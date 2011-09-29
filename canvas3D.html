@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+    </head>
+    
+    <style type="text/css">
+        body { background:#666; margin:2em; }
+        canvas { background:#ddd; border:1px solid #000; border-radius:300px; display:block; margin:0 auto; }
+    </style>
+    
+    <body>
+        <canvas id="cnv" width="600" height="600"></canvas>
+    </body>
+    
+    <script type="text/javascript">
+        
+        var cnv = document.getElementById('cnv'),
+            ctx = cnv.getContext('2d');
+        
+        if(window.addEventListener){
+            window.addEventListener('load', init, false); 
+            cnv.addEventListener('mouseover', draw, false); 
+            cnv.addEventListener('mouseout', function(){clearTimeout(t);}, false); 
+        }else if(window.attachEvent){ 
+            window.attachEvent('onload', init);
+            cnv.attachEvent('onmouseover', draw);
+            cnv.attachEvent('onmouseout', function(){clearTimeout(t);});
+        }
+        
+        var s = 4, //scaler
+            obj = [ [], [], [], [], [], [], [], [], [] ],
+            obj0 = [ [1,1,1], [1,s,1], [s,s,1], [s,1,1], [s,1,s], [s,s,s], [1,s,s], [1,1,s], [1,1,1] ],
+            xfrm = [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1] ],
+            pspctvX = 740,
+            pspctvY = 740,
+            x0 = parseInt(cnv.getAttribute('width'))/2,
+            y0 = parseInt(cnv.getAttribute('height'))/2,
+            c = 0,
+            t;
+            
+        function init(){
+            translate(0,0,34);
+        }
+        
+        function draw(){
+            var p, x, y;
+            rotate((Math.sin((++c)*0.01)/Math.PI),null,null);
+            rotate(null,(Math.cos((++c)*0.01)/Math.PI),null);
+            rotate(null,null,(Math.cos((++c)*0.01)/Math.PI));
+            
+            for(var r in obj){ //construct current cubeMatrix from currentTransformation.
+                obj[r][0] = (xfrm[0][0] * obj0[r][0]) + (xfrm[1][0] * obj0[r][1]) + (xfrm[2][0] * obj0[r][2]) + xfrm[3][0];
+                obj[r][1] = (xfrm[0][1] * obj0[r][0]) + (xfrm[1][1] * obj0[r][1]) + (xfrm[2][1] * obj0[r][2]) + xfrm[3][1];
+                obj[r][2] = (xfrm[0][2] * obj0[r][0]) + (xfrm[1][2] * obj0[r][1]) + (xfrm[2][2] * obj0[r][2]) + xfrm[3][2];
+            }
+            
+            cnv.width = cnv.width;
+            ctx.strokeStyle = "#000000";
+            ctx.beginPath();
+            
+            for(p in obj){ //plot, projecting 3d to 2d
+                x = Math.round(x0 + (obj[p][0] * pspctvX / obj[p][2]));
+                y = Math.round(y0 - (obj[p][1] * pspctvY / obj[p][2]));
+                ctx.lineTo(x,y);
+            }
+            
+            ctx.stroke();
+            t = setTimeout(function(){draw()}, 74);
+        }
+        
+        function rotate(radX, radY, radZ){
+            var tmpMatrix = [ [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0] ], 
+                rotateMatrix = radX!=null? [ [1,0,0,0], [0,Math.cos(radX),Math.sin(radX),0], [0,-Math.sin(radX),Math.cos(radX),0], [0,0,0,1] ]
+                             : radY!=null? [ [Math.cos(radY),0,-Math.sin(radY),0], [0,1,0,0], [Math.sin(radY),0,Math.cos(radY),0], [0,0,0,1] ]
+                             : radZ!=null? [ [Math.cos(radZ),Math.sin(radZ),0,0], [-Math.sin(radZ),Math.cos(radZ),0,0], [0,0,1,0], [0,0,0,1] ]
+                             : [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1] ];
+            for(var i in xfrm){ for(var j in xfrm){ for(var k in xfrm){
+                tmpMatrix[i][j] += rotateMatrix[i][k] * xfrm[k][j];
+            } } }
+            xfrm = tmpMatrix;
+        }
+        
+        function translate(x, y, z){
+            var tmpMatrix = [ [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0] ], 
+                rotateMatrix = [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [x,y,z,1] ];
+            for(var i in xfrm){ for(var j in xfrm){ for(var k in xfrm){
+                tmpMatrix[i][j] += rotateMatrix[i][k] * xfrm[k][j];
+            } } }
+            xfrm = tmpMatrix;
+        }
+        
+    </script>
+</html>
