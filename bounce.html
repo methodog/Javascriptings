@@ -40,7 +40,7 @@
         }
         
 		function init(){
-			x = y = mX = mY = vX = vY = 40; 
+			x = y = mX = mY = vX = vY = 30; 
 			drop();
 		}
 		
@@ -54,6 +54,8 @@
 			mY = e.clientY;
 			x = oX;
 			y = oY;
+			if(e.preventDefault) e.preventDefault(); else e.returnValue = false; 
+			return false;
 		}
 		
 		function drag(e){
@@ -69,6 +71,8 @@
     			x = x1;
     			y = y1;
     		}
+			if(e.preventDefault) e.preventDefault(); else e.returnValue = false; 
+			return false;
 		}
 		
 		function drop(){
