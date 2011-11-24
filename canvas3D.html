@@ -22,13 +22,13 @@
             pspctvY = 740,
             x0 = parseInt(cnv.getAttribute('width'))/2,
             y0 = parseInt(cnv.getAttribute('height'))/2,
-            c = 0,
             t;     
             
-        function Cube() {
+        function Cube(x, y, z) {
             this.obj = [ [], [], [], [], [], [], [], [], [] ];
             this.unit = [ [1,1,1], [1,s,1], [s,s,1], [s,1,1], [s,1,s], [s,s,s], [1,s,s], [1,1,s], [1,1,1] ];
-            this.xfrm = [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1] ];
+            this.xfrm = [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [x,y,z,1] ];
+            this.c = 0;
         }
         
         Cube.prototype.rotate = function(radX, radY, radZ){
@@ -43,45 +43,42 @@
             this.xfrm = tmpMatrix;
         };
         
-        Cube.prototype.translate = function(x, y, z){
-            var tmpMatrix = [ [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0] ], 
-                rotateMatrix = [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [x,y,z,1] ];
-            for(var i=0; i<this.xfrm.length; i++){ for(var j=0; j<this.xfrm.length; j++){ for(var k=0; k<this.xfrm.length; k++){
-                tmpMatrix[i][j] += rotateMatrix[i][k] * this.xfrm[k][j];
-            } } }
-            this.xfrm = tmpMatrix;
-        };
+        Cube.prototype.transform = function(){
+            this.rotate((Math.sin((++this.c)*0.01)/Math.PI),null,null);
+            this.rotate(null,(Math.cos((++this.c)*0.01)/Math.PI),null);
+            this.rotate(null,null,(Math.cos((++this.c)*0.01)/Math.PI));
+            
+            for(var r=0; r<this.obj.length; r++){ //construct current cubeMatrix from currentTransformation.
+                this.obj[r][0] = (this.xfrm[0][0] * this.unit[r][0]) + (this.xfrm[1][0] * this.unit[r][1]) + (this.xfrm[2][0] * this.unit[r][2]) + this.xfrm[3][0];
+                this.obj[r][1] = (this.xfrm[0][1] * this.unit[r][0]) + (this.xfrm[1][1] * this.unit[r][1]) + (this.xfrm[2][1] * this.unit[r][2]) + this.xfrm[3][1];
+                this.obj[r][2] = (this.xfrm[0][2] * this.unit[r][0]) + (this.xfrm[1][2] * this.unit[r][1]) + (this.xfrm[2][2] * this.unit[r][2]) + this.xfrm[3][2];
+            }
+        }
+        
+        function init(){
+            
+            cube1 = new Cube(0, 0, 34);
+            cube2 = new Cube(0, 10, 50);
+        }
         
         function animate(){
             var p, x, y;
-            cube1.rotate((Math.sin((++c)*0.01)/Math.PI),null,null);
-            cube1.rotate(null,(Math.cos((++c)*0.01)/Math.PI),null);
-            cube1.rotate(null,null,(Math.cos((++c)*0.01)/Math.PI));
-            
-            for(var r=0; r<cube1.obj.length; r++){ //construct current cubeMatrix from currentTransformation.
-                cube1.obj[r][0] = (cube1.xfrm[0][0] * cube1.unit[r][0]) + (cube1.xfrm[1][0] * cube1.unit[r][1]) + (cube1.xfrm[2][0] * cube1.unit[r][2]) + cube1.xfrm[3][0];
-                cube1.obj[r][1] = (cube1.xfrm[0][1] * cube1.unit[r][0]) + (cube1.xfrm[1][1] * cube1.unit[r][1]) + (cube1.xfrm[2][1] * cube1.unit[r][2]) + cube1.xfrm[3][1];
-                cube1.obj[r][2] = (cube1.xfrm[0][2] * cube1.unit[r][0]) + (cube1.xfrm[1][2] * cube1.unit[r][1]) + (cube1.xfrm[2][2] * cube1.unit[r][2]) + cube1.xfrm[3][2];
-            }
             
             cnv.width = cnv.width;
             ctx.strokeStyle = "#000000";
             ctx.beginPath();
+            
+            cube1.transform();
             
             for(var p=0; p<cube1.obj.length; p++){ //plot, projecting 3d to 2d
                 x = Math.round(x0 + (cube1.obj[p][0] * pspctvX / cube1.obj[p][2]));
                 y = Math.round(y0 - (cube1.obj[p][1] * pspctvY / cube1.obj[p][2]));
                 ctx.lineTo(x,y);
             }
-            
             ctx.stroke();
+            
             t = setTimeout(function(){animate()}, 74);
         };
-        
-        function init(){
-            cube1 = new Cube();
-            cube1.translate(0,0,34);
-        }
         
         if(window.addEventListener){
             window.addEventListener('load', init, false); 
