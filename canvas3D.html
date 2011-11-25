@@ -23,7 +23,7 @@
             x0 = parseInt(cnv.getAttribute('width'))/2,
             y0 = parseInt(cnv.getAttribute('height'))/2,
             t,
-            cubes = [new Cube(0, -4, 34), new Cube(10, 20, 86), new Cube(-10, 12, 64)];     
+            cubes = {cube1:new Cube(0, -4, 34), cube2:new Cube(10, 20, 86), cube3:new Cube(-10, 12, 64)};     
             
         function Cube(x, y, z) {
             this.obj = [ [], [], [], [], [], [], [], [], [] ];
@@ -64,7 +64,7 @@
             ctx.strokeStyle = "#000000";
             ctx.beginPath();
             
-            for(var n=0; n<cubes.length; n++){
+            for(var n in cubes){
                 cubes[n].transform();
                 
                 for(var p=0; p<cubes[n].obj.length; p++){ //plot, projecting 3d to 2d
