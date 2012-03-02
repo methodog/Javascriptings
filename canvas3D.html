@@ -17,23 +17,29 @@
         
         var cnv = document.getElementById('cnv'),
             ctx = cnv.getContext('2d'),
-            s = 4, //scaler
+            s = 1, //scaler
             pspctvX = 740,
             pspctvY = 740,
             x0 = parseInt(cnv.getAttribute('width'))/2,
             y0 = parseInt(cnv.getAttribute('height'))/2,
             t,
-            cubes = {cube1:new Cube(0, -4, 34), cube2:new Cube(10, 20, 86), cube3:new Cube(-10, 12, 64)};     
+            Things = { 
+                cube:new Thing([ [0,0,0], [0,s,0], [s,s,0], [s,0,0], [s,0,s], [s,s,s], [0,s,s], [0,0,s], [0,0,0] ], 0, -2, 13),  
+                square:new Thing([ [0,0,0], [0,s,0], [0,s,s], [0,0,s], [0,0,0] ], 2, 2, 16), 
+                square2:new Thing([ [0,0,0], [0,s,0], [0,s,s], [0,0,s], [0,0,0] ], 0, 8, 34), 
+                square3:new Thing([ [0,0,0], [0,s,0], [0,s,s], [0,0,s], [0,0,0] ], -4, 0, 18)
+            };     
             
-        function Cube(x, y, z) {
-            this.obj = [ [], [], [], [], [], [], [], [], [] ];
-            this.unit = [ [1,1,1], [1,s,1], [s,s,1], [s,1,1], [s,1,s], [s,s,s], [1,s,s], [1,1,s], [1,1,1] ];
+        function Thing(unit, x, y, z) {
+            this.unit = unit;
+            this.obj = new Array(this.unit.length);
+            for(var i=0; i<this.obj.length; ++i) this.obj[i] = new Array();
             this.xfrm = [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [x,y,z,1] ];
             this.c = 0;
             this.r = Math.random()*0.07;
         }
         
-        Cube.prototype.rotate = function(radX, radY, radZ){
+        Thing.prototype.rotate = function(radX, radY, radZ){
             var tmpMatrix = [ [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0] ], 
                 rotateMatrix = radX!=null? [ [1,0,0,0], [0,Math.cos(radX),Math.sin(radX),0], [0,-Math.sin(radX),Math.cos(radX),0], [0,0,0,1] ]
                              : radY!=null? [ [Math.cos(radY),0,-Math.sin(radY),0], [0,1,0,0], [Math.sin(radY),0,Math.cos(radY),0], [0,0,0,1] ]
@@ -45,7 +51,7 @@
             this.xfrm = tmpMatrix;
         };
         
-        Cube.prototype.transform = function(){
+        Thing.prototype.transform = function(){
             this.rotate((Math.sin((++this.c)*this.r)/Math.PI),null,null);
             this.rotate(null,(Math.cos((++this.c)*this.r)/Math.PI),null);
             this.rotate(null,null,(Math.cos((++this.c)*this.r)/Math.PI));
@@ -64,12 +70,12 @@
             ctx.strokeStyle = "#000000";
             ctx.beginPath();
             
-            for(var n in cubes){
-                cubes[n].transform();
+            for(var n in Things){
+                Things[n].transform();
                 
-                for(var p=0; p<cubes[n].obj.length; p++){ //plot, projecting 3d to 2d
-                    x = Math.round(x0 + (cubes[n].obj[p][0] * pspctvX / cubes[n].obj[p][2]));
-                    y = Math.round(y0 - (cubes[n].obj[p][1] * pspctvY / cubes[n].obj[p][2]));
+                for(var p=0; p<Things[n].obj.length; p++){ //plot, projecting 3d to 2d
+                    x = Math.round(x0 + (Things[n].obj[p][0] * pspctvX / Things[n].obj[p][2]));
+                    y = Math.round(y0 - (Things[n].obj[p][1] * pspctvY / Things[n].obj[p][2]));
                     if(p==0){ ctx.moveTo(x,y); }else{ ctx.lineTo(x,y); }
                 }
             }
