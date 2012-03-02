@@ -22,13 +22,19 @@
             pspctvY = 740,
             x0 = parseInt(cnv.getAttribute('width'))/2,
             y0 = parseInt(cnv.getAttribute('height'))/2,
-            t,
-            Things = { 
-                cube:new Thing([ [0,0,0], [0,s,0], [s,s,0], [s,0,0], [s,0,s], [s,s,s], [0,s,s], [0,0,s], [0,0,0] ], 0, -2, 13),  
-                square:new Thing([ [0,0,0], [0,s,0], [0,s,s], [0,0,s], [0,0,0] ], 2, 2, 16), 
-                square2:new Thing([ [0,0,0], [0,s,0], [0,s,s], [0,0,s], [0,0,0] ], 0, 8, 34), 
-                square3:new Thing([ [0,0,0], [0,s,0], [0,s,s], [0,0,s], [0,0,0] ], -4, 0, 18)
-            };     
+            t;
+        var hex = []; for(var i=0; i<7; ++i) hex[i] = [0,Math.cos(Math.PI*i/3),Math.sin(Math.PI*i/3)];
+        //var deltoid = []; for(var i=0; i<200; ++i) deltoid[i] = [0,-1+Math.cos(Math.PI*i/100)*(1+Math.cos(Math.PI*i/100)),2*Math.sin(Math.PI*i/100)*(1-Math.cos(Math.PI*i/100))];
+        //var hypotrochoid = []; n=40; for(var i=0; i<n; ++i) hypotrochoid[i] = [0,6*Math.cos(Math.PI*i/(n/2))+5*Math.cos((6/2)*Math.PI*i/(n/2)),6*Math.sin(Math.PI*i/(n/2))-5*Math.sin((6/2)*Math.PI*i/(n/2))];
+        var epicycloid = []; n=40; for(var i=0; i<n; ++i) epicycloid[i] = [0,5*Math.cos(Math.PI*i/(n/2))+Math.cos(5*Math.PI*i/(n/2)),5*Math.sin(Math.PI*i/(n/2))-Math.sin(5*Math.PI*i/(n/2))];
+        var Things = { 
+                cube:new Thing([ [0,0,0], [0,s,0], [s,s,0], [s,0,0], [s,0,s], [s,s,s], [0,s,s], [0,0,s], [0,0,0] ], 1, -2, 13),  
+                square:new Thing([ [0,0,0], [0,s,0], [0,s,s], [0,0,s], [0,0,0] ], 5, 2, 20), 
+                hex:new Thing(hex, -4, 0, 18),
+                //deltoid:new Thing(deltoid, 0, 8, 34),
+                //hypotrochoid:new Thing(hypotrochoid, 0, 8, 60),
+                epicycloid:new Thing(epicycloid, -3, 20, 100),
+            };
             
         function Thing(unit, x, y, z) {
             this.unit = unit;
