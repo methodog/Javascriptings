@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+    </head>
+    
+    <style type="text/css">
+        body { background:#666; margin:0; overflow:hidden; }
+        canvas { background:#ddd; display:block; margin:0 auto; }
+    </style>
+    
+    <body>
+        <canvas id="cnv" width="600" height="600"></canvas>
+    </body>
+    
+    <script type="text/javascript">
+        
+        var cnv = document.getElementById('cnv'),
+            ctx = cnv.getContext('2d'),
+            s = 1, //scaler
+            pspctvX = 740, pspctvY = 740,
+            x0 = parseInt(cnv.getAttribute('width'))/2, y0 = parseInt(cnv.getAttribute('height'))/2,
+            t,
+            cnvX = cnv.offsetLeft, cnvY = cnv.offsetTop, 
+            thing = [];
+            
+        function plot(e) {
+            thing.push([e.clientX-cnvX-x0, -e.clientY-cnvY+y0, 0]);
+            Things = { thing:new Thing(thing, 0, 0, 800) };
+            draw();
+        }
+        
+        function Thing(unit, x, y, z) {
+            this.unit = unit;
+            this.obj = new Array(this.unit.length);
+            for(var i=0; i<this.obj.length; ++i) this.obj[i] = new Array();
+            this.xfrm = [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [x,y,z,1] ];
+            this.c = 0;
+            this.r = Math.random()*0.07;
+        }
+        
+        Thing.prototype.rotate = function(radX, radY, radZ){
+            var tmpMatrix = [ [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0] ], 
+                rotateMatrix = radX!=null? [ [1,0,0,0], [0,Math.cos(radX),Math.sin(radX),0], [0,-Math.sin(radX),Math.cos(radX),0], [0,0,0,1] ]
+                             : radY!=null? [ [Math.cos(radY),0,-Math.sin(radY),0], [0,1,0,0], [Math.sin(radY),0,Math.cos(radY),0], [0,0,0,1] ]
+                             : radZ!=null? [ [Math.cos(radZ),Math.sin(radZ),0,0], [-Math.sin(radZ),Math.cos(radZ),0,0], [0,0,1,0], [0,0,0,1] ]
+                             : [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1] ];
+            for(var i=0; i<this.xfrm.length; i++){ for(var j=0; j<this.xfrm.length; j++){ for(var k=0; k<this.xfrm.length; k++){
+                tmpMatrix[i][j] += rotateMatrix[i][k] * this.xfrm[k][j];
+            } } }
+            this.xfrm = tmpMatrix;
+        };
+        
+        Thing.prototype.transform = function(){
+            this.rotate((Math.sin((++this.c)*this.r)/Math.PI),null,null);
+            this.rotate(null,(Math.cos((++this.c)*this.r)/Math.PI),null);
+            this.rotate(null,null,((Math.cos((++this.c)*this.r)/10)/Math.PI));
+            
+            for(var r=0; r<this.obj.length; r++){ //construct current cubeMatrix from currentTransformation.
+                this.obj[r][0] = (this.xfrm[0][0] * this.unit[r][0]) + (this.xfrm[1][0] * this.unit[r][1]) + (this.xfrm[2][0] * this.unit[r][2]) + this.xfrm[3][0];
+                this.obj[r][1] = (this.xfrm[0][1] * this.unit[r][0]) + (this.xfrm[1][1] * this.unit[r][1]) + (this.xfrm[2][1] * this.unit[r][2]) + this.xfrm[3][1];
+                this.obj[r][2] = (this.xfrm[0][2] * this.unit[r][0]) + (this.xfrm[1][2] * this.unit[r][1]) + (this.xfrm[2][2] * this.unit[r][2]) + this.xfrm[3][2];
+            }
+        }
+        
+        function draw(){
+            var x, y;
+            
+            cnv.width = cnv.width;
+            ctx.strokeStyle = "#000000";
+            ctx.beginPath();
+            
+            for(var n in Things){
+                Things[n].transform();
+                
+                for(var p=0; p<Things[n].obj.length; p++){ //plot, projecting 3d to 2d
+                    x = Math.round(x0 + (Things[n].obj[p][0] * pspctvX / Things[n].obj[p][2]));
+                    y = Math.round(y0 - (Things[n].obj[p][1] * pspctvY / Things[n].obj[p][2]));
+                    if(p==0){ ctx.moveTo(x,y); }else{ ctx.lineTo(x,y); }
+                }
+            }
+            
+            ctx.stroke();
+        };
+        
+        function animate(){
+            draw();
+            t = setTimeout(function(){animate()}, 74);
+        };
+        
+        if(window.addEventListener){
+            cnv.addEventListener('click', plot, false); 
+            cnv.addEventListener('mouseout', animate, false); 
+            cnv.addEventListener('mouseover', function(){clearTimeout(t);}, false); 
+        }else if(window.attachEvent){ 
+            cnv.attachEvent('click', plot);
+            cnv.attachEvent('onmouseout', animate);
+            cnv.attachEvent('onmouseover', function(){clearTimeout(t);});
+        }
+        
+    </script>
+</html>
