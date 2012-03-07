@@ -22,15 +22,9 @@
             x0 = parseInt(cnv.getAttribute('width'))/2, y0 = parseInt(cnv.getAttribute('height'))/2,
             t,
             cnvX = cnv.offsetLeft, cnvY = cnv.offsetTop, 
-            thing = [];
+            thing = [],
+            p;
             
-        function plot(e) {
-            if(!e) var e = cnv.event;
-            thing.push([e.clientX-cnvX-x0, -e.clientY-cnvY+y0, 0]);
-            Things = { thing:new Thing(thing, 0, 0, 800) };
-            draw();
-        }
-        
         function Thing(unit, x, y, z) {
             this.unit = unit;
             this.obj = new Array(this.unit.length);
@@ -84,17 +78,61 @@
             ctx.stroke();
         };
         
+        function plotStart(e){
+		    if(!e) var e = cnv.event;
+			p = 1;
+			if(e.preventDefault) e.preventDefault(); else e.returnValue = false; 
+			return false;
+		}
+		
+        function plotEnd(e){
+		    if(!e) var e = cnv.event;
+			p = 0;
+			if(e.preventDefault) e.preventDefault(); else e.returnValue = false; 
+			return false;
+		}
+		
+        function plot(e) {
+            if(p){
+                if(!e) var e = cnv.event;
+                thing.push([e.clientX-cnvX-x0, -e.clientY-cnvY+y0, 0]);
+                Things = { thing:new Thing(thing, 0, 0, 800) };
+                draw();
+            }
+        }
+        
+		function drag(e){
+		    if(!e) var e = window.event;
+		    if(b){
+		        var x1, y1;
+    			x1 = oX + e.clientX - mX;
+    			y1 = oY + e.clientY - mY;
+    			ball.style.left = x1 +'px';
+    			ball.style.top = y1 +'px';
+        		vX = (x1-x)/t;
+    			vY = (y1-y)/t;
+    			x = x1;
+    			y = y1;
+    		}
+			if(e.preventDefault) e.preventDefault(); else e.returnValue = false; 
+			return false;
+		}
+        
         function animate(){
             draw();
             t = setTimeout(function(){animate()}, 74);
         };
         
         if(window.addEventListener){
-            cnv.addEventListener('click', plot, false); 
+            cnv.addEventListener('mousedown', plotStart, false); 
+            cnv.addEventListener('mousemove', plot, false); 
+            cnv.addEventListener('mouseup', plotEnd, false); 
             cnv.addEventListener('mouseout', animate, false); 
             cnv.addEventListener('mouseover', function(){clearTimeout(t);}, false); 
         }else if(window.attachEvent){ 
-            cnv.attachEvent('click', plot);
+            cnv.attachEvent('mousedown', plotStart);
+            cnv.attachEvent('mousemove', plot);
+            cnv.attachEvent('mouseup', plotEnd);
             cnv.attachEvent('onmouseout', animate);
             cnv.attachEvent('onmouseover', function(){clearTimeout(t);});
         }
