@@ -101,23 +101,6 @@
             }
         }
         
-		function drag(e){
-		    if(!e) var e = window.event;
-		    if(b){
-		        var x1, y1;
-    			x1 = oX + e.clientX - mX;
-    			y1 = oY + e.clientY - mY;
-    			ball.style.left = x1 +'px';
-    			ball.style.top = y1 +'px';
-        		vX = (x1-x)/t;
-    			vY = (y1-y)/t;
-    			x = x1;
-    			y = y1;
-    		}
-			if(e.preventDefault) e.preventDefault(); else e.returnValue = false; 
-			return false;
-		}
-        
         function animate(){
             draw();
             t = setTimeout(function(){animate()}, 74);
