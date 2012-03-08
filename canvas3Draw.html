@@ -18,7 +18,7 @@
         var cnv = document.getElementById('cnv'),
             ctx = cnv.getContext('2d'),
             s = 1, //scaler
-            pspctvX = 740, pspctvY = 740,
+            pspctvX = pspctvY = 340,
             x0 = parseInt(cnv.getAttribute('width'))/2, y0 = parseInt(cnv.getAttribute('height'))/2,
             t,
             cnvX = cnv.offsetLeft, cnvY = cnv.offsetTop, 
@@ -96,7 +96,7 @@
             if(p){
                 if(!e) var e = cnv.event;
                 thing.push([e.clientX-cnvX-x0, -e.clientY-cnvY+y0, 0]);
-                Things = { thing:new Thing(thing, 0, 0, 800) };
+                Things = { thing:new Thing(thing, 0, 0, 340) };
                 draw();
             }
         }
