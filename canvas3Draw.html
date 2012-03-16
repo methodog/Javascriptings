@@ -23,7 +23,7 @@
             x0 = parseInt(cnv.getAttribute('width'))/2, y0 = parseInt(cnv.getAttribute('height'))/2,
             t,
             cnvX = cnv.offsetLeft, cnvY = cnv.offsetTop, 
-            thing = [],
+            plots = things = [],
             p;
             
         function Thing(unit, x, y, z) {
@@ -66,12 +66,12 @@
             ctx.strokeStyle = "#000000";
             ctx.beginPath();
             
-            for(var n in Things){
-                Things[n].transform();
+            for(var n in things){
+                things[n].transform();
                 
-                for(var p=0; p<Things[n].obj.length; p++){ //plot, projecting 3d to 2d
-                    x = Math.round(x0 + (Things[n].obj[p][0] * pspctvX / Things[n].obj[p][2]));
-                    y = Math.round(y0 - (Things[n].obj[p][1] * pspctvY / Things[n].obj[p][2]));
+                for(var p=0; p<things[n].obj.length; p++){ //plot, projecting 3d to 2d
+                    x = Math.round(x0 + (things[n].obj[p][0] * pspctvX / things[n].obj[p][2]));
+                    y = Math.round(y0 - (things[n].obj[p][1] * pspctvY / things[n].obj[p][2]));
                     if(p==0){ ctx.moveTo(x,y); }else{ ctx.lineTo(x,y); }
                 }
             }
@@ -82,6 +82,7 @@
         function plotStart(e){
 		    if(!e) var e = cnv.event;
 			p = 1;
+            plots.push([]);
 			if(e.preventDefault) e.preventDefault(); else e.returnValue = false; 
 			return false;
 		}
@@ -96,10 +97,16 @@
         function plot(e) {
             if(p){
                 if(!e) var e = cnv.event;
-                thing.push([e.clientX-cnvX-x0, -e.clientY-cnvY+y0, 0]);
-                thing.push([e.clientX-cnvX-x0, -e.clientY-cnvY+y0, 40]);
-                Things = { thing:new Thing(thing, 0, 0, 300) };
+                var plot = plots[plots.length-1];
+                plot.push([e.clientX-cnvX-x0, -e.clientY-cnvY+y0, 0]);
+                plot.push([e.clientX-cnvX-x0, -e.clientY-cnvY+y0, 40]);
+                things = [];
+                for(var i=0; i<plots.length; ++i ){
+                    things.push(new Thing(plots[i], 0, 0, 200));
+                }
                 draw();
+                if(e.preventDefault) e.preventDefault(); else e.returnValue = false; 
+                return false;
             }
         }
         
