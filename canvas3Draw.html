@@ -26,9 +26,9 @@
             plots = things = [],
             p;
             
-        function Thing(unit, x, y, z) {
-            this.unit = unit;
-            this.obj = new Array(this.unit.length);
+        function Thing(plot, x, y, z) {
+            this.plot = plot;
+            this.obj = new Array(this.plot.length);
             for(var i=0; i<this.obj.length; ++i) this.obj[i] = new Array();
             this.xfrm = [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [x,y,z,1] ];
             this.c = 0;
@@ -53,9 +53,9 @@
             this.rotate(null,null,((Math.cos((++this.c)*this.r)/10)/Math.PI));
             
             for(var r=0; r<this.obj.length; r++){ //construct current cubeMatrix from currentTransformation.
-                this.obj[r][0] = (this.xfrm[0][0] * this.unit[r][0]) + (this.xfrm[1][0] * this.unit[r][1]) + (this.xfrm[2][0] * this.unit[r][2]) + this.xfrm[3][0];
-                this.obj[r][1] = (this.xfrm[0][1] * this.unit[r][0]) + (this.xfrm[1][1] * this.unit[r][1]) + (this.xfrm[2][1] * this.unit[r][2]) + this.xfrm[3][1];
-                this.obj[r][2] = (this.xfrm[0][2] * this.unit[r][0]) + (this.xfrm[1][2] * this.unit[r][1]) + (this.xfrm[2][2] * this.unit[r][2]) + this.xfrm[3][2];
+                this.obj[r][0] = (this.xfrm[0][0] * this.plot[r][0]) + (this.xfrm[1][0] * this.plot[r][1]) + (this.xfrm[2][0] * this.plot[r][2]) + this.xfrm[3][0];
+                this.obj[r][1] = (this.xfrm[0][1] * this.plot[r][0]) + (this.xfrm[1][1] * this.plot[r][1]) + (this.xfrm[2][1] * this.plot[r][2]) + this.xfrm[3][1];
+                this.obj[r][2] = (this.xfrm[0][2] * this.plot[r][0]) + (this.xfrm[1][2] * this.plot[r][1]) + (this.xfrm[2][2] * this.plot[r][2]) + this.xfrm[3][2];
             }
         }
         
