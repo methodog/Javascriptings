@@ -2,18 +2,17 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
+        <style type="text/css">
+            body { background:#666; margin:2em; }
+            #box, #ball { background:#ddd; border:1px solid #000; border-radius:300px; display:block; height:600px; margin:0 auto; width:600px; position:relative; }
+            #ball { background:#666; border-radius:30px; height:60px; margin:0; width:60px; position:absolute; }
+        </style>	
 	</head>
-	
-	<style type="text/css">
-		body { background:#666; margin:2em; }
-		#box, #ball { background:#ddd; border:1px solid #000; border-radius:300px; display:block; height:600px; margin:0 auto; width:600px; position:relative; }
-		#ball { background:#666; border-radius:30px; height:60px; margin:0; width:60px; position:absolute; }
-	</style>
-	
+    
 	<body>
 		<div id="box"><div id="ball"></div></div>
 	</body>
-	
+    
 	<script type="text/javascript">
 	    
 		if(window.addEventListener){
