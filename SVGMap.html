@@ -101,7 +101,7 @@ viewBox="0 0 2555.1875 2087.5938" enable-background="new 0 0 2555.1875 2087.5938
             }
         }
 
-        var xy0 = [map.style.left? parseFloat(map.style.left):0, map.style.top? parseFloat(map.style.top):0],
+        var xy0 = [parseFloat(map.style.left)||0, parseFloat(map.style.top)||0],
             xyT = getXY(e);
         
         function getXY(e){
