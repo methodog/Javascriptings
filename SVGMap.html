@@ -29,7 +29,7 @@ viewBox="0 0 2555.1875 2087.5938" enable-background="new 0 0 2555.1875 2087.5938
 <script type="text/javascript">
 (function() {
     "use strict";
-    var map, w, h, w0, h0, clip, wC, hC, wC0, hC0;
+    var map, w, h, clip, wC, hC, wC0, hC0;
     
     if( window.addEventListener ){
         window.addEventListener('load', init, false); 
@@ -54,14 +54,14 @@ viewBox="0 0 2555.1875 2087.5938" enable-background="new 0 0 2555.1875 2087.5938
             if( w==='100%' ){ return; }
             this.style.left = (l>0? 0:(l<wC-w? wC-w:l))+'px';
             this.style.top = (t>0? 0:(t<hC-h? hC-h:t))+'px';
-        }
+        };
         map.reset = function(){
             map.move(0,0);
             w = '100%';
             h = '100%';
             this.style.width = w;
             this.style.height = h;
-        }
+        };
         if( window.addEventListener ){
             window.addEventListener('resize', respond, false); 
             map.addEventListener('mousedown', touch, false);
@@ -78,7 +78,7 @@ viewBox="0 0 2555.1875 2087.5938" enable-background="new 0 0 2555.1875 2087.5938
     
     function touch(e){
         if( e.type==='touchstart' ){
-            if( e.touches && e.touches.length==2 ){
+            if( e.touches && e.touches.length===2 ){
                 var d0 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
                 map.ontouchmove = zoom;
             }else{
@@ -88,7 +88,7 @@ viewBox="0 0 2555.1875 2087.5938" enable-background="new 0 0 2555.1875 2087.5938
             map.ontouchend = function(){
                 map.ontouchmove = null;
                 map.ontouchend = null;
-            }
+            };
         }else{
             if( e.type==='DOMMouseScroll' || e.type==='mousewheel' ){
                 zoom(e); 
@@ -97,7 +97,7 @@ viewBox="0 0 2555.1875 2087.5938" enable-background="new 0 0 2555.1875 2087.5938
                 document.onmouseup = function(){
                     document.onmousemove = null;
                     document.onmouseup = null;
-                }
+                };
             }
         }
 
@@ -167,9 +167,8 @@ viewBox="0 0 2555.1875 2087.5938" enable-background="new 0 0 2555.1875 2087.5938
             map.reset();
         }else if( w!=='100%' ){
             var l = parseFloat(map.style.left) || 0,
-                t = parseFloat(map.style.top) || 0,
-                l = l+((wC-wC0)/2),
-                t = t+((hC-hC0)/2); 
+                t = parseFloat(map.style.top) || 0;
+                l = l+((wC-wC0)/2), t = t+((hC-hC0)/2); 
             w = getComputed(map,'width');
             h = getComputed(map,'height');
             map.style.width = w+'px';
