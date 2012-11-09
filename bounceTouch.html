@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <style type="text/css">
+        html, body { height:100%; margin:0; width:100%; }
+        body { background:#666; }
+        #cont, #ball { background:#ddd; border:1px solid #000; display:block; height:100%; width:100%; position:relative; }
+        #ball { background:#666; border-radius:30px; height:60px; margin:0; width:60px; position:absolute; }
+    </style>	
+</head>
+
+<body>
+    <div id="cont"><div id="ball"></div></div>
+</body>
+
+<script type="text/javascript">
+(function() {
+    "use strict";
+    var ball, xyB, whB, vB, cont, whC, t=1;
+    
+    if( window.addEventListener ){
+        window.addEventListener('load', init, false); 
+    }else if( window.attachEvent ){
+        window.attachEvent('onload', init);
+    }
+    
+    function getComputed(el,style){
+        return parseFloat(document.defaultView? document.defaultView.getComputedStyle(el,'').getPropertyValue(style) : el.currentStyle? el.currentStyle[style] : null);
+    }
+    
+    function init(){
+        ball = document.getElementById('ball');
+        whB = [getComputed(ball,'width'), getComputed(ball,'height')];
+        xyB = [getComputed(ball,'left'), getComputed(ball,'top')];
+        cont = document.getElementById('cont');
+        whC = [getComputed(cont,'width'), getComputed(cont,'height')];
+        ball.move = function(xy){
+            var x=xy[0], y=xy[1], r;
+            if( x<0 ){ x=0; r=[1,0]; }
+            if( x>whC[0]-whB[0] ){ x=whC[0]-whB[0]; r=[1,0]; }
+            if( y<0 ){ y=0; r=[0,1]; }
+            if( y>whC[1]-whB[1] ){ y=whC[1]-whB[0]; r=[0,1]; }
+            this.style.left = x+'px';
+            this.style.top = y+'px';
+            return r;
+        };
+        ball.drop = function(){console.log(vB);
+            var s, g = 1, f = 0.6, r;
+            vB = [vB[0], vB[1]+(g*t)];
+            xyB = [xyB[0]+(vB[0]*t), xyB[1]+(vB[1]*t)];
+            if( r = ball.move(xyB) ){
+                if( r[0] ){ vB = [-vB[0]*f, vB[1]]; }
+                if( r[1] ){ vB = [vB[0], -vB[0]*f]; }
+                if(Math.abs(vB[0])+Math.abs(vB[1]) < 0.36) { clearTimeout(s); return; }
+            }
+            s = setTimeout(function(){ ball.drop() }, 23);
+        };
+        if( window.addEventListener ){
+            window.addEventListener('resize', respond, false); 
+            ball.addEventListener('mousedown', touch, false);
+            ball.addEventListener('touchstart', touch, false);
+        }else if( window.attachEvent ){
+            window.attachEvent('onresize', respond);
+            ball.attachEvent('onmousedown', touch);
+            ball.attachEvent('ontouchstart', touch);
+        }
+    }
+    
+    function touch(e){
+        if( e.type==='touchstart' ){
+            ball.ontouchmove = drag;
+            ball.onmousedown = null;
+            ball.ontouchend = function(){
+                ball.ontouchmove = null;
+                ball.ontouchend = null;
+                ball.drop();
+            };
+        }else{
+            document.onmousemove = drag;
+            document.onmouseup = function(){
+                document.onmousemove = null;
+                document.onmouseup = null;
+                ball.drop();
+            };
+        }
+
+        var xy0 = [parseFloat(ball.style.left)||0, parseFloat(ball.style.top)||0],
+            xyT = getXY(e);
+        
+        function getXY(e){
+            var xy = [];
+            if( e.touches && e.touches.length ){
+                if( e.touches.length>1 ){
+                    xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2;
+                    xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;
+                }else{
+                    xy[0] = e.touches[0].pageX;
+                    xy[1] = e.touches[0].pageY;
+                }
+            }else{
+                xy[0] = e.pageX;
+                xy[1] = e.pageY;
+            }
+            return xy;
+        }
+        
+        function drag(e){
+            var xyE = getXY(e);
+            vB = [(xyE[0]-xyB[0])/t,(xyE[1]-xyB[1])/t];
+            ball.move([xy0[0]+xyE[0]-xyT[0], xy0[1]+xyE[1]-xyT[1]]);
+            return false;
+        }
+    }
+    
+    function respond(){
+        whC = [getComputed(cont,'width'), getComputed(cont,'height')];console.log(whC[1]);
+        ball.move([parseFloat(ball.style.left), parseFloat(ball.style.top)]);
+    }
+}());    
+</script>
+</html>
