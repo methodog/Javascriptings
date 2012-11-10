@@ -17,7 +17,7 @@
 <script type="text/javascript">
 (function() {
     "use strict";
-    var ball, xyB, whB, vB, cont, whC, t=1;
+    var ball, xyB, whB, vB, cont, whC, t=1, drop;
     
     if( window.addEventListener ){
         window.addEventListener('load', init, false); 
@@ -41,20 +41,22 @@
             if( x>whC[0]-whB[0] ){ x=whC[0]-whB[0]; r=[1,0]; }
             if( y<0 ){ y=0; r=[0,1]; }
             if( y>whC[1]-whB[1] ){ y=whC[1]-whB[0]; r=[0,1]; }
+            xyB = [x,y];
             this.style.left = x+'px';
             this.style.top = y+'px';
             return r;
         };
-        ball.drop = function(){console.log(vB);
-            var s, g = 1, f = 0.6, r;
+        ball.drop = function(){
+            var g = 1, f = 0.6, r;
             vB = [vB[0], vB[1]+(g*t)];
             xyB = [xyB[0]+(vB[0]*t), xyB[1]+(vB[1]*t)];
             if( r = ball.move(xyB) ){
                 if( r[0] ){ vB = [-vB[0]*f, vB[1]]; }
                 if( r[1] ){ vB = [vB[0], -vB[0]*f]; }
-                if(Math.abs(vB[0])+Math.abs(vB[1]) < 0.36) { clearTimeout(s); return; }
+                if(Math.abs(vB[0])+Math.abs(vB[1]) < 0.36) { clearTimeout(drop); return; }
             }
-            s = setTimeout(function(){ ball.drop() }, 23);
+            drop = setTimeout(function(){ ball.drop() }, 23);
+            return false;
         };
         if( window.addEventListener ){
             window.addEventListener('resize', respond, false); 
@@ -106,15 +108,17 @@
         }
         
         function drag(e){
-            var xyE = getXY(e);
-            vB = [(xyE[0]-xyB[0])/t,(xyE[1]-xyB[1])/t];
-            ball.move([xy0[0]+xyE[0]-xyT[0], xy0[1]+xyE[1]-xyT[1]]);
+            clearTimeout(drop);
+            var xyE = getXY(e), xy;
+            xy = [xy0[0]+xyE[0]-xyT[0], xy0[1]+xyE[1]-xyT[1]];
+            vB = [(xy[0]-xyB[0])/t,(xy[1]-xyB[1])/t];
+            ball.move(xy);
             return false;
         }
     }
     
     function respond(){
-        whC = [getComputed(cont,'width'), getComputed(cont,'height')];console.log(whC[1]);
+        whC = [getComputed(cont,'width'), getComputed(cont,'height')];
         ball.move([parseFloat(ball.style.left), parseFloat(ball.style.top)]);
     }
 }());    
