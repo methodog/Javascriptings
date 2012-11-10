@@ -48,13 +48,14 @@
         };
         ball.drop = function(){
             var g = 1, f = 0.6, r;
-            vB = [vB[0], vB[1]+(g*t)];
+            vB = [vB[0], vB[1]+(g*t)]; //v=u+at
             xyB = [xyB[0]+(vB[0]*t), xyB[1]+(vB[1]*t)];
             if( r = ball.move(xyB) ){
                 if( r[0] ){ vB = [-vB[0]*f, vB[1]]; }
-                if( r[1] ){ vB = [vB[0], -vB[0]*f]; }
-                if(Math.abs(vB[0])+Math.abs(vB[1]) < 0.36) { clearTimeout(drop); return; }
+                if( r[1] ){ vB = [vB[0], -vB[1]*f]; }
             }
+            console.log(Math.abs(vB[0])+Math.abs(vB[1]));
+            if( Math.abs(vB[0])+Math.abs(vB[1]) < 0.36 ){ console.log('stop');clearTimeout(drop); return; }
             drop = setTimeout(function(){ ball.drop() }, 23);
             return false;
         };
