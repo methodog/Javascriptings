@@ -6,7 +6,7 @@
         html, body { height:100%; margin:0; width:100%; }
         body { background:#666; }
         #cont, #ball { background:#ddd; border:1px solid #000; display:block; height:100%; width:100%; position:relative; }
-        #ball { background:#666; border-radius:30px; height:60px; margin:0; width:60px; position:absolute; }
+        #ball { background:#666; border-radius:30px; height:60px; margin:0; width:60px; position:absolute; left:40%; top:40%; }
     </style>	
 </head>
 
@@ -17,7 +17,7 @@
 <script type="text/javascript">
 (function() {
     "use strict";
-    var ball, xyB, whB, vB, cont, whC, t=1, drop;
+    var ball, xyB, whB, vB=[0,0], cont, whC, t=1, tD;
     
     if( window.addEventListener ){
         window.addEventListener('load', init, false); 
@@ -37,10 +37,10 @@
         whC = [getComputed(cont,'width'), getComputed(cont,'height')];
         ball.move = function(xy){
             var x=xy[0], y=xy[1], r;
-            if( x<0 ){ x=0; r=[1,0]; }
-            if( x>whC[0]-whB[0] ){ x=whC[0]-whB[0]; r=[1,0]; }
-            if( y<0 ){ y=0; r=[0,1]; }
-            if( y>whC[1]-whB[1] ){ y=whC[1]-whB[0]; r=[0,1]; }
+            if( x<=0 ){ x=0; r=[-1,0]; }
+            if( x>=whC[0]-whB[0] ){ x=whC[0]-whB[0]; r=[1,0]; }
+            if( y<=0 ){ y=0; r=[0,-1]; }
+            if( y>=whC[1]-whB[1] ){ y=whC[1]-whB[0]; r=[0,1]; }
             xyB = [x,y];
             this.style.left = x+'px';
             this.style.top = y+'px';
@@ -51,12 +51,11 @@
             vB = [vB[0], vB[1]+(g*t)]; //v=u+at
             xyB = [xyB[0]+(vB[0]*t), xyB[1]+(vB[1]*t)];
             if( r = ball.move(xyB) ){
-                if( r[0] ){ vB = [-vB[0]*f, vB[1]]; }
-                if( r[1] ){ vB = [vB[0], -vB[1]*f]; }
+                if( r[0] ){ vB = [-vB[0]*f, vB[1]*f]; }
+                if( r[1] ){ vB = [vB[0]*f, -vB[1]*f]; }
+                if( r[1]>0 && Math.abs(vB[0])+Math.abs(vB[1]) < 0.5 ){ console.log('stop');clearTimeout(tD); }
             }
-            console.log(Math.abs(vB[0])+Math.abs(vB[1]));
-            if( Math.abs(vB[0])+Math.abs(vB[1]) < 0.36 ){ console.log('stop');clearTimeout(drop); return; }
-            drop = setTimeout(function(){ ball.drop() }, 23);
+            tD = setTimeout(function(){ ball.drop(); }, 23);
             return false;
         };
         if( window.addEventListener ){
@@ -88,7 +87,7 @@
             };
         }
 
-        var xy0 = [parseFloat(ball.style.left)||0, parseFloat(ball.style.top)||0],
+        var xy0 = [getComputed(ball,'left'), getComputed(ball,'top')], 
             xyT = getXY(e);
         
         function getXY(e){
@@ -109,7 +108,9 @@
         }
         
         function drag(e){
-            clearTimeout(drop);
+            e = e || window.event;
+            if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
+            clearTimeout(tD);
             var xyE = getXY(e), xy;
             xy = [xy0[0]+xyE[0]-xyT[0], xy0[1]+xyE[1]-xyT[1]];
             vB = [(xy[0]-xyB[0])/t,(xy[1]-xyB[1])/t];
@@ -120,7 +121,7 @@
     
     function respond(){
         whC = [getComputed(cont,'width'), getComputed(cont,'height')];
-        ball.move([parseFloat(ball.style.left), parseFloat(ball.style.top)]);
+        ball.move([getComputed(ball,'left'), getComputed(ball,'top')]);
     }
 }());    
 </script>
