@@ -5,124 +5,95 @@
     <style type="text/css">
         html, body { height:100%; margin:0; width:100%; }
         body { background:#666; }
-        #cont, #ball { background:#ddd; border:1px solid #000; display:block; height:100%; width:100%; position:relative; }
-        #ball { background:#666; border-radius:30px; height:60px; margin:0; width:60px; position:absolute; left:40%; top:40%; }
+        #cont, #ball, #ball2 { background:#ddd; border:1px solid #000; display:block; height:100%; width:100%; position:relative; }
+        #ball, #ball2 { background:#666; border-radius:30px; height:60px; margin:0; width:60px; position:absolute; left:40%; top:40%; }
     </style>	
 </head>
 
 <body>
-    <div id="cont"><div id="ball"></div></div>
+    <div id="cont"><div id="ball"></div><div id="ball2"></div></div>
 </body>
 
 <script type="text/javascript">
-(function() {
-    "use strict";
-    var ball, xyB, whB, vB=[0,0], cont, whC, t=1, tD;
-    
-    if( window.addEventListener ){
-        window.addEventListener('load', init, false); 
-    }else if( window.attachEvent ){
-        window.attachEvent('onload', init);
-    }
-    
-    function getComputed(el,style){
-        return parseFloat(document.defaultView? document.defaultView.getComputedStyle(el,'').getPropertyValue(style) : el.currentStyle? el.currentStyle[style] : null);
-    }
-    
-    function init(){
-        ball = document.getElementById('ball');
-        whB = [getComputed(ball,'width'), getComputed(ball,'height')];
-        xyB = [getComputed(ball,'left'), getComputed(ball,'top')];
-        cont = document.getElementById('cont');
-        whC = [getComputed(cont,'width'), getComputed(cont,'height')];
-        ball.move = function(xy){
+function addHandler(obj,evt,fn){ if( obj.addEventListener ){ obj.addEventListener(evt,fn,false); }else if( obj.attachEvent ){ obj.attachEvent('on'+evt,fn); } }
+function rmHandler(obj,evt,fn){ if( obj.removeEventListener ){obj.removeEventListener(evt,fn,false); }else if( obj.detachEvent ){ obj.detachEvent('on'+evt,fn); } }
+function getComputed(el,style){ return parseFloat(document.defaultView? document.defaultView.getComputedStyle(el,'').getPropertyValue(style) : el.currentStyle? el.currentStyle[style] : null); }
+function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
+dragDrop = {
+	obj: undefined, xy0: undefined, xyT: undefined, 
+	init: function(el) {
+		if(typeof el==='string'){ el = document.getElementById(el); }
+		el.onmousedown = dragDrop.touch;
+        el.xy = [getComputed(el,'left'), getComputed(el,'top')];
+        el.v = [0,0];
+        el.wh = [getComputed(el,'width'), getComputed(el,'height')];
+        el.P = el.parentNode;
+        el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
+        el.move = function(xy){
             var x=xy[0], y=xy[1], r;
             if( x<=0 ){ x=0; r=[-1,0]; }
-            if( x>=whC[0]-whB[0] ){ x=whC[0]-whB[0]; r=[1,0]; }
+            if( x>=this.whP[0]-this.wh[0] ){ x=this.whP[0]-this.wh[0]; r=[1,0]; }
             if( y<=0 ){ y=0; r=[0,-1]; }
-            if( y>=whC[1]-whB[1] ){ y=whC[1]-whB[0]; r=[0,1]; }
-            xyB = [x,y];
+            if( y>=this.whP[1]-this.wh[1] ){ y=this.whP[1]-this.wh[0]; r=[0,1]; }
+            this.xy = [x,y];
             this.style.left = x+'px';
             this.style.top = y+'px';
             return r;
         };
-        ball.drop = function(){
+        el.drop = function(){
             var g = 1, f = 0.6, r;
-            vB = [vB[0], vB[1]+(g*t)]; //v=u+at
-            xyB = [xyB[0]+(vB[0]*t), xyB[1]+(vB[1]*t)];
-            if( r = ball.move(xyB) ){
-                if( r[0] ){ vB = [-vB[0]*f, vB[1]*f]; }
-                if( r[1] ){ vB = [vB[0]*f, -vB[1]*f]; }
-                if( r[1]>0 && Math.abs(vB[0])+Math.abs(vB[1]) < 0.5 ){ console.log('stop');clearTimeout(tD); }
+            this.v = [this.v[0], this.v[1]+(g)]; //v=u+at
+            this.xy = [this.xy[0]+(this.v[0]), this.xy[1]+(this.v[1])];
+            if( r = this.move(this.xy) ){
+                if( r[0] ){ this.v = [-this.v[0]*f, this.v[1]*f]; }
+                if( r[1] ){ this.v = [this.v[0]*f, -this.v[1]*f]; }
+                if( r[1]>0 && Math.abs(this.v[0])+Math.abs(this.v[1]) < 0.5 ){ console.log(this.t);clearTimeout(this.t); }
             }
-            tD = setTimeout(function(){ ball.drop(); }, 23);
+            this.t = setTimeout(function(){ el.drop(); }, 23);
             return false;
         };
-        if( window.addEventListener ){
-            window.addEventListener('resize', respond, false); 
-            ball.addEventListener('mousedown', touch, false);
-            ball.addEventListener('touchstart', touch, false);
-        }else if( window.attachEvent ){
-            window.attachEvent('onresize', respond);
-            ball.attachEvent('onmousedown', touch);
-            ball.attachEvent('ontouchstart', touch);
-        }
-    }
-    
-    function touch(e){
-        if( e.type==='touchstart' ){
-            ball.ontouchmove = drag;
-            ball.onmousedown = null;
-            ball.ontouchend = function(){
-                ball.ontouchmove = null;
-                ball.ontouchend = null;
-                ball.drop();
-            };
-        }else{
-            document.onmousemove = drag;
-            document.onmouseup = function(){
-                document.onmousemove = null;
-                document.onmouseup = null;
-                ball.drop();
-            };
-        }
+	},
+	touch: function(e){
+		e = e || window.event;
+		if( dragDrop.obj ){ dragDrop.release(); }
+		dragDrop.xy0 = [getComputed(this,'left'), getComputed(this,'top')];
+        dragDrop.xyT = getXY(e);
+		dragDrop.obj = this;
+		this.className += ' dragged';
+		addHandler(document,'mousemove',dragDrop.drag);
+		addHandler(document,'mouseup',dragDrop.release);
+		return false;
+	},
+	drag: function(e){
+        clearTimeout(dragDrop.obj.t);
+		e = e || window.event;
+        var xyE = getXY(e), 
+            xy = [dragDrop.xy0[0]+xyE[0]-dragDrop.xyT[0], dragDrop.xy0[1]+xyE[1]-dragDrop.xyT[1]];
+        dragDrop.obj.v = [(xy[0]-dragDrop.obj.xy[0]),(xy[1]-dragDrop.obj.xy[1])];
+        dragDrop.obj.move(xy);
+		return false;
+	},
+	release: function(){
+		rmHandler(document,'mousemove',dragDrop.drag);
+		rmHandler(document,'mouseup',dragDrop.release);
+		dragDrop.obj.className = dragDrop.obj.className.replace(/dragged/,'');
+		dragDrop.obj.drop();
+		dragDrop.obj = null;
+	}
+}
 
-        var xy0 = [getComputed(ball,'left'), getComputed(ball,'top')], 
-            xyT = getXY(e);
-        
-        function getXY(e){
-            var xy = [];
-            if( e.touches && e.touches.length ){
-                if( e.touches.length>1 ){
-                    xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2;
-                    xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;
-                }else{
-                    xy[0] = e.touches[0].pageX;
-                    xy[1] = e.touches[0].pageY;
-                }
-            }else{
-                xy[0] = e.pageX;
-                xy[1] = e.pageY;
-            }
-            return xy;
-        }
-        
-        function drag(e){
-            e = e || window.event;
-            if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
-            clearTimeout(tD);
-            var xyE = getXY(e), xy;
-            xy = [xy0[0]+xyE[0]-xyT[0], xy0[1]+xyE[1]-xyT[1]];
-            vB = [(xy[0]-xyB[0])/t,(xy[1]-xyB[1])/t];
-            ball.move(xy);
-            return false;
-        }
-    }
-    
-    function respond(){
-        whC = [getComputed(cont,'width'), getComputed(cont,'height')];
-        ball.move([getComputed(ball,'left'), getComputed(ball,'top')]);
-    }
-}());    
+ball = document.getElementById('ball');
+ball2 = document.getElementById('ball2');
+
+dragDrop.init(ball);
+dragDrop.init(ball2);
+
+addHandler(window,'resize',function(){
+    ball.whP = [getComputed(ball.P,'width'), getComputed(ball.P,'height')];
+    ball.move([getComputed(ball,'left'), getComputed(ball,'top')]);
+    ball2.whP = [getComputed(ball2.P,'width'), getComputed(ball2.P,'height')];
+    ball2.move([getComputed(ball2,'left'), getComputed(ball2,'top')]);
+});
+
 </script>
 </html>
