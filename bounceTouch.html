@@ -24,6 +24,7 @@ dragDrop = {
 	init: function(el) {
 		if(typeof el==='string'){ el = document.getElementById(el); }
 		el.onmousedown = dragDrop.touch;
+		el.ontouchstart = dragDrop.touch;
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
         el.v = [0,0];
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
@@ -60,8 +61,22 @@ dragDrop = {
         dragDrop.xyT = getXY(e);
 		dragDrop.obj = this;
 		this.className += ' dragged';
-		addHandler(document,'mousemove',dragDrop.drag);
-		addHandler(document,'mouseup',dragDrop.release);
+		if( e.type==='touchstart' ){
+            dragDrop.obj.ontouchmove = dragDrop.drag;
+            dragDrop.obj.onmousedown = null;
+            dragDrop.obj.ontouchend = function(){
+                dragDrop.obj.ontouchmove = null;
+                dragDrop.obj.ontouchend = null;
+                dragDrop.release();
+            };
+        }else{
+            document.onmousemove = dragDrop.drag;
+            document.onmouseup = function(){
+                document.onmousemove = null;
+                document.onmouseup = null;
+                dragDrop.release();
+            };
+        }
 		return false;
 	},
 	drag: function(e){
@@ -74,11 +89,9 @@ dragDrop = {
 		return false;
 	},
 	release: function(){
-		rmHandler(document,'mousemove',dragDrop.drag);
-		rmHandler(document,'mouseup',dragDrop.release);
 		dragDrop.obj.className = dragDrop.obj.className.replace(/dragged/,'');
-		dragDrop.obj.drop();
 		dragDrop.obj = null;
+		dragDrop.obj.drop();
 	}
 }
 
