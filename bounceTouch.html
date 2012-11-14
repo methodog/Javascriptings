@@ -60,6 +60,7 @@ dragDrop = {
 		if( dragDrop.obj ){ dragDrop.release(); }
 		dragDrop.obj = this;
         clearTimeout(dragDrop.obj.t);
+        dragZoom.obj.v = [0,0];
 		dragDrop.xy0 = [getComputed(this,'left'), getComputed(this,'top')];
         dragDrop.xyT = getXY(e);
 		this.className += ' dragged';
@@ -90,7 +91,7 @@ dragDrop = {
 		return false;
 	},
 	release: function(){
-		dragDrop.obj.className = dragDrop.obj.className.replace(/dragged/,'');
+		dragDrop.obj.className = dragDrop.obj.className.replace(/ dragged/,'');
 		dragDrop.obj.drop();
 		dragDrop.obj = null;
 	}
