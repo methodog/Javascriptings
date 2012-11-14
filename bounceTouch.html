@@ -57,9 +57,10 @@ dragDrop = {
 	touch: function(e){
 		e = e || window.event;
 		if( dragDrop.obj ){ dragDrop.release(); }
+		dragDrop.obj = this;
+        clearTimeout(dragDrop.obj.t);
 		dragDrop.xy0 = [getComputed(this,'left'), getComputed(this,'top')];
         dragDrop.xyT = getXY(e);
-		dragDrop.obj = this;
 		this.className += ' dragged';
 		if( e.type==='touchstart' ){
             dragDrop.obj.ontouchmove = dragDrop.drag;
@@ -80,7 +81,6 @@ dragDrop = {
 		return false;
 	},
 	drag: function(e){
-        clearTimeout(dragDrop.obj.t);
 		e = e || window.event;
         var xyE = getXY(e), 
             xy = [dragDrop.xy0[0]+xyE[0]-dragDrop.xyT[0], dragDrop.xy0[1]+xyE[1]-dragDrop.xyT[1]];
