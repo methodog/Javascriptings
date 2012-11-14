@@ -90,8 +90,8 @@ dragDrop = {
 	},
 	release: function(){
 		dragDrop.obj.className = dragDrop.obj.className.replace(/dragged/,'');
-		dragDrop.obj = null;
 		dragDrop.obj.drop();
+		dragDrop.obj = null;
 	}
 }
 
@@ -107,6 +107,5 @@ addHandler(window,'resize',function(){
     ball2.whP = [getComputed(ball2.P,'width'), getComputed(ball2.P,'height')];
     ball2.drop();
 });
-
 </script>
 </html>
