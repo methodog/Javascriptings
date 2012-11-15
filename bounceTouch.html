@@ -59,7 +59,6 @@ dragDrop = {
 	},
 	touch: function(e){
 		e = e || window.event;
-		if( dragDrop.obj ){ dragDrop.release(); }
 		dragDrop.obj = this;
         clearTimeout(dragDrop.obj.t);
         dragDrop.obj.v = [0,0];
