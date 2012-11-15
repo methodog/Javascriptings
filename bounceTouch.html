@@ -86,6 +86,7 @@ dragDrop = {
 	},
 	drag: function(e){
 		e = e || window.event;
+        if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
         var xyE = getXY(e), 
             xy = [dragDrop.xy0[0]+xyE[0]-dragDrop.xyT[0], dragDrop.xy0[1]+xyE[1]-dragDrop.xyT[1]];
         dragDrop.obj.v = [(xy[0]-dragDrop.obj.xy[0]),(xy[1]-dragDrop.obj.xy[1])];
