@@ -6,8 +6,8 @@
     <style type="text/css">
         html, body { height:100%; margin:0; width:100%; }
         body { background:#666; font:15px/1 helvetica,arial,freesans,sans-serif; font-weight:600; }
-        #cont, #ball, #ball2 { background:#ddd; border:1px solid #333; display:block; height:100%; width:100%; position:relative; }
-        #ball, #ball2 { background:#888; cursor:pointer; border-radius:2.5em; height:5em; line-height:5em; width:5em; margin:0; text-align:center; position:absolute; left:130px; top:100px; }
+        #cont, #ball, #ball2 { background:#ddd; border:1px solid #333; display:block; height:500px; width:500px; position:relative; }
+        #ball, #ball2 { background:#888; cursor:pointer; border-radius:2.5em; height:5em; line-height:5em; width:5em; margin:0; text-align:center; position:absolute; }
     </style>	
 </head>
 
@@ -18,19 +18,19 @@
 <script type="text/javascript">
 function addHandler(obj,evt,fn){ if( obj.addEventListener ){ obj.addEventListener(evt,fn,false); }else if( obj.attachEvent ){ obj.attachEvent('on'+evt,fn); } }
 function rmHandler(obj,evt,fn){ if( obj.removeEventListener ){obj.removeEventListener(evt,fn,false); }else if( obj.detachEvent ){ obj.detachEvent('on'+evt,fn); } }
-function getComputed(el,style){ return parseFloat(document.defaultView? document.defaultView.getComputedStyle(el,'').getPropertyValue(style) : el.currentStyle? el.currentStyle[style] : null); }
+function getComputed(el,style){ if(el.currentStyle){ var y=el.currentStyle[style]; }else if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); } return parseFloat(y); }
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 var dragDrop;
 dragDrop = {
 	obj: undefined, xy0: undefined, xyT: undefined, 
-	init: function(el) {
+	init: function(el, container) {
 		if(typeof el==='string'){ el = document.getElementById(el); }
 		el.onmousedown = dragDrop.touch;
 		el.ontouchstart = dragDrop.touch;
-        el.xy = [getComputed(el,'left'), getComputed(el,'top')];
+        el.xy = [getComputed(el,'left')||0, getComputed(el,'top')||0];
         el.v = [0,0];
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
-        el.P = el.parentNode;
+        el.P = container||el.parentNode;
         el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
         el.move = function(xy){
             var x=xy[0], y=xy[1], r;
@@ -62,7 +62,7 @@ dragDrop = {
 		dragDrop.obj = this;
         clearTimeout(dragDrop.obj.t);
         dragDrop.obj.v = [0,0];
-		dragDrop.xy0 = [getComputed(this,'left'), getComputed(this,'top')];
+		dragDrop.xy0 = [getComputed(this,'left')||0, getComputed(this,'top')||0];
         dragDrop.xyT = getXY(e);
 		this.className += ' dragged';
 		if( e.type==='touchstart' ){
@@ -102,8 +102,8 @@ dragDrop = {
 var ball = document.getElementById('ball');
 var ball2 = document.getElementById('ball2');
 
-dragDrop.init(ball);
-dragDrop.init(ball2);
+dragDrop.init(ball, document.body);
+dragDrop.init(ball2, document.body);
 
 addHandler(window,'resize',function(){
     ball.whP = [getComputed(ball.P,'width'), getComputed(ball.P,'height')];
