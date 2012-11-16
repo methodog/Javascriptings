@@ -27,7 +27,7 @@ dragDrop = {
 		if(typeof el==='string'){ el = document.getElementById(el); }
 		el.onmousedown = dragDrop.touch;
 		el.ontouchstart = dragDrop.touch;
-        el.xy = [getComputed(el,'left')||0, getComputed(el,'top')||0];
+        el.xy = [getComputed(el,'left'), getComputed(el,'top')];
         el.v = [0,0];
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
         el.P = container||el.parentNode;
@@ -62,7 +62,7 @@ dragDrop = {
 		dragDrop.obj = this;
         clearTimeout(dragDrop.obj.t);
         dragDrop.obj.v = [0,0];
-		dragDrop.xy0 = [getComputed(this,'left')||0, getComputed(this,'top')||0];
+		dragDrop.xy0 = [getComputed(this,'left'), getComputed(this,'top')];
         dragDrop.xyT = getXY(e);
 		this.className += ' dragged';
 		if( e.type==='touchstart' ){
