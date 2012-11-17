@@ -40,22 +40,22 @@
 
 </body>
 <script type="text/javascript">
-function addHandler(obj,evt,fn){ if( obj.addEventListener ){ obj.addEventListener(evt,fn,false); }else if( obj.attachEvent ){ obj.attachEvent('on'+evt,fn); } }
-function rmHandler(obj,evt,fn){ if( obj.removeEventListener ){obj.removeEventListener(evt,fn,false); }else if( obj.detachEvent ){ obj.detachEvent('on'+evt,fn); } }
+function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
+function rmHandler(el,evt,fn){ if( el.removeEventListener ){el.removeEventListener(evt,fn,false); }else if( el.detachEvent ){ el.detachEvent('on'+evt,fn); } }
 function getComputed(el,style){ if(el.currentStyle){ var y=el.currentStyle[style]; }else if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); } return parseFloat(y); }
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
-var dragDrop;
-dragDrop = {
-	obj:null, xy0:null, xyT:null, d0:null, 
+var dragZoom;
+dragZoom = {
+	el:null, xy0:null, xyT:null, d0:null, 
 	init: function(el,zoomer) {
 		if(typeof el==='string'){ el = document.getElementById(el); }
-		el.onmousedown = dragDrop.touch;
-		el.ontouchstart = dragDrop.touch;
+		el.onmousedown = dragZoom.touch;
+		el.ontouchstart = dragZoom.touch;
         if( window.addEventListener ){
-            el.addEventListener('DOMMouseScroll', dragDrop.touch, false); 
-            el.addEventListener('mousewheel', dragDrop.touch, false); 
+            el.addEventListener('DOMMouseScroll', dragZoom.touch, false); 
+            el.addEventListener('mousewheel', dragZoom.touch, false); 
         }else if( window.attachEvent ){
-            el.attachEvent('onmousewheel', dragDrop.touch);
+            el.attachEvent('onmousewheel', dragZoom.touch);
         }
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
         el.v = [0,0];
@@ -100,35 +100,35 @@ dragDrop = {
 	},
 	touch: function(e){
 		e = e || window.event;
-		dragDrop.obj = this;
-        clearTimeout(dragDrop.obj.t);
-		dragDrop.obj.v = [0,0];
-		dragDrop.xy0 = [getComputed(this,'left'), getComputed(this,'top')];
-        dragDrop.xyT = getXY(e);
+		dragZoom.el = this;
+        clearTimeout(dragZoom.el.t);
+		dragZoom.el.v = [0,0];
+		dragZoom.xy0 = [getComputed(this,'left'), getComputed(this,'top')];
+        dragZoom.xyT = getXY(e);
 		if( e.type==='touchstart' ){
             if( e.touches && e.touches.length===2 ){
-                if( dragDrop.obj.zoomer ){
-                    dragDrop.d0 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
-                    dragDrop.obj.ontouchmove = dragDrop.zoom;
+                if( dragZoom.el.zoomer ){
+                    dragZoom.d0 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
+                    dragZoom.el.ontouchmove = dragZoom.zoom;
                 }
             }else{
-                dragDrop.obj.ontouchmove = dragDrop.drag;
+                dragZoom.el.ontouchmove = dragZoom.drag;
             }
-            dragDrop.obj.onmousedown = null;
-            dragDrop.obj.ontouchend = function(){
-                dragDrop.obj.ontouchmove = null;
-                dragDrop.obj.ontouchend = null;
-                dragDrop.release();
+            dragZoom.el.onmousedown = null;
+            dragZoom.el.ontouchend = function(){
+                dragZoom.el.ontouchmove = null;
+                dragZoom.el.ontouchend = null;
+                dragZoom.release();
             };
         }else{
             if( e.type==='DOMMouseScroll' || e.type==='mousewheel' ){
-                if( dragDrop.obj.zoomer ){ dragDrop.zoom(e); }
+                if( dragZoom.el.zoomer ){ dragZoom.zoom(e); }
             }else{
-                document.onmousemove = dragDrop.drag;
+                document.onmousemove = dragZoom.drag;
                 document.onmouseup = function(){
                     document.onmousemove = null;
                     document.onmouseup = null;
-                    dragDrop.release();
+                    dragZoom.release();
                 };
             }
         }
@@ -138,14 +138,14 @@ dragDrop = {
 		e = e || window.event;
         if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
         var xyE = getXY(e), 
-            xy = [dragDrop.xy0[0]+xyE[0]-dragDrop.xyT[0], dragDrop.xy0[1]+xyE[1]-dragDrop.xyT[1]];
-        dragDrop.obj.v = [(xy[0]-dragDrop.obj.xy[0]),(xy[1]-dragDrop.obj.xy[1])];
-        dragDrop.obj.move(xy);
+            xy = [dragZoom.xy0[0]+xyE[0]-dragZoom.xyT[0], dragZoom.xy0[1]+xyE[1]-dragZoom.xyT[1]];
+        dragZoom.el.v = [(xy[0]-dragZoom.el.xy[0]),(xy[1]-dragZoom.el.xy[1])];
+        dragZoom.el.move(xy);
 		return false;
 	},
 	release: function(){
-		dragDrop.obj.drop();
-		dragDrop.obj = null;
+		dragZoom.el.drop();
+		dragZoom.el = null;
 	},
     zoom: function(e){
         e = e || window.event;
@@ -153,29 +153,29 @@ dragDrop = {
         var z, d1, xy0;
         if( e.touches ){
             d1 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
-            z = 1+((d1-dragDrop.d0>0?1:-1)*0.05);
-            dragDrop.d0 = d1;
-            xy0 = [dragDrop.xyT[0],dragDrop.xyT[1]];
+            z = 1+((d1-dragZoom.d0>0?1:-1)*0.05);
+            dragZoom.d0 = d1;
+            xy0 = [dragZoom.xyT[0],dragZoom.xyT[1]];
         }else{
             z = (e.detail? e.detail*-1 : e.wheelDelta/40);
             z = 1+((z>0?1:-1)*0.25);
-            xy0 = [dragDrop.obj.whP[0]/2,dragDrop.obj.whP[1]/2];
+            xy0 = [dragZoom.el.whP[0]/2,dragZoom.el.whP[1]/2];
         }
-        if( dragDrop.obj.wh[0]*z>dragDrop.obj.whP[0] || dragDrop.obj.wh[1]*z>dragDrop.obj.whP[1] ){
-            dragDrop.obj.zoom(z,xy0);
+        if( dragZoom.el.wh[0]*z>dragZoom.el.whP[0] || dragZoom.el.wh[1]*z>dragZoom.el.whP[1] ){
+            dragZoom.el.zoom(z,xy0);
         }else{
-            dragDrop.obj.zoom0();
+            dragZoom.el.zoom0();
         }
         return false;
     }
 };
 
 var map = document.getElementById('map');
-dragDrop.init(map, 1);
+dragZoom.init(map, 1);
 var list = document.getElementById('list');
-dragDrop.init(list);
+dragZoom.init(list);
 var listV = document.getElementById('list-v');
-dragDrop.init(listV);
+dragZoom.init(listV);
 
 addHandler(window,'resize',function(){
     map.whP = [getComputed(map.P,'width'), getComputed(map.P,'height')];
