@@ -6,14 +6,16 @@
     <title>Bounce (Methodog)</title>
     <style type="text/css">
         html, body { height:100%; margin:0; width:100%; }
-        body { background:#666; font:15px/1 helvetica,arial,freesans,sans-serif; font-weight:600; }
-        #cont, #ball, #ball2 { background:#ddd; border:1px solid #333; display:block; height:50%; width:50%; margin:auto; position:relative; }
-        #ball, #ball2 { background:#888; cursor:pointer; border-radius:2.5em; height:5em; line-height:5em; width:5em; margin:0; text-align:center; position:relative; left:0; top:0; }
+        body { background:#000; font:18px/1 helvetica,arial,freesans,sans-serif; font-weight:600; height:95%; }
+        body, i { color:#fff; }
+        i { cursor:pointer; display:inline-block; }
+        i, #cont { position:relative; }
+        #cont { margin:auto; width:50%; text-align:center; top:10%; }
     </style>	
 </head>
 
 <body>
-    <div id="cont"><div id="ball">BACK</div><div id="ball2">ENTER</div></div>
+    <div id="cont"><i>I</i> <i>M</i><i>A</i><i>D</i><i>E</i> <i>S</i><i>N</i><i>O</i><i>W</i></div>
 </body>
 
 <script type="text/javascript">
@@ -47,14 +49,14 @@ dragDrop = {
             return r;
         };
         el.drop = function(){
-            var g = 1, f = 0.6, r;
-            this.v = [this.v[0], this.v[1]+g]; //v=u+at
+            var g = 0.01, f = 0.99, fC = 0.4, r;
+            this.v = [this.v[0]*f, this.v[1]+g]; //v=u+at
             this.xy = [this.xy[0]+this.v[0], this.xy[1]+this.v[1]];
             r = this.move(this.xy);
             if( r ){
-                if( r[0] ){ this.v = [-this.v[0]*f, this.v[1]*f]; }
-                if( r[1] ){ this.v = [this.v[0]*f, -this.v[1]*f]; }
-                if( r[1]>0 && Math.abs(this.v[0])+Math.abs(this.v[1]) < 0.5 ){ clearTimeout(this.t); return; }
+                if( r[0] ){ this.v = [-this.v[0], this.v[1]]; }
+                if( r[1]<0 ){ this.v = [this.v[0], -this.v[1]*fC]; }
+                if( r[1]>0 ){ clearTimeout(this.t); this.v = [(Math.random()<0.5?-1:1)*Math.random()*7,-Math.random()*4]; return; }
             }
             this.t = setTimeout(function(){ el.drop(); }, 23);
             return false;
@@ -102,17 +104,16 @@ dragDrop = {
 	}
 };
 
-var ball = document.getElementById('ball');
-var ball2 = document.getElementById('ball2');
-
-dragDrop.init(ball);
-dragDrop.init(ball2, 1);
-
+var els = document.getElementsByTagName('I');
+for( var i=0; i<els.length; ++i ){
+    dragDrop.init(els[i], 1);
+}
 addHandler(window,'resize',function(){
-    ball.whP = [getComputed(ball.P,'width'), getComputed(ball.P,'height')];
-    ball.drop();
-    ball2.whP = [getComputed(ball2.P,'width'), getComputed(ball2.P,'height')];
-    ball2.drop();
+    for( var i=0; i<els.length; ++i ){
+        els[i].whP = [getComputed(els[i].P,'width'), getComputed(els[i].P,'height')];
+        els[i].v = [(Math.random()<0.5?-1:1)*Math.random()*7, els[i].v[1]-Math.random()*4];
+        els[i].drop();
+    }
 });
 </script>
 </html>
