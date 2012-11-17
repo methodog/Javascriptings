@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bounce (Methodog)</title>
+    <style type="text/css">
+        html, body { height:100%; margin:0; width:100%; }
+        body { background:#666; font:15px/1 helvetica,arial,freesans,sans-serif; font-weight:600; }
+        #cont, #ball, #ball2 { background:#ddd; border:1px solid #333; display:block; height:50%; width:50%; margin:auto; position:relative; }
+        #ball, #ball2 { background:#888; cursor:pointer; border-radius:2.5em; height:5em; line-height:5em; width:5em; margin:0; text-align:center; position:relative; left:0; top:0; }
+    </style>	
+</head>
+
+<body>
+    <div id="cont"><div id="ball">BACK</div><div id="ball2">ENTER</div></div>
+</body>
+
+<script type="text/javascript">
+function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
+function rmHandler(el,evt,fn){ if( el.removeEventListener ){el.removeEventListener(evt,fn,false); }else if( el.detachEvent ){ el.detachEvent('on'+evt,fn); } }
+function getComputed(el,style){ if(el.currentStyle){ var y=el.currentStyle[style]; }else if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); } return parseFloat(y); }
+function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
+function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
+var dragDrop;
+dragDrop = {
+	el: null, xy0: null, xyT: null, 
+	init: function(el, unbound) {
+		if(typeof el==='string'){ el = document.getElementById(el); }
+		el.onmousedown = dragDrop.touch;
+		el.ontouchstart = dragDrop.touch;
+        el.xy = [getComputed(el,'left'), getComputed(el,'top')];
+        el.v = [0,0];
+        el.wh = [getComputed(el,'width'), getComputed(el,'height')];
+        el.P = unbound? document.body:el.parentNode;
+        el.xyO = unbound? getPgOffset(el):[0,0];
+        el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
+        el.move = function(xy){
+            var x=xy[0], y=xy[1], r;
+            if( x<=0-el.xyO[0] ){ x=0-el.xyO[0]; r=[-1,0]; }
+            if( x>=this.whP[0]-this.wh[0]-el.xyO[0] ){ x=this.whP[0]-this.wh[0]-el.xyO[0]; r=[1,0]; }
+            if( y<=0-el.xyO[1] ){ y=0-el.xyO[1]; r=[0,-1]; }
+            if( y>=this.whP[1]-this.wh[1]-el.xyO[1] ){ y=this.whP[1]-this.wh[0]-el.xyO[1]; r=[0,1]; }
+            this.xy = [x,y];
+            this.style.left = x+'px';
+            this.style.top = y+'px';
+            return r;
+        };
+        el.drop = function(){
+            var g = 1, f = 0.6, r;
+            this.v = [this.v[0], this.v[1]+g]; //v=u+at
+            this.xy = [this.xy[0]+this.v[0], this.xy[1]+this.v[1]];
+            r = this.move(this.xy);
+            if( r ){
+                if( r[0] ){ this.v = [-this.v[0]*f, this.v[1]*f]; }
+                if( r[1] ){ this.v = [this.v[0]*f, -this.v[1]*f]; }
+                if( r[1]>0 && Math.abs(this.v[0])+Math.abs(this.v[1]) < 0.5 ){ clearTimeout(this.t); return; }
+            }
+            this.t = setTimeout(function(){ el.drop(); }, 23);
+            return false;
+        };
+	},
+	touch: function(e){
+		e = e || window.event;
+		dragDrop.el = this;
+        clearTimeout(dragDrop.el.t);
+        dragDrop.el.v = [0,0];
+		dragDrop.xy0 = dragDrop.el.xy;
+        dragDrop.xyT = getXY(e);
+		this.className += ' dragged';
+		if( e.type==='touchstart' ){
+            dragDrop.el.ontouchmove = dragDrop.drag;
+            dragDrop.el.onmousedown = null;
+            dragDrop.el.ontouchend = function(){
+                dragDrop.el.ontouchmove = null;
+                dragDrop.el.ontouchend = null;
+                dragDrop.release();
+            };
+        }else{
+            document.onmousemove = dragDrop.drag;
+            document.onmouseup = function(){
+                document.onmousemove = null;
+                document.onmouseup = null;
+                dragDrop.release();
+            };
+        }
+		return false;
+	},
+	drag: function(e){
+		e = e || window.event;
+        if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
+        var xyE = getXY(e), 
+            xy = [dragDrop.xy0[0]+xyE[0]-dragDrop.xyT[0], dragDrop.xy0[1]+xyE[1]-dragDrop.xyT[1]];
+        dragDrop.el.v = [(xy[0]-dragDrop.el.xy[0]),(xy[1]-dragDrop.el.xy[1])];
+        dragDrop.el.move(xy);
+		return false;
+	},
+	release: function(){
+		dragDrop.el.className = dragDrop.el.className.replace(/ dragged/,'');
+		dragDrop.el.drop();
+		dragDrop.el = null;
+	}
+};
+
+var ball = document.getElementById('ball');
+var ball2 = document.getElementById('ball2');
+
+dragDrop.init(ball);
+dragDrop.init(ball2, 1);
+
+addHandler(window,'resize',function(){
+    ball.whP = [getComputed(ball.P,'width'), getComputed(ball.P,'height')];
+    ball.drop();
+    ball2.whP = [getComputed(ball2.P,'width'), getComputed(ball2.P,'height')];
+    ball2.drop();
+});
+</script>
+</html>
