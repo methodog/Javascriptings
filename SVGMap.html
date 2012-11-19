@@ -3,17 +3,24 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SVGMap (Methodog)</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="apple-touch-icon" href="http://www.vam.ac.uk/__data/assets/image/0008/173609/favicon_130.png" />
+    <link rel="apple-touch-startup-image" href="http://www.vam.ac.uk/__data/assets/image/0018/173610/favicon_1024.png" />
+    <link rel="shortcut icon" href="http://www.vam.ac.uk/__data/assets/file/0008/172358/favicon.ico" />
+    <title>V&amp;A ActiveMap</title>
     <style type="text/css" media="all">
         html, body { height:100%; margin:0; width:100%; }
         body { font:13.5px/1.184 "V&A TheSansLightPlain",helvetica,arial,freesans,sans-serif; }
         .col { float:left; height:100%; width:74%; }
         .col.right { width:26%; }
         .clip { border:1px solid #000; height:100%; width:100%; overflow:hidden; position:relative; }
+        .dragpad, .draggable { height:100%; position:absolute; left:0; top:0; }
+        .dragpad, .zoomable { width:100%; }
         #map-clip { height:80%; }
-        #map { display:block; height:100%; width:100%; position:relative; }
+        #map { display:block; }
         #list-clip { height:70px; }
-        ul { list-style-type:none; margin:0 45px; padding:0; height:100%; position:absolute; white-space:nowrap; }
+        ul { list-style-type:none; margin:0; padding:0; white-space:nowrap; }
         li { box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; display:inline-block; }
         #list-v, #list-v>li { margin:0; height:auto; width:100%; }
         #list-v>li { border:1px solid #000; display:block; padding:1em; }
@@ -23,18 +30,18 @@
     
 <div class="col">
     <div id="map-clip" class="clip">
-    <svg id="map" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" 
+    <svg class="draggable zoomable" id="map" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" 
     viewBox="0 0 2555.1875 2087.5938" enable-background="new 0 0 2555.1875 2087.5938" xml:space="preserve">
     <g id="outline_x5F_temp" transform="translate(-509.56258,-184.96875)"><polygon fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" points="1751.298,2251.924 1856.318,2252.174 1856.318,2246.406 1866.124,2246.406 1866.124,2239.013 1958.705,2236.763 1958.705,2238.691 1989.886,2237.888 1989.886,2216.188 2297.682,2202.431 2298.968,2225.668 2328.542,2223.578 2330.47,2248.331 2333.524,2248.331 2335.754,2271.477 2359.562,2269.548 2359.696,2271.468 2384.604,2269.822 2384.476,2262.797 2436.231,2258.94 2436.874,2266.334 2460.501,2264.405 2460.501,2262.154 2485.093,2259.904 2485.093,2252.832 2847.965,2215.702 2848.824,2223.096 2872.5,2219.976 2872.934,2222.452 2896.255,2219.28 2895.275,2212.166 2947.351,2205.508 2948.155,2212.325 2973.505,2208.907 2973.229,2206.539 2995.731,2203.646 2992.723,2181.166 2995.731,2180.822 2992.035,2155.425 2984.801,2156.39 2977.965,2104.794 2985.77,2103.625 2982.23,2077.952 2979.524,2078.236 2976.604,2056.092 2948.476,2059.628 2897.838,2065.973 2887.44,1991.167 2889.076,1991.167 2888.516,1986.112 2996.8,1972.134 2996.504,1970.37 3050.106,1962.992 3050.562,1964.814 3063.632,1962.992 3047.64,1845.782 3034.64,1847.367 3034.708,1849.477 2982.399,1856.556 2982.005,1854.885 2974.829,1855.868 2881.298,1170.174 2829.298,793.174 2772.298,368.174 2719.35,374.04 2709.579,299.695 2600.823,314.14 2595.726,278.029 2522.23,286.951 2516.708,248.716 2216.355,198.587 2111.423,213.456 2087.208,212.606 2085.508,204.109 2033.679,210.906 2033.679,213.031 1266.867,208.783 1266.867,213.88 1263.468,214.305 869.432,186.046 857.895,259.468 833.771,256.321 819.086,357.014 842.162,362.258 786.571,713.632 764.544,710.485 747.763,813.275 667.997,1241.98 664.681,1264.471 660.906,1263.943 657.124,1288.724 664.505,1289.954 655.718,1341.975 648.161,1340.92 643.944,1366.755 646.58,1367.282 643.065,1389.954 650.798,1391.36 602.995,1687.668 592.977,1685.911 589.813,1704.364 592.274,1704.891 586.299,1742.325 584.014,1741.798 580.675,1760.076 590.692,1762.009 542.539,2059.021 535.333,2057.966 531.291,2080.402 528.665,2080.402 525.14,2104.012 531.643,2105.418 523.207,2157.967 516.529,2157.264 512.662,2181.165 514.596,2181.692 510.729,2204.188 533.576,2207.662 533.294,2209.419 558.291,2213.008 559.125,2206.727 611.104,2213.777 610.335,2219.674 635.331,2223.135 635.651,2221.212 657.892,2224.288 658.981,2216.469 1023.35,2253.901 1023.093,2259.926 1046.231,2261.592 1046.231,2264.092 1070.33,2265.694 1070.843,2258.836 1122.758,2262.746 1122.374,2269.477 1147.306,2271.477 1147.37,2268.964 1171.084,2270.63 1172.659,2248.197 1176.212,2248.262 1177.878,2225.315 1208.835,2226.598 1209.925,2202.755 1516.803,2216.343 1516.483,2238.198 1548.401,2238.712 1548.401,2237.237 1641.336,2238.968 1641.144,2245.825 1649.412,2245.89 1649.54,2252.491 "/><polygon fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" points="2158.066,1259.841 2098.272,764.574 1937.449,764.574 1937.449,792.787 1853.632,791.174 1853.632,797.841 1651.632,796.507 1651.632,791.174 1566.298,791.841 1566.298,764.574 1392.298,764.574 1350.299,1261.84 1691.632,1265.174 1690.965,1246.507 1817.632,1245.84 1816.965,1260.507 "/></g><g id="stair_x5F_u" transform="translate(-509.56258,-184.96875)"><polygon fill="#00FF00" points="2429.169,2130.809 2427.305,2104.476 2350.114,2111.089 2348.402,2088.29 2445.798,2081.049 2448.682,2129.288 "/></g><g id="stair_x5F_v" transform="translate(-509.56258,-184.96875)"><polygon fill="#00FF00" points="1078.861,2130.417 1080.725,2104.084 1157.916,2110.697 1159.627,2087.898 1062.231,2080.657 1059.348,2128.896 "/></g><g id="stair_x5F_g" transform="translate(-509.56258,-184.96875)"><path fill="#00FF00" d="M776.02,1395.338l-46.712-7.629l-1.905,11.255l-20.105-3.267l1.697-11.306l-48.089-7.854l19.83-116.402l115.629,18.8l-7.792,46.004l9.999,1.696v24.614l-14.253-1.194l-1.345,7.941l-27.812-4.893l8.241-49.96l-58.974-9.529l-4.635,29.358c0,0-2.79,30.361,23.95,34.251c14.164,2.061,21.241-4.285,21.241-4.285l4.586,7.159l32.105,5.37L776.02,1395.338z"/></g><g id="stair_x5F_x" display="none" transform="translate(-509.56258,-184.96875)"><path display="inline" fill="#00FF00" d="M989.976,798.887l1.693,0.255l0.493-4.054l-1.507-0.254l2.085-11.494l20.373,3.191l-1.819,11.181l-1.732-0.252l-0.704,4.334l1.794,0.304l38.04,5.907l-1.006,6.28l3.297,0.562l-1.567,9.66l-3.294-0.453l-4.175,26.073l-58.897-9.664L989.976,798.887z M1004.961,826.846l22.467,3.679l1.42-8.517l-22.661-3.622L1004.961,826.846z"/></g><g id="wc3" transform="translate(-509.56258,-184.96875)"><polygon fill="#00FFFF" points="2352.925,2081.333 2350.02,2081.527 2347.542,2046.751 2370.849,2046.751 2373.326,2079.968 2363.205,2080.645 2363.737,2087.174 2353.411,2087.941 "/></g><g id="wc2" transform="translate(-509.56258,-184.96875)"></g><g id="wc1" display="none" transform="translate(-509.56258,-184.96875)"><polygon display="inline" fill="#00FFFF" points="1051.974,808.734 1063.461,810.74 1056.897,852.315 1045.227,850.309 "/></g><g id="lift_x5F_o_x5F_platform" transform="translate(-509.56258,-184.96875)"><polygon fill="#F7931E" points="2551.468,2116.694 2553.852,2116.446 2553.741,2114.871 2567.083,2113.468 2560.188,2045.354 2508.365,2050.536 2509.347,2060.309 2501.966,2060.309 2501.966,2073.992 2510.722,2073.992 2515.237,2118.921 2528.305,2117.546 2528.556,2119.076 2531.031,2118.818 2531.631,2125.895 2552.16,2123.778 "/></g><g id="lift_x5F_o" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF0000" points="2500.32,2073.988 2500.32,2076.506 2473.91,2076.506 2473.91,2057.841 2500.32,2057.841 2500.32,2060.296 2501.966,2060.296 2501.966,2074.019 "/></g><g id="lift_x5F_q" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF0000" points="2334.157,2184.713 2335.754,2208.612 2312.771,2210.148 2311.358,2186.254 "/></g><g id="lift_x5F_b_x5F_platform" transform="translate(-509.56258,-184.96875)"><polyline fill="#F7931E" points="1497.073,2052.817 1499.42,2052.817 1499.42,2041.593 1517.463,2041.593 1517.463,2043.985 1526.859,2043.985 1526.859,2087.158 1519.376,2087.158 1519.376,2080.257 1516.05,2080.257 1516.05,2088.625 1498.586,2087.877 1498.586,2079.426 1494.93,2079.426 1494.93,2069.78 1499.586,2069.78 1499.669,2064.542 1497.073,2064.625 1497.073,2052.817 "/></g><g id="lift_x5F_b" transform="translate(-509.56258,-184.96875)"><rect x="1467.683" y="2043.985" fill="#FF0000" width="29.391" height="23.112"/></g><g id="lift_x5F_r" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF0000" points="1173.063,2186.082 1171.466,2209.981 1194.449,2211.518 1195.861,2187.623 "/></g><g id="lift_x5F_f_x5F_platform" transform="translate(-509.56258,-184.96875)"><polygon fill="#FBB03B" points="774.298,1447.702 777.827,1448.284 778.285,1445.82 790.55,1447.883 790.19,1450.438 796.351,1451.338 791.776,1479.257 788.303,1478.721 788.001,1481.167 774.817,1479.094 775.05,1476.677 769.723,1475.855 770.819,1469.106 760.775,1467.712 763.172,1453.047 773.194,1454.493 "/></g><g id="lift_x5F_f" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF0000" points="767.844,1477.952 791.604,1481.731 786.39,1515.211 761.904,1511.162 "/></g><g id="lift_x5F_y_x5F_lobby" display="none" transform="translate(-509.56258,-184.96875)"></g><g id="lift_x5F_y" display="none" transform="translate(-509.56258,-184.96875)"><polygon display="inline" fill="#ED1C24" points="1050.728,755.775 1071.354,759.156 1068.297,777.911 1047.654,774.615 "/><polygon display="inline" fill="#ED1C24" points="1047.062,780.108 1067.688,783.489 1064.631,802.244 1043.988,798.948 "/></g><g id="room146" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF00FF" points="2847.965,2088.841 2962.965,2073.175 2977.965,2189.841 2862.632,2205.508 "/></g><g id="_x31_45_x5F_146" display="none" transform="translate(-509.56258,-184.96875)"><polygon display="inline" fill="#FF00FF" points="2842.897,2137.269 2853.865,2135.771 2856.616,2157.655 2845.74,2159.147 "/></g><g id="room145" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF00FF" points="2471.298,2132.174 2837.298,2094.174 2851.298,2201.926 2479.298,2239.674 "/></g><g id="_x31_44_x5F_145" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF00FF" points="2463.431,2177.052 2474.571,2176.149 2476.106,2196.774 2464.896,2197.683 "/></g><g id="room144" transform="translate(-509.56258,-184.96875)"><path fill="#FF00FF" d="M2344.267,2184.783l2.361-0.177l-3.503-47.09l10.596-0.825l-0.586-6.999l42.141-3.329l0.593,7.042l10.376-0.81l-0.551-6.797l18.854-1.625l0.63,6.946l23.503-1.832l0.179,1.698l8.438-0.812l-0.182-1.543l2.861-0.224l8.285,116.716l-116.473,8.867l-0.762-10.241l-3.103,0.138l-1.382-18.009l3.125-0.395l-1.402-18.847l-2.255,0.103l0.049,0.834c0,0-3.631,0.687-5.545-1.521c-1.542-1.779-1.533-5.068-1.533-5.068l-3.668,0.112l-0.589-8.979l3.614-0.366c0,0-0.65-4.097,1.036-5.812c1.852-1.884,4.772-1.87,4.772-1.87L2344.267,2184.783"/></g><g id="_x31_43_x5F_144" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF00FF" points="2332.561,2147.988 2343.841,2147.142 2345.189,2165.263 2333.946,2166.139 "/></g><g id="room143" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF00FF" points="2286.011,2081.443 2294.92,2081.049 2295.243,2096.555 2301,2096.075 2300.794,2092.426 2328.209,2090.548 2328.751,2097.767 2339.649,2096.909 2339.001,2088.877 2343.992,2088.519 2346.986,2122.299 2341.608,2122.886 2340.757,2114.88 2330.103,2115.752 2334.47,2173.021 2304.703,2175.168 2304.462,2172.205 2300.568,2172.255 2300.998,2187.075 1980.526,2202.431 1980.526,2094.966 2037.516,2092.443 2037.199,2084.497 2074.402,2082.888 2074.546,2090.804 2249.161,2083.075 2248.982,2074.893 2285.691,2073.236 "/></g><g id="room143a" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF00FF" points="2196.146,2085.339 2232.769,2083.69 2232.59,2075.508 2301.677,2072.39 2302.215,2085.002 2304,2085.013 2304.335,2092.184 2325.06,2090.764 2324.729,2083.548 2327.771,2083.296 2325.067,2043.779 2027.871,2044.004 2029.11,2084.9 2090.088,2082.189 2090.232,2090.105 2127.544,2088.426 2127.298,2080.277 2143.036,2079.604 2143.3,2087.717 2180.471,2086.044 2180.255,2078.008 2195.798,2077.341 "/></g><g id="_x31_42_x5F_143" transform="translate(-509.56258,-184.96875)"><rect x="1970.245" y="2122.094" fill="#FF00FF" width="10.282" height="21.05"/></g><g id="room142" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF00FF" points="1970.245,2047.338 1970.245,2217.872 1858.051,2217.872 1852.281,2211.462 1852.281,2153.762 1857.685,2153.736 1857.861,2111.112 1852.281,2111.128 1852.281,2054.39 1859.013,2047.338 "/></g><g id="_x31_41_x5F_142" transform="translate(-509.56258,-184.96875)"><rect x="1839.066" y="2121.698" fill="#FF00FF" width="18.751" height="20.558"/></g><g id="room141" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF00FF" points="1684.582,2063.203 1684.511,2059.173 1721.267,2059.173 1721.378,2045.754 1785.79,2046.033 1785.734,2059.285 1822.512,2059.285 1822.533,2063.455 1826.444,2063.483 1826.444,2099.865 1839.066,2099.866 1839.066,2164.305 1826.444,2164.412 1826.444,2200.969 1822.361,2200.969 1822.361,2204.985 1785.611,2205 1785.665,2218.358 1721.514,2218.358 1721.407,2204.985 1684.786,2204.985 1684.783,2200.965 1680.765,2200.966 1680.765,2164.355 1668.205,2164.393 1668.205,2100.107 1680.765,2100.035 1680.765,2063.205 "/></g><g id="_x31_40_x5F_141" transform="translate(-509.56258,-184.96875)"><rect x="1651.011" y="2121.777" fill="#FF00FF" width="17.194" height="20.558"/></g><g id="room140" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF00FF" points="1536.965,2219.323 1536.965,2045.789 1650.808,2045.789 1656.578,2052.199 1656.578,2109.899 1651.174,2109.925 1650.998,2152.549 1656.578,2152.533 1656.578,2212.271 1649.846,2219.323 "/></g><g id="_x31_39_x5F_140" transform="translate(-509.56258,-184.96875)"><rect x="1527.126" y="2123.039" fill="#FF00FF" width="9.838" height="21.05"/></g><g id="room139" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF00FF" points="1221.841,2081.443 1211.627,2080.879 1211.305,2096.385 1205.544,2095.809 1205.35,2093.64 1179.187,2091.975 1178.711,2098.737 1167.427,2097.961 1167.756,2089.889 1162.142,2089.538 1159.627,2122.307 1165.353,2122.833 1165.751,2115.874 1177.62,2116.804 1173.382,2173.021 1203.149,2175.168 1203.391,2172.205 1207.285,2172.255 1206.854,2187.075 1527.326,2202.431 1527.133,2093.932 1521.999,2093.706 1522.066,2088.893 1484.441,2087.265 1484.345,2092.055 1469.571,2091.407 1470.396,2069.563 1465.048,2069.806 1465.048,2043.985 1431.757,2043.985 1431.856,2090.801 1258.692,2083.075 "/></g><g id="room139a" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF00FF" points="1259.587,2083.051 1222.081,2081.348 1222.239,2073.178 1206.166,2071.925 1205.916,2085.592 1203.415,2085.592 1203.156,2093.408 1182.737,2092.108 1183.197,2083.752 1180.161,2083.434 1183.716,2043.985 1431.757,2043.985 1431.878,2082.371 1406.463,2081.493 1406.527,2089.656 1389.242,2088.97 1389.242,2080.756 1365.005,2079.961 1364.691,2087.872 1327.885,2086.098 1327.768,2077.789 1302.43,2076.747 1302.426,2084.962 1285.12,2084.189 1285.152,2075.943 1259.625,2074.88 "/></g><g id="_x31_38_x5F_139" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF00FF" points="1175.172,2149.28 1163.485,2148.569 1162.168,2166.749 1173.782,2167.724 "/></g><g id="room138" transform="translate(-509.56258,-184.96875)"><path fill="#FF00FF" d="M1163.118,2186.406l-2.361-0.177l3.56-49.141l-10.596-0.825l0.586-6.999l-42.141-3.329l-0.593,7.042l-10.376-0.81l0.551-6.797l-18.854-1.625l-0.63,6.946l-23.503-1.832l-0.179,1.698l-8.438-0.812l0.182-1.543l-2.653-0.244l-8.342,118.767l116.265,8.888l0.762-10.241l3.103,0.138l1.382-18.009l-3.125-0.395l1.402-18.847l2.255,0.103l-0.049,0.834c0,0,3.631,0.687,5.545-1.521c1.542-1.779,1.533-5.068,1.533-5.068l3.668,0.112l0.589-8.979l-3.614-0.366c0,0,0.65-4.097-1.036-5.812c-1.852-1.884-4.772-1.87-4.772-1.87L1163.118,2186.406"/></g><g id="_x31_37_x5F_138" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF00FF" points="1044.183,2177.633 1033.378,2177.151 1032.115,2197.436 1042.745,2198.104 "/></g><g id="room137" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF00FF" points="1036.138,2132.838 674.741,2097.266 657.501,2204.539 1029.444,2240.338 "/></g><g id="_x31_36_x5F_137" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF00FF" points="667.791,2140.513 656.685,2138.886 653.421,2159.521 664.508,2160.938 "/></g><g id="room136" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF00FF" points="664.087,2092.09 548.545,2076.914 528.665,2191.995 645.807,2207.662 "/></g><g id="_x31_35_x5F_136" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF00FF" points="597.51,2071.915 618.44,2074.747 616.876,2085.906 596.142,2083.166 "/></g><g id="room133_x5F_134_x5F_135" transform="translate(-509.56258,-184.96875)"><polygon fill="#FF00FF" points="663.76,1388.648 770.863,1406.008 660.606,2080.402 553.419,2065.984 605.903,1743.806 597.296,1742.433 603.08,1708.215 611.539,1709.21 "/></g><g id="entrance_x5F_area" display="none" transform="translate(-509.56258,-184.96875)"></g><g id="study_x5F_prints" display="none" transform="translate(-509.56258,-184.96875)"></g><g id="arch_x5F_2_x5F_prints" display="none" transform="translate(-509.56258,-184.96875)"></g><g id="study_x5F_arch_x5F_2" display="none" transform="translate(-509.56258,-184.96875)"></g><g id="arch_x5F_1_x5F_2" display="none" transform="translate(-509.56258,-184.96875)"></g><g id="arch_x5F_1_x5F_prints" display="none" transform="translate(-509.56258,-184.96875)"></g><g id="study_x5F_arch_x5F_1" display="none" transform="translate(-509.56258,-184.96875)"></g>
     </svg>
     </div>
     <div id="list-clip" class="clip">
-        <ul id="list"><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AC/2006AC5746_jpg_s.jpg" alt="Chair" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2008BR/2008BR9185_jpg_s.jpg" alt="Vase" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2010EA/2010EA7377_jpg_s.jpg" alt="Poster" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AM/2006AM7100_jpg_s.jpg" alt="Design" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AM/2006AM2862_jpg_s.jpg" alt="Engraving" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009CT/2009CT1962_jpg_s.jpg" alt="H Beard Print Collection (Print)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AP/2006AP9141_jpg_s.jpg" alt="Open Landscape with Shepherd, Sheep, Pool and Distant Hills (Oil painting)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2008BU/2008BU3026_jpg_s.jpg" alt="Scenes of a Marriage Ceremony (cassone panel) (Cassone panel)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2010EG/2010EG0492_jpg_s.jpg" alt="H Beard Print Collection (Print)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006BA/2006BA0945_jpg_s.jpg" alt="Smoking table" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AT/2006AT4261_jpg_s.jpg" alt="British and Foreign Animals, A New Game, Moral, Instructive, and Amusing (Board game)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AU/2006AU9235_jpg_s.jpg" alt="Snuff bottle" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AW/2006AW3391_jpg_s.jpg" alt="View from palace in fort, Lahore (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BY/2009BY0649_jpg_s.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BX/2009BX9101_jpg_s.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2007BL/2007BL8897_jpg_s.jpg" alt="The Munduramiar Mundapam (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006BG/2006BG6915_jpg_s.jpg" alt="Locket" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AT/2006AT1108_jpg_s.jpg" alt="Clock" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BY/2009BY2731_jpg_s.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AU/2006AU9488_jpg_s.jpg" alt="Snuff bottle" height="70" width="70"></li></ul>
+        <ul class="draggable" id="list"><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AC/2006AC5746_jpg_s.jpg" alt="Chair" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2008BR/2008BR9185_jpg_s.jpg" alt="Vase" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2010EA/2010EA7377_jpg_s.jpg" alt="Poster" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AM/2006AM7100_jpg_s.jpg" alt="Design" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AM/2006AM2862_jpg_s.jpg" alt="Engraving" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009CT/2009CT1962_jpg_s.jpg" alt="H Beard Print Collection (Print)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AP/2006AP9141_jpg_s.jpg" alt="Open Landscape with Shepherd, Sheep, Pool and Distant Hills (Oil painting)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2008BU/2008BU3026_jpg_s.jpg" alt="Scenes of a Marriage Ceremony (cassone panel) (Cassone panel)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2010EG/2010EG0492_jpg_s.jpg" alt="H Beard Print Collection (Print)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006BA/2006BA0945_jpg_s.jpg" alt="Smoking table" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AT/2006AT4261_jpg_s.jpg" alt="British and Foreign Animals, A New Game, Moral, Instructive, and Amusing (Board game)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AU/2006AU9235_jpg_s.jpg" alt="Snuff bottle" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AW/2006AW3391_jpg_s.jpg" alt="View from palace in fort, Lahore (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BY/2009BY0649_jpg_s.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BX/2009BX9101_jpg_s.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2007BL/2007BL8897_jpg_s.jpg" alt="The Munduramiar Mundapam (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006BG/2006BG6915_jpg_s.jpg" alt="Locket" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AT/2006AT1108_jpg_s.jpg" alt="Clock" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BY/2009BY2731_jpg_s.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AU/2006AU9488_jpg_s.jpg" alt="Snuff bottle" height="70" width="70"></li></ul>
     </div>
 </div>
 <div class="col right">
     <div id="list-v-clip" class="clip">
-        <ul id="list-v"><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li></ul>
+        <ul class="draggable" id="list-v"><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li></ul>
     </div>
 </div>
 
@@ -46,21 +53,22 @@ function getComputed(el,style){ if(el.currentStyle){ var y=el.currentStyle[style
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 var dragZoom;
 dragZoom = {
-	el:null, xy0:null, xyT:null, d0:null, 
+	el:null, xy0:null, xyT:null, d0:null, trig:null, targ:null, 
 	init: function(el,zoomer) {
 		if(typeof el==='string'){ el = document.getElementById(el); }
-		el.onmousedown = dragZoom.touch;
-		el.ontouchstart = dragZoom.touch;
+		el.P = el.parentNode;
+        trig = document.createElement('div'); trig.setAttribute('class', 'dragpad'); el.P.appendChild(trig);
+		trig.onmousedown = dragZoom.touch;
+		trig.ontouchstart = dragZoom.touch;
         if( window.addEventListener ){
-            el.addEventListener('DOMMouseScroll', dragZoom.touch, false); 
-            el.addEventListener('mousewheel', dragZoom.touch, false); 
+            trig.addEventListener('DOMMouseScroll', dragZoom.touch, false); 
+            trig.addEventListener('mousewheel', dragZoom.touch, false); 
         }else if( window.attachEvent ){
-            el.attachEvent('onmousewheel', dragZoom.touch);
+            trig.attachEvent('onmousewheel', dragZoom.touch);
         }
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
         el.v = [0,0];
-        el.wh = [getComputed(el,'width')+getComputed(el,'margin-left')+getComputed(el,'margin-right'), getComputed(el,'height')];
-        el.P = el.parentNode;
+        el.wh = [getComputed(el,'width'), getComputed(el,'height')];
         el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
         el.whP0 = el.whP;
         el.zoomer = zoomer||null;
@@ -84,7 +92,6 @@ dragZoom = {
             r = this.move(this.xy);
             if( Math.abs(this.v[0])+Math.abs(this.v[1])<0.5 ){ clearTimeout(this.t); return; }
             this.t = setTimeout(function(){ el.drop(); }, 23);
-            return false;
         };
         el.zoom = function(z,xy0){
             this.wh = [this.wh[0]*z,this.wh[1]*z];
@@ -100,24 +107,25 @@ dragZoom = {
 	},
 	touch: function(e){
 		e = e || window.event;
-		dragZoom.el = this;
+		dragZoom.el = this.parentNode.getElementsByClassName('draggable')[0];
         clearTimeout(dragZoom.el.t);
 		dragZoom.el.v = [0,0];
-		dragZoom.xy0 = [getComputed(this,'left'), getComputed(this,'top')];
+		dragZoom.xy0 = [getComputed(dragZoom.el,'left'), getComputed(dragZoom.el,'top')];
         dragZoom.xyT = getXY(e);
+        this.style.display = 'none'; dragZoom.targ = document.elementFromPoint(dragZoom.xyT[0],dragZoom.xyT[1]); this.style.display = 'block';   
 		if( e.type==='touchstart' ){
             if( e.touches && e.touches.length===2 ){
                 if( dragZoom.el.zoomer ){
                     dragZoom.d0 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
-                    dragZoom.el.ontouchmove = dragZoom.zoom;
+                    dragZoom.trig.ontouchmove = dragZoom.zoom;
                 }
             }else{
-                dragZoom.el.ontouchmove = dragZoom.drag;
+                dragZoom.trig.ontouchmove = dragZoom.drag;
             }
-            dragZoom.el.onmousedown = null;
-            dragZoom.el.ontouchend = function(){
-                dragZoom.el.ontouchmove = null;
-                dragZoom.el.ontouchend = null;
+            dragZoom.trig.onmousedown = null;
+            dragZoom.trig.ontouchend = function(){
+                dragZoom.trig.ontouchmove = null;
+                dragZoom.trig.ontouchend = null;
                 dragZoom.release();
             };
         }else{
@@ -136,7 +144,6 @@ dragZoom = {
 	},
     drag: function(e){
 		e = e || window.event;
-        if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
         var xyE = getXY(e), 
             xy = [dragZoom.xy0[0]+xyE[0]-dragZoom.xyT[0], dragZoom.xy0[1]+xyE[1]-dragZoom.xyT[1]];
         dragZoom.el.v = [(xy[0]-dragZoom.el.xy[0]),(xy[1]-dragZoom.el.xy[1])];
@@ -144,12 +151,16 @@ dragZoom = {
 		return false;
 	},
 	release: function(){
-		dragZoom.el.drop();
+		if( Math.abs(dragZoom.el.v[0])+Math.abs(dragZoom.el.v[1])<5 ){ 
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent("click", true, false);
+            dragZoom.targ.dispatchEvent(evt);
+        }
+        dragZoom.el.drop();
 		dragZoom.el = null;
 	},
     zoom: function(e){
         e = e || window.event;
-        if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
         var z, d1, xy0;
         if( e.touches ){
             d1 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
@@ -170,24 +181,31 @@ dragZoom = {
     }
 };
 
-var map = document.getElementById('map');
-dragZoom.init(map, 1);
-var list = document.getElementById('list');
-dragZoom.init(list);
-var listV = document.getElementById('list-v');
-dragZoom.init(listV);
-
-addHandler(window,'resize',function(){
-    map.whP = [getComputed(map.P,'width'), getComputed(map.P,'height')];
-    if( map.wh[0]<map.whP[0] || map.wh[1]<map.whP[1] ){
-        map.zoom0();
-    }else if( map.wh[0]!=='100%' ){
-        map.move([map.xy[0]+((map.whP[0]-map.whP0[0])/2), map.xy[1]+((map.whP[1]-map.whP0[1])/2)]);
-        map.whP0 = map.whP;
-        //update w/h explicitly for SVGs
-        map.style.width = getComputed(map,'width')+'px';
-        map.style.height = getComputed(map,'height')+'px';
+function respond(els){
+    for( var i=0; i<els.length; ++i ){
+        var el = els[i];
+        el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
+        el.wh = [getComputed(el,'width'), getComputed(el,'height')];
+        if( el.wh[0]<el.whP[0] || el.wh[1]<el.whP[1] ){
+            el.zoom0();
+        }else if( el.wh[0]!=='100%' ){
+            el.move([el.xy[0]+((el.whP[0]-el.whP0[0])/2), el.xy[1]+((el.whP[1]-el.whP0[1])/2)]);
+            el.whP0 = el.whP;
+            if( el.nodeName.toLowerCase()==='svg' ){ //update w/h explicitly for SVGs
+                el.style.width = getComputed(el,'width')+'px';
+                el.style.height = getComputed(el,'height')+'px';
+            }
+        }
     }
-});
+}
+
+var draggables = document.getElementsByClassName('draggable');
+for( var i=0; i<draggables.length; ++i ){ 
+    var el = draggables[i], className = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomable = String(className).indexOf('zoomable')>-1;
+    dragZoom.init(el, zoomable?1:0); 
+}
+addHandler(window,'resize',function(){ respond(draggables); });
 </script>
 </html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">$('#map').on("click", "g", function() {alert('hit me');});</script>
