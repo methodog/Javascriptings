@@ -3,35 +3,42 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Methodog rules</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="apple-touch-icon" href="http://www.vam.ac.uk/__data/assets/image/0008/173609/favicon_130.png" />
+    <link rel="apple-touch-startup-image" href="http://www.vam.ac.uk/__data/assets/image/0018/173610/favicon_1024.png" />
+    <link rel="shortcut icon" href="http://www.vam.ac.uk/__data/assets/file/0008/172358/favicon.ico" />
+    <title>V&amp;A ActiveMap</title>
     <style type="text/css" media="all">
         html, body { height:100%; margin:0; width:100%; }
         body { font:13.5px/1.184 "V&A TheSansLightPlain",helvetica,arial,freesans,sans-serif; }
         .col { float:left; height:100%; width:74%; }
         .col.right { width:26%; }
         .clip { border:1px solid #000; height:100%; width:100%; overflow:hidden; position:relative; }
+        .dragpad, .draggable { height:100%; position:absolute; left:0; top:0; }
+        .dragpad, .zoomable { width:100%; }
         #map-clip { height:80%; }
-        #map { display:block; height:100%; width:100%; position:relative; }
+        #map { display:block; }
         #list-clip { height:70px; }
-        ul { list-style-type:none; margin:0 45px; padding:0; height:100%; width:1400px; position:relative; }
+        ul { list-style-type:none; margin:0; padding:0; white-space:nowrap; }
         li { box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; display:inline-block; }
         #list-v, #list-v>li { margin:0; height:auto; width:100%; }
-        #list-v>li { border:1px solid #000; padding:1em; }
+        #list-v>li { border:1px solid #000; display:block; padding:1em; }
     </style>
 </head>
 <body>
     
 <div class="col">
     <div id="map-clip" class="clip">
-    <img id="map" src="img/clear_blue_sky_label.jpg" />
+        <img class="draggable zoomable" id="map" src="img/clear_blue_sky_label.jpg" />
     </div>
     <div id="list-clip" class="clip">
-        <ul id="list"><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AC/2006AC5746_jpg_s.jpg" alt="Chair" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2008BR/2008BR9185_jpg_s.jpg" alt="Vase" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2010EA/2010EA7377_jpg_s.jpg" alt="Poster" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AM/2006AM7100_jpg_s.jpg" alt="Design" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AM/2006AM2862_jpg_s.jpg" alt="Engraving" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009CT/2009CT1962_jpg_s.jpg" alt="H Beard Print Collection (Print)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AP/2006AP9141_jpg_s.jpg" alt="Open Landscape with Shepherd, Sheep, Pool and Distant Hills (Oil painting)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2008BU/2008BU3026_jpg_s.jpg" alt="Scenes of a Marriage Ceremony (cassone panel) (Cassone panel)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2010EG/2010EG0492_jpg_s.jpg" alt="H Beard Print Collection (Print)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006BA/2006BA0945_jpg_s.jpg" alt="Smoking table" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AT/2006AT4261_jpg_s.jpg" alt="British and Foreign Animals, A New Game, Moral, Instructive, and Amusing (Board game)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AU/2006AU9235_jpg_s.jpg" alt="Snuff bottle" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AW/2006AW3391_jpg_s.jpg" alt="View from palace in fort, Lahore (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BY/2009BY0649_jpg_s.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BX/2009BX9101_jpg_s.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2007BL/2007BL8897_jpg_s.jpg" alt="The Munduramiar Mundapam (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006BG/2006BG6915_jpg_s.jpg" alt="Locket" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AT/2006AT1108_jpg_s.jpg" alt="Clock" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BY/2009BY2731_jpg_s.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AU/2006AU9488_jpg_s.jpg" alt="Snuff bottle" height="70" width="70"></li></ul>
+        <ul class="draggable" id="list"><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AC/2006AC5746_jpg_s.jpg" alt="Chair" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2008BR/2008BR9185_jpg_s.jpg" alt="Vase" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2010EA/2010EA7377_jpg_s.jpg" alt="Poster" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AM/2006AM7100_jpg_s.jpg" alt="Design" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AM/2006AM2862_jpg_s.jpg" alt="Engraving" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009CT/2009CT1962_jpg_s.jpg" alt="H Beard Print Collection (Print)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AP/2006AP9141_jpg_s.jpg" alt="Open Landscape with Shepherd, Sheep, Pool and Distant Hills (Oil painting)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2008BU/2008BU3026_jpg_s.jpg" alt="Scenes of a Marriage Ceremony (cassone panel) (Cassone panel)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2010EG/2010EG0492_jpg_s.jpg" alt="H Beard Print Collection (Print)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006BA/2006BA0945_jpg_s.jpg" alt="Smoking table" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AT/2006AT4261_jpg_s.jpg" alt="British and Foreign Animals, A New Game, Moral, Instructive, and Amusing (Board game)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AU/2006AU9235_jpg_s.jpg" alt="Snuff bottle" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AW/2006AW3391_jpg_s.jpg" alt="View from palace in fort, Lahore (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BY/2009BY0649_jpg_s.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BX/2009BX9101_jpg_s.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2007BL/2007BL8897_jpg_s.jpg" alt="The Munduramiar Mundapam (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006BG/2006BG6915_jpg_s.jpg" alt="Locket" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AT/2006AT1108_jpg_s.jpg" alt="Clock" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BY/2009BY2731_jpg_s.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="70" width="70"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AU/2006AU9488_jpg_s.jpg" alt="Snuff bottle" height="70" width="70"></li></ul>
     </div>
 </div>
 <div class="col right">
     <div id="list-v-clip" class="clip">
-        <ul id="list-v"><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li></ul>
+        <ul class="draggable" id="list-v"><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li></ul>
     </div>
 </div>
 
@@ -43,21 +50,22 @@ function getComputed(el,style){ if(el.currentStyle){ var y=el.currentStyle[style
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 var dragZoom;
 dragZoom = {
-	el:null, xy0:null, xyT:null, d0:null, 
+	el:null, xy0:null, xyT:null, d0:null, trig:null, targ:null, 
 	init: function(el,zoomer) {
 		if(typeof el==='string'){ el = document.getElementById(el); }
-		el.onmousedown = dragZoom.touch;
-		el.ontouchstart = dragZoom.touch;
+		el.P = el.parentNode;
+        trig = document.createElement('div'); trig.setAttribute('class', 'dragpad'); el.P.appendChild(trig);
+		trig.onmousedown = dragZoom.touch;
+		trig.ontouchstart = dragZoom.touch;
         if( window.addEventListener ){
-            el.addEventListener('DOMMouseScroll', dragZoom.touch, false); 
-            el.addEventListener('mousewheel', dragZoom.touch, false); 
+            trig.addEventListener('DOMMouseScroll', dragZoom.touch, false); 
+            trig.addEventListener('mousewheel', dragZoom.touch, false); 
         }else if( window.attachEvent ){
-            el.attachEvent('onmousewheel', dragZoom.touch);
+            trig.attachEvent('onmousewheel', dragZoom.touch);
         }
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
         el.v = [0,0];
-        el.wh = [getComputed(el,'width')+getComputed(el,'margin-left')+getComputed(el,'margin-right'), getComputed(el,'height')];
-        el.P = el.parentNode;
+        el.wh = [getComputed(el,'width'), getComputed(el,'height')];
         el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
         el.whP0 = el.whP;
         el.zoomer = zoomer||null;
@@ -101,24 +109,25 @@ dragZoom = {
 	},
 	touch: function(e){
 		e = e || window.event;
-		dragZoom.el = this;
+		dragZoom.el = this.parentNode.getElementsByClassName('draggable')[0];
         clearTimeout(dragZoom.el.t);
 		dragZoom.el.v = [0,0];
-		dragZoom.xy0 = [getComputed(this,'left'), getComputed(this,'top')];
+		dragZoom.xy0 = [getComputed(dragZoom.el,'left'), getComputed(dragZoom.el,'top')];
         dragZoom.xyT = getXY(e);
+        this.style.display = 'none'; dragZoom.targ = document.elementFromPoint(dragZoom.xyT[0],dragZoom.xyT[1]); this.style.display = 'block';   
 		if( e.type==='touchstart' ){
             if( e.touches && e.touches.length===2 ){
                 if( dragZoom.el.zoomer ){
                     dragZoom.d0 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
-                    dragZoom.el.ontouchmove = dragZoom.zoom;
+                    dragZoom.trig.ontouchmove = dragZoom.zoom;
                 }
             }else{
-                dragZoom.el.ontouchmove = dragZoom.drag;
+                dragZoom.trig.ontouchmove = dragZoom.drag;
             }
-            dragZoom.el.onmousedown = null;
-            dragZoom.el.ontouchend = function(){
-                dragZoom.el.ontouchmove = null;
-                dragZoom.el.ontouchend = null;
+            dragZoom.trig.onmousedown = null;
+            dragZoom.trig.ontouchend = function(){
+                dragZoom.trig.ontouchmove = null;
+                dragZoom.trig.ontouchend = null;
                 dragZoom.release();
             };
         }else{
@@ -137,7 +146,6 @@ dragZoom = {
 	},
     drag: function(e){
 		e = e || window.event;
-        if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
         var xyE = getXY(e), 
             xy = [dragZoom.xy0[0]+xyE[0]-dragZoom.xyT[0], dragZoom.xy0[1]+xyE[1]-dragZoom.xyT[1]];
         dragZoom.el.v = [(xy[0]-dragZoom.el.xy[0]),(xy[1]-dragZoom.el.xy[1])];
@@ -145,12 +153,16 @@ dragZoom = {
 		return false;
 	},
 	release: function(){
-		dragZoom.el.drop();
+		if( Math.abs(dragZoom.el.v[0])+Math.abs(dragZoom.el.v[1])<5 ){ 
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent("click", true, false);
+            dragZoom.targ.dispatchEvent(evt);
+        }
+        dragZoom.el.drop();
 		dragZoom.el = null;
 	},
     zoom: function(e){
         e = e || window.event;
-        if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
         var z, d1, xy0;
         if( e.touches ){
             d1 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
@@ -171,24 +183,31 @@ dragZoom = {
     }
 };
 
-var map = document.getElementById('map');
-dragZoom.init(map, 1);
-var list = document.getElementById('list');
-dragZoom.init(list);
-var listV = document.getElementById('list-v');
-dragZoom.init(listV);
-
-addHandler(window,'resize',function(){
-    map.whP = [getComputed(map.P,'width'), getComputed(map.P,'height')];
-    if( map.wh[0]<map.whP[0] || map.wh[1]<map.whP[1] ){
-        map.zoom0();
-    }else if( map.wh[0]!=='100%' ){
-        map.move([map.xy[0]+((map.whP[0]-map.whP0[0])/2), map.xy[1]+((map.whP[1]-map.whP0[1])/2)]);
-        map.whP0 = map.whP;
-        //update w/h explicitly for SVGs
-        map.style.width = getComputed(map,'width')+'px';
-        map.style.height = getComputed(map,'height')+'px';
+function respond(els){
+    for( var i=0; i<els.length; ++i ){
+        var el = els[i];
+        el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
+        el.wh = [getComputed(el,'width'), getComputed(el,'height')];
+        if( el.wh[0]<el.whP[0] || el.wh[1]<el.whP[1] ){
+            el.zoom0();
+        }else if( el.wh[0]!=='100%' ){
+            el.move([el.xy[0]+((el.whP[0]-el.whP0[0])/2), el.xy[1]+((el.whP[1]-el.whP0[1])/2)]);
+            el.whP0 = el.whP;
+            if( el.nodeName.toLowerCase()==='svg' ){ //update w/h explicitly for SVGs
+                el.style.width = getComputed(el,'width')+'px';
+                el.style.height = getComputed(el,'height')+'px';
+            }
+        }
     }
-});
+}
+
+var draggables = document.getElementsByClassName('draggable');
+for( var i=0; i<draggables.length; ++i ){ 
+    var el = draggables[i], className = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomable = String(className).indexOf('zoomable')>-1;
+    dragZoom.init(el, zoomable?1:0); 
+}
+addHandler(window,'resize',function(){ respond(draggables); });
 </script>
 </html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">$('#map').on("click", "g", function() {alert('hit me');});</script>
