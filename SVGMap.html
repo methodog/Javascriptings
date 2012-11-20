@@ -53,7 +53,8 @@ dragZoom = {
 		if(typeof el==='string'){ el = document.getElementById(el); }
         var zoomer = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomer = String(zoomer).indexOf('zoomable')>-1
 		el.P = el.parentNode;
-        el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.appendChild(el.trig);
+        if( el.P.getElementsByClassName('dragpad').length>0 ){ el.trig = el.P.getElementsByClassName('dragpad')[0]; }
+        else{ el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.appendChild(el.trig); }
 		el.trig.onmousedown = dragZoom.touch;
 		el.trig.ontouchstart = dragZoom.touch;
         if( window.addEventListener ){
