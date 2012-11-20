@@ -46,8 +46,9 @@ function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches
 var dragZoom;
 dragZoom = {
 	el:null, xy0:null, xyT:null, d0:null, targ:null, 
-	init: function(el,zoomer) {
+	init: function(el) {
 		if(typeof el==='string'){ el = document.getElementById(el); }
+        var zoomer = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomer = String(zoomer).indexOf('zoomable')>-1
 		el.P = el.parentNode;
         el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.appendChild(el.trig);
 		el.trig.onmousedown = dragZoom.touch;
@@ -198,8 +199,8 @@ function respond(els){
 
 var draggables = document.getElementsByClassName('draggable');
 for( var i=0; i<draggables.length; ++i ){ 
-    var el = draggables[i], className = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomable = String(className).indexOf('zoomable')>-1;
-    dragZoom.init(el, zoomable?1:0); 
+    var el = draggables[i];
+    dragZoom.init(el); 
 }
 addHandler(window,'resize',function(){ respond(draggables); });
 </script>

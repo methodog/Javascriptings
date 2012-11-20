@@ -3,12 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <link rel="apple-touch-icon" href="http://www.vam.ac.uk/__data/assets/image/0008/173609/favicon_130.png" />
-    <link rel="apple-touch-startup-image" href="http://www.vam.ac.uk/__data/assets/image/0018/173610/favicon_1024.png" />
-    <link rel="shortcut icon" href="http://www.vam.ac.uk/__data/assets/file/0008/172358/favicon.ico" />
-    <title>V&amp;A ActiveMap</title>
+    <title>Methodog ActiveSVG</title>
     <style type="text/css" media="all">
         html, body { height:100%; margin:0; width:100%; }
         body { font:13.5px/1.184 "V&A TheSansLightPlain",helvetica,arial,freesans,sans-serif; }
@@ -54,8 +49,9 @@ function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches
 var dragZoom;
 dragZoom = {
 	el:null, xy0:null, xyT:null, d0:null, targ:null, 
-	init: function(el,zoomer) {
+	init: function(el) {
 		if(typeof el==='string'){ el = document.getElementById(el); }
+        var zoomer = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomer = String(zoomer).indexOf('zoomable')>-1
 		el.P = el.parentNode;
         el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.appendChild(el.trig);
 		el.trig.onmousedown = dragZoom.touch;
@@ -201,8 +197,8 @@ function respond(els){
 
 var draggables = document.getElementsByClassName('draggable');
 for( var i=0; i<draggables.length; ++i ){ 
-    var el = draggables[i], className = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomable = String(className).indexOf('zoomable')>-1;
-    dragZoom.init(el, zoomable?1:0); 
+    var el = draggables[i];
+    dragZoom.init(el); 
 }
 addHandler(window,'resize',function(){ respond(draggables); });
 </script>
