@@ -178,9 +178,14 @@ dragZoom = {
     }
 };
 
-function respond(els){
-    for( var i=0; i<els.length; ++i ){
-        var el = els[i];
+var draggables = document.getElementsByClassName('draggable');
+for( var i=0; i<draggables.length; ++i ){ 
+    var el = draggables[i];
+    dragZoom.init(el); 
+}
+addHandler(window,'resize',function(){
+    for( var i=0; i<draggables.length; ++i ){
+        var el = draggables[i];
         el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
         if( el.wh[0]<el.whP[0] || el.wh[1]<el.whP[1] ){
@@ -194,14 +199,8 @@ function respond(els){
             }
         }
     }
-}
-
-var draggables = document.getElementsByClassName('draggable');
-for( var i=0; i<draggables.length; ++i ){ 
-    var el = draggables[i];
-    dragZoom.init(el); 
-}
-addHandler(window,'resize',function(){ respond(draggables); });
+});
+addHandler(window,'resize',function(){ respond(); });
 </script>
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
