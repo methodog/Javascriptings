@@ -160,6 +160,7 @@ dragZoom = {
 	},
     zoom: function(e){
         e = e || window.event;
+        if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
         var z, d1, xy0;
         if( e.touches ){
             d1 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
