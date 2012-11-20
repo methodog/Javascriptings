@@ -49,7 +49,7 @@ function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches
 var dragZoom;
 dragZoom = {
 	el:null, xy0:null, xyT:null, d0:null, targ:null, 
-	init: function(el) {
+	init: function(el){
 		if(typeof el==='string'){ el = document.getElementById(el); }
         var zoomer = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomer = String(zoomer).indexOf('zoomable')>-1
 		el.P = el.parentNode;

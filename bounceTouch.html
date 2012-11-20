@@ -25,7 +25,7 @@ function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches
 var dragDrop;
 dragDrop = {
 	el: null, xy0: null, xyT: null, 
-	init: function(el, unbound) {
+	init: function(el, unbound){
 		if(typeof el==='string'){ el = document.getElementById(el); }
 		el.onmousedown = dragDrop.touch;
 		el.ontouchstart = dragDrop.touch;
