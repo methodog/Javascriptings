@@ -111,7 +111,7 @@ dragZoom = {
 		dragZoom.el.v = [0,0];
 		dragZoom.xy0 = [getComputed(dragZoom.el,'left'), getComputed(dragZoom.el,'top')];
         dragZoom.xyT = getXY(e);
-        this.style.display = 'none'; dragZoom.targ = document.elementFromPoint(dragZoom.xyT[0]-document.body.scrollLeft,dragZoom.xyT[1]-document.body.scrollTop); this.style.display = 'block';
+        this.style.display = 'none'; dragZoom.targ = document.elementFromPoint(dragZoom.xyT[0]-(window.scrollX?window.scrollX:document.body.scrollLeft),dragZoom.xyT[1]-(window.scrollY?window.scrollY:document.body.scrollTop)); this.style.display = 'block';
 		if( e.type==='touchstart' ){
             if( e.touches && e.touches.length===2 ){
                 if( dragZoom.el.zoomer ){
