@@ -205,4 +205,13 @@ addHandler(window,'resize',function(){ respond(); });
 </script>
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
-<script type="text/javascript">$('#map').on("click", "g", function() {alert('hit me');});</script>
+<script type="text/javascript">$('#map').on("click", "g",function(){
+    var $room = $(this);
+    $room.css({'opacity':0.5});
+    var $port = $('#map-clip'), m = 20, 
+        portL = $port.offset().left+m, portR = portL+$port[0].getBoundingClientRect().width-2*m, portT = $port.offset().top+m, portB = portT+$port[0].getBoundingClientRect().height-2*m,
+        roomL = $room.offset().left, roomR = roomL+$room[0].getBoundingClientRect().width, roomT = $room.offset().top, roomB = roomT+$room[0].getBoundingClientRect().height;
+    if(roomL>portR || roomR<portL || roomT>portB || roomB<portT){ $('svg')[0].zoom0(); }
+    
+});
+</script>
