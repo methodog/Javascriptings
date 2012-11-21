@@ -148,7 +148,7 @@ dragZoom = {
 		return false;
 	},
 	release: function(){
-		if( Math.abs(dragZoom.xy0[0]-dragZoom.el.xy[0])+Math.abs(dragZoom.xy0[0]-dragZoom.el.xy[0])<5 ){
+		if( Math.abs(dragZoom.xy0[0]-dragZoom.el.xy[0])+Math.abs(dragZoom.xy0[1]-dragZoom.el.xy[1])<5 ){
             var evt = document.createEvent("HTMLEvents");
             evt.initEvent("click", true, false);
             dragZoom.targ.dispatchEvent(evt);
