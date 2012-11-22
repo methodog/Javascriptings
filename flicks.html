@@ -161,8 +161,7 @@ dragZoom = {
             var evt = document.createEvent("HTMLEvents");
             evt.initEvent("click", true, false);
             dragZoom.targ.dispatchEvent(evt);
-        }
-        dragZoom.el.drop();
+         }else{ dragZoom.el.drop(); }
         dragZoom.el = null;
     },
     zoom: function(e){
