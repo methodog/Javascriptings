@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Bounce (Methodog)</title>
     <style type="text/css">
-        html, body { height:100%; margin:0; width:100%; }
+        html, body { margin:0; overflow:hidden; height:100%; width:100%; }
         body { background:#3b34db; font:36px/1 helvetica,arial,freesans,sans-serif; font-weight:600; height:95%; }
         body, i { color:#fff; }
         i { cursor:pointer; display:inline-block; }
@@ -118,7 +118,8 @@ dragDrop = {
 function respond(els){
     for( var i=0; i<els.length; ++i ){
         els[i].whP = [getComputed(els[i].P,'width'), getComputed(els[i].P,'height')];
-        els[i].v = [(Math.random()<0.5?-1:1)*Math.random()*7, els[i].v[1]-Math.random()*4];
+        els[i].v = [(Math.random()<0.5?-1:1)*Math.random()*7, -Math.random()*10];
+        els[i].move([els[i].xy[0], els[i].xy[1]-23]);
         els[i].drop();
     }
 }
