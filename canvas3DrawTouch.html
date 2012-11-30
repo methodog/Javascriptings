@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Canvas 3Draw Touch</title>
+    <style type="text/css">
+        body { background:#666; margin:0; overflow:hidden; }
+        canvas { background:#ddd; border:1px solid #000; display:block; margin:0 auto; height:100%; width:100%; }
+        canvas:hover { border-color:#fff; }
+    </style>
+</head>
+
+<body>
+    <canvas class="pad"></canvas>
+</body>
+
+<script type="text/javascript">
+function Thing(plot, x, y, z){
+    this.plot = plot;
+    this.obj = new Array(this.plot.length);
+    for( var i=0; i<this.obj.length; ++i ){ this.obj[i] = new Array(); }
+    this.xfrm = [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [x,y,z,1] ];
+    this.c = 0;
+    this.r = Math.random()*0.07;
+}
+Thing.prototype.rotate = function(radX, radY, radZ){
+    var tmpMatrix = [ [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0] ], 
+        rotateMatrix = radX!=null? [ [1,0,0,0], [0,Math.cos(radX),Math.sin(radX),0], [0,-Math.sin(radX),Math.cos(radX),0], [0,0,0,1] ]
+                     : radY!=null? [ [Math.cos(radY),0,-Math.sin(radY),0], [0,1,0,0], [Math.sin(radY),0,Math.cos(radY),0], [0,0,0,1] ]
+                     : radZ!=null? [ [Math.cos(radZ),Math.sin(radZ),0,0], [-Math.sin(radZ),Math.cos(radZ),0,0], [0,0,1,0], [0,0,0,1] ]
+                     : [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1] ],
+        i, j, k;
+    for( i=0; i<this.xfrm.length; i++ ){ for( j=0; j<this.xfrm.length; j++ ){ for( k=0; k<this.xfrm.length; k++ ){
+        tmpMatrix[i][j] += rotateMatrix[i][k] * this.xfrm[k][j];
+    } } }
+    this.xfrm = tmpMatrix;
+};
+Thing.prototype.transform = function(){
+    this.rotate((Math.sin((++this.c)*this.r)/Math.PI),null,null);
+    this.rotate(null,(Math.cos((++this.c)*this.r)/Math.PI),null);
+    this.rotate(null,null,((Math.cos((++this.c)*this.r)/10)/Math.PI));
+    for( var r=0; r<this.obj.length; r++ ){ //construct current cubeMatrix from currentTransformation.
+        this.obj[r][0] = (this.xfrm[0][0] * this.plot[r][0]) + (this.xfrm[1][0] * this.plot[r][1]) + (this.xfrm[2][0] * this.plot[r][2]) + this.xfrm[3][0];
+        this.obj[r][1] = (this.xfrm[0][1] * this.plot[r][0]) + (this.xfrm[1][1] * this.plot[r][1]) + (this.xfrm[2][1] * this.plot[r][2]) + this.xfrm[3][1];
+        this.obj[r][2] = (this.xfrm[0][2] * this.plot[r][0]) + (this.xfrm[1][2] * this.plot[r][1]) + (this.xfrm[2][2] * this.plot[r][2]) + this.xfrm[3][2];
+    }
+}
+function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
+function getComputed(el,style){ if(el.currentStyle){ var y=el.currentStyle[style]; }else if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); } return parseFloat(y); }
+function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
+function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
+var cnvDraw;
+cnvDraw = {
+	cnv: null, 
+	init: function(cnv){
+		if(typeof cnv==='string'){ cnv = document.getElementById(cnv); }
+		cnv.onmousedown = cnvDraw.touch;
+		cnv.ontouchstart = cnvDraw.touch;
+        cnv.xy = getPgOffset(cnv);
+		cnv.wh = [getComputed(cnv,'width'), getComputed(cnv,'height')];
+		cnv.xy0 = [cnv.wh[0]/2, cnv.wh[1]/2];
+        cnv.plots = [];
+        cnv.things = [];
+        cnv.draw = function(){
+            var ctx = cnv.getContext('2d'), i, thing, p, x, y, pspctvX=500, pspctvY=500;
+            cnv.width = cnv.wh[0]; cnv.height = cnv.wh[1];
+            ctx.strokeStyle = "#000000";
+            ctx.beginPath();
+            for( i in cnv.things ){
+                thing = cnv.things[i];
+                thing.transform();
+                for( p=0; p<thing.obj.length; p++ ){ //plot, projecting 3d to 2d
+                    x = Math.round(cnv.xy0[0] + (thing.obj[p][0] * pspctvX / thing.obj[p][2]));
+                    y = Math.round(cnv.xy0[1] - (thing.obj[p][1] * pspctvY / thing.obj[p][2]));
+                    if( p==0 ){ ctx.moveTo(x,y); }else{ ctx.lineTo(x,y); }
+                }
+            }
+            ctx.stroke();
+        };
+        cnv.animate = function(){ cnv.t = setInterval(function(){cnv.draw()}, 74); };
+	},
+	touch: function(e){
+		e = e || window.event;
+		cnvDraw.cnv = this;
+        clearTimeout(cnvDraw.cnv.t);
+        cnvDraw.cnv.plots.push([]);
+		if( e.type==='touchstart' ){
+            cnvDraw.cnv.ontouchmove = cnvDraw.move;
+            cnvDraw.cnv.onmousedown = null;
+            cnvDraw.cnv.ontouchend = function(){
+                cnvDraw.cnv.ontouchmove = null;
+                cnvDraw.cnv.ontouchend = null;
+                cnvDraw.release();
+            };
+        }else{
+            document.onmousemove = cnvDraw.move;
+            document.onmouseup = function(){
+                document.onmousemove = null;
+                document.onmouseup = null;
+                cnvDraw.release();
+            };
+        }
+		return false;
+	},
+	move: function(e){
+		e = e || window.event;
+        var i=0, 
+            plot = cnvDraw.cnv.plots[cnvDraw.cnv.plots.length-1],
+            xyE = getXY(e);
+        plot.push([xyE[0]-cnvDraw.cnv.xy[0]-cnvDraw.cnv.xy0[0], -xyE[1]-cnvDraw.cnv.xy[1]+cnvDraw.cnv.xy0[1], 0]);
+        plot.push([xyE[0]-cnvDraw.cnv.xy[0]-cnvDraw.cnv.xy0[0], -xyE[1]-cnvDraw.cnv.xy[1]+cnvDraw.cnv.xy0[1], 40]);
+        cnvDraw.cnv.things = [];
+        for( ; i<cnvDraw.cnv.plots.length; ++i ){ cnvDraw.cnv.things.push(new Thing(cnvDraw.cnv.plots[i], 0, 0, 200)); }
+        cnvDraw.cnv.draw();
+		return false;
+	},
+	release: function(){
+		cnvDraw.cnv.animate();
+		cnvDraw.cnv = null;
+	}
+};
+
+var i, els = document.getElementsByClassName('pad');
+for( i=0; i<els.length; ++i ){ 
+    cnvDraw.init(els[i]); 
+    addHandler(els[i],'mouseout',function(){ clearTimeout(this.t); });
+    addHandler(els[i],'mouseover',function(){ this.animate(); });
+}
+</script>
+</html>
