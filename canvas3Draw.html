@@ -1,132 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <style type="text/css">
-            body { background:#666; margin:0; overflow:hidden; }
-            canvas { background:#ddd; border:1px solid #000; border-radius:340px; display:block; margin:0 auto; }
-            canvas:hover { border:2px solid #fff; }
-        </style>
-    </head>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Canvas 3Draw</title>
+    <style type="text/css">
+        body { background:#666; margin:0; overflow:hidden; }
+        canvas { background:#ddd; border:1px solid #000; border-radius:340px; display:block; margin:0 auto; }
+        canvas:hover { border:2px solid #fff; }
+    </style>
+</head>
     
-    <body>
-        <canvas id="cnv" width="700" height="700"></canvas>
-    </body>
+<body>
+    <canvas id="cnv" width="700" height="700"></canvas>
+</body>
+
+<script type="text/javascript">
+var cnv = document.getElementById('cnv'),
+    ctx = cnv.getContext('2d'),
+    s = 1, //scaler
+    pspctvX = pspctvY = 500,
+    x0 = parseInt(cnv.getAttribute('width'))/2, y0 = parseInt(cnv.getAttribute('height'))/2,
+    t,
+    cnvX = cnv.offsetLeft, cnvY = cnv.offsetTop, 
+    plots = things = [],
+    p;
     
-    <script type="text/javascript">
+function Thing(plot, x, y, z) {
+    this.plot = plot;
+    this.obj = new Array(this.plot.length);
+    for(var i=0; i<this.obj.length; ++i) this.obj[i] = new Array();
+    this.xfrm = [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [x,y,z,1] ];
+    this.c = 0;
+    this.r = Math.random()*0.07;
+}
+
+Thing.prototype.rotate = function(radX, radY, radZ){
+    var tmpMatrix = [ [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0] ], 
+        rotateMatrix = radX!=null? [ [1,0,0,0], [0,Math.cos(radX),Math.sin(radX),0], [0,-Math.sin(radX),Math.cos(radX),0], [0,0,0,1] ]
+                     : radY!=null? [ [Math.cos(radY),0,-Math.sin(radY),0], [0,1,0,0], [Math.sin(radY),0,Math.cos(radY),0], [0,0,0,1] ]
+                     : radZ!=null? [ [Math.cos(radZ),Math.sin(radZ),0,0], [-Math.sin(radZ),Math.cos(radZ),0,0], [0,0,1,0], [0,0,0,1] ]
+                     : [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1] ];
+    for(var i=0; i<this.xfrm.length; i++){ for(var j=0; j<this.xfrm.length; j++){ for(var k=0; k<this.xfrm.length; k++){
+        tmpMatrix[i][j] += rotateMatrix[i][k] * this.xfrm[k][j];
+    } } }
+    this.xfrm = tmpMatrix;
+};
+
+Thing.prototype.transform = function(){
+    this.rotate((Math.sin((++this.c)*this.r)/Math.PI),null,null);
+    this.rotate(null,(Math.cos((++this.c)*this.r)/Math.PI),null);
+    this.rotate(null,null,((Math.cos((++this.c)*this.r)/10)/Math.PI));
+    
+    for(var r=0; r<this.obj.length; r++){ //construct current cubeMatrix from currentTransformation.
+        this.obj[r][0] = (this.xfrm[0][0] * this.plot[r][0]) + (this.xfrm[1][0] * this.plot[r][1]) + (this.xfrm[2][0] * this.plot[r][2]) + this.xfrm[3][0];
+        this.obj[r][1] = (this.xfrm[0][1] * this.plot[r][0]) + (this.xfrm[1][1] * this.plot[r][1]) + (this.xfrm[2][1] * this.plot[r][2]) + this.xfrm[3][1];
+        this.obj[r][2] = (this.xfrm[0][2] * this.plot[r][0]) + (this.xfrm[1][2] * this.plot[r][1]) + (this.xfrm[2][2] * this.plot[r][2]) + this.xfrm[3][2];
+    }
+}
+
+function draw(){
+    var x, y;
+    
+    cnv.width = cnv.width;
+    ctx.strokeStyle = "#000000";
+    ctx.beginPath();
+    
+    for(var n in things){
+        things[n].transform();
         
-        var cnv = document.getElementById('cnv'),
-            ctx = cnv.getContext('2d'),
-            s = 1, //scaler
-            pspctvX = pspctvY = 500,
-            x0 = parseInt(cnv.getAttribute('width'))/2, y0 = parseInt(cnv.getAttribute('height'))/2,
-            t,
-            cnvX = cnv.offsetLeft, cnvY = cnv.offsetTop, 
-            plots = things = [],
-            p;
-            
-        function Thing(plot, x, y, z) {
-            this.plot = plot;
-            this.obj = new Array(this.plot.length);
-            for(var i=0; i<this.obj.length; ++i) this.obj[i] = new Array();
-            this.xfrm = [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [x,y,z,1] ];
-            this.c = 0;
-            this.r = Math.random()*0.07;
+        for(var p=0; p<things[n].obj.length; p++){ //plot, projecting 3d to 2d
+            x = Math.round(x0 + (things[n].obj[p][0] * pspctvX / things[n].obj[p][2]));
+            y = Math.round(y0 - (things[n].obj[p][1] * pspctvY / things[n].obj[p][2]));
+            if(p==0){ ctx.moveTo(x,y); }else{ ctx.lineTo(x,y); }
         }
-        
-        Thing.prototype.rotate = function(radX, radY, radZ){
-            var tmpMatrix = [ [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0] ], 
-                rotateMatrix = radX!=null? [ [1,0,0,0], [0,Math.cos(radX),Math.sin(radX),0], [0,-Math.sin(radX),Math.cos(radX),0], [0,0,0,1] ]
-                             : radY!=null? [ [Math.cos(radY),0,-Math.sin(radY),0], [0,1,0,0], [Math.sin(radY),0,Math.cos(radY),0], [0,0,0,1] ]
-                             : radZ!=null? [ [Math.cos(radZ),Math.sin(radZ),0,0], [-Math.sin(radZ),Math.cos(radZ),0,0], [0,0,1,0], [0,0,0,1] ]
-                             : [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1] ];
-            for(var i=0; i<this.xfrm.length; i++){ for(var j=0; j<this.xfrm.length; j++){ for(var k=0; k<this.xfrm.length; k++){
-                tmpMatrix[i][j] += rotateMatrix[i][k] * this.xfrm[k][j];
-            } } }
-            this.xfrm = tmpMatrix;
-        };
-        
-        Thing.prototype.transform = function(){
-            this.rotate((Math.sin((++this.c)*this.r)/Math.PI),null,null);
-            this.rotate(null,(Math.cos((++this.c)*this.r)/Math.PI),null);
-            this.rotate(null,null,((Math.cos((++this.c)*this.r)/10)/Math.PI));
-            
-            for(var r=0; r<this.obj.length; r++){ //construct current cubeMatrix from currentTransformation.
-                this.obj[r][0] = (this.xfrm[0][0] * this.plot[r][0]) + (this.xfrm[1][0] * this.plot[r][1]) + (this.xfrm[2][0] * this.plot[r][2]) + this.xfrm[3][0];
-                this.obj[r][1] = (this.xfrm[0][1] * this.plot[r][0]) + (this.xfrm[1][1] * this.plot[r][1]) + (this.xfrm[2][1] * this.plot[r][2]) + this.xfrm[3][1];
-                this.obj[r][2] = (this.xfrm[0][2] * this.plot[r][0]) + (this.xfrm[1][2] * this.plot[r][1]) + (this.xfrm[2][2] * this.plot[r][2]) + this.xfrm[3][2];
-            }
+    }
+    
+    ctx.stroke();
+};
+
+function plotStart(e){
+    if(!e) var e = cnv.event;
+    p = 1;
+    plots.push([]);
+    if(e.preventDefault) e.preventDefault(); else e.returnValue = false; 
+    return false;
+}
+
+function plotEnd(e){
+    if(!e) var e = cnv.event;
+    p = 0;
+    if(e.preventDefault) e.preventDefault(); else e.returnValue = false; 
+    return false;
+}
+
+function plot(e) {
+    if(p){
+        if(!e) var e = cnv.event;
+        var plot = plots[plots.length-1];
+        plot.push([e.clientX-cnvX-x0, -e.clientY-cnvY+y0, 0]);
+        plot.push([e.clientX-cnvX-x0, -e.clientY-cnvY+y0, 40]);
+        things = [];
+        for(var i=0; i<plots.length; ++i ){
+            things.push(new Thing(plots[i], 0, 0, 200));
         }
-        
-        function draw(){
-            var x, y;
-            
-            cnv.width = cnv.width;
-            ctx.strokeStyle = "#000000";
-            ctx.beginPath();
-            
-            for(var n in things){
-                things[n].transform();
-                
-                for(var p=0; p<things[n].obj.length; p++){ //plot, projecting 3d to 2d
-                    x = Math.round(x0 + (things[n].obj[p][0] * pspctvX / things[n].obj[p][2]));
-                    y = Math.round(y0 - (things[n].obj[p][1] * pspctvY / things[n].obj[p][2]));
-                    if(p==0){ ctx.moveTo(x,y); }else{ ctx.lineTo(x,y); }
-                }
-            }
-            
-            ctx.stroke();
-        };
-        
-        function plotStart(e){
-		    if(!e) var e = cnv.event;
-			p = 1;
-            plots.push([]);
-			if(e.preventDefault) e.preventDefault(); else e.returnValue = false; 
-			return false;
-		}
-		
-        function plotEnd(e){
-		    if(!e) var e = cnv.event;
-			p = 0;
-			if(e.preventDefault) e.preventDefault(); else e.returnValue = false; 
-			return false;
-		}
-		
-        function plot(e) {
-            if(p){
-                if(!e) var e = cnv.event;
-                var plot = plots[plots.length-1];
-                plot.push([e.clientX-cnvX-x0, -e.clientY-cnvY+y0, 0]);
-                plot.push([e.clientX-cnvX-x0, -e.clientY-cnvY+y0, 40]);
-                things = [];
-                for(var i=0; i<plots.length; ++i ){
-                    things.push(new Thing(plots[i], 0, 0, 200));
-                }
-                draw();
-                if(e.preventDefault) e.preventDefault(); else e.returnValue = false; 
-                return false;
-            }
-        }
-        
-        function animate(){
-            draw();
-            t = setTimeout(function(){animate()}, 74);
-        };
-        
-        if(window.addEventListener){
-            cnv.addEventListener('mousedown', plotStart, false); 
-            cnv.addEventListener('mousemove', plot, false); 
-            cnv.addEventListener('mouseup', plotEnd, false); 
-            cnv.addEventListener('mouseout', animate, false); 
-            cnv.addEventListener('mouseover', function(){clearTimeout(t);}, false); 
-        }else if(window.attachEvent){ 
-            cnv.attachEvent('mousedown', plotStart);
-            cnv.attachEvent('mousemove', plot);
-            cnv.attachEvent('mouseup', plotEnd);
-            cnv.attachEvent('onmouseout', animate);
-            cnv.attachEvent('onmouseover', function(){clearTimeout(t);});
-        }
-        
-    </script>
+        draw();
+        if(e.preventDefault) e.preventDefault(); else e.returnValue = false; 
+        return false;
+    }
+}
+
+function animate(){
+    draw();
+    t = setTimeout(function(){animate()}, 74);
+};
+
+if(window.addEventListener){
+    cnv.addEventListener('mousedown', plotStart, false); 
+    cnv.addEventListener('mousemove', plot, false); 
+    cnv.addEventListener('mouseup', plotEnd, false); 
+    cnv.addEventListener('mouseout', animate, false); 
+    cnv.addEventListener('mouseover', function(){clearTimeout(t);}, false); 
+}else if(window.attachEvent){ 
+    cnv.attachEvent('mousedown', plotStart);
+    cnv.attachEvent('mousemove', plot);
+    cnv.attachEvent('mouseup', plotEnd);
+    cnv.attachEvent('onmouseout', animate);
+    cnv.attachEvent('onmouseover', function(){clearTimeout(t);});
+}
+</script>
 </html>
