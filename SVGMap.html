@@ -171,7 +171,7 @@ dragZoom = {
         var z, d1, xy0 = [dragZoom.xyT[0]-dragZoom.el.xyP[0],dragZoom.xyT[1]-dragZoom.el.xyP[1]];
         if( e.touches ){
             d1 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
-            z = 1+((d1-dragZoom.d0>0?1:-2)*0.035);
+            z = 1+((d1-dragZoom.d0>0?1:-1.5)*0.05);
             dragZoom.d0 = d1;
         }else{
             z = (e.detail? e.detail*-1 : e.wheelDelta/40);
