@@ -6,16 +6,15 @@
     <title>textplode</title>
     <style type="text/css">
         html, body { margin:0; overflow:hidden; height:100%; width:100%; }
-        body { background:#e5f3de; font:14px/1 helvetica,arial,freesans,sans-serif; }
-        .dr { color:#352a30; cursor:pointer; display:inline-block; position:relative; left:0; top:0; }
+        body { background:#e5f3de; font:14px/1 helvetica,arial,freesans,sans-serif; text-align:center; }
+        .dr { color:#352a30; cursor:pointer; }
     </style>	
 </head>
 
 <body>
-    <p>############</p>
-    <p>*********************</p>
-    <p>+++++++++++++++++</p>
-</body>
+<p>##################### #####################</p>
+<p>*************************** DANDELION SEEDS **************************</p>
+<p>+++++++++++++++++++++ +++++++++++++++++++++</p>
 
 <script type="text/javascript">
 function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
@@ -128,8 +127,12 @@ dragDrop = {
     }
 })(document.body);
 
-var i, els = document.getElementsByClassName('dr');
-for( i=0; i<els.length; ++i ){ dragDrop.init(els[i], 1); }
+var i, els = document.getElementsByClassName('dr'), el;
+for( i=0; i<els.length; ++i ){
+    el = els[i];
+    el.style.position = 'relative'; el.style.display = 'inline-block'; el.style.left = 0; el.style.top = 0; 
+    dragDrop.init(el, 1); 
+}
 addHandler(window,'resize',function(){ respond(els); });
 addHandler(window,'click',function(){ respond(els); });
 
@@ -142,4 +145,5 @@ function respond(els){
     }
 }
 </script>
+</body>
 </html>
