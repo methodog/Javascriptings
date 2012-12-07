@@ -39,7 +39,6 @@
     </div>
 </div>
 
-</body>
 <script type="text/javascript">
 function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
 function rmHandler(el,evt,fn){ if( el.removeEventListener ){el.removeEventListener(evt,fn,false); }else if( el.detachEvent ){ el.detachEvent('on'+evt,fn); } }
@@ -206,7 +205,7 @@ addHandler(window,'resize',function(){
     }
 });
 </script>
-</html>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 $('svg').on('click', 'g',function(){ $('svg g').css({'opacity':0.4}); $(this).css({'opacity':1}); });
@@ -219,3 +218,6 @@ $('ul').on('click', 'li',function(){
     $room.trigger('click');
 });
 </script>
+
+</body>
+</html>
