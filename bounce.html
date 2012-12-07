@@ -11,106 +11,105 @@
     
 	<body>
 		<div id="box"><div id="ball"></div></div>
-	</body>
     
-	<script type="text/javascript">
-	    
-		if(window.addEventListener){
-			window.addEventListener('load', init, false); 
-			window.addEventListener('mousemove', drag, false); 
-			document.getElementById('ball').addEventListener('mouseup', drop, false); 
-			document.getElementById('ball').addEventListener('mousedown', grab, false); 
-		}else if(window.attachEvent){
-			window.attachEvent('onload', init);
-			window.attachEvent('onmousemove', drag);
-			document.getElementById('ball').attachEvent('onmouseup', drop);
-			document.getElementById('ball').attachEvent('onmousedown', grab);
-		}
-		
-		var ball = document.getElementById('ball'),
-		    box = document.getElementById('box'),
-		    rS = getwidth(ball)/2,
-		    rL = getwidth(box)/2, 
-		    oX, oY, mX, mY, b, s, 
-		    x, y, vX, vY, t = 1, g = 1, f = 0.6;
-		
-		function getwidth(el){
+    <script type="text/javascript">
+        if(window.addEventListener){
+            window.addEventListener('load', init, false); 
+            window.addEventListener('mousemove', drag, false); 
+            document.getElementById('ball').addEventListener('mouseup', drop, false); 
+            document.getElementById('ball').addEventListener('mousedown', grab, false); 
+        }else if(window.attachEvent){
+            window.attachEvent('onload', init);
+            window.attachEvent('onmousemove', drag);
+            document.getElementById('ball').attachEvent('onmouseup', drop);
+            document.getElementById('ball').attachEvent('onmousedown', grab);
+        }
+        
+        var ball = document.getElementById('ball'),
+            box = document.getElementById('box'),
+            rS = getwidth(ball)/2,
+            rL = getwidth(box)/2, 
+            oX, oY, mX, mY, b, s, 
+            x, y, vX, vY, t = 1, g = 1, f = 0.6;
+        
+        function getwidth(el){
             return width = parseInt(document.defaultView? document.defaultView.getComputedStyle(el, '').getPropertyValue('width') : el.currentStyle? el.currentStyle['width'] : null);
         }
         
-		function init(){
-			x = y = mX = mY = vX = vY = 30; 
-			drop();
-		}
-		
-		function grab(e){
-		    if(!e) var e = ball.event;
-			clearTimeout(s);
-			b = 1;
-			oX = ball.style.left==''? 0 : parseInt(ball.style.left);
-			oY = ball.style.top==''? 0 : parseInt(ball.style.top);
-			mX = e.clientX;
-			mY = e.clientY;
-			x = oX;
-			y = oY;
-			if(e.preventDefault) e.preventDefault(); else e.returnValue = false; 
-			return false;
-		}
-		
-		function drag(e){
-		    if(!e) var e = window.event;
-		    if(b){
-		        var x1, y1;
-    			x1 = oX + e.clientX - mX;
-    			y1 = oY + e.clientY - mY;
-    			ball.style.left = x1 +'px';
-    			ball.style.top = y1 +'px';
-        		vX = (x1-x)/t;
-    			vY = (y1-y)/t;
-    			x = x1;
-    			y = y1;
-    		}
-			if(e.preventDefault) e.preventDefault(); else e.returnValue = false; 
-			return false;
-		}
-		
-		function drop(){
-        	b = 0;
-        	var r = 0;
-        	vY += (g*t);
-        	x += (vX*t);
-        	y += (vY*t);
-        	if(x+(2*rS) <= rL){//left quad
-        	    if(y+(2*rS) <= rL){//upper left quad
-        	        if(Math.pow(rL-rS-x,2) + Math.pow(rL-rS-y,2) >= Math.pow(rL-rS,2)){
-        	            //y = rS-rL-Math.abs(Math.sqrt(Math.pow(rL-rS,2) - Math.pow(rL-rS-x,2)));
-        	            r = 1
-        		    }
-        		}else{//lower left quad
-        		    if(Math.pow(rL-rS-x,2) + Math.pow(y+rS-rL,2) >= Math.pow(rL-rS,2)){
-        	            r = 1
-        		    }
-        		}
-        	}else{//right quad
-        	    if(y+(2*rS) <= rL){//upper right quad
-        	        if(Math.pow(x+rS-rL,2) + Math.pow(rL-rS-y,2) >= Math.pow(rL-rS,2)){
-        	            r = 1
-        		    }
-        		}else{//lower right quad
-        		    if(Math.pow(x+rS-rL,2) + Math.pow(y+rS-rL,2) >= Math.pow(rL-rS,2)){
-        	            r = 1
-        		    }
-        		}
-        	}
-        	if(r){
-        	    vY = -vY*f;
-        		vX = -vX*f;
+        function init(){
+            x = y = mX = mY = vX = vY = 30; 
+            drop();
+        }
+        
+        function grab(e){
+            if(!e) var e = ball.event;
+            clearTimeout(s);
+            b = 1;
+            oX = ball.style.left==''? 0 : parseInt(ball.style.left);
+            oY = ball.style.top==''? 0 : parseInt(ball.style.top);
+            mX = e.clientX;
+            mY = e.clientY;
+            x = oX;
+            y = oY;
+            if(e.preventDefault) e.preventDefault(); else e.returnValue = false; 
+            return false;
+        }
+        
+        function drag(e){
+            if(!e) var e = window.event;
+            if(b){
+                var x1, y1;
+                x1 = oX + e.clientX - mX;
+                y1 = oY + e.clientY - mY;
+                ball.style.left = x1 +'px';
+                ball.style.top = y1 +'px';
+                vX = (x1-x)/t;
+                vY = (y1-y)/t;
+                x = x1;
+                y = y1;
+            }
+            if(e.preventDefault) e.preventDefault(); else e.returnValue = false; 
+            return false;
+        }
+        
+        function drop(){
+            b = 0;
+            var r = 0;
+            vY += (g*t);
+            x += (vX*t);
+            y += (vY*t);
+            if(x+(2*rS) <= rL){//left quad
+                if(y+(2*rS) <= rL){//upper left quad
+                    if(Math.pow(rL-rS-x,2) + Math.pow(rL-rS-y,2) >= Math.pow(rL-rS,2)){
+                        //y = rS-rL-Math.abs(Math.sqrt(Math.pow(rL-rS,2) - Math.pow(rL-rS-x,2)));
+                        r = 1
+                    }
+                }else{//lower left quad
+                    if(Math.pow(rL-rS-x,2) + Math.pow(y+rS-rL,2) >= Math.pow(rL-rS,2)){
+                        r = 1
+                    }
+                }
+            }else{//right quad
+                if(y+(2*rS) <= rL){//upper right quad
+                    if(Math.pow(x+rS-rL,2) + Math.pow(rL-rS-y,2) >= Math.pow(rL-rS,2)){
+                        r = 1
+                    }
+                }else{//lower right quad
+                    if(Math.pow(x+rS-rL,2) + Math.pow(y+rS-rL,2) >= Math.pow(rL-rS,2)){
+                        r = 1
+                    }
+                }
+            }
+            if(r){
+                vY = -vY*f;
+                vX = -vX*f;
                 if(Math.abs(vX)+Math.abs(vY) < 0.36) { clearTimeout(s); return; }
             }
-        	ball.style.left = x +'px';
-        	ball.style.top = y +'px';
-        	s = setTimeout(function(){drop()}, 23);
-		}
-		
-	</script>
+            ball.style.left = x +'px';
+            ball.style.top = y +'px';
+            s = setTimeout(function(){drop()}, 23);
+        }
+        
+    </script>
+</body>
 </html>
