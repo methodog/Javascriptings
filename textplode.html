@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>textplode</title>
+    <style type="text/css">
+        html, body { margin:0; overflow:hidden; height:100%; width:100%; }
+        body { background:#e5f3de; font:14px/1 helvetica,arial,freesans,sans-serif; }
+        .dr { color:#352a30; cursor:pointer; display:inline-block; position:relative; left:0; top:0; }
+    </style>	
+</head>
+
+<body>
+    <p>############</p>
+    <p>*********************</p>
+    <p>+++++++++++++++++</p>
+</body>
+
+<script type="text/javascript">
+function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
+function rmHandler(el,evt,fn){ if( el.removeEventListener ){el.removeEventListener(evt,fn,false); }else if( el.detachEvent ){ el.detachEvent('on'+evt,fn); } }
+function getComputed(el,style){ if(el.currentStyle){ var y=el.currentStyle[style]; }else if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); } return parseFloat(y); }
+function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
+function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
+var dragDrop;
+dragDrop = {
+	el: null, xy0: null, xyT: null, 
+	init: function(el, unbound) {
+		if(typeof el==='string'){ el = document.getElementById(el); }
+		el.onmousedown = dragDrop.touch;
+		el.ontouchstart = dragDrop.touch;
+        el.xy = [getComputed(el,'left'), getComputed(el,'top')];
+        el.v = [0,0];
+        el.wh = [getComputed(el,'width'), getComputed(el,'height')];
+        el.P = unbound? document.body:el.parentNode;
+        el.xyO = unbound? getPgOffset(el):[0,0];
+        el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
+        el.move = function(xy){
+            var x=xy[0], y=xy[1], r;
+            if( x<=0-el.xyO[0] ){ x=0-el.xyO[0]; r=[-1,0]; }
+            if( x>=this.whP[0]-this.wh[0]-el.xyO[0] ){ x=this.whP[0]-this.wh[0]-el.xyO[0]; r=[1,0]; }
+            if( y<=0-el.xyO[1] ){ y=0-el.xyO[1]; r=[0,-1]; }
+            if( y>=this.whP[1]-this.wh[1]-el.xyO[1] ){ y=this.whP[1]-this.wh[0]-el.xyO[1]; r=[0,1]; }
+            this.xy = [x,y];
+            this.style.left = x+'px';
+            this.style.top = y+'px';
+            return r;
+        };
+        el.drop = function(){
+            var g = 0.01, f = 0.99, fC = 0.4, r;
+            this.v = [this.v[0]*f, this.v[1]+g]; //v=u+at
+            this.xy = [this.xy[0]+this.v[0], this.xy[1]+this.v[1]];
+            r = this.move(this.xy);
+            if( r ){
+                if( r[0] ){ this.v = [-this.v[0], this.v[1]]; }
+                if( r[1]<0 ){ this.v = [this.v[0], -this.v[1]*fC]; }
+                if( r[1]>0 ){ clearTimeout(this.t); this.v = [(Math.random()<0.5?-1:1)*Math.random()*7,-Math.random()*4]; return; }
+            }
+            this.t = setTimeout(function(){ el.drop(); }, 23);
+            return false;
+        };
+	},
+	touch: function(e){
+		e = e || window.event;
+		dragDrop.el = this;
+        clearTimeout(dragDrop.el.t);
+        dragDrop.el.v = [0,0];
+		dragDrop.xy0 = dragDrop.el.xy;
+        dragDrop.xyT = getXY(e);
+		if( e.type==='touchstart' ){
+            dragDrop.el.ontouchmove = dragDrop.drag;
+            dragDrop.el.onmousedown = null;
+            dragDrop.el.ontouchend = function(){
+                dragDrop.el.ontouchmove = null;
+                dragDrop.el.ontouchend = null;
+                dragDrop.release();
+            };
+        }else{
+            document.onmousemove = dragDrop.drag;
+            document.onmouseup = function(){
+                document.onmousemove = null;
+                document.onmouseup = null;
+                dragDrop.release();
+            };
+        }
+		return false;
+	},
+	drag: function(e){
+		e = e || window.event;
+        if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
+        var xyE = getXY(e), 
+            xy = [dragDrop.xy0[0]+xyE[0]-dragDrop.xyT[0], dragDrop.xy0[1]+xyE[1]-dragDrop.xyT[1]];
+        dragDrop.el.v = [(xy[0]-dragDrop.el.xy[0]),(xy[1]-dragDrop.el.xy[1])];
+        dragDrop.el.move(xy);
+		return false;
+	},
+	release: function(){
+		dragDrop.el.drop();
+		dragDrop.el = null;
+	}
+};
+
+(function prepTextNodes(el){
+    var div = document.createElement('div'), text_nodes = [], textContent = 'textContent' in el ? 'textContent':'innerText';
+    div.className = 'dr';
+    (function recursiveWalk(node){
+        if( node ){
+            node = node.firstChild;
+            while( node!==null ){
+                if( node.nodeType===3 ){
+                    if( node[textContent].trim().length>0 ){ text_nodes.push(node); }
+                }else if( node.nodeType===1 ){
+                    if( node.nodeName.toLowerCase()!=='script' ){ recursiveWalk(node); }
+                }
+                node = node.nextSibling;
+            }
+        }
+    })(el);
+    for( var i=text_nodes.length-1; i>=0; i-- ){
+        var dummy = document.createDocumentFragment(), node = text_nodes[i], text = node[textContent], tmp;
+        for( var j=0; j<text.length; j++ ){
+            tmp = div.cloneNode(true);
+            tmp[textContent] = text[j];
+            dummy.appendChild(tmp);
+        }
+        node.parentNode.replaceChild(dummy, node);
+    }
+})(document.body);
+
+var i, els = document.getElementsByClassName('dr');
+for( i=0; i<els.length; ++i ){ dragDrop.init(els[i], 1); }
+addHandler(window,'resize',function(){ respond(els); });
+addHandler(window,'click',function(){ respond(els); });
+
+function respond(els){
+    for( i=0; i<els.length; ++i ){
+        els[i].whP = [getComputed(els[i].P,'width'), getComputed(els[i].P,'height')];
+        els[i].v = [(Math.random()<0.5?-1:1)*Math.random()*7, -Math.random()*7];
+        els[i].move([els[i].xy[0], els[i].xy[1]-23]);
+        els[i].drop();
+    }
+}
+</script>
+</html>
