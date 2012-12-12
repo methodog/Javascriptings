@@ -131,7 +131,8 @@ var i, els = document.getElementsByClassName('dr'), el;
 for( i=0; i<els.length; ++i ){
     el = els[i];
     el.style.position = 'relative'; el.style.display = 'inline-block'; el.style.left = 0; el.style.top = 0; 
-    dragDrop.init(el, 1); 
+    dragDrop.init(el, 1);
+    el.style.display = 'inline'; 
 }
 addHandler(window,'resize',function(){ respond(els); });
 addHandler(window,'click',function(){ respond(els); });
