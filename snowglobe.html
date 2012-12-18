@@ -23,7 +23,7 @@
         <script type="text/javascript">
             if( window.location.search.length>1 ){
                 document.write('<br/>');
-                for( var i=1; i<window.location.search.length; ++i ){ document.write('<i>'+window.location.search[i]+'</i>'); }
+                for( var i=1; i<window.location.search.length; ++i ){ document.write(window.location.search[i]==='_'? ' ':'<i>'+window.location.search[i]+'</i>'); }
             }
         </script>
         <br/><i>*</i><i>*</i><i>*</i><i>*</i><i>*</i><i>*</i><i>*</i><i>*</i><i>*</i><i>*</i><i>*</i><i>*</i><i>*</i><i>*</i>
