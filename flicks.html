@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <title>Methodog rules</title>
+    <title>Flicks</title>
     <style type="text/css" media="all">
         html, body { height:100%; margin:0; width:100%; }
-        body { font:13.5px/1.184 "V&A TheSansLightPlain",helvetica,arial,freesans,sans-serif; }
+        body { font:13.5px/1.184 helvetica,arial,freesans,sans-serif; }
         .col { float:left; height:100%; width:74%; }
         .col.right { width:26%; }
         .clip { height:100%; width:100%; overflow:hidden; position:relative; }
@@ -45,7 +45,7 @@ function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.off
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 var dragZoom;
 dragZoom = {
-    el:null, xy0:null, xyT:null, d0:null, targ:null, 
+    el:null, xy0:null, xyT:null, d0:null, targ:null, dt:null, t:null,
     init: function(el){
         if(typeof el==='string'){ el = document.getElementById(el); }
         var zoomer = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomer = String(zoomer).indexOf('zoomable')>-1
@@ -80,7 +80,7 @@ dragZoom = {
             }
         };
         el.drop = function(){
-            var f = 0.95, r;
+            var f = 0.98, r;
             this.v = [this.v[0]*f, this.v[1]*f];
             this.xy = [this.xy[0]+this.v[0], this.xy[1]+this.v[1]];
             r = this.move(this.xy);
@@ -89,7 +89,7 @@ dragZoom = {
                 if( r[1] ){ this.v = [this.v[0]*f, -this.v[1]*f]; }
             }
             if( Math.abs(this.v[0])+Math.abs(this.v[1])<0.5 ){ window.clearTimeout(this.t); return; }
-            this.t = setTimeout(function(){ el.drop(); }, 23);
+            this.t = window.setTimeout(function(){ el.drop(); }, 23);
         };
         el.zoom = function(z,xy0){
             xy0 = xy0 || [this.whP[0]/2, this.whP[1]/2];
@@ -120,12 +120,19 @@ dragZoom = {
         dragZoom.xy0 = dragZoom.el.xy;
         dragZoom.xyT = getXY(e);
         this.style.display = 'none'; dragZoom.targ = document.elementFromPoint(dragZoom.xyT[0]-(window.scrollX?window.scrollX:document.body.scrollLeft),dragZoom.xyT[1]-(window.scrollY?window.scrollY:document.body.scrollTop)); this.style.display = 'block';
+        if( dragZoom.el.zoomer ){
+            var dt0 = dragZoom.dt, dt = new Date().getTime();
+            dragZoom.dt = dt;
+            if( dt0 && dt-dt0<250 ){ 
+                window.clearTimeout(dragZoom.t);
+                dragZoom.zoom(e,1);
+                return;
+            }
+        }
         if( e.type==='touchstart' ){
-            if( e.touches && e.touches.length===2 ){
-                if( dragZoom.el.zoomer ){
-                    dragZoom.d0 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
-                    dragZoom.el.trig.ontouchmove = dragZoom.zoom;
-                }
+            if( dragZoom.el.zoomer && e.touches && e.touches.length===2 ){
+                dragZoom.d0 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
+                dragZoom.el.trig.ontouchmove = dragZoom.zoom;
             }else{
                 dragZoom.el.trig.ontouchmove = dragZoom.drag;
             }
@@ -136,8 +143,8 @@ dragZoom = {
                 dragZoom.release();
             };
         }else{
-            if( e.type==='DOMMouseScroll' || e.type==='mousewheel' ){
-                if( dragZoom.el.zoomer ){ dragZoom.zoom(e); }
+            if( dragZoom.el.zoomer && (e.type==='DOMMouseScroll' || e.type==='mousewheel') ){
+                dragZoom.zoom(e);
             }else{
                 document.onmousemove = dragZoom.drag;
                 document.onmouseup = function(){
@@ -159,17 +166,22 @@ dragZoom = {
     },
     release: function(){
         if( Math.abs(dragZoom.xy0[0]-dragZoom.el.xy[0])+Math.abs(dragZoom.xy0[1]-dragZoom.el.xy[1])<5 ){
-            var evt = document.createEvent("HTMLEvents");
-            evt.initEvent("click", true, false);
-            dragZoom.targ.dispatchEvent(evt);
+            var passclick = function(){
+                var evt = document.createEvent("HTMLEvents");
+                evt.initEvent("click", true, false);
+                dragZoom.targ.dispatchEvent(evt);
+            }
+            if(dragZoom.el.zoomer ){ dragZoom.t = window.setTimeout(passclick,100); }else{ passclick(); }
         }else{ dragZoom.el.drop(); }
         dragZoom.el = null;
     },
-    zoom: function(e){
+    zoom: function(e,zz){
         e = e || window.event;
         if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
         var z, d1, xy0 = [dragZoom.xyT[0]-dragZoom.el.xyP[0],dragZoom.xyT[1]-dragZoom.el.xyP[1]];
-        if( e.touches ){
+        if( zz ){
+            z = dragZoom.el.wh[0]>=dragZoom.el.whP[0]*2 ? 0:2;
+        }else if( e.touches ){
             d1 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
             z = 1+((d1-dragZoom.d0>0?1:-1.5)*0.05);
             dragZoom.d0 = d1;
