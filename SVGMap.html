@@ -35,7 +35,7 @@
 </div>
 <div class="col right">
     <div id="list-v-clip" class="clip">
-        <ul class="draggable" id="list-v"><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li><li>ITEM</li></ul>
+        <ul class="draggable" id="list-v"><li>ITEM 1</li><li>ITEM 2</li><li>ITEM 3</li><li>ITEM 4</li><li>ITEM 5</li><li>ITEM 6</li><li>ITEM 7</li><li>ITEM 8</li><li>ITEM 9</li><li>ITEM 10</li><li>ITEM 11</li><li>ITEM 12</li><li>ITEM 13</li><li>ITEM 14</li><li>ITEM 15</li><li>ITEM 16</li><li>ITEM 17</li><li>ITEM 18</li><li>ITEM 19</li><li>ITEM 20</li><li>ITEM 21</li><li>ITEM 22</li><li>ITEM 23</li></ul>
     </div>
 </div>
 
@@ -194,8 +194,7 @@ dragZoom = {
 
 var draggables = document.getElementsByClassName('draggable');
 for( var i=0; i<draggables.length; ++i ){ 
-    var el = draggables[i];
-    dragZoom.init(el); 
+    dragZoom.init(draggables[i]e); 
 }
 addHandler(window,'resize',function(){
     for( var i=0; i<draggables.length; ++i ){
@@ -217,7 +216,7 @@ addHandler(window,'resize',function(){
 });
 </script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 $('#map').on('click', 'g',function(){ $(this).css({'opacity':$(this).css('opacity')==1?0.4:1}); });
 $('ul').on('click', 'li',function(){ 
