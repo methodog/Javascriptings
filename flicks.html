@@ -45,7 +45,7 @@ function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.off
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 var dragZoom;
 dragZoom = {
-    el:null, xy0:null, xyT:null, d0:null, targ:null, dt:null, t:null,
+    el:null, xy0:null, xyT:null, xyE:null, d0:null, targ:null, dt:null, t:null,
     init: function(el){
         if(typeof el==='string'){ el = document.getElementById(el); }
         var zoomer = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomer = String(zoomer).indexOf('zoomable')>-1
@@ -158,22 +158,24 @@ dragZoom = {
     },
     drag: function(e){
         e = e || window.event;
-        var xyE = getXY(e), 
-            xy = [dragZoom.xy0[0]+xyE[0]-dragZoom.xyT[0], dragZoom.xy0[1]+xyE[1]-dragZoom.xyT[1]];
+        dragZoom.xyE = getXY(e);
+        var xy = [dragZoom.xy0[0]+dragZoom.xyE[0]-dragZoom.xyT[0], dragZoom.xy0[1]+dragZoom.xyE[1]-dragZoom.xyT[1]];
         dragZoom.el.v = [(xy[0]-dragZoom.el.xy[0]),(xy[1]-dragZoom.el.xy[1])];
         dragZoom.el.move(xy);
         return false;
     },
     release: function(){
-        if( Math.abs(dragZoom.xy0[0]-dragZoom.el.xy[0])+Math.abs(dragZoom.xy0[1]-dragZoom.el.xy[1])<5 ){
+        if( (dragZoom.xyE && Math.abs(dragZoom.xyT[0]-dragZoom.xyE[0])<5 && Math.abs(dragZoom.xyT[1]-dragZoom.xyE[1])<5) || (dragZoom.el.v[0]===0 && dragZoom.el.v[1]===0) ){
             var passclick = function(){
                 var evt = document.createEvent("HTMLEvents");
                 evt.initEvent("click", true, false);
                 dragZoom.targ.dispatchEvent(evt);
             }
             if(dragZoom.el.zoomer ){ dragZoom.t = window.setTimeout(passclick,100); }else{ passclick(); }
-        }else{ dragZoom.el.drop(); }
-        dragZoom.el = null;
+        }else{
+            dragZoom.el.drop();
+        }
+        dragZoom.el = dragZoom.xyE = null;
     },
     zoom: function(e,zz){
         e = e || window.event;
