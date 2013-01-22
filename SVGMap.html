@@ -163,7 +163,7 @@ dragZoom = {
         return false;
     },
     release: function(){
-        if( (dragZoom.xyE && Math.abs(dragZoom.xyT[0]-dragZoom.xyE[0])<5 && Math.abs(dragZoom.xyT[1]-dragZoom.xyE[1])<5) || (dragZoom.el.v[0]===0 && dragZoom.el.v[1]===0) ){
+        if( !dragZoom.xyE || (Math.abs(dragZoom.xyT[0]-dragZoom.xyE[0])<5 && Math.abs(dragZoom.xyT[1]-dragZoom.xyE[1])<5) ){
             var passclick = function(){
                 var evt = document.createEvent("HTMLEvents");
                 evt.initEvent("click", true, false);
