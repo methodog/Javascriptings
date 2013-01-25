@@ -166,7 +166,7 @@ dragZoom = {
         return false;
     },
     release: function(){
-        if( (!dragZoom.xyE || (Math.abs(dragZoom.xyT[0]-dragZoom.xyE[0])<5 && Math.abs(dragZoom.xyT[1]-dragZoom.xyE[1])<5)) && Math.abs(dragZoom.v0[0])+Math.abs(dragZoom.v0[1])<5 ){
+        if( ((!dragZoom.xyE && !dragZoom.d0) || (!!dragZoom.xyE && Math.abs(dragZoom.xyT[0]-dragZoom.xyE[0])<5 && Math.abs(dragZoom.xyT[1]-dragZoom.xyE[1])<5)) && Math.abs(dragZoom.v0[0])+Math.abs(dragZoom.v0[1])<2 ){
             var passclick = function(){
                 var evt = document.createEvent("HTMLEvents");
                 evt.initEvent("click", true, false);
@@ -176,7 +176,7 @@ dragZoom = {
         }else{
             dragZoom.el.drop();
         }
-        dragZoom.el = dragZoom.xyE = null;
+        dragZoom.el = dragZoom.xyE = dragZoom.d0 = null;
     },
     zoom: function(e,zz){
         e = e || window.event;
