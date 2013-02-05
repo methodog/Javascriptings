@@ -114,6 +114,7 @@ dragZoom = {
     },
     touch: function(e){
         e = e || window.event;
+        if( e.type==='touchstart' && e.touches && e.touches.length>2 ){ return; }
         dragZoom.el = this.parentNode.getElementsByClassName('draggable')[0];
         window.clearTimeout(dragZoom.el.t);
         dragZoom.v0 = dragZoom.el.v;
