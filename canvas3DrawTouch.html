@@ -51,13 +51,13 @@ function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(e
 function getComputed(el,style){ if(el.currentStyle){ var y=el.currentStyle[style]; }else if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); } return parseFloat(y); }
 function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
-var cnvDraw;
-cnvDraw = {
+var cnvPad;
+cnvPad = {
 	cnv: null, 
 	init: function(cnv){
 		if(typeof cnv==='string'){ cnv = document.getElementById(cnv); }
-		cnv.onmousedown = cnvDraw.touch;
-		cnv.ontouchstart = cnvDraw.touch;
+		cnv.onmousedown = cnvPad.touch;
+		cnv.ontouchstart = cnvPad.touch;
         cnv.xy = getPgOffset(cnv);
 		cnv.wh = [window.innerWidth, window.innerHeight];
 		cnv.width = cnv.wh[0]; cnv.height = cnv.wh[1];
@@ -84,23 +84,23 @@ cnvDraw = {
 	},
 	touch: function(e){
 		e = e || window.event;
-		cnvDraw.cnv = this;
-        clearTimeout(cnvDraw.cnv.t);
-        cnvDraw.cnv.plots.push([]);
+		cnvPad.cnv = this;
+        clearTimeout(cnvPad.cnv.t);
+        cnvPad.cnv.plots.push([]);
 		if( e.type==='touchstart' ){
-            cnvDraw.cnv.ontouchmove = cnvDraw.move;
-            cnvDraw.cnv.onmousedown = null;
-            cnvDraw.cnv.ontouchend = function(){
-                cnvDraw.cnv.ontouchmove = null;
-                cnvDraw.cnv.ontouchend = null;
-                cnvDraw.release();
+            cnvPad.cnv.ontouchmove = cnvPad.move;
+            cnvPad.cnv.onmousedown = null;
+            cnvPad.cnv.ontouchend = function(){
+                cnvPad.cnv.ontouchmove = null;
+                cnvPad.cnv.ontouchend = null;
+                cnvPad.release();
             };
         }else{
-            document.onmousemove = cnvDraw.move;
+            document.onmousemove = cnvPad.move;
             document.onmouseup = function(){
                 document.onmousemove = null;
                 document.onmouseup = null;
-                cnvDraw.release();
+                cnvPad.release();
             };
         }
 		return false;
@@ -108,25 +108,25 @@ cnvDraw = {
 	move: function(e){
 		e = e || window.event;
         var i=0, 
-            plot = cnvDraw.cnv.plots[cnvDraw.cnv.plots.length-1],
+            plot = cnvPad.cnv.plots[cnvPad.cnv.plots.length-1],
             xyE = getXY(e);
-        plot.push([xyE[0]-cnvDraw.cnv.xy[0]-cnvDraw.cnv.xy0[0], -xyE[1]-cnvDraw.cnv.xy[1]+cnvDraw.cnv.xy0[1], 0]);
-        plot.push([xyE[0]-cnvDraw.cnv.xy[0]-cnvDraw.cnv.xy0[0], -xyE[1]-cnvDraw.cnv.xy[1]+cnvDraw.cnv.xy0[1], 40]);
-        cnvDraw.cnv.things = [];
-        for( ; i<cnvDraw.cnv.plots.length; ++i ){ cnvDraw.cnv.things.push(new Thing(cnvDraw.cnv.plots[i], 0, 0, 200)); }
-        cnvDraw.cnv.draw();
+        plot.push([xyE[0]-cnvPad.cnv.xy[0]-cnvPad.cnv.xy0[0], -xyE[1]-cnvPad.cnv.xy[1]+cnvPad.cnv.xy0[1], 0]);
+        plot.push([xyE[0]-cnvPad.cnv.xy[0]-cnvPad.cnv.xy0[0], -xyE[1]-cnvPad.cnv.xy[1]+cnvPad.cnv.xy0[1], 40]);
+        cnvPad.cnv.things = [];
+        for( ; i<cnvPad.cnv.plots.length; ++i ){ cnvPad.cnv.things.push(new Thing(cnvPad.cnv.plots[i], 0, 0, 200)); }
+        cnvPad.cnv.draw();
 		return false;
 	},
 	release: function(){
-		cnvDraw.cnv.animate();
-		cnvDraw.cnv = null;
+		cnvPad.cnv.animate();
+		cnvPad.cnv = null;
 	}
 };
 
 var i, els = document.getElementsByClassName('pad');
 for( i=0; i<els.length; ++i ){ 
     var el = els[i];
-    cnvDraw.init(el); 
+    cnvPad.init(el); 
     addHandler(el,'mouseout',function(){ clearTimeout(this.t); });
     addHandler(el,'mouseover',function(){ this.animate(); });
     addHandler(window,'resize',function(){
