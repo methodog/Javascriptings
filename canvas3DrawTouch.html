@@ -8,7 +8,7 @@
     <title>Canvas 3Draw Touch</title>
     <style type="text/css">
         body { background:#666; margin:0; overflow:hidden; }
-        canvas { background:#ddd; border:1px solid #000; display:block; margin:0 auto; height:100%; width:100%; }
+        canvas { background:#ddd; border:1px solid #000; display:block; margin:0 auto; width:100%; height:100%; }
         canvas:hover { border-color:#fff; }
     </style>
 </head>
@@ -59,8 +59,9 @@ cnvDraw = {
 		cnv.onmousedown = cnvDraw.touch;
 		cnv.ontouchstart = cnvDraw.touch;
         cnv.xy = getPgOffset(cnv);
-		cnv.wh = [getComputed(cnv,'width'), getComputed(cnv,'height')];
-		cnv.xy0 = [cnv.wh[0]/2, cnv.wh[1]/2];
+		cnv.wh = [window.innerWidth, window.innerHeight];
+		cnv.width = cnv.wh[0]; cnv.height = cnv.wh[1];
+        cnv.xy0 = [cnv.wh[0]/2, cnv.wh[1]/2];
         cnv.plots = [];
         cnv.things = [];
         cnv.draw = function(){
@@ -124,9 +125,15 @@ cnvDraw = {
 
 var i, els = document.getElementsByClassName('pad');
 for( i=0; i<els.length; ++i ){ 
-    cnvDraw.init(els[i]); 
-    addHandler(els[i],'mouseout',function(){ clearTimeout(this.t); });
-    addHandler(els[i],'mouseover',function(){ this.animate(); });
+    var el = els[i];
+    cnvDraw.init(el); 
+    addHandler(el,'mouseout',function(){ clearTimeout(this.t); });
+    addHandler(el,'mouseover',function(){ this.animate(); });
+    addHandler(window,'resize',function(){
+        el.wh = [window.innerWidth, window.innerHeight];
+        el.width = el.wh[0]; el.height = el.wh[1];
+        el.xy0 = [el.wh[0]/2, el.wh[1]/2];
+    });
 }
 </script>
 </body>
