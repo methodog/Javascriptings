@@ -145,8 +145,8 @@ dragZoom = {
                 dragZoom.release();
             };
         }else{
-            if( dragZoom.el.zoomer && (e.type==='DOMMouseScroll' || e.type==='mousewheel') ){
-                dragZoom.zoom(e);
+            if( e.type==='DOMMouseScroll' || e.type==='mousewheel' ){ 
+                if( dragZoom.el.zoomer ){ dragZoom.zoom(e); }
             }else{
                 document.onmousemove = dragZoom.drag;
                 document.onmouseup = function(){
