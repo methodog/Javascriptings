@@ -37,30 +37,32 @@ dragDrop = {
         el.P = unbound? document.body:el.parentNode;
         el.xyO = unbound? getPgOffset(el):[0,0];
         el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
-        el.move = function(xy){
-            var x=xy[0], y=xy[1], r;
-            if( x<=0-el.xyO[0] ){ x=0-el.xyO[0]; r=[-1,0]; }
-            if( x>=this.whP[0]-this.wh[0]-el.xyO[0] ){ x=this.whP[0]-this.wh[0]-el.xyO[0]; r=[1,0]; }
-            if( y<=0-el.xyO[1] ){ y=0-el.xyO[1]; r=[0,-1]; }
-            if( y>=this.whP[1]-this.wh[1]-el.xyO[1] ){ y=this.whP[1]-this.wh[0]-el.xyO[1]; r=[0,1]; }
-            this.xy = [x,y];
-            this.style.left = x+'px';
-            this.style.top = y+'px';
-            return r;
-        };
-        el.drop = function(){
-            var g = 0.01, f = 0.99, fC = 0.4, r;
-            this.v = [this.v[0]*f, this.v[1]+g]; //v=u+at
-            this.xy = [this.xy[0]+this.v[0], this.xy[1]+this.v[1]];
-            r = this.move(this.xy);
-            if( r ){
-                if( r[0] ){ this.v = [-this.v[0], this.v[1]]; }
-                if( r[1]<0 ){ this.v = [this.v[0], -this.v[1]*fC]; }
-                if( r[1]>0 ){ clearTimeout(this.t); this.v = [(Math.random()<0.5?-1:1)*Math.random()*7,-Math.random()*4]; return; }
-            }
-            this.t = setTimeout(function(){ el.drop(); }, 23);
-            return false;
-        };
+        if( !el.move ){
+            el.move = function(xy){
+                var x=xy[0], y=xy[1], r;
+                if( x<=0-el.xyO[0] ){ x=0-el.xyO[0]; r=[-1,0]; }
+                if( x>=this.whP[0]-this.wh[0]-el.xyO[0] ){ x=this.whP[0]-this.wh[0]-el.xyO[0]; r=[1,0]; }
+                if( y<=0-el.xyO[1] ){ y=0-el.xyO[1]; r=[0,-1]; }
+                if( y>=this.whP[1]-this.wh[1]-el.xyO[1] ){ y=this.whP[1]-this.wh[0]-el.xyO[1]; r=[0,1]; }
+                this.xy = [x,y];
+                this.style.left = x+'px';
+                this.style.top = y+'px';
+                return r;
+            };
+            el.drop = function(){
+                var g = 0.01, f = 0.99, fC = 0.4, r;
+                this.v = [this.v[0]*f, this.v[1]+g]; //v=u+at
+                this.xy = [this.xy[0]+this.v[0], this.xy[1]+this.v[1]];
+                r = this.move(this.xy);
+                if( r ){
+                    if( r[0] ){ this.v = [-this.v[0], this.v[1]]; }
+                    if( r[1]<0 ){ this.v = [this.v[0], -this.v[1]*fC]; }
+                    if( r[1]>0 ){ clearTimeout(this.t); this.v = [(Math.random()<0.5?-1:1)*Math.random()*7,-Math.random()*4]; return; }
+                }
+                this.t = setTimeout(function(){ el.drop(); }, 23);
+                return false;
+            };
+        }
 	},
 	touch: function(e){
 		e = e || window.event;

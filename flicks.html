@@ -66,51 +66,55 @@ dragZoom = {
         el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
         el.whP0 = el.whP;
         el.zoomer = zoomer||null;
-        el.move = function(xy){
-            if( this.wh[0]>this.whP[0] || this.wh[1]>this.whP[1] ){
-                var x=xy[0], y=xy[1], r;
-                if( x>0 ){ x=0; r = this.wh[0]>this.whP[0]? [1,0]:null; }
-                else if( x<this.whP[0]-this.wh[0] ){ x=this.whP[0]-this.wh[0]; r = this.wh[0]>this.whP[0]? [-1,0]:null; }
-                if( y>0 ){ y=0; r = this.wh[1]>this.whP[1]? [0,1]:r; }
-                else if( y<this.whP[1]-this.wh[1] ){ y=this.whP[1]-this.wh[1]; r = this.wh[1]>this.whP[1]? [0,-1]:r; }
-                this.xy = [x,y];
-                this.style.left = x+'px';
-                this.style.top = y+'px';
-                return r;
+        if( !el.move ){
+            el.move = function(xy){
+                if( this.wh[0]>this.whP[0] || this.wh[1]>this.whP[1] ){
+                    var x=xy[0], y=xy[1], r;
+                    if( x>0 ){ x=0; r = this.wh[0]>this.whP[0]? [1,0]:null; }
+                    else if( x<this.whP[0]-this.wh[0] ){ x=this.whP[0]-this.wh[0]; r = this.wh[0]>this.whP[0]? [-1,0]:null; }
+                    if( y>0 ){ y=0; r = this.wh[1]>this.whP[1]? [0,1]:r; }
+                    else if( y<this.whP[1]-this.wh[1] ){ y=this.whP[1]-this.wh[1]; r = this.wh[1]>this.whP[1]? [0,-1]:r; }
+                    this.xy = [x,y];
+                    this.style.left = x+'px';
+                    this.style.top = y+'px';
+                    return r;
+                }
+            };
+            el.drop = function(){
+                var f = Math.abs(this.v[0])+Math.abs(this.v[1])>50?0.98:0.88, r;
+                this.v = [this.v[0]*f, this.v[1]*f];
+                this.xy = [this.xy[0]+this.v[0], this.xy[1]+this.v[1]];
+                r = this.move(this.xy);
+                if( r ){
+                    if( r[0] ){ this.v = [-this.v[0]*f, this.v[1]*f]; }
+                    if( r[1] ){ this.v = [this.v[0]*f, -this.v[1]*f]; }
+                }
+                if( Math.abs(this.v[0])+Math.abs(this.v[1])<0.5 ){ window.clearTimeout(this.t); return; }
+                this.t = window.setTimeout(function(){ el.drop(); }, 23);
+            };
+            if( el.zoomer ){
+                el.zoom = function(z,xy0){
+                    xy0 = xy0 || [this.whP[0]/2, this.whP[1]/2];
+                    if( z>1 && this.wh[0]>2048 ){ return; }
+                    if( this.wh[0]*z>this.whP[0] || this.wh[1]*z>this.whP[1] ){
+                        this.wh = [this.wh[0]*z,this.wh[1]*z];
+                        this.style.width = this.wh[0]+'px';
+                        this.style.height = this.wh[1]+'px';
+                        this.move([(xy0[0]-((xy0[0]-this.xy[0])*z)),(xy0[1]-((xy0[1]-this.xy[1])*z))]);
+                    }else{
+                        this.style.width = this.style.height = '100%';
+                        this.wh = [getComputed(el,'width'), getComputed(el,'height')];
+                        this.style.left = this.style.top = 0;
+                        this.xy = [0,0];
+                    }
+                };
+                el.zoom0 = function(){
+                    var c = 0;
+                    if( this.t ){ window.clearInterval(this.t); }
+                    this.t = window.setInterval(function(){ el.zoom(0.92+0.07*(1-Math.pow(1-(++c/1000),5))); if( el.style.width==='100%' ){ window.clearInterval(el.t); }},1);
+                };
             }
-        };
-        el.drop = function(){
-            var f = Math.abs(this.v[0])+Math.abs(this.v[1])>50?0.98:0.88, r;
-            this.v = [this.v[0]*f, this.v[1]*f];
-            this.xy = [this.xy[0]+this.v[0], this.xy[1]+this.v[1]];
-            r = this.move(this.xy);
-            if( r ){
-                if( r[0] ){ this.v = [-this.v[0]*f, this.v[1]*f]; }
-                if( r[1] ){ this.v = [this.v[0]*f, -this.v[1]*f]; }
-            }
-            if( Math.abs(this.v[0])+Math.abs(this.v[1])<0.5 ){ window.clearTimeout(this.t); return; }
-            this.t = window.setTimeout(function(){ el.drop(); }, 23);
-        };
-        el.zoom = function(z,xy0){
-            xy0 = xy0 || [this.whP[0]/2, this.whP[1]/2];
-            if( z>1 && this.wh[0]>2048 ){ return; }
-            if( this.wh[0]*z>this.whP[0] || this.wh[1]*z>this.whP[1] ){
-                this.wh = [this.wh[0]*z,this.wh[1]*z];
-                this.style.width = this.wh[0]+'px';
-                this.style.height = this.wh[1]+'px';
-                this.move([(xy0[0]-((xy0[0]-this.xy[0])*z)),(xy0[1]-((xy0[1]-this.xy[1])*z))]);
-            }else{
-                this.style.width = this.style.height = '100%';
-                this.wh = [getComputed(el,'width'), getComputed(el,'height')];
-                this.style.left = this.style.top = 0;
-                this.xy = [0,0];
-            }
-        };
-        el.zoom0 = function(){
-            var c = 0;
-            if( this.t ){ window.clearInterval(this.t); }
-            this.t = window.setInterval(function(){ el.zoom(0.92+0.07*(1-Math.pow(1-(++c/1000),5))); if( el.style.width==='100%' ){ window.clearInterval(el.t); }},1);
-        };
+        }
     },
     touch: function(e){
         e = e || window.event;
