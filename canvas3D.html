@@ -24,14 +24,16 @@
         var hex = []; for(var i=0; i<7; ++i) hex[i] = [0,Math.cos(Math.PI*i/3),Math.sin(Math.PI*i/3)];
         //var deltoid = []; for(var i=0; i<200; ++i) deltoid[i] = [0,-1+Math.cos(Math.PI*i/100)*(1+Math.cos(Math.PI*i/100)),2*Math.sin(Math.PI*i/100)*(1-Math.cos(Math.PI*i/100))];
         //var hypotrochoid = []; n=40; for(var i=0; i<n; ++i) hypotrochoid[i] = [0,6*Math.cos(Math.PI*i/(n/2))+5*Math.cos((6/2)*Math.PI*i/(n/2)),6*Math.sin(Math.PI*i/(n/2))-5*Math.sin((6/2)*Math.PI*i/(n/2))];
-        var epicycloid = []; n=40; for(var i=0; i<n; ++i) epicycloid[i] = [0,5*Math.cos(Math.PI*i/(n/2))+Math.cos(5*Math.PI*i/(n/2)),5*Math.sin(Math.PI*i/(n/2))-Math.sin(5*Math.PI*i/(n/2))];
+        //var epicycloid = []; n=40; for(var i=0; i<n; ++i) epicycloid[i] = [0,5*Math.cos(Math.PI*i/(n/2))+Math.cos(5*Math.PI*i/(n/2)),5*Math.sin(Math.PI*i/(n/2))-Math.sin(5*Math.PI*i/(n/2))];
+        var heart = []; n=100; for(var i=0; i<n; ++i) heart[i] = [0,16*Math.sin(i)*Math.sin(i)*Math.sin(i),13*Math.cos(i)-5*Math.cos(2*i)-2*Math.cos(3*i)-Math.cos(4*i)];
         var Things = { 
                 cube:new Thing([ [0,0,0], [0,s,0], [s,s,0], [s,0,0], [s,0,s], [s,s,s], [0,s,s], [0,0,s], [0,0,0] ], 1, -2, 13),  
                 square:new Thing([ [0,0,0], [0,s,0], [0,s,s], [0,0,s], [0,0,0] ], 5, 2, 20), 
                 hex:new Thing(hex, -4, 0, 18),
                 //deltoid:new Thing(deltoid, 0, 8, 34),
                 //hypotrochoid:new Thing(hypotrochoid, 0, 8, 60),
-                epicycloid:new Thing(epicycloid, -3, 20, 100),
+                //epicycloid:new Thing(epicycloid, -3, 20, 100),
+                heart:new Thing(heart, -3, 20, 200),
             };
             
         function Thing(unit, x, y, z) {
