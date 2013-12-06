@@ -27,17 +27,20 @@ function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches
 var dragDrop;
 dragDrop = {
 	el: null, xy0: null, xyT: null, 
+    size: function(el){
+        el.wh = [getComputed(el,'width'), getComputed(el,'height')];
+        el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
+    },
 	init: function(el, unbound) {
-		if(typeof el==='string'){ el = document.getElementById(el); }
-		el.onmousedown = dragDrop.touch;
-		el.ontouchstart = dragDrop.touch;
+		if( typeof el==='string' ){ el = document.querySelector(el); } if( !el ){ return; }
+        el.P = unbound? document.body:el.parentNode;
+        dragDrop.size(el);
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
         el.v = [0,0];
-        el.wh = [getComputed(el,'width'), getComputed(el,'height')];
-        el.P = unbound? document.body:el.parentNode;
         el.xyO = unbound? getPgOffset(el):[0,0];
-        el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
         if( !el.move ){
+            el.onmousedown = dragDrop.touch;
+            el.ontouchstart = dragDrop.touch;
             el.move = function(xy){
                 var x=xy[0], y=xy[1], r;
                 if( x<=0-el.xyO[0] ){ x=0-el.xyO[0]; r=[-1,0]; }
