@@ -1,104 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <style type="text/css">
-            body { background:#666; margin:2em; }
-            canvas { background:#ddd; border:1px solid #000; border-radius:300px; display:block; margin:0 auto; }
-        </style>
-    </head>
-    
-    <body>
-        <canvas id="cnv" width="600" height="600"></canvas>
-    
+<head>
+    <meta charset="utf-8" />
+    <style type="text/css">
+        body { background:#666; margin:2em; }
+        canvas { background:#ddd; border:1px solid #000; border-radius:300px; display:block; margin:0 auto; }
+    </style>
+</head>
+<body>
+    <canvas id="cnv" width="600" height="600"></canvas>
     <script type="text/javascript">
-        
-        var cnv = document.getElementById('cnv'),
-            ctx = cnv.getContext('2d'),
-            s = 1, //scaler
-            pspctvX = 740,
-            pspctvY = 740,
-            x0 = parseInt(cnv.getAttribute('width'))/2,
-            y0 = parseInt(cnv.getAttribute('height'))/2,
-            t;
-        var hex = []; for(var i=0; i<7; ++i) hex[i] = [0,Math.cos(Math.PI*i/3),Math.sin(Math.PI*i/3)];
-        //var deltoid = []; for(var i=0; i<200; ++i) deltoid[i] = [0,-1+Math.cos(Math.PI*i/100)*(1+Math.cos(Math.PI*i/100)),2*Math.sin(Math.PI*i/100)*(1-Math.cos(Math.PI*i/100))];
-        //var hypotrochoid = []; n=40; for(var i=0; i<n; ++i) hypotrochoid[i] = [0,6*Math.cos(Math.PI*i/(n/2))+5*Math.cos((6/2)*Math.PI*i/(n/2)),6*Math.sin(Math.PI*i/(n/2))-5*Math.sin((6/2)*Math.PI*i/(n/2))];
-        //var epicycloid = []; n=40; for(var i=0; i<n; ++i) epicycloid[i] = [0,5*Math.cos(Math.PI*i/(n/2))+Math.cos(5*Math.PI*i/(n/2)),5*Math.sin(Math.PI*i/(n/2))-Math.sin(5*Math.PI*i/(n/2))];
-        var heart = []; n=100; for(var i=0; i<n; ++i) heart[i] = [0,16*Math.sin(i)*Math.sin(i)*Math.sin(i),13*Math.cos(i)-5*Math.cos(2*i)-2*Math.cos(3*i)-Math.cos(4*i)];
-        var Things = { 
-                cube:new Thing([ [0,0,0], [0,s,0], [s,s,0], [s,0,0], [s,0,s], [s,s,s], [0,s,s], [0,0,s], [0,0,0] ], 1, -2, 13),  
-                square:new Thing([ [0,0,0], [0,s,0], [0,s,s], [0,0,s], [0,0,0] ], 5, 2, 20), 
-                hex:new Thing(hex, -4, 0, 18),
-                //deltoid:new Thing(deltoid, 0, 8, 34),
-                //hypotrochoid:new Thing(hypotrochoid, 0, 8, 60),
-                //epicycloid:new Thing(epicycloid, -3, 20, 100),
-                heart:new Thing(heart, -3, 20, 200),
-            };
-            
-        function Thing(unit, x, y, z) {
-            this.unit = unit;
-            this.obj = new Array(this.unit.length);
-            for(var i=0; i<this.obj.length; ++i) this.obj[i] = new Array();
-            this.xfrm = [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [x,y,z,1] ];
-            this.c = 0;
-            this.r = Math.random()*0.07;
-        }
-        
-        Thing.prototype.rotate = function(radX, radY, radZ){
-            var tmpMatrix = [ [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0] ], 
-                rotateMatrix = radX!=null? [ [1,0,0,0], [0,Math.cos(radX),Math.sin(radX),0], [0,-Math.sin(radX),Math.cos(radX),0], [0,0,0,1] ]
-                             : radY!=null? [ [Math.cos(radY),0,-Math.sin(radY),0], [0,1,0,0], [Math.sin(radY),0,Math.cos(radY),0], [0,0,0,1] ]
-                             : radZ!=null? [ [Math.cos(radZ),Math.sin(radZ),0,0], [-Math.sin(radZ),Math.cos(radZ),0,0], [0,0,1,0], [0,0,0,1] ]
-                             : [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1] ];
-            for(var i=0; i<this.xfrm.length; i++){ for(var j=0; j<this.xfrm.length; j++){ for(var k=0; k<this.xfrm.length; k++){
-                tmpMatrix[i][j] += rotateMatrix[i][k] * this.xfrm[k][j];
-            } } }
-            this.xfrm = tmpMatrix;
+    var cnv = document.getElementById('cnv'),
+        ctx = cnv.getContext('2d'),
+        s = 1, //scaler
+        pspctvX = 740,
+        pspctvY = 740,
+        x0 = parseInt(cnv.getAttribute('width'))/2,
+        y0 = parseInt(cnv.getAttribute('height'))/2,
+        t;
+    var hex = []; for(var i=0; i<7; ++i) hex[i] = [0,Math.cos(Math.PI*i/3),Math.sin(Math.PI*i/3)];
+    var heart = []; n=100; for(var i=0; i<n; ++i) heart[i] = [0,16*Math.sin(i)*Math.sin(i)*Math.sin(i),13*Math.cos(i)-5*Math.cos(2*i)-2*Math.cos(3*i)-Math.cos(4*i)];
+    var Things = { 
+            cube:new Thing([ [0,0,0], [0,s,0], [s,s,0], [s,0,0], [s,0,s], [s,s,s], [0,s,s], [0,0,s], [0,0,0] ], 1, -2, 13),  
+            square:new Thing([ [0,0,0], [0,s,0], [0,s,s], [0,0,s], [0,0,0] ], 5, 2, 20), 
+            hex:new Thing(hex, -4, 0, 18),
+            heart:new Thing(heart, -3, 20, 200),
         };
         
-        Thing.prototype.transform = function(){
-            this.rotate((Math.sin((++this.c)*this.r)/Math.PI),null,null);
-            this.rotate(null,(Math.cos((++this.c)*this.r)/Math.PI),null);
-            this.rotate(null,null,((Math.cos((++this.c)*this.r)/10)/Math.PI));
+    function Thing(unit, x, y, z) {
+        this.unit = unit;
+        this.obj = new Array(this.unit.length);
+        for(var i=0; i<this.obj.length; ++i) this.obj[i] = new Array();
+        this.xfrm = [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [x,y,z,1] ];
+        this.c = 0;
+        this.r = Math.random()*0.07;
+    }
+    
+    Thing.prototype.rotate = function(radX, radY, radZ){
+        var tmpMatrix = [ [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0] ], 
+            rotateMatrix = radX!=null? [ [1,0,0,0], [0,Math.cos(radX),Math.sin(radX),0], [0,-Math.sin(radX),Math.cos(radX),0], [0,0,0,1] ]
+                         : radY!=null? [ [Math.cos(radY),0,-Math.sin(radY),0], [0,1,0,0], [Math.sin(radY),0,Math.cos(radY),0], [0,0,0,1] ]
+                         : radZ!=null? [ [Math.cos(radZ),Math.sin(radZ),0,0], [-Math.sin(radZ),Math.cos(radZ),0,0], [0,0,1,0], [0,0,0,1] ]
+                         : [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1] ];
+        for(var i=0; i<this.xfrm.length; i++){ for(var j=0; j<this.xfrm.length; j++){ for(var k=0; k<this.xfrm.length; k++){
+            tmpMatrix[i][j] += rotateMatrix[i][k] * this.xfrm[k][j];
+        } } }
+        this.xfrm = tmpMatrix;
+    };
+    
+    Thing.prototype.transform = function(){
+        this.rotate((Math.sin((++this.c)*this.r)/Math.PI),null,null);
+        this.rotate(null,(Math.cos((++this.c)*this.r)/Math.PI),null);
+        this.rotate(null,null,((Math.cos((++this.c)*this.r)/10)/Math.PI));
+        for(var r=0; r<this.obj.length; r++){ //construct current cubeMatrix from currentTransformation.
+            this.obj[r][0] = (this.xfrm[0][0] * this.unit[r][0]) + (this.xfrm[1][0] * this.unit[r][1]) + (this.xfrm[2][0] * this.unit[r][2]) + this.xfrm[3][0];
+            this.obj[r][1] = (this.xfrm[0][1] * this.unit[r][0]) + (this.xfrm[1][1] * this.unit[r][1]) + (this.xfrm[2][1] * this.unit[r][2]) + this.xfrm[3][1];
+            this.obj[r][2] = (this.xfrm[0][2] * this.unit[r][0]) + (this.xfrm[1][2] * this.unit[r][1]) + (this.xfrm[2][2] * this.unit[r][2]) + this.xfrm[3][2];
+        }
+    }
+    
+    function animate(){
+        var x, y;
+        cnv.width = cnv.width;
+        ctx.strokeStyle = "#000000";
+        ctx.beginPath();
+        for(var n in Things){
+            Things[n].transform();
             
-            for(var r=0; r<this.obj.length; r++){ //construct current cubeMatrix from currentTransformation.
-                this.obj[r][0] = (this.xfrm[0][0] * this.unit[r][0]) + (this.xfrm[1][0] * this.unit[r][1]) + (this.xfrm[2][0] * this.unit[r][2]) + this.xfrm[3][0];
-                this.obj[r][1] = (this.xfrm[0][1] * this.unit[r][0]) + (this.xfrm[1][1] * this.unit[r][1]) + (this.xfrm[2][1] * this.unit[r][2]) + this.xfrm[3][1];
-                this.obj[r][2] = (this.xfrm[0][2] * this.unit[r][0]) + (this.xfrm[1][2] * this.unit[r][1]) + (this.xfrm[2][2] * this.unit[r][2]) + this.xfrm[3][2];
+            for(var p=0; p<Things[n].obj.length; p++){ //plot, projecting 3d to 2d
+                x = Math.round(x0 + (Things[n].obj[p][0] * pspctvX / Things[n].obj[p][2]));
+                y = Math.round(y0 - (Things[n].obj[p][1] * pspctvY / Things[n].obj[p][2]));
+                if(p==0){ ctx.moveTo(x,y); }else{ ctx.lineTo(x,y); }
             }
         }
-        
-        function animate(){
-            var x, y;
-            
-            cnv.width = cnv.width;
-            ctx.strokeStyle = "#000000";
-            ctx.beginPath();
-            
-            for(var n in Things){
-                Things[n].transform();
-                
-                for(var p=0; p<Things[n].obj.length; p++){ //plot, projecting 3d to 2d
-                    x = Math.round(x0 + (Things[n].obj[p][0] * pspctvX / Things[n].obj[p][2]));
-                    y = Math.round(y0 - (Things[n].obj[p][1] * pspctvY / Things[n].obj[p][2]));
-                    if(p==0){ ctx.moveTo(x,y); }else{ ctx.lineTo(x,y); }
-                }
-            }
-            
-            ctx.stroke();
-            
-            t = setTimeout(function(){animate()}, 74);
-        };
-        
-        if(window.addEventListener){
-            cnv.addEventListener('mouseover', animate, false); 
-            cnv.addEventListener('mouseout', function(){clearTimeout(t);}, false); 
-        }else if(window.attachEvent){ 
-            cnv.attachEvent('onmouseover', animate);
-            cnv.attachEvent('onmouseout', function(){clearTimeout(t);});
-        }
-        
+        ctx.stroke();
+        t = setTimeout(function(){animate()}, 74);
+    };
+    if(window.addEventListener){
+        cnv.addEventListener('mouseover', animate, false); 
+        cnv.addEventListener('mouseout', function(){clearTimeout(t);}, false); 
+    }else if(window.attachEvent){ 
+        cnv.attachEvent('onmouseover', animate);
+        cnv.attachEvent('onmouseout', function(){clearTimeout(t);});
+    }
     </script>
 </body>
 </html>
