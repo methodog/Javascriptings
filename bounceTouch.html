@@ -30,7 +30,6 @@ dragDrop = {
     size: function(el){
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
         el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
-        el.xyP = getPgOffset(el.P);
     },
 	init: function(el, unbound){
         if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
