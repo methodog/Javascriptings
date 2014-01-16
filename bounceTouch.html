@@ -40,9 +40,7 @@ dragDrop = {
         if( !el.move ){
             el.onmousedown = dragDrop.touch;
             el.ontouchstart = dragDrop.touch;
-            el.wh = [getComputed(el,'width'), getComputed(el,'height')];
             el.xyO = unbound? getPgOffset(el):[0,0];
-            el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
             el.move = function(xy){
                 var x=xy[0], y=xy[1], r;
                 if( x<=0-el.xyO[0] ){ x=0-el.xyO[0]; r=[-1,0]; }
