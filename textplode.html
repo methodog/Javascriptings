@@ -44,9 +44,9 @@ dragDrop = {
             el.move = function(xy){
                 var x=xy[0], y=xy[1], r;
                 if( x<=0-el.xyO[0] ){ x=0-el.xyO[0]; r=[-1,0]; }
-                if( x>=this.whP[0]-this.wh[0]-el.xyO[0] ){ x=this.whP[0]-this.wh[0]-el.xyO[0]; r=[1,0]; }
+                else if( x>=this.whP[0]-this.wh[0]-el.xyO[0] ){ x=this.whP[0]-this.wh[0]-el.xyO[0]; r=[1,0]; }
                 if( y<=0-el.xyO[1] ){ y=0-el.xyO[1]; r=[0,-1]; }
-                if( y>=this.whP[1]-this.wh[1]-el.xyO[1] ){ y=this.whP[1]-this.wh[0]-el.xyO[1]; r=[0,1]; }
+                else if( y>=this.whP[1]-this.wh[1]-el.xyO[1] ){ y=this.whP[1]-this.wh[1]-el.xyO[1]; r=[0,1]; }
                 this.xy = [x,y];
                 this.style.left = x+'px';
                 this.style.top = y+'px';
