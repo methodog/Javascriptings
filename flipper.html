@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>Finger Flip</title>
+    <style type="text/css">
+        html, body { height:100%; margin:0; width:100%; overflow:hidden; }
+        ul { list-style-type:none; margin:0; padding:0; white-space:nowrap; }
+        li { box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; display:inline-block; }
+        .clip { height:100%; width:100%; overflow:hidden; position:relative; }
+        .dragpad, .draggable { cursor:pointer; height:100%; position:absolute; left:0; top:0; }
+        .dragpad, .zoomable { width:100%; }
+        #list-clip { height:355px; margin:auto; width:355px; }
+    </style>	
+</head>
+
+<body>
+
+<div id="list-clip" class="clip">
+    <ul class="draggable flipper"><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AC/2006AC5746_jpg_ds.jpg" alt="Chair" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2008BR/2008BR9185_jpg_ds.jpg" alt="Vase" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2010EA/2010EA7377_jpg_ds.jpg" alt="Poster" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AM/2006AM7100_jpg_ds.jpg" alt="Design" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AM/2006AM2862_jpg_ds.jpg" alt="Engraving" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009CT/2009CT1962_jpg_ds.jpg" alt="H Beard Print Collection (Print)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AP/2006AP9141_jpg_ds.jpg" alt="Open Landscape with Shepherd, Sheep, Pool and Distant Hills (Oil painting)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2008BU/2008BU3026_jpg_ds.jpg" alt="Scenes of a Marriage Ceremony (cassone panel) (Cassone panel)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2010EG/2010EG0492_jpg_ds.jpg" alt="H Beard Print Collection (Print)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006BA/2006BA0945_jpg_ds.jpg" alt="Smoking table" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AT/2006AT4261_jpg_ds.jpg" alt="British and Foreign Animals, A New Game, Moral, Instructive, and Amusing (Board game)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AU/2006AU9235_jpg_ds.jpg" alt="Snuff bottle" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AW/2006AW3391_jpg_ds.jpg" alt="View from palace in fort, Lahore (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BY/2009BY0649_jpg_ds.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BX/2009BX9101_jpg_ds.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2007BL/2007BL8897_jpg_ds.jpg" alt="The Munduramiar Mundapam (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006BG/2006BG6915_jpg_ds.jpg" alt="Locket" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AT/2006AT1108_jpg_ds.jpg" alt="Clock" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BY/2009BY2731_jpg_ds.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AU/2006AU9488_jpg_ds.jpg" alt="Snuff bottle" height="355" width="355"></li></ul>
+</div>
+
+<script type="text/javascript">
+function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
+function getComputed(el,style){ if(el.currentStyle){ var y=el.currentStyle[style]; }else if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); } return parseFloat(y)||0; }
+function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
+function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
+var dragZoom = {
+    el:null, xy0:null, v0:null, xyT:null, xyE:null, d0:null, targ:null, 
+    size: function(el){
+        el.wh = [getComputed(el,'width'), getComputed(el,'height')];
+        el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
+        el.whC = [getComputed(el.childNodes[0],'width'), getComputed(el.childNodes[0],'height')];
+        el.xyP = getPgOffset(el.P);
+    },
+    init: function(el){
+        if( typeof el==='string' ){ el = document.querySelector(el); } if( !el ){ return; }
+        el.P = el.parentNode;
+        dragZoom.size(el);
+        el.xy = [getComputed(el,'left'), getComputed(el,'top')];
+        el.v = [0,0];
+        if( !el.move ){
+            var zoomer = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomer = String(zoomer).indexOf('zoomable')>-1;
+            el.zoomer = zoomer||null;
+            el.flipper = String(el.className).indexOf('flipper')>-1||null;
+            el.whP0 = el.whP;
+            if( !el.nextSibling ){ el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.appendChild(el.trig) }else{ if( el.nextSibling.className==='dragpad' ){ el.trig = el.nextSibling; }else{ el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.insertBefore(el.trig, el.nextSibling); } }
+            el.trig.onmousedown = dragZoom.touch;
+            el.trig.ontouchstart = dragZoom.touch;
+            if( window.addEventListener ){
+                el.trig.addEventListener('DOMMouseScroll', dragZoom.touch, false); 
+                el.trig.addEventListener('mousewheel', dragZoom.touch, false); 
+            }else if( window.attachEvent ){
+                el.trig.attachEvent('onmousewheel', dragZoom.touch);
+            }
+            el.move = function(xy){
+                if( this.wh[0]>this.whP[0] || this.wh[1]>this.whP[1] ){
+                    var x=xy[0], y=xy[1], r;
+                    if( x>0 ){ x=0; r = this.wh[0]>this.whP[0]? [1,0]:null; }
+                    else if( x<this.whP[0]-this.wh[0] ){ x=this.whP[0]-this.wh[0]; r = this.wh[0]>this.whP[0]? [-1,0]:null; }
+                    if( y>0 ){ y=0; r = this.wh[1]>this.whP[1]? [0,1]:r; }
+                    else if( y<this.whP[1]-this.wh[1] ){ y=this.whP[1]-this.wh[1]; r = this.wh[1]>this.whP[1]? [0,-1]:r; }
+                    if( this.flipper ){ x=x-(x%this.whC[0]); y=y-(y%this.whC[1]); }
+                    this.xy = [x,y];
+                    this.style.left = x+'px';
+                    this.style.top = y+'px';
+                    return r;
+                }
+            };
+            el.drop = function(){
+                var f = Math.abs(this.v[0])+Math.abs(this.v[1])>50?0.98:0.88, r;
+                this.v = [this.v[0]*f, this.v[1]*f];
+                this.xy = [this.xy[0]+this.v[0], this.xy[1]+this.v[1]];
+                r = this.move(this.xy);
+                if( r || Math.abs(this.v[0])+Math.abs(this.v[1])<0.5 ){ dragZoom.v0 = this.v = [0,0]; window.clearTimeout(this.t); return; }
+                this.t = window.setTimeout(function(){ el.drop(); }, 23);
+            };
+            if( el.zoomer ){
+                el.zoom = function(z,xy0){
+                    xy0 = xy0 || [this.whP[0]/2, this.whP[1]/2];
+                    if( z>1 && this.wh[0]>5000 ){ return; }
+                    if( this.wh[0]*z>this.whP[0] || this.wh[1]*z>this.whP[1] ){
+                        this.wh = [this.wh[0]*z,this.wh[1]*z];
+                        this.style.width = this.wh[0]+'px';
+                        this.style.height = this.wh[1]+'px';
+                        this.move([(xy0[0]-((xy0[0]-this.xy[0])*z)),(xy0[1]-((xy0[1]-this.xy[1])*z))]);
+                        if( this.wh[0]>1200 ){ svgnums.css('display','block'); }else{ svgnums.css('display','none'); }
+                    }else{
+                        this.style.width = this.style.height = '100%';
+                        this.wh = [getComputed(el,'width'), getComputed(el,'height')];
+                        this.style.left = this.style.top = 0;
+                        this.xy = [0,0];
+                    }
+                };
+                el.zoom0 = function(){
+                    if( !!el.style.width ){
+                        var c = 0;
+                        if( this.t ){ window.clearInterval(this.t); }
+                        this.t = window.setInterval(function(){ el.zoom(0.8); if( el.style.width==='100%' ){ window.clearInterval(el.t); }},50);
+
+                    }
+                };
+            }
+        }
+    },
+    touch: function(e){
+        e = e || window.event;
+        if( e.type==='touchstart' && e.touches && e.touches.length>2 ){ return; }
+        dragZoom.el = this.parentNode.getElementsByClassName('draggable')[0];
+        window.clearTimeout(dragZoom.el.t);
+        dragZoom.v0 = dragZoom.el.v;
+        dragZoom.el.v = [0,0];
+        dragZoom.xy0 = dragZoom.el.xy;
+        dragZoom.xyT = getXY(e);
+        this.style.display = 'none'; dragZoom.targ = document.elementFromPoint(dragZoom.xyT[0]-(window.scrollX?window.scrollX:document.body.scrollLeft),dragZoom.xyT[1]-(window.scrollY?window.scrollY:document.body.scrollTop)); this.style.display = 'block';
+        if( e.type==='touchstart' ){
+            if( dragZoom.el.zoomer && e.touches && e.touches.length===2 ){
+                dragZoom.d0 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
+                dragZoom.el.trig.ontouchmove = dragZoom.zoom;
+            }else{
+                dragZoom.el.trig.ontouchmove = dragZoom.drag;
+            }
+            dragZoom.el.trig.onmousedown = null;
+            dragZoom.el.trig.ontouchend = function(){
+                dragZoom.el.trig.ontouchmove = null;
+                dragZoom.el.trig.ontouchend = null;
+                dragZoom.release();
+            };
+        }else{
+            if( e.type==='DOMMouseScroll' || e.type==='mousewheel' ){ 
+                if( dragZoom.el.zoomer ){ dragZoom.zoom(e); }
+            }else{
+                document.onmousemove = dragZoom.drag;
+                document.onmouseup = function(){
+                    document.onmousemove = null;
+                    document.onmouseup = null;
+                    dragZoom.release();
+                };
+            }
+        }
+        return false;
+    },
+    drag: function(e){
+        e = e || window.event;
+        dragZoom.xyE = getXY(e);
+        var xy = [dragZoom.xy0[0]+dragZoom.xyE[0]-dragZoom.xyT[0], dragZoom.xy0[1]+dragZoom.xyE[1]-dragZoom.xyT[1]];
+        dragZoom.el.v = [(xy[0]-dragZoom.el.xy[0]),(xy[1]-dragZoom.el.xy[1])];
+        dragZoom.el.move(xy);
+        return false;
+    },
+    release: function(){
+        if( ((!dragZoom.xyE && !dragZoom.d0) || (!!dragZoom.xyE && Math.abs(dragZoom.xyT[0]-dragZoom.xyE[0])<5 && Math.abs(dragZoom.xyT[1]-dragZoom.xyE[1])<5)) && Math.abs(dragZoom.v0[0])+Math.abs(dragZoom.v0[1])<2 ){
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent("click", true, false);
+            dragZoom.targ.dispatchEvent(evt);
+        }else{
+            //dragZoom.el.drop();
+        }
+        dragZoom.el = dragZoom.xyE = dragZoom.d0 = null;
+    },
+    zoom: function(e){
+        e = e || window.event;
+        if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
+        var z, d1, xy0 = [dragZoom.xyT[0]-dragZoom.el.xyP[0],dragZoom.xyT[1]-dragZoom.el.xyP[1]];
+        if( e.touches ){
+            d1 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
+            z = 1+((d1-dragZoom.d0>0?(d1/dragZoom.el.whP[0]):-0.5)*0.1);
+            dragZoom.d0 = d1;
+        }else{
+            z = (e.detail? e.detail*-1 : e.wheelDelta/40);
+            z = 1+((z>0?1:-1)*0.25);
+        }
+        dragZoom.el.zoom(z,xy0);
+        return false;
+    }
+};
+var draggables = document.getElementsByClassName('draggable');
+for( var i=0; i<draggables.length; ++i ){ 
+    dragZoom.init(draggables[i]); 
+}
+</script>
+</body>
+</html>
