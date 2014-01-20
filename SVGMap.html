@@ -72,17 +72,19 @@ dragZoom = {
         el.zoomer = zoomer||null;
         if( !el.move ){
             el.move = function(xy){
-                if( this.wh[0]>this.whP[0] || this.wh[1]>this.whP[1] ){
-                    var x=xy[0], y=xy[1], r;
+                var x=xy[0], y=xy[1], r;
+                if( this.wh[0]>this.whP[0] ){
                     if( x>0 ){ x=0; r = this.wh[0]>this.whP[0]? [1,0]:null; }
                     else if( x<this.whP[0]-this.wh[0] ){ x=this.whP[0]-this.wh[0]; r = this.wh[0]>this.whP[0]? [-1,0]:null; }
+                    this.style.left = x+'px';
+                }
+                if( this.wh[1]>this.whP[1] ){
                     if( y>0 ){ y=0; r = this.wh[1]>this.whP[1]? [0,1]:r; }
                     else if( y<this.whP[1]-this.wh[1] ){ y=this.whP[1]-this.wh[1]; r = this.wh[1]>this.whP[1]? [0,-1]:r; }
-                    this.xy = [x,y];
-                    this.style.left = x+'px';
                     this.style.top = y+'px';
-                    return r;
                 }
+                this.xy = [x,y];
+                return r;
             };
             el.drop = function(){
                 var f = Math.abs(this.v[0])+Math.abs(this.v[1])>50?0.98:0.88, r;
