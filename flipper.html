@@ -13,7 +13,7 @@
         .clip { height:100%; width:100%; overflow:hidden; position:relative; }
         .dragpad, .draggable { cursor:pointer; height:100%; position:absolute; left:0; top:0; }
         .dragpad, .zoomable { width:100%; }
-        #list-clip { height:355px; margin:auto; width:355px; }
+        #list-clip { border:1px solid #ccc; height:355px; margin:auto; width:355px; }
     </style>	
 </head>
 
@@ -33,7 +33,6 @@ var dragZoom = {
     size: function(el){
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
         el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
-        el.whC = [getComputed(el.childNodes[0],'width'), getComputed(el.childNodes[0],'height')];
         el.xyP = getPgOffset(el.P);
     },
     init: function(el){
@@ -46,6 +45,7 @@ var dragZoom = {
             var zoomer = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomer = String(zoomer).indexOf('zoomable')>-1;
             el.zoomer = zoomer||null;
             el.flipper = String(el.className).indexOf('flipper')>-1||null;
+            
             el.whP0 = el.whP;
             if( !el.nextSibling ){ el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.appendChild(el.trig) }else{ if( el.nextSibling.className==='dragpad' ){ el.trig = el.nextSibling; }else{ el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.insertBefore(el.trig, el.nextSibling); } }
             el.trig.onmousedown = dragZoom.touch;
@@ -57,18 +57,19 @@ var dragZoom = {
                 el.trig.attachEvent('onmousewheel', dragZoom.touch);
             }
             el.move = function(xy){
-                if( this.wh[0]>this.whP[0] || this.wh[1]>this.whP[1] ){
-                    var x=xy[0], y=xy[1], r;
+                var x=xy[0], y=xy[1], r;
+                if( this.wh[0]>this.whP[0] ){
                     if( x>0 ){ x=0; r = this.wh[0]>this.whP[0]? [1,0]:null; }
                     else if( x<this.whP[0]-this.wh[0] ){ x=this.whP[0]-this.wh[0]; r = this.wh[0]>this.whP[0]? [-1,0]:null; }
+                    this.style.left = x+'px';
+                }
+                if( this.wh[1]>this.whP[1] ){
                     if( y>0 ){ y=0; r = this.wh[1]>this.whP[1]? [0,1]:r; }
                     else if( y<this.whP[1]-this.wh[1] ){ y=this.whP[1]-this.wh[1]; r = this.wh[1]>this.whP[1]? [0,-1]:r; }
-                    if( this.flipper ){ x=x-(x%this.whC[0]); y=y-(y%this.whC[1]); }
-                    this.xy = [x,y];
-                    this.style.left = x+'px';
                     this.style.top = y+'px';
-                    return r;
                 }
+                this.xy = [x,y];
+                return r;
             };
             el.drop = function(){
                 var f = Math.abs(this.v[0])+Math.abs(this.v[1])>50?0.98:0.88, r;
@@ -77,6 +78,10 @@ var dragZoom = {
                 r = this.move(this.xy);
                 if( r || Math.abs(this.v[0])+Math.abs(this.v[1])<0.5 ){ dragZoom.v0 = this.v = [0,0]; window.clearTimeout(this.t); return; }
                 this.t = window.setTimeout(function(){ el.drop(); }, 23);
+            };
+            el.snap = function(){
+                console.log(Math.abs(this.xy[0])%this.whP[0]);
+                //this.t = window.setTimeout(function(){ el.snap(); }, 23);
             };
             if( el.zoomer ){
                 el.zoom = function(z,xy0){
@@ -147,7 +152,13 @@ var dragZoom = {
         e = e || window.event;
         dragZoom.xyE = getXY(e);
         var xy = [dragZoom.xy0[0]+dragZoom.xyE[0]-dragZoom.xyT[0], dragZoom.xy0[1]+dragZoom.xyE[1]-dragZoom.xyT[1]];
-        dragZoom.el.v = [(xy[0]-dragZoom.el.xy[0]),(xy[1]-dragZoom.el.xy[1])];
+        if( dragZoom.el.flipper ){ 
+            //console.log(dragZoom.el.whP[0]*(Math.cos(xy[0]*2*Math.PI/dragZoom.el.whP[0])-1)/2);
+            xy = [dragZoom.el.whP[0]*(((Math.cos((xy[0]*6*Math.PI/dragZoom.el.whP[0])%Math.PI)-1)/2) - Math.floor(Math.abs(xy[0])*6/dragZoom.el.whP[0])), xy[1]];
+            //console.log(dragZoom.el.whP[0]*(((Math.cos((xy[0]*2*Math.PI/dragZoom.el.whP[0])%Math.PI)-1)/2) - Math.floor(Math.abs(xy[0])*2/dragZoom.el.whP[0])));
+        }else{
+            dragZoom.el.v = [(xy[0]-dragZoom.el.xy[0]),(xy[1]-dragZoom.el.xy[1])];
+        }
         dragZoom.el.move(xy);
         return false;
     },
@@ -157,7 +168,11 @@ var dragZoom = {
             evt.initEvent("click", true, false);
             dragZoom.targ.dispatchEvent(evt);
         }else{
-            //dragZoom.el.drop();
+            if( dragZoom.el.flipper ){ 
+                dragZoom.el.snap();
+            }else{
+                dragZoom.el.drop();
+            }
         }
         dragZoom.el = dragZoom.xyE = dragZoom.d0 = null;
     },
