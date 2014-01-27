@@ -80,7 +80,11 @@ var dragZoom = {
                 this.t = window.setTimeout(function(){ el.drop(); }, 23);
             };
             el.snap = function(){
-                console.log(Math.abs(this.xy[0])%this.whP[0]);
+                if( Math.abs(this.xy[0])%this.whP[0]>this.whP[0]/2 ){
+                    console.log('snap to '+(this.xy[0]-this.whP[0]+(-1*this.xy[0])%this.whP[0]));
+                }else{
+                    console.log('snap to '+(this.xy[0]+(-1*this.xy[0])%this.whP[0]));
+                }
                 //this.t = window.setTimeout(function(){ el.snap(); }, 23);
             };
             if( el.zoomer ){
