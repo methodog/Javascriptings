@@ -156,11 +156,12 @@ var dragZoom = {
         dragZoom.xyE = getXY(e);
         var xy = [dragZoom.xyE[0]-dragZoom.xyT[0], dragZoom.xyE[1]-dragZoom.xyT[1]];
         if( dragZoom.el.flipper ){ 
-            var d = [(xy[0]<0?-1:1), (xy[1]<0?-1:1)];
+            var n = 3, 
+                d = [(xy[0]<0?-1:1), (xy[1]<0?-1:1)];
             if( dragZoom.el.flipper==='h' ){ 
-                xy = [dragZoom.el.whP[0]*d[0]*(Math.pow(((Math.cos((xy[0]*6*Math.PI/dragZoom.el.whP[0])%Math.PI)-1)/2),2) + Math.floor(Math.abs(xy[0])*6/dragZoom.el.whP[0])), xy[1]];
+                xy = [dragZoom.el.whP[0]*d[0]*(Math.pow(((Math.cos((xy[0]*n*Math.PI/dragZoom.el.whP[0])%Math.PI)-1)/2),2) + Math.floor(Math.abs(xy[0])*n/dragZoom.el.whP[0])), xy[1]];
             }else{
-                xy = [xy[0], dragZoom.el.whP[1]*d[1]*(Math.pow(((Math.cos((xy[1]*6*Math.PI/dragZoom.el.whP[1])%Math.PI)-1)/2),2) + Math.floor(Math.abs(xy[1])*6/dragZoom.el.whP[1]))];
+                xy = [xy[0], dragZoom.el.whP[1]*d[1]*(Math.pow(((Math.cos((xy[1]*n*Math.PI/dragZoom.el.whP[1])%Math.PI)-1)/2),2) + Math.floor(Math.abs(xy[1])*n/dragZoom.el.whP[1]))];
             }
         }else{
             dragZoom.el.v = [dragZoom.xy0[0]+xy[0]-dragZoom.el.xy[0], dragZoom.xy0[1]+xy[1]-dragZoom.el.xy[1]];
