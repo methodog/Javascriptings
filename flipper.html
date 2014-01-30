@@ -78,14 +78,15 @@ var dragZoom = {
                 this.t = window.setTimeout(function(){ el.drop(); }, 23);
             };
             el.snap = function(d, dest){
-                var x = this.xy[0]+Math.ceil(d*((d*dest)-(d*this.xy[0]))/4);
-                if( (d<0 && x<=dest) || (d>0 && x>=dest) ){ 
+                var hv = el.flipper==='h'? 0:1,
+                    p = this.xy[hv]+Math.ceil(d*((d*dest)-(d*this.xy[hv]))/4);
+                if( (d<0 && p<=dest) || (d>0 && p>=dest) ){
                     window.clearTimeout(this.t);
-                    x = dest;
-                    this.move([x, this.xy[1]]);
+                    p = dest;
+                    this.move((hv ? [this.xy[0], p] : [p, this.xy[1]]));
                     return;
                 }
-                this.move([x, this.xy[1]]);
+                this.move((hv ? [this.xy[0], p] : [p, this.xy[1]]));
                 this.t = window.setTimeout(function(){ el.snap(d, dest); }, 23);
             };
             if( el.zoomer ){
@@ -177,11 +178,12 @@ var dragZoom = {
             evt.initEvent("click", true, false);
             dragZoom.targ.dispatchEvent(evt);
         }else{
-            if( dragZoom.el.flipper ){ 
-                if( Math.abs(dragZoom.el.xy[0])%dragZoom.el.whP[0]>dragZoom.el.whP[0]/2 ){
-                    var d = -1, dest = dragZoom.el.xy[0]-dragZoom.el.whP[0]+(-1*dragZoom.el.xy[0])%dragZoom.el.whP[0];
+            if( dragZoom.el.flipper ){
+                var hv = dragZoom.el.flipper==='h'? 0:1;
+                if( Math.abs(dragZoom.el.xy[hv])%dragZoom.el.whP[hv]>dragZoom.el.whP[hv]/2 ){
+                    var d = -1, dest = dragZoom.el.xy[hv]-dragZoom.el.whP[hv]+(-1*dragZoom.el.xy[hv])%dragZoom.el.whP[hv];
                 }else{
-                    var d = 1, dest = dragZoom.el.xy[0]+(-1*dragZoom.el.xy[0])%dragZoom.el.whP[0];
+                    var d = 1, dest = dragZoom.el.xy[hv]+(-1*dragZoom.el.xy[hv])%dragZoom.el.whP[hv];
                 }
                 dragZoom.el.snap(d, dest);
             }else{
