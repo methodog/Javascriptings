@@ -55,8 +55,7 @@ dragDrop = {
             el.drop = function(){
                 var g = 1, f = 0.6, r;
                 this.v = [this.v[0], this.v[1]+g]; //v=u+at
-                this.xy = [this.xy[0]+this.v[0], this.xy[1]+this.v[1]];
-                r = this.move(this.xy);
+                var r = this.move([this.xy[0]+this.v[0], this.xy[1]+this.v[1]]);
                 if( r ){
                     if( r[0] ){ this.v = [-this.v[0]*f, this.v[1]*f]; }
                     if( r[1] ){ this.v = [this.v[0]*f, -this.v[1]*f]; }
