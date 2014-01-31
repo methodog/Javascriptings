@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1, initial-scale=1">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <title>Finger Flip</title>
@@ -44,7 +44,7 @@ var dragZoom = {
         if( !el.move ){
             var zoomer = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomer = String(zoomer).indexOf('zoomable')>-1;
             el.zoomer = zoomer||null;
-            el.flipper = String(el.className).indexOf('flipper')>-1? (el.whP[0]>el.whP[1]?'v':'h') : null;
+            el.flipper = String(el.className).indexOf('flipper')>-1? (el.wh[0]>el.wh[1]?'h':'v') : null;
             el.whP0 = el.whP;
             if( !el.nextSibling ){ el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.appendChild(el.trig) }else{ if( el.nextSibling.className==='dragpad' ){ el.trig = el.nextSibling; }else{ el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.insertBefore(el.trig, el.nextSibling); } }
             el.trig.onmousedown = dragZoom.touch;
