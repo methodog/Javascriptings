@@ -14,6 +14,10 @@
         .dragpad, .draggable { cursor:pointer; height:100%; position:absolute; left:0; top:0; }
         .dragpad, .zoomable { width:100%; }
         #list-clip { border:1px solid #ccc; height:355px; margin:auto; width:355px; }
+        @media screen and (max-width:355px){
+            #list-clip { width:100%!important; }
+            img { height:auto!important; }
+        }
     </style>	
 </head>
 
@@ -208,10 +212,20 @@ var dragZoom = {
         return false;
     }
 };
-var draggables = document.getElementsByClassName('draggable');
+var draggables = document.getElementsByClassName('draggable'),
+    flipperIms = document.getElementById('list-clip').getElementsByTagName('img');
 for( var i=0; i<draggables.length; ++i ){ 
     dragZoom.init(draggables[i]); 
 }
+var resize = function(){
+    w = getComputed(document.body,'width');
+    w = w>355? '':w+'px'
+    for( var i=0; i<flipperIms.length; ++i ){ 
+        flipperIms[i].style.width = w;
+    }
+    dragZoom.size(draggables[i])
+}
+resize(); addHandler(window,'resize',function(){ resize(); });
 </script>
 </body>
 </html>
