@@ -223,7 +223,7 @@ var resize = function(){
     for( var i=0; i<flipperIms.length; ++i ){ 
         flipperIms[i].style.width = w;
     }
-    dragZoom.size(draggables[i])
+    dragZoom.size(draggables[0])
 }
 resize(); addHandler(window,'resize',function(){ resize(); });
 </script>
