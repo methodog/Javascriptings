@@ -7,15 +7,16 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <title>Finger Flip</title>
     <style type="text/css">
-        html, body { height:100%; margin:0; width:100%; overflow:hidden; }
+        html, body { height:100%; margin:0; width:100%; }
         ul { list-style-type:none; margin:0; padding:0; white-space:nowrap; }
         li { box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; display:inline-block; }
         .clip { height:100%; width:100%; overflow:hidden; position:relative; }
         .dragpad, .draggable { cursor:pointer; height:100%; position:absolute; left:0; top:0; }
         .dragpad, .zoomable { width:100%; }
-        #list-clip { border:1px solid #ccc; height:355px; margin:auto; width:355px; }
+        .h-clip { border:1px solid #ccc; height:355px; margin:auto; width:355px; }
+        .zzomable img { height:auto; width:100%; }
         @media screen and (max-width:355px){
-            #list-clip { width:100%!important; }
+            .h-clip { width:100%!important; }
             img { height:auto!important; }
         }
     </style>	
@@ -23,9 +24,18 @@
 
 <body>
 
-<div id="list-clip" class="clip">
+<div id="flipper" class="clip h-clip">
     <ul class="draggable flipper"><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AC/2006AC5746_jpg_ds.jpg" alt="Chair" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2008BR/2008BR9185_jpg_ds.jpg" alt="Vase" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2010EA/2010EA7377_jpg_ds.jpg" alt="Poster" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AM/2006AM7100_jpg_ds.jpg" alt="Design" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AM/2006AM2862_jpg_ds.jpg" alt="Engraving" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009CT/2009CT1962_jpg_ds.jpg" alt="H Beard Print Collection (Print)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AP/2006AP9141_jpg_ds.jpg" alt="Open Landscape with Shepherd, Sheep, Pool and Distant Hills (Oil painting)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2008BU/2008BU3026_jpg_ds.jpg" alt="Scenes of a Marriage Ceremony (cassone panel) (Cassone panel)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2010EG/2010EG0492_jpg_ds.jpg" alt="H Beard Print Collection (Print)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006BA/2006BA0945_jpg_ds.jpg" alt="Smoking table" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AT/2006AT4261_jpg_ds.jpg" alt="British and Foreign Animals, A New Game, Moral, Instructive, and Amusing (Board game)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AU/2006AU9235_jpg_ds.jpg" alt="Snuff bottle" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AW/2006AW3391_jpg_ds.jpg" alt="View from palace in fort, Lahore (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BY/2009BY0649_jpg_ds.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BX/2009BX9101_jpg_ds.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2007BL/2007BL8897_jpg_ds.jpg" alt="The Munduramiar Mundapam (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006BG/2006BG6915_jpg_ds.jpg" alt="Locket" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AT/2006AT1108_jpg_ds.jpg" alt="Clock" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BY/2009BY2731_jpg_ds.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AU/2006AU9488_jpg_ds.jpg" alt="Snuff bottle" height="355" width="355"></li></ul>
 </div>
+
+<div id="flinger" class="clip h-clip">
+    <ul class="draggable"><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AC/2006AC5746_jpg_ds.jpg" alt="Chair" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2008BR/2008BR9185_jpg_ds.jpg" alt="Vase" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2010EA/2010EA7377_jpg_ds.jpg" alt="Poster" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AM/2006AM7100_jpg_ds.jpg" alt="Design" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AM/2006AM2862_jpg_ds.jpg" alt="Engraving" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009CT/2009CT1962_jpg_ds.jpg" alt="H Beard Print Collection (Print)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AP/2006AP9141_jpg_ds.jpg" alt="Open Landscape with Shepherd, Sheep, Pool and Distant Hills (Oil painting)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2008BU/2008BU3026_jpg_ds.jpg" alt="Scenes of a Marriage Ceremony (cassone panel) (Cassone panel)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2010EG/2010EG0492_jpg_ds.jpg" alt="H Beard Print Collection (Print)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006BA/2006BA0945_jpg_ds.jpg" alt="Smoking table" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AT/2006AT4261_jpg_ds.jpg" alt="British and Foreign Animals, A New Game, Moral, Instructive, and Amusing (Board game)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AU/2006AU9235_jpg_ds.jpg" alt="Snuff bottle" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AW/2006AW3391_jpg_ds.jpg" alt="View from palace in fort, Lahore (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BY/2009BY0649_jpg_ds.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BX/2009BX9101_jpg_ds.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2007BL/2007BL8897_jpg_ds.jpg" alt="The Munduramiar Mundapam (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006BG/2006BG6915_jpg_ds.jpg" alt="Locket" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AT/2006AT1108_jpg_ds.jpg" alt="Clock" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BY/2009BY2731_jpg_ds.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AU/2006AU9488_jpg_ds.jpg" alt="Snuff bottle" height="355" width="355"></li></ul>
+</div>
+
+<div id="zoomer" class="clip h-clip">
+    <img class="draggable zoomable" src="http://media.vam.ac.uk/media/thira/collection_images/2006AC/2006AC5746.jpg" alt="Chair" height="768" width="">
+</div>
+
 
 <script type="text/javascript">
 function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
@@ -102,7 +112,6 @@ var dragZoom = {
                         this.style.width = this.wh[0]+'px';
                         this.style.height = this.wh[1]+'px';
                         this.move([(xy0[0]-((xy0[0]-this.xy[0])*z)),(xy0[1]-((xy0[1]-this.xy[1])*z))]);
-                        if( this.wh[0]>1200 ){ svgnums.css('display','block'); }else{ svgnums.css('display','none'); }
                     }else{
                         this.style.width = this.style.height = '100%';
                         this.wh = [getComputed(el,'width'), getComputed(el,'height')];
@@ -213,7 +222,7 @@ var dragZoom = {
     }
 };
 var draggables = document.getElementsByClassName('draggable'),
-    flipperIms = document.getElementById('list-clip').getElementsByTagName('img');
+    flipperIms = document.getElementById('flipper').getElementsByTagName('img');
 for( var i=0; i<draggables.length; ++i ){ 
     dragZoom.init(draggables[i]); 
 }
