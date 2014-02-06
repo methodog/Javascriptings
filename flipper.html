@@ -13,8 +13,8 @@
         .clip { height:100%; width:100%; overflow:hidden; position:relative; }
         .dragpad, .draggable { cursor:pointer; height:100%; position:absolute; left:0; top:0; }
         .dragpad, .zoomable { width:100%; }
-        .h-clip { border:1px solid #ccc; height:355px; margin:auto; width:355px; }
-        .zzomable img { height:auto; width:100%; }
+        .h-clip { border:1px solid #ccc; height:355px; margin:0 auto 1.5em; width:355px; }
+        .zoomable img { height:auto!important; width:100%!important; }
         @media screen and (max-width:355px){
             .h-clip { width:100%!important; }
             img { height:auto!important; }
@@ -140,6 +140,15 @@ var dragZoom = {
         dragZoom.xy0 = dragZoom.el.xy;
         dragZoom.xyT = getXY(e);
         this.style.display = 'none'; dragZoom.targ = document.elementFromPoint(dragZoom.xyT[0]-(window.scrollX?window.scrollX:document.body.scrollLeft),dragZoom.xyT[1]-(window.scrollY?window.scrollY:document.body.scrollTop)); this.style.display = 'block';
+        if( dragZoom.el.zoomer ){
+            var dt0 = dragZoom.dt, dt = new Date().getTime();
+            dragZoom.dt = dt;
+            if( dt0 && dt-dt0<250 ){ 
+                window.clearTimeout(dragZoom.t);
+                dragZoom.zoom(e,1);
+                return;
+            }
+        }
         if( e.type==='touchstart' ){
             if( dragZoom.el.zoomer && e.touches && e.touches.length===2 ){
                 dragZoom.d0 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
@@ -205,11 +214,13 @@ var dragZoom = {
         }
         dragZoom.el = dragZoom.xyE = dragZoom.d0 = null;
     },
-    zoom: function(e){
+    zoom: function(e, zz){
         e = e || window.event;
         if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
         var z, d1, xy0 = [dragZoom.xyT[0]-dragZoom.el.xyP[0],dragZoom.xyT[1]-dragZoom.el.xyP[1]];
-        if( e.touches ){
+        if( zz ){
+            z = dragZoom.el.wh[0]>=dragZoom.el.whP[0]*2 ? 0:2;
+        }else if( e.touches ){
             d1 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
             z = 1+((d1-dragZoom.d0>0?(d1/dragZoom.el.whP[0]):-0.5)*0.1);
             dragZoom.d0 = d1;
