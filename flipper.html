@@ -24,6 +24,10 @@
 
 <body>
 
+<div id="zoetrope" class="clip h-clip">
+    <ul class="draggable flipper"><li><img src="img/zoetrope/buffalo00.jpg" width="355" alt=""></li><li><img src="img/zoetrope/buffalo02.jpg" width="355" alt=""></li><li><img src="img/zoetrope/buffalo04.jpg" width="355" alt=""></li><li><img src="img/zoetrope/buffalo06.jpg" width="355" alt=""></li><li><img src="img/zoetrope/buffalo08.jpg" width="355" alt=""></li><li><img src="img/zoetrope/buffalo10.jpg" width="355" alt=""></li><li><img src="img/zoetrope/buffalo12.jpg" width="355" alt=""></li><li><img src="img/zoetrope/buffalo14.jpg" width="355" alt=""></li> <li><img src="img/zoetrope/buffalo01.jpg" width="355" alt=""></li><li><img src="img/zoetrope/buffalo03.jpg" width="355" alt=""></li><li><img src="img/zoetrope/buffalo05.jpg" width="355" alt=""></li><li><img src="img/zoetrope/buffalo07.jpg" width="355" alt=""></li><li><img src="img/zoetrope/buffalo09.jpg" width="355" alt=""></li><li><img src="img/zoetrope/buffalo11.jpg" width="355" alt=""></li><li><img src="img/zoetrope/buffalo13.jpg" width="355" alt=""></li><li><img src="img/zoetrope/buffalo15.jpg" width="355" alt=""></li></ul>
+</div>
+
 <div id="flipper" class="clip h-clip">
     <ul class="draggable flipper"><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AC/2006AC5746_jpg_ds.jpg" alt="Chair" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2008BR/2008BR9185_jpg_ds.jpg" alt="Vase" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2010EA/2010EA7377_jpg_ds.jpg" alt="Poster" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AM/2006AM7100_jpg_ds.jpg" alt="Design" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AM/2006AM2862_jpg_ds.jpg" alt="Engraving" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009CT/2009CT1962_jpg_ds.jpg" alt="H Beard Print Collection (Print)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AP/2006AP9141_jpg_ds.jpg" alt="Open Landscape with Shepherd, Sheep, Pool and Distant Hills (Oil painting)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2008BU/2008BU3026_jpg_ds.jpg" alt="Scenes of a Marriage Ceremony (cassone panel) (Cassone panel)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2010EG/2010EG0492_jpg_ds.jpg" alt="H Beard Print Collection (Print)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006BA/2006BA0945_jpg_ds.jpg" alt="Smoking table" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AT/2006AT4261_jpg_ds.jpg" alt="British and Foreign Animals, A New Game, Moral, Instructive, and Amusing (Board game)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AU/2006AU9235_jpg_ds.jpg" alt="Snuff bottle" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AW/2006AW3391_jpg_ds.jpg" alt="View from palace in fort, Lahore (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BY/2009BY0649_jpg_ds.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BX/2009BX9101_jpg_ds.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2007BL/2007BL8897_jpg_ds.jpg" alt="The Munduramiar Mundapam (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006BG/2006BG6915_jpg_ds.jpg" alt="Locket" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AT/2006AT1108_jpg_ds.jpg" alt="Clock" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2009BY/2009BY2731_jpg_ds.jpg" alt="Guy Little Theatrical Photograph (Photograph)" height="355" width="355"></li><li><img src="http://media.vam.ac.uk/media/thira/collection_images/2006AU/2006AU9488_jpg_ds.jpg" alt="Snuff bottle" height="355" width="355"></li></ul>
 </div>
@@ -180,10 +184,20 @@ var dragZoom = {
         e = e || window.event;
         dragZoom.xyE = getXY(e);
         var xy = [dragZoom.xyE[0]-dragZoom.xyT[0], dragZoom.xyE[1]-dragZoom.xyT[1]];
-        if( dragZoom.el.flipper ){ 
+        if( dragZoom.el.flipper ){
+            if( dragZoom.el.flipper==='h' && Math.abs(xy[1])>Math.abs(xy[0]) ){
+                var evt = document.createEvent("HTMLEvents");
+                evt.initEvent("touchend", true, false);
+                dragZoom.el.trig.dispatchEvent(evt);
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                window.dispatchEvent(e);
+                return true;
+            }
             var n = 5, 
                 d = [(xy[0]<0?-1:1), (xy[1]<0?-1:1)];
-            if( dragZoom.el.flipper==='h' ){ 
+            if( dragZoom.el.flipper==='h' ){
                 xy = [dragZoom.el.whP[0]*d[0]*(Math.pow(((Math.cos((xy[0]*n*Math.PI/dragZoom.el.whP[0])%Math.PI)-1)/2),2) + Math.floor(Math.abs(xy[0])*n/dragZoom.el.whP[0])), xy[1]];
             }else{
                 xy = [xy[0], dragZoom.el.whP[1]*d[1]*(Math.pow(((Math.cos((xy[1]*n*Math.PI/dragZoom.el.whP[1])%Math.PI)-1)/2),2) + Math.floor(Math.abs(xy[1])*n/dragZoom.el.whP[1]))];
@@ -233,7 +247,8 @@ var dragZoom = {
     }
 };
 var draggables = document.getElementsByClassName('draggable'),
-    flipperIms = document.getElementById('flipper').getElementsByTagName('img');
+    flipperIms = Array.prototype.slice.call(document.getElementById('flipper').getElementsByTagName('img'));
+    flipperIms = flipperIms.concat(Array.prototype.slice.call(document.getElementById('zoetrope').getElementsByTagName('img')));
 for( var i=0; i<draggables.length; ++i ){ 
     dragZoom.init(draggables[i]); 
 }
