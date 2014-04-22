@@ -8,7 +8,7 @@
     <title>Freakazoids</title>
     <style type="text/css">
         html, body { margin:0; }
-        body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; text-align:center; }
+        body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
         img { height:auto; max-width:100%; }
         img:last-child { position:absolute; left:0; top:0; }
         .strober { margin:0 0 1em; position:relative; }
@@ -36,7 +36,7 @@ var strober = {
         if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
         strober.size(el);
         var h = el.wh[0]>el.wh[1]?1:0;
-        if( opt.val ){ el.volume = opt.val; } 
+        if( opt.val ){ el.val = opt.val; } 
         el.min = !!opt.min? opt.min : 0; 
         el.max = !!opt.max? opt.max : 1;
         el.im2 = el.childNodes[1];
@@ -50,17 +50,17 @@ var strober = {
                 if( h ){
                     if( x<=0 ){ x=0; }
                     else if( x>=this.wh[0] ){ x=this.wh[0]; }
-                    el.volume = this.min+(x/this.wh[0]*(this.max-this.min));
+                    el.val = this.min+(x/this.wh[0]*(this.max-this.min));
                 }else{
                     if( y<=0 ){ y=0; }
                     else if( y>=this.wh[1] ){ y=this.wh[1]; }
-                    el.volume = this.min+(y/this.wh[1]*(this.max-this.min));
+                    el.val = this.min+(y/this.wh[1]*(this.max-this.min));
                 }
             };
             el.strobe = function(){
                 var im2 = this.im2.className===''? 0:1;
                 this.im2.className = im2? '':'hide';
-                this.t = window.setTimeout(function(){ el.strobe(); }, (im2?100:this.volume));
+                this.t = window.setTimeout(function(){ el.strobe(); }, (im2?100:this.val));
             };
             el.strobe();
         }
@@ -104,7 +104,7 @@ var strober = {
 
 var i, els = document.getElementsByClassName('strober'), el;
 for( i=0; i<els.length; ++i ){
-    strober.init(els[i], { min:0, max:2000, val:2000, slide:function(){ console.log(strober.el.volume) } });
+    strober.init(els[i], { min:0, max:2000, val:2000, slide:function(){ console.log(strober.el.val) } });
 }
 addHandler(window,'resize',function(){
     for( i=0; i<els.length; ++i ){
