@@ -60,7 +60,7 @@ var strober = {
             el.strobe = function(){
                 var im2 = this.im2.className===''? 0:1;
                 this.im2.className = im2? '':'hide';
-                this.t = window.setTimeout(function(){ el.strobe(); }, (im2?100:this.val));
+                this.t = window.setTimeout(function(){ el.strobe(); }, (im2?(1-this.val):this.val)*2000);
             };
             el.strobe();
         }
@@ -104,7 +104,7 @@ var strober = {
 
 var i, els = document.getElementsByClassName('strober'), el;
 for( i=0; i<els.length; ++i ){
-    strober.init(els[i], { min:0, max:2000, val:2000, slide:function(){ console.log(strober.el.val) } });
+    strober.init(els[i], { min:0, max:1, val:0.5, slide:function(){ console.log(strober.el.val) } });
 }
 addHandler(window,'resize',function(){
     for( i=0; i<els.length; ++i ){
