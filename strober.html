@@ -9,10 +9,9 @@
     <style type="text/css">
         html, body { margin:0; }
         body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
-        img { height:auto; max-width:100%; -webkit-transition:opacity 0.3s ease; -moz-transition:opacity 0.3s ease; -ms-transition:opacity 0.3s ease; -o-transition:opacity 0.3s ease; transition:opacity 0.3s ease; }
+        img { height:auto; max-width:100%; }
         img:last-child { position:absolute; left:0; top:0; }
         .strober { margin:0 0 1em; position:relative; }
-        .hide { opacity:0; -webkit-transition:opacity 0.3s ease; -moz-transition:opacity 0.3s ease; -ms-transition:opacity 0.3s ease; -o-transition:opacity 0.3s ease; transition:opacity 0.3s ease; }
     </style>	
 </head>
 
@@ -56,13 +55,8 @@ var strober = {
                     else if( y>=this.wh[1] ){ y=this.wh[1]; }
                     el.val = this.min+(y/this.wh[1]*(this.max-this.min));
                 }
+                el.im2.style.opacity = el.val;
             };
-            el.strobe = function(){
-                var im2 = this.im2.className===''? 0:1;
-                this.im2.className = im2? '':'hide';
-                this.t = window.setTimeout(function(){ el.strobe(); }, (im2?(1-this.val):this.val)*2000);
-            };
-            el.strobe();
         }
     },
     touch: function(e){
@@ -104,7 +98,7 @@ var strober = {
 
 var i, els = document.getElementsByClassName('strober'), el;
 for( i=0; i<els.length; ++i ){
-    strober.init(els[i], { min:0, max:1, val:0.5, slide:function(){ console.log(strober.el.val) } });
+    strober.init(els[i], { min:0, max:1, val:0 });
 }
 addHandler(window,'resize',function(){
     for( i=0; i<els.length; ++i ){
