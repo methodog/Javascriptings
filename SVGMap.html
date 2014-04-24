@@ -47,30 +47,32 @@ function rmHandler(el,evt,fn){ if( el.removeEventListener ){el.removeEventListen
 function getComputed(el,style){ if(el.currentStyle){ var y=el.currentStyle[style]; }else if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); } return parseFloat(y); }
 function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
-var dragZoom;
-dragZoom = {
-    el:null, xy0:null, v0:null, xyT:null, xyE:null, d0:null, targ:null, dt:null, t:null,
+var dragZoom = {
+    el:null, xy0:null, v0:null, xyT:null, xyE:null, d0:null, targ:null, dt:null, t:null, 
+    size: function(el){
+        el.wh = [getComputed(el,'width'), getComputed(el,'height')];
+        el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
+        el.xyP = getPgOffset(el.P);
+    },
     init: function(el){
-        if(typeof el==='string'){ el = document.getElementById(el); }
-        var zoomer = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomer = String(zoomer).indexOf('zoomable')>-1;
+        if( typeof el==='string' ){ el = document.querySelector(el); } if( !el ){ return; }
         el.P = el.parentNode;
-        if( !el.nextSibling ){ el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.appendChild(el.trig) }else{ if( el.nextSibling.className==='dragpad' ){ el.trig = el.nextSibling; }else{ el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.insertBefore(el.trig, el.nextSibling); } }
-        el.trig.onmousedown = dragZoom.touch;
-        el.trig.ontouchstart = dragZoom.touch;
-        if( window.addEventListener ){
-            el.trig.addEventListener('DOMMouseScroll', dragZoom.touch, false); 
-            el.trig.addEventListener('mousewheel', dragZoom.touch, false); 
-        }else if( window.attachEvent ){
-            el.trig.attachEvent('onmousewheel', dragZoom.touch);
-        }
+        dragZoom.size(el);
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
         el.v = [0,0];
-        el.wh = [getComputed(el,'width'), getComputed(el,'height')];
-        el.xyP = getPgOffset(el.P);
-        el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
-        el.whP0 = el.whP;
-        el.zoomer = zoomer||null;
         if( !el.move ){
+            var zoomer = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomer = String(zoomer).indexOf('zoomable')>-1;
+            el.zoomer = zoomer||null;
+            el.whP0 = el.whP;
+            if( !el.nextSibling ){ el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.appendChild(el.trig) }else{ if( el.nextSibling.className==='dragpad' ){ el.trig = el.nextSibling; }else{ el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.insertBefore(el.trig, el.nextSibling); } }
+            el.trig.onmousedown = dragZoom.touch;
+            el.trig.ontouchstart = dragZoom.touch;
+            if( window.addEventListener ){
+                el.trig.addEventListener('DOMMouseScroll', dragZoom.touch, false); 
+                el.trig.addEventListener('mousewheel', dragZoom.touch, false); 
+            }else if( window.attachEvent ){
+                el.trig.attachEvent('onmousewheel', dragZoom.touch);
+            }
             el.move = function(xy){
                 var x=xy[0], y=xy[1], r;
                 if( this.wh[0]>this.whP[0] ){
@@ -96,7 +98,7 @@ dragZoom = {
             if( el.zoomer ){
                 el.zoom = function(z,xy0){
                     xy0 = xy0 || [this.whP[0]/2, this.whP[1]/2];
-                    if( z>1 && this.wh[0]>2048 ){ return; }
+                    if( z>1 && this.wh[0]>5000 ){ return; }
                     if( this.wh[0]*z>this.whP[0] || this.wh[1]*z>this.whP[1] ){
                         this.wh = [this.wh[0]*z,this.wh[1]*z];
                         this.style.width = this.wh[0]+'px';
@@ -110,9 +112,12 @@ dragZoom = {
                     }
                 };
                 el.zoom0 = function(){
-                    var c = 0;
-                    if( this.t ){ window.clearInterval(this.t); }
-                    this.t = window.setInterval(function(){ el.zoom(0.92+0.07*(1-Math.pow(1-(++c/1000),5))); if( el.style.width==='100%' ){ window.clearInterval(el.t); }},1);
+                    if( !!el.style.width ){
+                        var c = 0;
+                        if( this.t ){ window.clearInterval(this.t); }
+                        this.t = window.setInterval(function(){ el.zoom(0.8); if( el.style.width==='100%' ){ window.clearInterval(el.t); }},50);
+
+                    }
                 };
             }
         }
@@ -173,12 +178,9 @@ dragZoom = {
     },
     release: function(){
         if( ((!dragZoom.xyE && !dragZoom.d0) || (!!dragZoom.xyE && Math.abs(dragZoom.xyT[0]-dragZoom.xyE[0])<5 && Math.abs(dragZoom.xyT[1]-dragZoom.xyE[1])<5)) && Math.abs(dragZoom.v0[0])+Math.abs(dragZoom.v0[1])<2 ){
-            var passclick = function(){
-                var evt = document.createEvent("HTMLEvents");
-                evt.initEvent("click", true, false);
-                dragZoom.targ.dispatchEvent(evt);
-            }
-            if(dragZoom.el.zoomer ){ dragZoom.t = window.setTimeout(passclick,100); }else{ passclick(); }
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent("click", true, false);
+            dragZoom.targ.dispatchEvent(evt);
         }else{
             dragZoom.el.drop();
         }
@@ -192,7 +194,7 @@ dragZoom = {
             z = dragZoom.el.wh[0]>=dragZoom.el.whP[0]*2 ? 0:2;
         }else if( e.touches ){
             d1 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
-            z = 1+((d1-dragZoom.d0>0?1:-1.5)*0.05);
+            z = 1+((d1-dragZoom.d0>0?(d1/dragZoom.el.whP[0]):-0.5)*0.1);
             dragZoom.d0 = d1;
         }else{
             z = (e.detail? e.detail*-1 : e.wheelDelta/40);
