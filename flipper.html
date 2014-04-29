@@ -191,7 +191,7 @@ var dragZoom = {
             if( dragZoom.el.flipper ){
                 var n = 5, 
                     d = [(xy[0]<0?-1:1), (xy[1]<0?-1:1)];
-                if( dragZoom.el.flipper==='h' ){
+                if( dragZoom.el.h ){
                     xy = [dragZoom.el.whP[0]*d[0]*(Math.pow(((Math.cos((xy[0]*n*Math.PI/dragZoom.el.whP[0])%Math.PI)-1)/2),2) + Math.floor(Math.abs(xy[0])*n/dragZoom.el.whP[0])), xy[1]];
                 }else{
                     xy = [xy[0], dragZoom.el.whP[1]*d[1]*(Math.pow(((Math.cos((xy[1]*n*Math.PI/dragZoom.el.whP[1])%Math.PI)-1)/2),2) + Math.floor(Math.abs(xy[1])*n/dragZoom.el.whP[1]))];
