@@ -5,21 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <title>Freakazoids</title>
+    <title>Stroker</title>
     <style type="text/css">
         html, body { margin:0; }
         body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
-        img { height:auto; max-width:100%; }
-        img:last-child { opacity:0; position:absolute; left:0; top:0; }
+        img { height:auto; max-width:100%; opacity:0; position:absolute; left:0; top:0; }
+        img:nth-child(1) { opacity:1; position:relative; }
         .stroker { margin:0 0 3em; position:relative; }
     </style>	
 </head>
 
 <body>
-<p class="stroker"><img src="img/strober/Dave.jpg" alt=""><img class="hide" src="img/strober/Dave1.jpg" alt=""></p>
-<p class="stroker"><img src="img/strober/John.jpg" alt=""><img class="hide" src="img/strober/John1.jpg" alt=""></p>
-<p class="stroker"><img src="img/strober/Luca.jpg" alt=""><img class="hide" src="img/strober/Luca1.jpg" alt=""></p>
-<p class="stroker"><img src="img/strober/climbingfreaks.jpg" alt=""><img class="hide" src="img/strober/climbingfreaks1.jpg" alt=""></p>
+<p class="stroker"><img src="img/strober/Sophie_smiles_1.jpg" alt=""><img src="img/strober/Sophie_smiles_2.jpg" alt=""><img src="img/strober/Sophie_smiles_3.jpg" alt=""><img src="img/strober/Sophie_smiles_4.jpg" alt=""></p>
+<p class="stroker"><img src="img/strober/Dave.jpg" alt=""><img src="img/strober/Dave1.jpg" alt=""></p>
+<p class="stroker"><img src="img/strober/John.jpg" alt=""><img src="img/strober/John1.jpg" alt=""></p>
+<p class="stroker"><img src="img/strober/Luca.jpg" alt=""><img src="img/strober/Luca1.jpg" alt=""></p>
+<p class="stroker"><img src="img/strober/climbingfreaks.jpg" alt=""><img src="img/strober/climbingfreaks1.jpg" alt=""></p>
 
 <script type="text/javascript">
 function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
@@ -38,24 +39,28 @@ var stroker = {
         if( opt.val ){ el.val = opt.val; } 
         el.min = !!opt.min? opt.min : 0; 
         el.max = !!opt.max? opt.max : 1;
-        el.im2 = el.childNodes[1];
+        el.imL = el.childNodes.length;
         if( typeof(opt.slide)==='function' ){ el.slide = opt.slide; }
         if( typeof(opt.stop)==='function' ){ el.stop = opt.stop; }
         if( !el.move ){
             el.onmousedown = stroker.touch;
             el.ontouchstart = stroker.touch;
             el.move = function(xy){
-                var x=xy[0], y=xy[1];
+                var x=xy[0], y=xy[1], i, vis, op;
                 if( h ){
                     if( x<=0 ){ x=0; }
                     else if( x>=this.wh[0] ){ x=this.wh[0]; }
-                    el.val = this.min+(x/this.wh[0]*(this.max-this.min));
+                    this.val = this.min+(x/this.wh[0]*(this.max-this.min));
                 }else{
                     if( y<=0 ){ y=0; }
                     else if( y>=this.wh[1] ){ y=this.wh[1]; }
-                    el.val = this.min+(y/this.wh[1]*(this.max-this.min));
+                    this.val = this.min+(y/this.wh[1]*(this.max-this.min));
                 }
-                el.im2.style.opacity = el.val;
+                vis = Math.ceil(this.val*this.imL);
+                for( i=0; i<this.imL; ++i ){
+                    op = i>vis? 0 : ( i===vis? this.val%(1/this.imL) : 1 );
+                    this.childNodes[i].style.opacity = op;
+                }
             };
         }
     },
@@ -98,7 +103,7 @@ var stroker = {
 
 var i, els = document.getElementsByClassName('stroker'), el;
 for( i=0; i<els.length; ++i ){
-    stroker.init(els[i], { min:0, max:1, val:0 });
+    stroker.init(els[i], { val:0 });
 }
 addHandler(window,'resize',function(){
     for( i=0; i<els.length; ++i ){
