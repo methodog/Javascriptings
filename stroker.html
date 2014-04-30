@@ -58,7 +58,7 @@ var stroker = {
                 }
                 vis = Math.ceil(this.val*this.imL);
                 for( i=0; i<this.imL; ++i ){
-                    op = i>vis? 0 : ( i===vis? this.val%(1/this.imL) : 1 );
+                    op = i>vis? 0 : ( i===vis? (this.val%(1/this.imL))*this.imL : 1 );
                     this.childNodes[i].style.opacity = op;
                 }
             };
