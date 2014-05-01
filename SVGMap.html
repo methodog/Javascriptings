@@ -48,7 +48,7 @@ function getComputed(el,style){ if(el.currentStyle){ var y=el.currentStyle[style
 function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 var dragZoom = {
-    el:null, xy0:null, v0:null, xyT:null, xyE:null, d0:null, targ:null, dt:null, t:null, 
+    el:null, xy0:null, v0:null, xyT:null, xyE:null, d0:null, targ:null, 
     size: function(el){
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
         el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
@@ -132,15 +132,6 @@ var dragZoom = {
         dragZoom.xy0 = dragZoom.el.xy;
         dragZoom.xyT = getXY(e);
         this.style.display = 'none'; dragZoom.targ = document.elementFromPoint(dragZoom.xyT[0]-(window.scrollX?window.scrollX:document.body.scrollLeft),dragZoom.xyT[1]-(window.scrollY?window.scrollY:document.body.scrollTop)); this.style.display = 'block';
-        if( dragZoom.el.zoomer ){
-            var dt0 = dragZoom.dt, dt = new Date().getTime();
-            dragZoom.dt = dt;
-            if( dt0 && dt-dt0<250 ){ 
-                window.clearTimeout(dragZoom.t);
-                dragZoom.zoom(e,1);
-                return;
-            }
-        }
         if( e.type==='touchstart' ){
             if( dragZoom.el.zoomer && e.touches && e.touches.length===2 ){
                 dragZoom.d0 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
@@ -186,13 +177,11 @@ var dragZoom = {
         }
         dragZoom.el = dragZoom.xyE = dragZoom.d0 = null;
     },
-    zoom: function(e,zz){
+    zoom: function(e){
         e = e || window.event;
         if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
         var z, d1, xy0 = [dragZoom.xyT[0]-dragZoom.el.xyP[0],dragZoom.xyT[1]-dragZoom.el.xyP[1]];
-        if( zz ){
-            z = dragZoom.el.wh[0]>=dragZoom.el.whP[0]*2 ? 0:2;
-        }else if( e.touches ){
+        if( e.touches ){
             d1 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
             z = 1+((d1-dragZoom.d0>0?(d1/dragZoom.el.whP[0]):-0.5)*0.1);
             dragZoom.d0 = d1;
