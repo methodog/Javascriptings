@@ -39,7 +39,7 @@ var stroker = {
         if( opt.val ){ el.val = opt.val; } 
         el.min = !!opt.min? opt.min : 0; 
         el.max = !!opt.max? opt.max : 1;
-        el.imL = el.childNodes.length;
+        el.arcs = el.childNodes.length-1;
         if( typeof(opt.slide)==='function' ){ el.slide = opt.slide; }
         if( typeof(opt.stop)==='function' ){ el.stop = opt.stop; }
         if( !el.move ){
@@ -56,9 +56,9 @@ var stroker = {
                     else if( y>=this.wh[1] ){ y=this.wh[1]; }
                     this.val = this.min+(y/this.wh[1]*(this.max-this.min));
                 }
-                vis = Math.ceil(this.val*this.imL);
-                for( i=0; i<this.imL; ++i ){
-                    op = i>vis? 0 : ( i===vis? (this.val%(1/this.imL))*this.imL : 1 );
+                vis = Math.ceil(this.val*this.arcs);
+                for( i=1; i<=this.arcs; ++i ){
+                    op = i>vis? 0 : ( i===vis? (this.val%(1/this.arcs))*this.arcs : 1 );
                     this.childNodes[i].style.opacity = op;
                 }
             };
