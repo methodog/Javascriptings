@@ -35,9 +35,11 @@ var stroker = {
         if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
         stroker.size(el);
         var h = el.wh[0]>el.wh[1]?1:0;
-        if( opt.val ){ el.val = opt.val; } 
+        if( !opt ) var opt = {};
+        el.val = !!opt.val? opt.val : 0; 
         el.min = !!opt.min? opt.min : 0; 
         el.max = !!opt.max? opt.max : 1;
+        el.loop = !!opt.loop? opt.loop : 0;
         el.arcs = el.childNodes.length-1;
         if( typeof(opt.slide)==='function' ){ el.slide = opt.slide; }
         if( typeof(opt.stop)==='function' ){ el.stop = opt.stop; }
@@ -102,7 +104,7 @@ var stroker = {
 
 var i, els = document.getElementsByClassName('stroker'), el;
 for( i=0; i<els.length; ++i ){
-    stroker.init(els[i], { val:0 });
+    stroker.init(els[i]);
 }
 addHandler(window,'resize',function(){
     for( i=0; i<els.length; ++i ){
