@@ -45,11 +45,11 @@ var stroker = {
         if( !el.move ){
             el.onmousedown = stroker.touch;
             el.ontouchstart = stroker.touch;
-            el.move = function(xy){
+            el.move = function(xy){console.log(this.val);
                 var x=xy[0], i, vis, op;
                 if( x<=0 ){ x=0; }
                 else if( x>=this.wh[0] ){ x=this.wh[0]; }
-                this.val = this.min+(x/this.wh[0]*(this.max-this.min));
+                this.val = this.min+(x/this.wh[0]*(this.max-this.min)); /* add some 'swing' in here to gravitate towards whole frames being visibile */
                 vis = Math.ceil(this.val*this.arcs);
                 for( i=1; i<=this.arcs; ++i ){
                     op = i>vis? 0 : ( i===vis? (this.val%(1/this.arcs))*this.arcs : 1 );
@@ -62,7 +62,8 @@ var stroker = {
         e = e || window.event;
         stroker.el = this;
         this.className += ' dragged';
-        stroker.el.move(getXY(e));
+        var xy = getXY(e);
+        stroker.el.min = stroker.el.val-(xy[0]/stroker.el.wh[0]*(stroker.el.max-stroker.el.min));
         if( e.type==='touchstart' ){
             this.ontouchmove = stroker.drag;
             this.onmousedown = null;
