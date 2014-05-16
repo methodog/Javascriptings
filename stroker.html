@@ -34,7 +34,6 @@ var stroker = {
     init: function(el, opt){
         if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
         stroker.size(el);
-        var h = el.wh[0]>el.wh[1]?1:0;
         if( !opt ) var opt = {};
         el.val = !!opt.val? opt.val : 0; 
         el.min = !!opt.min? opt.min : 0; 
@@ -47,16 +46,10 @@ var stroker = {
             el.onmousedown = stroker.touch;
             el.ontouchstart = stroker.touch;
             el.move = function(xy){
-                var x=xy[0], y=xy[1], i, vis, op;
-                if( h ){
-                    if( x<=0 ){ x=0; }
-                    else if( x>=this.wh[0] ){ x=this.wh[0]; }
-                    this.val = this.min+(x/this.wh[0]*(this.max-this.min));
-                }else{
-                    if( y<=0 ){ y=0; }
-                    else if( y>=this.wh[1] ){ y=this.wh[1]; }
-                    this.val = this.min+(y/this.wh[1]*(this.max-this.min));
-                }
+                var x=xy[0], i, vis, op;
+                if( x<=0 ){ x=0; }
+                else if( x>=this.wh[0] ){ x=this.wh[0]; }
+                this.val = this.min+(x/this.wh[0]*(this.max-this.min));
                 vis = Math.ceil(this.val*this.arcs);
                 for( i=1; i<=this.arcs; ++i ){
                     op = i>vis? 0 : ( i===vis? (this.val%(1/this.arcs))*this.arcs : 1 );
