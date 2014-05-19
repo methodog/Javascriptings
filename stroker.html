@@ -28,7 +28,7 @@ function getComputed(el,style){ if(el.currentStyle){ var y=el.currentStyle[style
 function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 var stroker = {
-    el: null, 
+    el: null, xy0:null, v0:null, xyT:null, xyE:null, 
     size: function(el){
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
     },
@@ -42,6 +42,8 @@ var stroker = {
         el.loop = !!opt.loop? opt.loop : 0;
         el.arcs = el.childNodes.length-1;
         el.rng = el.max-el.min;
+        el.xy = [getComputed(el,'left'), getComputed(el,'top')];
+        el.v = [0,0];
         if( typeof(opt.slide)==='function' ){ el.slide = opt.slide; }
         if( typeof(opt.stop)==='function' ){ el.stop = opt.stop; }
         if( !el.move ){
@@ -49,8 +51,6 @@ var stroker = {
             el.ontouchstart = stroker.touch;
             el.move = function(xy){
                 var x=xy[0], i, vis, op;
-                if( x<=0 ){ x=0; }
-                else if( x>=this.wh[0] ){ x=this.wh[0]; }
                 this.val = this.min+(x/this.wh[0]*(this.max-this.min)); /* add some 'swing' in here to gravitate towards whole frames being visibile */
                 if( this.loop ){ this.val = this.val.mod(this.rng); }
                 vis = Math.ceil(this.val*this.arcs);
@@ -59,14 +59,26 @@ var stroker = {
                     this.childNodes[i].style.opacity = op;
                 }
             };
+            el.drop = function(){
+                var f = Math.abs(this.v[0])+Math.abs(this.v[1])>50?0.98:0.88;
+                this.v = [this.v[0]*f, this.v[1]*f];
+                this.move([this.xy[0]-this.v[0], this.xy[1]-this.v[1]]);
+                if( Math.abs(this.v[0])+Math.abs(this.v[1])<0.5 ){ stroker.v0 = this.v = [0,0]; window.clearTimeout(this.t); return; }
+                this.t = window.setTimeout(function(){ el.drop(); }, 23);
+            };
         }
     },
     touch: function(e){
         e = e || window.event;
+        if( e.type==='touchstart' && e.touches && e.touches.length>2 ){ return; }
         stroker.el = this;
+        window.clearTimeout(stroker.el.t);
         this.className += ' dragged';
-        var xy = getXY(e);
-        stroker.el.min = stroker.el.val-(xy[0]/stroker.el.wh[0]*(stroker.el.max-stroker.el.min));
+        stroker.v0 = stroker.el.v;
+        stroker.el.v = [0,0];
+        stroker.xy0 = stroker.el.xy;
+        stroker.xyT = getXY(e);
+        stroker.el.min = stroker.el.val-(stroker.xyT[0]/stroker.el.wh[0]*(stroker.el.max-stroker.el.min));
         stroker.el.max = stroker.el.min+stroker.el.rng;
         if( e.type==='touchstart' ){
             this.ontouchmove = stroker.drag;
@@ -89,14 +101,18 @@ var stroker = {
     drag: function(e){
         e = e || window.event;
         if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
-        stroker.el.move(getXY(e));
+        stroker.xyE = getXY(e);
+        var xy = [stroker.xy0[0]+stroker.xyE[0]-stroker.xyT[0], stroker.xy0[1]+stroker.xyE[1]-stroker.xyT[1]];
+        stroker.el.v = [(xy[0]-stroker.el.xy[0])*stroker.el.arcs,(xy[1]-stroker.el.xy[1])*stroker.el.arcs];
+        stroker.el.move(xy);
         if( !!stroker.el.slide ){ stroker.el.slide.call(this); }
         return false;
     },
     release: function(){
         stroker.el.className = stroker.el.className.replace(/ dragged/,'');
         if( !!stroker.el.stop ){ stroker.el.stop.call(this); }
-        stroker.el = null;
+        stroker.el.drop();
+        stroker.el = stroker.xyE = null;
     }
 };
 
