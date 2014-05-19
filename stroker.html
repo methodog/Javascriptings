@@ -22,6 +22,7 @@
 <p class="stroker"><img src="img/strober/climbingfreaks.jpg" alt=""><img src="img/strober/climbingfreaks1.jpg" alt=""></p>
 
 <script type="text/javascript">
+Number.prototype.mod = function(n) { return ((this%n)+n)%n; }
 function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
 function getComputed(el,style){ if(el.currentStyle){ var y=el.currentStyle[style]; }else if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); } return parseFloat(y); }
 function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
@@ -40,16 +41,18 @@ var stroker = {
         el.max = !!opt.max? opt.max : 1;
         el.loop = !!opt.loop? opt.loop : 0;
         el.arcs = el.childNodes.length-1;
+        el.rng = el.max-el.min;
         if( typeof(opt.slide)==='function' ){ el.slide = opt.slide; }
         if( typeof(opt.stop)==='function' ){ el.stop = opt.stop; }
         if( !el.move ){
             el.onmousedown = stroker.touch;
             el.ontouchstart = stroker.touch;
-            el.move = function(xy){console.log(this.val);
+            el.move = function(xy){
                 var x=xy[0], i, vis, op;
                 if( x<=0 ){ x=0; }
                 else if( x>=this.wh[0] ){ x=this.wh[0]; }
                 this.val = this.min+(x/this.wh[0]*(this.max-this.min)); /* add some 'swing' in here to gravitate towards whole frames being visibile */
+                if( this.loop ){ this.val = this.val.mod(this.rng); }
                 vis = Math.ceil(this.val*this.arcs);
                 for( i=1; i<=this.arcs; ++i ){
                     op = i>vis? 0 : ( i===vis? (this.val%(1/this.arcs))*this.arcs : 1 );
@@ -64,6 +67,7 @@ var stroker = {
         this.className += ' dragged';
         var xy = getXY(e);
         stroker.el.min = stroker.el.val-(xy[0]/stroker.el.wh[0]*(stroker.el.max-stroker.el.min));
+        stroker.el.max = stroker.el.min+stroker.el.rng;
         if( e.type==='touchstart' ){
             this.ontouchmove = stroker.drag;
             this.onmousedown = null;
@@ -98,7 +102,7 @@ var stroker = {
 
 var i, els = document.getElementsByClassName('stroker'), el;
 for( i=0; i<els.length; ++i ){
-    stroker.init(els[i]);
+    stroker.init(els[i], {'loop':1});
 }
 addHandler(window,'resize',function(){
     for( i=0; i<els.length; ++i ){
