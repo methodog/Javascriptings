@@ -5,21 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <title>Stroker</title>
+    <title>flicker</title>
     <style type="text/css">
         html, body { margin:0; }
         body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
         img { height:auto; max-width:100%; opacity:0; position:absolute; left:0; top:0; }
         img:nth-child(1) { opacity:1; position:relative; }
-        .stroker { margin:0 0 3em; position:relative; }
+        .flicker { margin:0 0 3em; position:relative; }
     </style>	
 </head>
 
 <body>
-<p class="stroker"><img src="img/strober/buffalo00.jpg" alt=""><img src="img/strober/buffalo01.jpg" alt=""><img src="img/strober/buffalo02.jpg" alt=""><img src="img/strober/buffalo03.jpg" alt=""><img src="img/strober/buffalo04.jpg" alt=""><img src="img/strober/buffalo05.jpg" alt=""><img src="img/strober/buffalo06.jpg" alt=""><img src="img/strober/buffalo07.jpg" alt=""><img src="img/strober/buffalo08.jpg" alt=""><img src="img/strober/buffalo09.jpg" alt=""><img src="img/strober/buffalo10.jpg" alt=""><img src="img/strober/buffalo11.jpg" alt=""><img src="img/strober/buffalo12.jpg" alt=""><img src="img/strober/buffalo13.jpg" alt=""><img src="img/strober/buffalo14.jpg" alt=""><img src="img/strober/buffalo15.jpg" alt=""></p>
-<p class="stroker"><img src="img/strober/Sophie_smiles_1.jpg" alt=""><img src="img/strober/Sophie_smiles_3.jpg" alt=""><img src="img/strober/Sophie_smiles_2.jpg" alt=""><img src="img/strober/Sophie_smiles_4.jpg" alt=""></p>
-<p class="stroker"><img src="img/strober/Dave.jpg" alt=""><img src="img/strober/Dave1.jpg" alt=""></p>
-<p class="stroker"><img src="img/strober/climbingfreaks.jpg" alt=""><img src="img/strober/climbingfreaks1.jpg" alt=""></p>
+<p class="flicker"><img src="img/strober/buffalo00.jpg" alt=""><img src="img/strober/buffalo01.jpg" alt=""><img src="img/strober/buffalo02.jpg" alt=""><img src="img/strober/buffalo03.jpg" alt=""><img src="img/strober/buffalo04.jpg" alt=""><img src="img/strober/buffalo05.jpg" alt=""><img src="img/strober/buffalo06.jpg" alt=""><img src="img/strober/buffalo07.jpg" alt=""><img src="img/strober/buffalo08.jpg" alt=""><img src="img/strober/buffalo09.jpg" alt=""><img src="img/strober/buffalo10.jpg" alt=""><img src="img/strober/buffalo11.jpg" alt=""><img src="img/strober/buffalo12.jpg" alt=""><img src="img/strober/buffalo13.jpg" alt=""><img src="img/strober/buffalo14.jpg" alt=""><img src="img/strober/buffalo15.jpg" alt=""></p>
+<p class="flicker"><img src="img/strober/Sophie_smiles_1.jpg" alt=""><img src="img/strober/Sophie_smiles_3.jpg" alt=""><img src="img/strober/Sophie_smiles_2.jpg" alt=""><img src="img/strober/Sophie_smiles_4.jpg" alt=""></p>
+<p class="flicker"><img src="img/strober/Dave.jpg" alt=""><img src="img/strober/Dave1.jpg" alt=""></p>
+<p class="flicker"><img src="img/strober/climbingfreaks.jpg" alt=""><img src="img/strober/climbingfreaks1.jpg" alt=""></p>
 
 <script type="text/javascript">
 Number.prototype.mod = function(n) { return ((this%n)+n)%n; }
@@ -27,14 +27,14 @@ function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(e
 function getComputed(el,style){ if(el.currentStyle){ var y=el.currentStyle[style]; }else if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); } return parseFloat(y); }
 function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
-var stroker = {
+var flicker = {
     el: null, xy0:null, v0:null, xyT:null, xyE:null, 
     size: function(el){
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
     },
     init: function(el, opt){
         if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
-        stroker.size(el);
+        flicker.size(el);
         if( !opt ) var opt = {};
         el.val = !!opt.val? opt.val : 0; 
         el.min = !!opt.min? opt.min : 0; 
@@ -47,8 +47,8 @@ var stroker = {
         if( typeof(opt.slide)==='function' ){ el.slide = opt.slide; }
         if( typeof(opt.stop)==='function' ){ el.stop = opt.stop; }
         if( !el.move ){
-            el.onmousedown = stroker.touch;
-            el.ontouchstart = stroker.touch;
+            el.onmousedown = flicker.touch;
+            el.ontouchstart = flicker.touch;
             el.move = function(xy){
                 var x=xy[0], i, vis, op;
                 this.val = this.min+(x/this.wh[0]*(this.max-this.min)); /* add some 'swing' in here to gravitate towards whole frames being visibile */
@@ -63,7 +63,7 @@ var stroker = {
                 var f = Math.abs(this.v[0])+Math.abs(this.v[1])>50?0.98:0.88;
                 this.v = [this.v[0]*f, this.v[1]*f];
                 this.move([this.xy[0]-this.v[0], this.xy[1]-this.v[1]]);
-                if( Math.abs(this.v[0])+Math.abs(this.v[1])<0.5 ){ stroker.v0 = this.v = [0,0]; window.clearTimeout(this.t); return; }
+                if( Math.abs(this.v[0])+Math.abs(this.v[1])<0.5 ){ flicker.v0 = this.v = [0,0]; window.clearTimeout(this.t); return; }
                 this.t = window.setTimeout(function(){ el.drop(); }, 23);
             };
         }
@@ -71,29 +71,29 @@ var stroker = {
     touch: function(e){
         e = e || window.event;
         if( e.type==='touchstart' && e.touches && e.touches.length>2 ){ return; }
-        stroker.el = this;
-        window.clearTimeout(stroker.el.t);
+        flicker.el = this;
+        window.clearTimeout(flicker.el.t);
         this.className += ' dragged';
-        stroker.v0 = stroker.el.v;
-        stroker.el.v = [0,0];
-        stroker.xy0 = stroker.el.xy;
-        stroker.xyT = getXY(e);
-        stroker.el.min = stroker.el.val-(stroker.xyT[0]/stroker.el.wh[0]*(stroker.el.max-stroker.el.min));
-        stroker.el.max = stroker.el.min+stroker.el.rng;
+        flicker.v0 = flicker.el.v;
+        flicker.el.v = [0,0];
+        flicker.xy0 = flicker.el.xy;
+        flicker.xyT = getXY(e);
+        flicker.el.min = flicker.el.val-(flicker.xyT[0]/flicker.el.wh[0]*(flicker.el.max-flicker.el.min));
+        flicker.el.max = flicker.el.min+flicker.el.rng;
         if( e.type==='touchstart' ){
-            this.ontouchmove = stroker.drag;
+            this.ontouchmove = flicker.drag;
             this.onmousedown = null;
             this.ontouchend = function(){
                 this.ontouchmove = null;
                 this.ontouchend = null;
-                stroker.release();
+                flicker.release();
             };
         }else{
-            document.onmousemove = stroker.drag;
+            document.onmousemove = flicker.drag;
             document.onmouseup = function(){
                 document.onmousemove = null;
                 document.onmouseup = null;
-                stroker.release();
+                flicker.release();
             };
         }
         return false;
@@ -101,28 +101,28 @@ var stroker = {
     drag: function(e){
         e = e || window.event;
         if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
-        stroker.xyE = getXY(e);
-        var xy = [stroker.xy0[0]+stroker.xyE[0]-stroker.xyT[0], stroker.xy0[1]+stroker.xyE[1]-stroker.xyT[1]];
-        stroker.el.v = [(xy[0]-stroker.el.xy[0])*stroker.el.arcs,(xy[1]-stroker.el.xy[1])*stroker.el.arcs];
-        stroker.el.move(xy);
-        if( !!stroker.el.slide ){ stroker.el.slide.call(this); }
+        flicker.xyE = getXY(e);
+        var xy = [flicker.xy0[0]+flicker.xyE[0]-flicker.xyT[0], flicker.xy0[1]+flicker.xyE[1]-flicker.xyT[1]];
+        flicker.el.v = [(xy[0]-flicker.el.xy[0])*flicker.el.arcs,(xy[1]-flicker.el.xy[1])*flicker.el.arcs];
+        flicker.el.move(xy);
+        if( !!flicker.el.slide ){ flicker.el.slide.call(this); }
         return false;
     },
     release: function(){
-        stroker.el.className = stroker.el.className.replace(/ dragged/,'');
-        if( !!stroker.el.stop ){ stroker.el.stop.call(this); }
-        stroker.el.drop();
-        stroker.el = stroker.xyE = null;
+        flicker.el.className = flicker.el.className.replace(/ dragged/,'');
+        if( !!flicker.el.stop ){ flicker.el.stop.call(this); }
+        flicker.el.drop();
+        flicker.el = flicker.xyE = null;
     }
 };
 
-var i, els = document.getElementsByClassName('stroker'), el;
+var i, els = document.getElementsByClassName('flicker'), el;
 for( i=0; i<els.length; ++i ){
-    stroker.init(els[i], {'loop':1});
+    flicker.init(els[i], {'loop':1});
 }
 addHandler(window,'resize',function(){
     for( i=0; i<els.length; ++i ){
-        stroker.size(els[i]);
+        flicker.size(els[i]);
     }
 });
 </script>
