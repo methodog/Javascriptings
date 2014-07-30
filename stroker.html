@@ -9,9 +9,9 @@
     <style type="text/css">
         html, body { margin:0; }
         body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
-        img { height:auto; max-width:100%; opacity:0; position:absolute; left:0; top:0; }
-        img:nth-child(1) { opacity:1; position:relative; }
         .flicker { margin:0 0 3em; position:relative; }
+        .flicker img { height:auto; max-width:100%; opacity:0; position:absolute; left:0; top:0; }
+        .flicker img:nth-child(1) { opacity:1; position:relative; }
     </style>	
 </head>
 
@@ -28,7 +28,7 @@ function getComputed(el,style){ if(el.currentStyle){ var y=el.currentStyle[style
 function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 var flicker = {
-    el: null, xy0:null, v0:null, xyT:null, xyE:null, 
+    el: null, xy0:null, v0:null, xyT:null, 
     size: function(el){
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
     },
@@ -50,17 +50,18 @@ var flicker = {
             el.onmousedown = flicker.touch;
             el.ontouchstart = flicker.touch;
             el.move = function(xy){
-                var x=xy[0], i, vis, op;
-                this.val = this.min+(x/this.wh[0]*(this.max-this.min)); /* add some 'swing' in here to gravitate towards whole frames being visibile */
+                var i, vis, op;
+                this.val = this.min+(xy[0]/this.wh[0]*(this.max-this.min));
                 if( this.loop ){ this.val = this.val.mod(this.rng); }
                 vis = Math.ceil(this.val*this.arcs);
                 for( i=1; i<=this.arcs; ++i ){
                     op = i>vis? 0 : ( i===vis? (this.val%(1/this.arcs))*this.arcs : 1 );
                     this.childNodes[i].style.opacity = op;
                 }
+                this.xy = [xy[0],xy[1]];
             };
             el.drop = function(){
-                var f = Math.abs(this.v[0])+Math.abs(this.v[1])>50?0.98:0.88;
+                var f = 0.98;
                 this.v = [this.v[0]*f, this.v[1]*f];
                 this.move([this.xy[0]-this.v[0], this.xy[1]-this.v[1]]);
                 if( Math.abs(this.v[0])+Math.abs(this.v[1])<0.5 ){ flicker.v0 = this.v = [0,0]; window.clearTimeout(this.t); return; }
@@ -101,9 +102,9 @@ var flicker = {
     drag: function(e){
         e = e || window.event;
         if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
-        flicker.xyE = getXY(e);
-        var xy = [flicker.xy0[0]+flicker.xyE[0]-flicker.xyT[0], flicker.xy0[1]+flicker.xyE[1]-flicker.xyT[1]];
-        flicker.el.v = [(xy[0]-flicker.el.xy[0])*flicker.el.arcs,(xy[1]-flicker.el.xy[1])*flicker.el.arcs];
+        var xyE = getXY(e),
+            xy = [flicker.xy0[0]+xyE[0]-flicker.xyT[0], flicker.xy0[1]+xyE[1]-flicker.xyT[1]];
+        flicker.el.v = [flicker.el.xy[0]-xy[0],flicker.el.xy[1]-xy[1]];
         flicker.el.move(xy);
         if( !!flicker.el.slide ){ flicker.el.slide.call(this); }
         return false;
@@ -112,7 +113,7 @@ var flicker = {
         flicker.el.className = flicker.el.className.replace(/ dragged/,'');
         if( !!flicker.el.stop ){ flicker.el.stop.call(this); }
         flicker.el.drop();
-        flicker.el = flicker.xyE = null;
+        flicker.el = null;
     }
 };
 
