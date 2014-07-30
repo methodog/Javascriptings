@@ -51,7 +51,7 @@ var flicker = {
             el.ontouchstart = flicker.touch;
             el.move = function(xy){
                 var i, vis, op;
-                this.val = this.min+(xy[0]/this.wh[0]*(this.max-this.min));
+                this.val = this.min+(xy[0]/this.wh[0]*(this.rng));
                 if( this.loop ){ this.val = this.val.mod(this.rng); }
                 vis = Math.ceil(this.val*this.arcs);
                 for( i=1; i<=this.arcs; ++i ){
