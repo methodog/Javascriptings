@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>lenticule</title>
+    <style type="text/css">
+        html, body { margin:0; }
+        body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
+        .lenticule { margin:0 0 3em; position:relative; }
+        .lenticule img { height:auto; max-width:100%; opacity:0; position:absolute; left:0; top:0; }
+        .lenticule img:nth-child(1) { opacity:1; position:relative; }
+    </style>	
+</head>
+
+<body>
+<p class="lenticule"><img src="img/lenticular/gnome-1.jpg" alt=""><img src="img/lenticular/gnome-2.jpg" alt=""><img src="img/lenticular/gnome-3.jpg" alt=""><img src="img/lenticular/gnome-4.jpg" alt=""><img src="img/lenticular/gnome-5.jpg" alt=""><img src="img/lenticular/gnome-6.jpg" alt=""><img src="img/lenticular/gnome-7.jpg" alt=""><img src="img/lenticular/gnome-8.jpg" alt=""></p>
+<p class="lenticule"><img src="img/lenticular/birdbath-01.jpg" alt=""><img src="img/lenticular/birdbath-02.jpg" alt=""><img src="img/lenticular/birdbath-03.jpg" alt=""><img src="img/lenticular/birdbath-04.jpg" alt=""><img src="img/lenticular/birdbath-05.jpg" alt=""><img src="img/lenticular/birdbath-06.jpg" alt=""><img src="img/lenticular/birdbath-07.jpg" alt=""><img src="img/lenticular/birdbath-08.jpg" alt=""><img src="img/lenticular/birdbath-09.jpg" alt=""><img src="img/lenticular/birdbath-10.jpg" alt=""><img src="img/lenticular/birdbath-11.jpg" alt=""><img src="img/lenticular/birdbath-12.jpg" alt=""><img src="img/lenticular/birdbath-13.jpg" alt=""></p>
+
+<script type="text/javascript">
+Number.prototype.mod = function(n) { return ((this%n)+n)%n; }
+function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
+function getComputed(el,style){ if(el.currentStyle){ var y=el.currentStyle[style]; }else if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); } return parseFloat(y); }
+function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
+function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
+var lenticule = {
+    el: null, xy0:null, xyT:null, 
+    size: function(el){
+        el.wh = [getComputed(el,'width'), getComputed(el,'height')];
+    },
+    init: function(el, opt){
+        if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
+        lenticule.size(el);
+        if( !opt ) var opt = {};
+        el.val = !!opt.val? opt.val : 0; 
+        el.min = !!opt.min? opt.min : 0; 
+        el.max = !!opt.max? opt.max : 1;
+        el.loop = !!opt.loop? opt.loop : 0;
+        el.arcs = el.childNodes.length-1;
+        el.rng = el.max-el.min;
+        el.xy = [getComputed(el,'left'), getComputed(el,'top')];
+        if( typeof(opt.slide)==='function' ){ el.slide = opt.slide; }
+        if( typeof(opt.stop)==='function' ){ el.stop = opt.stop; }
+        if( !el.move ){
+            el.onmousedown = lenticule.touch;
+            el.ontouchstart = lenticule.touch;
+            el.move = function(xy){
+                var i, vis, op;
+                this.val = this.min+(xy[0]/this.wh[0]*(this.max-this.min)); /* add some 'swing' in here to gravitate towards whole frames being visibile */
+                if( this.loop ){ this.val = this.val.mod(this.rng); }
+                vis = Math.ceil(this.val*this.arcs);
+                for( i=1; i<=this.arcs; ++i ){
+                    op = i>vis? 0 : ( i===vis? (this.val%(1/this.arcs))*this.arcs : 1 );
+                    this.childNodes[i].style.opacity = op;
+                }
+                this.xy = [xy[0],xy[1]];
+            };
+        }
+    },
+    touch: function(e){
+        e = e || window.event;
+        if( e.type==='touchstart' && e.touches && e.touches.length>2 ){ return; }
+        lenticule.el = this;
+        lenticule.xy0 = lenticule.el.xy;
+        lenticule.xyT = getXY(e);
+        lenticule.el.min = lenticule.el.val-(lenticule.xyT[0]/lenticule.el.wh[0]*(lenticule.el.max-lenticule.el.min));
+        lenticule.el.max = lenticule.el.min+lenticule.el.rng;
+        if( e.type==='touchstart' ){
+            this.ontouchmove = lenticule.drag;
+            this.onmousedown = null;
+            this.ontouchend = function(){
+                this.ontouchmove = null;
+                this.ontouchend = null;
+                lenticule.release();
+            };
+        }else{
+            document.onmousemove = lenticule.drag;
+            document.onmouseup = function(){
+                document.onmousemove = null;
+                document.onmouseup = null;
+                lenticule.release();
+            };
+        }
+        return false;
+    },
+    drag: function(e){
+        e = e || window.event;
+        if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
+        var xyE = getXY(e),
+            xy = [lenticule.xy0[0]+xyE[0]-lenticule.xyT[0], lenticule.xy0[1]+xyE[1]-lenticule.xyT[1]];
+        lenticule.el.move(xy);
+        if( !!lenticule.el.slide ){ lenticule.el.slide.call(this); }
+        return false;
+    },
+    release: function(){
+        if( !!lenticule.el.stop ){ lenticule.el.stop.call(this); }
+        lenticule.el = null;
+    }
+};
+
+var i, els = document.getElementsByClassName('lenticule'), el;
+for( i=0; i<els.length; ++i ){
+    lenticule.init(els[i], {'loop':1});
+}
+addHandler(window,'resize',function(){
+    for( i=0; i<els.length; ++i ){
+        lenticule.size(els[i]);
+    }
+});
+if( !!window.DeviceOrientationEvent ){
+    addHandler(window,'deviceorientation',function(e){
+        var tiltLR = e.gamma, tiltFB = e.beta;
+        xy = [lenticule.xy0[0]+xyE[0]-lenticule.xyT[0], lenticule.xy0[1]+xyE[1]-lenticule.xyT[1]];
+        lenticule.el.move(xy);
+    });
+}
+</script>
+</body>
+</html>
