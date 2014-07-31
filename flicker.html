@@ -34,6 +34,7 @@ var flicker = {
     },
     init: function(el, opt){
         if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
+        if( !el.cloned ){ el.appendChild(el.childNodes[0].cloneNode(true)); el.cloned=1; }
         flicker.size(el);
         if( !opt ) var opt = {};
         el.val = !!opt.val? opt.val : 0; 
