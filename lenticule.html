@@ -35,7 +35,7 @@ var lenticule = {
     },
     init: function(el, opt){
         if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
-        if( !el.cloned ){ el.appendChild(el.childNodes[0].cloneNode(true)); el.cloned = 1; }
+        if( !el.cloned ){ for( var i=el.childNodes.length-2; i>=0; --i){ el.appendChild(el.childNodes[i].cloneNode(true)); } el.cloned = 1; }
         lenticule.size(el);
         if( !opt ) var opt = {};
         el.val = !!opt.val? opt.val : 0; 
