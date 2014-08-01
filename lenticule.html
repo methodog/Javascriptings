@@ -35,7 +35,7 @@ var lenticule = {
     },
     init: function(el, opt){
         if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
-        if( !el.cloned ){ el.appendChild(el.childNodes[0].cloneNode(true)); el.cloned=1; }
+        if( !el.cloned ){ el.appendChild(el.childNodes[0].cloneNode(true)); el.cloned = 1; }
         lenticule.size(el);
         if( !opt ) var opt = {};
         el.val = !!opt.val? opt.val : 0; 
@@ -115,10 +115,13 @@ addHandler(window,'resize',function(){
 });
 if( !!window.DeviceOrientationEvent ){
     addHandler(window,'deviceorientation',function(e){
-        for( i=0; i<els.length; ++i ){
-            lenticule.el = els[i];
-            xy = [(e.gamma/45)*lenticule.el.wh[0], lenticule.el.xy[1]];
-            lenticule.el.move(xy);
+        if( !lenticule.el ){
+            for( i=0; i<els.length; ++i ){
+                lenticule.el = els[i];
+                xy = [(e.gamma/45)*lenticule.el.wh[0], lenticule.el.xy[1]];
+                lenticule.el.move(xy);
+                lenticule.el = null;
+            }
         }
     });
 }
