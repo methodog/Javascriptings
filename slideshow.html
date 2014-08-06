@@ -1,0 +1,72 @@
+<html lang="en" id="vam-ac-uk">
+<head>
+    <meta charset="utf-8">
+    <title>slideshow</title>
+    <style type="text/css">
+        .hide { display:none!important; }
+        #slideshow, .slide { height:100%; width:100%; overflow:hidden; position:relative; }
+        img, .slide { height:auto; max-width:100%; }
+        .slide { position:absolute; top:0; left:0; }
+    </style>
+</head>
+
+<body>
+    
+    <div id="slideshow">
+        <div class="slide">
+            <img src="http://www.vam.ac.uk/__data/assets/image/0014/243023/VA_DO_Web-Banner1.jpg" width="960" height="415" alt="" />
+        </div>
+        <div class="slide hide">
+            <img src="http://www.vam.ac.uk/__data/assets/image/0020/241247/HeaderNew.jpg" width="960" height="415" alt="" />
+        </div>
+    </div>
+    
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    
+    /* responsiveness */
+    (function(){
+        var resize = function(){
+            $('.slideshow').each(function(){ $(this).height((414/960)*$(this).width()); });
+        }; resize(); $(window).bind('resize', function(){ resize(); });
+    })();
+    
+    /* slideshow */
+    $('#slideshow').each(function(){
+        if( $(this).find('.slide').length>0 ){
+            var ss = this, $ss = $(this), sc = 0;
+            $ss.find('.slide').each(function(){
+                var $s = $(this);
+                ++sc; //slide count
+                if( sc==1 ){ $s.addClass('on'); }
+            });
+            $ss.data('c',1);
+            ss.showSlide = function(d){
+                var $so = $ss.find('.on'), /* slide-out */
+                    $si = $ss.find('.slide:nth-child('+(((($so.index()+(d<0?-1:1))+sc)%sc)+1)+')'), /* slide-in */
+                    c = $ss.data('c'),
+                    e = 3,
+                    t = 1000;
+                if( c >= e ){
+                    $so.data('exposure-1','').removeClass('on');
+                    $si.removeClass('hide').addClass('on').show().css({'left':0,'opacity':1});
+                    if( $so.data('wipe')==='fade' ){
+                        $so.stop(true,true); $si.stop(true,true).css({'opacity':0}).animate({'opacity':1}, t, function(){ $so.hide(); $so.css({'opacity':0}); });
+                    }else{
+                        $si.stop(true,true).css({'left':(d<0?1:-1)*$ss.width()+'px'}).animate({'left':0}, t);
+                        $so.stop(true,true).animate({'left':(d<0?-1:1)*$ss.width()+'px'}, t, function(){ $so.hide(); $so.css({'opacity':0}); });
+                    }
+                    c = 0;
+                }
+                $ss.data('c',++c);
+                ss.t = setTimeout(function(){ss.showSlide(d);}, 1000);
+            }; ss.showSlide(-1); 
+        }
+    });
+        
+});
+</script>
+</body>
+</html>
+
