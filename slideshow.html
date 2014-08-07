@@ -21,7 +21,7 @@ jQuery(document).ready(function() {
     /* slideshow */
     $('#slideshow').each(function(){
         var ss = this, $ss = $(this), sc = 0;
-        ss.newSlides = function(){
+        ss.newSlides = function(callback){
             var img;
             $.ajax('http://www.vam.ac.uk/api/json/museumobject/search?materialsearch=ivory', { dataType:'jsonp' }).done( function(data){
                 var slides = data.records;
@@ -29,14 +29,18 @@ jQuery(document).ready(function() {
                     img = slides[s].fields.primary_image_id;
                     $ss.append('<div class="slide hide"><img src="http://media.vam.ac.uk/media/thira/collection_images/'+img.substr(0,6)+'/'+img+'_jpg_l.jpg" alt="" /></div>');
                 }
+                if( !!callback ){ callback.call(this); }
             });
         }
-        ss.newSlides();
-        $ss.find('.slide').each(function(){
-            ++sc; //slide count
-            if( sc==1 ){ $(this).removeClass('hide').addClass('on'); }
-        });
-        $ss.data('c',1);
+        ss.newSlides(function(){ss.init()});
+        ss.init = function(){
+            $ss.find('.slide').each(function(){
+                ++sc; //slide count
+                if( sc==1 ){ $(this).removeClass('hide').addClass('on'); }
+            });
+            $ss.data('c',1);
+            ss.showSlide(-1);
+        };
         ss.showSlide = function(d){
             var $so = $ss.find('.on'), /* slide-out */
                 $si = $ss.find('.slide:nth-child('+(((($so.index()+(d<0?-1:1))+sc)%sc)+1)+')'), /* slide-in */
@@ -56,8 +60,7 @@ jQuery(document).ready(function() {
             }
             $ss.data('c',++c);
             ss.t = setTimeout(function(){ss.showSlide(d);}, 1000);
-        }; 
-        ss.showSlide(-1); 
+        };
     });
         
 });
