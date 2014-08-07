@@ -50,13 +50,9 @@ jQuery(document).ready(function() {
             if( l===sc ){ ss.newSlides() }
             if( c >= e ){
                 $so.data('exposure-1','').removeClass('on');
-                $si.removeClass('hide').addClass('on').show().css({'left':0,'opacity':1});
-                if( $so.data('wipe')==='fade' ){
-                    $so.stop(true,true); $si.stop(true,true).css({'opacity':0}).animate({'opacity':1}, t, function(){ $so.hide(); $so.css({'opacity':0}); });
-                }else{
-                    $si.stop(true,true).css({'left':(d<0?1:-1)*$ss.width()+'px'}).animate({'left':0}, t);
-                    $so.stop(true,true).animate({'left':(d<0?-1:1)*$ss.width()+'px'}, t, function(){ $so.hide(); $so.css({'opacity':0}); });
-                }
+                $si.removeClass('hide').addClass('on').show(0).css({'left':0});
+                $si.stop(true,true).css({'left':(d<0?1:-1)*$ss.width()+'px'}).animate({'left':0}, t);
+                $so.stop(true,true).animate({'left':(d<0?-1:1)*$ss.width()+'px'}, t);
                 c = 0;
                 if( l>=sc ){ setTimeout(function(){$ss.find('.slide:last-child').remove()}, t) }
             }
