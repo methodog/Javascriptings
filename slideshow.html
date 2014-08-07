@@ -20,33 +20,34 @@ jQuery(document).ready(function() {
     
     /* slideshow */
     $('#slideshow').each(function(){
-        var ss = this, $ss = $(this), sc = 0;
+        var ss = this, $ss = $(this), sc = 0, 
+            dir = -1, /* slide direction */
+            e = 1, /* slide exposure time (s) */
+            t = 1000; /* slide animation time (ms) */
         ss.newSlides = function(callback){
             var img;
-            $.ajax('http://www.vam.ac.uk/api/json/museumobject/search?materialsearch=ivory', { dataType:'jsonp' }).done( function(data){
+            $.ajax('http://www.vam.ac.uk/api/json/museumobject/search?materialsearch=glass&random=0&images=1&limit=3&offset='+Math.ceil(Math.random()*10)*3, { dataType:'jsonp' }).done( function(data){
                 var slides = data.records;
                 for( s in slides ){
                     img = slides[s].fields.primary_image_id;
-                    $ss.append('<div class="slide hide"><img src="http://media.vam.ac.uk/media/thira/collection_images/'+img.substr(0,6)+'/'+img+'_jpg_l.jpg" alt="" /></div>');
+                    $ss.prepend('<div class="slide hide"><img src="http://media.vam.ac.uk/media/thira/collection_images/'+img.substr(0,6)+'/'+img+'_jpg_l.jpg" alt="" /></div>');
                 }
-                if( !!callback ){ callback.call(this); }
+                if( !!callback ){ callback.call(this) }
             });
         }
         ss.newSlides(function(){ss.init()});
         ss.init = function(){
-            $ss.find('.slide').each(function(){
-                ++sc; //slide count
-                if( sc==1 ){ $(this).removeClass('hide').addClass('on'); }
-            });
+            sc = $ss.find('.slide').length;
+            $ss.find('.slide:nth-child('+sc+')').removeClass('hide').addClass('on');
             $ss.data('c',1);
-            ss.showSlide(-1);
+            ss.showSlide(dir);
         };
         ss.showSlide = function(d){
             var $so = $ss.find('.on'), /* slide-out */
                 $si = $ss.find('.slide:nth-child('+(((($so.index()+(d<0?-1:1))+sc)%sc)+1)+')'), /* slide-in */
-                c = $ss.data('c'),
-                e = 3,
-                t = 1000;
+                l = $ss.find('.slide').length,
+                c = $ss.data('c');
+            if( l===sc ){ ss.newSlides() }
             if( c >= e ){
                 $so.data('exposure-1','').removeClass('on');
                 $si.removeClass('hide').addClass('on').show().css({'left':0,'opacity':1});
@@ -57,6 +58,7 @@ jQuery(document).ready(function() {
                     $so.stop(true,true).animate({'left':(d<0?-1:1)*$ss.width()+'px'}, t, function(){ $so.hide(); $so.css({'opacity':0}); });
                 }
                 c = 0;
+                if( l>=sc ){ setTimeout(function(){$ss.find('.slide:last-child').remove()}, t) }
             }
             $ss.data('c',++c);
             ss.t = setTimeout(function(){ss.showSlide(d);}, 1000);
