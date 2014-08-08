@@ -49,7 +49,7 @@ jQuery(document).ready(function() {
                 c = $ss.data('c');
             if( l===sc ){ ss.newSlides() }
             if( c >= e ){
-                $so.data('exposure-1','').removeClass('on');
+                $so.removeClass('on');
                 $si.removeClass('hide').addClass('on').show(0).css({'left':0});
                 $si.stop(true,true).css({'left':(d<0?1:-1)*$ss.width()+'px'}).animate({'left':0}, t);
                 $so.stop(true,true).animate({'left':(d<0?-1:1)*$ss.width()+'px'}, t);
