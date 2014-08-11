@@ -47,8 +47,8 @@ jQuery(document).ready(function() {
                 $si = $ss.find('.slide:nth-child('+(((($so.index()+(d<0?-1:1))+sc)%sc)+1)+')'), /* slide-in */
                 l = $ss.find('.slide').length,
                 c = $ss.data('c');
-            if( l===sc ){ ss.newSlides() }
             if( c >= e ){
+                if( l===sc ){ ss.newSlides() }
                 $so.removeClass('on');
                 $si.removeClass('hide').addClass('on').show(0).css({'left':0});
                 $si.stop(true,true).css({'left':(d<0?1:-1)*$ss.width()+'px'}).animate({'left':0}, t);
