@@ -5,21 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <title>DragZoom Map</title>
+    <title>Fruity</title>
     <style type="text/css" media="all">
-        html, body { height:100%; margin:0; width:100%; }
+        html, body, #fruity { height:100%; margin:0; width:100%; overflow:hidden; }
         body { font:13.5px/1.184 helvetica,arial,freesans,sans-serif; }
         img { height:auto; max-width:100%; }
         .clip { height:100%; width:100%; overflow:hidden; position:relative; }
         .dragpad, .draggable { cursor:pointer; width:100%; height:100%; position:absolute; left:0; top:0; }
+        .reel { float:left; }
         .reel .draggable { height:auto; }
         .reel.clip { width:25%; }
     </style>
 </head>
 <body>
 
-<div class="reel clip">
-    <div class="draggable"><img src="img/fruitmachine/v.01.png" alt="V"><img src="img/fruitmachine/v.02.png" alt="V"><img src="img/fruitmachine/v.03.png" alt="V"><img src="img/fruitmachine/v.04.png" alt="V"></div>
+<div id="container">
+    <div id="fruity">
+        <div class="reel clip">
+            <div class="draggable"><img src="img/fruitmachine/v.01.png" alt="V"><img src="img/fruitmachine/v.02.png" alt="V"><img src="img/fruitmachine/v.03.png" alt="V"><img src="img/fruitmachine/v.04.png" alt="V"></div>
+        </div>
+        <div class="reel clip">
+            <div class="draggable"><img src="img/fruitmachine/a.01.png" alt="A"><img src="img/fruitmachine/a.02.png" alt="A"><img src="img/fruitmachine/a.03.png" alt="A"><img src="img/fruitmachine/a.04.png" alt="A"></div>
+        </div>
+        <div class="reel clip">
+            <div class="draggable"><img src="img/fruitmachine/r.01.png" alt="R"><img src="img/fruitmachine/r.02.png" alt="R"><img src="img/fruitmachine/r.03.png" alt="R"><img src="img/fruitmachine/r.04.png" alt="R"></div>
+        </div>
+        <div class="reel clip">
+            <div class="draggable"><img src="img/fruitmachine/i.01.png" alt="I"><img src="img/fruitmachine/i.02.png" alt="I"><img src="img/fruitmachine/i.03.png" alt="I"><img src="img/fruitmachine/i.04.png" alt="I"></div>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -192,6 +206,11 @@ addHandler(window,'resize',function(){
         dragZoom.size(draggables[i]);
     }
 });
+
+var resize = function(){
+    var c = document.getElementById('container');
+    c.style.height = (415/940)*getComputed(c,'width')+'px';
+}; addHandler(window,'load',resize); addHandler(window,'resize',resize);
 </script>
 
 </body>
