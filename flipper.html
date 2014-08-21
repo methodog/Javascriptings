@@ -56,10 +56,9 @@ var dragZoom = {
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
         el.v = [0,0];
         if( !el.move ){
-            var zoomer = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className; 
-            el.zoomer = String(zoomer).indexOf('zoomable')>-1? 1:null;
-            el.flipper = String(el.className).indexOf('flipper')>-1? 1:null;
-            el.h = el.wh[0]>el.wh[1]? 1:0;
+            var zoomer = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomer = String(zoomer).indexOf('zoomable')>-1;
+            el.zoomer = zoomer||null;
+            el.flipper = String(el.className).indexOf('flipper')>-1? (el.wh[0]>el.wh[1]?'h':'v') : null;
             el.whP0 = el.whP;
             if( !el.nextSibling ){ el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.appendChild(el.trig) }else{ if( el.nextSibling.className==='dragpad' ){ el.trig = el.nextSibling; }else{ el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.insertBefore(el.trig, el.nextSibling); } }
             el.trig.onmousedown = dragZoom.touch;
@@ -93,7 +92,7 @@ var dragZoom = {
                 this.t = window.setTimeout(function(){ el.drop(); }, 23);
             };
             el.snap = function(d, dest){
-                var hv = el.h? 0:1,
+                var hv = el.flipper==='h'? 0:1,
                     p = this.xy[hv]+Math.ceil(d*((d*dest)-(d*this.xy[hv]))/4);
                 if( (d<0 && p<=dest) || (d>0 && p>=dest) ){
                     window.clearTimeout(this.t);
@@ -181,26 +180,28 @@ var dragZoom = {
         e = e || window.event;
         dragZoom.xyE = getXY(e);
         var xy = [dragZoom.xyE[0]-dragZoom.xyT[0], dragZoom.xyE[1]-dragZoom.xyT[1]];
-        if( !dragZoom.el.zoomer && dragZoom.el.h && Math.abs(xy[1])>Math.abs(xy[0]) ){
-            window.scrollBy(0, -xy[1]);
-            dragZoom.xyT[1] = dragZoom.xyE[1];
-        }else if( !dragZoom.el.zoomer && Math.abs(xy[0])>Math.abs(xy[1]) ){
-            window.scrollBy(-xy[0], 0);
-            dragZoom.xyT[0] = dragZoom.xyE[0];
-        }else{
-            if( dragZoom.el.flipper ){
-                var n = 5, 
-                    d = [(xy[0]<0?-1:1), (xy[1]<0?-1:1)];
-                if( dragZoom.el.h ){
-                    xy = [dragZoom.el.whP[0]*d[0]*(Math.pow(((Math.cos((xy[0]*n*Math.PI/dragZoom.el.whP[0])%Math.PI)-1)/2),2) + Math.floor(Math.abs(xy[0])*n/dragZoom.el.whP[0])), xy[1]];
-                }else{
-                    xy = [xy[0], dragZoom.el.whP[1]*d[1]*(Math.pow(((Math.cos((xy[1]*n*Math.PI/dragZoom.el.whP[1])%Math.PI)-1)/2),2) + Math.floor(Math.abs(xy[1])*n/dragZoom.el.whP[1]))];
-                }
-            }else{
-                dragZoom.el.v = [dragZoom.xy0[0]+xy[0]-dragZoom.el.xy[0], dragZoom.xy0[1]+xy[1]-dragZoom.el.xy[1]];
+        if( dragZoom.el.flipper ){
+            if( dragZoom.el.flipper==='h' && Math.abs(xy[1])>Math.abs(xy[0]) ){
+                var evt = document.createEvent("HTMLEvents");
+                evt.initEvent("touchend", true, false);
+                dragZoom.el.trig.dispatchEvent(evt);
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                window.dispatchEvent(e);
+                return true;
             }
-            dragZoom.el.move([dragZoom.xy0[0]+xy[0], dragZoom.xy0[1]+xy[1]]);
+            var n = 5, 
+                d = [(xy[0]<0?-1:1), (xy[1]<0?-1:1)];
+            if( dragZoom.el.flipper==='h' ){
+                xy = [dragZoom.el.whP[0]*d[0]*(Math.pow(((Math.cos((xy[0]*n*Math.PI/dragZoom.el.whP[0])%Math.PI)-1)/2),2) + Math.floor(Math.abs(xy[0])*n/dragZoom.el.whP[0])), xy[1]];
+            }else{
+                xy = [xy[0], dragZoom.el.whP[1]*d[1]*(Math.pow(((Math.cos((xy[1]*n*Math.PI/dragZoom.el.whP[1])%Math.PI)-1)/2),2) + Math.floor(Math.abs(xy[1])*n/dragZoom.el.whP[1]))];
+            }
+        }else{
+            dragZoom.el.v = [dragZoom.xy0[0]+xy[0]-dragZoom.el.xy[0], dragZoom.xy0[1]+xy[1]-dragZoom.el.xy[1]];
         }
+        dragZoom.el.move([dragZoom.xy0[0]+xy[0], dragZoom.xy0[1]+xy[1]]);
         return false;
     },
     release: function(){
