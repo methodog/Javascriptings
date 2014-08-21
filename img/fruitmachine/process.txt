@@ -1,0 +1,9 @@
+convert -crop 235 VARI\ banner\ 1.png 1%02d.png
+convert -crop 235 VARI\ banner\ 2.png 2%02d.png
+convert -crop 235 VARI\ banner\ 3.png 3%02d.png
+convert -crop 235 VARI\ banner\ 4.png 4%02d.png
+
+rename 's/(\d)00/v.0$1/ig' *png
+rename 's/(\d)01/a.0$1/ig' *png
+rename 's/(\d)02/r.0$1/ig' *png
+rename 's/(\d)03/i.0$1/ig' *png
