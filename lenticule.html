@@ -35,7 +35,6 @@ var lenticule = {
     },
     init: function(el, opt){
         if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
-        if( !el.cloned ){ for( var i=el.childNodes.length-2; i>=0; --i){ el.appendChild(el.childNodes[i].cloneNode(true)); } el.cloned = 1; }
         lenticule.size(el);
         if( !opt ) var opt = {};
         el.val = !!opt.val? opt.val : 0; 
@@ -45,6 +44,7 @@ var lenticule = {
         el.arcs = el.childNodes.length-1;
         el.rng = el.max-el.min;
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
+        if( !el.cloned ){ for( var i=el.childNodes.length-2; i>=0; --i){ el.appendChild(el.childNodes[i].cloneNode(true)); } el.cloned = 1; }
         if( typeof(opt.slide)==='function' ){ el.slide = opt.slide; }
         if( typeof(opt.stop)==='function' ){ el.stop = opt.stop; }
         if( !el.move ){
