@@ -240,7 +240,7 @@ var dragZoom = {
 
 var draggables = document.getElementsByClassName('draggable');
 for( var i=0; i<draggables.length; ++i ){ 
-    dragZoom.init(draggables[i], {'loop':i||0, 'snap':i||0}); 
+    dragZoom.init(draggables[i], {'loop':1, 'snap':1}); 
 }
 var resize = function(){
     var c = document.getElementById('container');
