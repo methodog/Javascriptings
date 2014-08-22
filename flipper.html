@@ -56,7 +56,8 @@ var dragZoom = {
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
         el.v = [0,0];
         if( !el.move ){
-            var zoomer = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomer = String(zoomer).indexOf('zoomable')>-1;
+            var hv = el.whP[0]>el.whP[1]?1:0,
+                zoomer = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomer = String(zoomer).indexOf('zoomable')>-1;
             el.zoomer = zoomer||null;
             el.flipper = String(el.className).indexOf('flipper')>-1? (el.wh[0]>el.wh[1]?'h':'v') : null;
             el.whP0 = el.whP;
@@ -92,15 +93,14 @@ var dragZoom = {
                 this.t = window.setTimeout(function(){ el.drop(); }, 23);
             };
             el.snap = function(d, dest){
-                var hv = el.flipper==='h'? 0:1,
-                    p = this.xy[hv]+Math.ceil(d*((d*dest)-(d*this.xy[hv]))/4);
-                if( (d<0 && p<=dest) || (d>0 && p>=dest) ){
+                var p = this.xy[hv]+Math.ceil(d*((d*dest)-(d*this.xy[hv]))/4);
+                if( (d<0 && p<=dest+5) || (d>0 && p>=dest-5) ){
                     window.clearTimeout(this.t);
                     p = dest;
-                    this.move((hv ? [this.xy[0], p] : [p, this.xy[1]]));
+                    this.move((hv?[this.xy[0],p]:[p,this.xy[1]]));
                     return;
                 }
-                this.move((hv ? [this.xy[0], p] : [p, this.xy[1]]));
+                this.move((hv?[this.xy[0],p]:[p,this.xy[1]]));
                 this.t = window.setTimeout(function(){ el.snap(d, dest); }, 23);
             };
             if( el.zoomer ){
