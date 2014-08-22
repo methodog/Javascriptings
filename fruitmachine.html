@@ -9,7 +9,7 @@
     <style type="text/css" media="all">
         html, body, #fruity { height:100%; margin:0; width:100%; overflow:hidden; }
         body { font:13.5px/1.184 helvetica,arial,freesans,sans-serif; }
-        img { height:auto; max-width:100%; }
+        img { height:auto; max-width:100%; vertical-align:top; }
         .clip { height:100%; width:100%; overflow:hidden; position:relative; }
         .dragpad, .draggable { cursor:pointer; width:100%; height:100%; position:absolute; left:0; top:0; }
         .reel { float:left; }
@@ -63,7 +63,9 @@ var dragZoom = {
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
         el.v = [0,0];
         if( !el.move ){
-            var zoomer = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomer = String(zoomer).indexOf('zoomable')>-1;
+            var hv = el.whP[0]>el.whP[1]? 1 : 0,
+                snap = !!opt.snap? opt.snap : 0,
+                zoomer = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomer = String(zoomer).indexOf('zoomable')>-1;
             el.zoomer = zoomer||null;
             el.whP0 = el.whP;
             if( !el.nextSibling ){ el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.appendChild(el.trig) }else{ if( el.nextSibling.className==='dragpad' ){ el.trig = el.nextSibling; }else{ el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.insertBefore(el.trig, el.nextSibling); } }
@@ -104,8 +106,30 @@ var dragZoom = {
                 var f = Math.abs(this.v[0])+Math.abs(this.v[1])>50?0.98:0.88, r;
                 this.v = [this.v[0]*f, this.v[1]*f];
                 var r = this.move([this.xy[0]+this.v[0], this.xy[1]+this.v[1]]);
-                if( r || Math.abs(this.v[0])+Math.abs(this.v[1])<0.5 ){ dragZoom.v0 = this.v = [0,0]; window.clearTimeout(this.t); return; }
+                if( r || Math.abs(this.v[0])+Math.abs(this.v[1])<(snap?10:0.5) ){
+                    dragZoom.v0=this.v=[0,0]; window.clearTimeout(this.t);
+                    if( snap ){
+                        if( Math.abs(this.xy[hv])%this.whP[hv]>this.whP[hv]/2 ){
+                            var d=-1, dest=this.xy[hv]-this.whP[hv]+(-1*this.xy[hv])%this.whP[hv];
+                        }else{
+                            var d=1, dest=this.xy[hv]+(-1*this.xy[hv])%this.whP[hv];
+                        }
+                        this.snap(d, dest);
+                    } 
+                    return;
+                }
                 this.t = window.setTimeout(function(){ el.drop(); }, 23);
+            };
+            el.snap = function(d, dest){
+                var p = this.xy[hv]+Math.ceil(d*((d*dest)-(d*this.xy[hv]))/4);
+                if( (d<0 && p<=dest+5) || (d>0 && p>=dest-5) ){
+                    window.clearTimeout(this.t);
+                    p = dest;
+                    this.move((hv?[this.xy[0],p]:[p,this.xy[1]]));
+                    return;
+                }
+                this.move((hv?[this.xy[0],p]:[p,this.xy[1]]));
+                this.t = window.setTimeout(function(){ el.snap(d, dest); }, 23);
             };
             if( el.zoomer ){
                 el.wMax = el.getAttribute('data-max-width');
@@ -216,7 +240,7 @@ var dragZoom = {
 
 var draggables = document.getElementsByClassName('draggable');
 for( var i=0; i<draggables.length; ++i ){ 
-    dragZoom.init(draggables[i], {'loop':i||0}); 
+    dragZoom.init(draggables[i], {'loop':i||0, 'snap':i||0}); 
 }
 var resize = function(){
     var c = document.getElementById('container');
