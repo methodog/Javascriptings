@@ -252,6 +252,15 @@ var resize = function(){
         dragZoom.size(draggables[i]);
     }
 }; addHandler(window,'load',resize); addHandler(window,'resize',resize);
+addHandler(document.getElementById('fruity'),'click',function(){
+    var reels = this.children, v=100, i, d;
+    for( i=0; i<reels.length; ++i ){
+        d = reels[i].children[0];
+        d.v = [0,v+(i*v)];
+        d.drop();
+    }
+    return false;
+});
 </script>
 
 </body>
