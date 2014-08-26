@@ -253,7 +253,7 @@ var resize = function(){
     }
 }; addHandler(window,'load',resize); addHandler(window,'resize',resize);
 addHandler(document.getElementById('fruity'),'click',function(){
-    var reels = this.children, v=(1+Math.random())*150, i, d;
+    var reels = this.children, v=(1+Math.random())*100, i, d;
     for( i=0; i<reels.length; ++i ){
         d = reels[i].children[0];
         d.v = [0,v+(2*i*v)];
