@@ -68,6 +68,7 @@ var dragZoom = {
                 snap = !!opt.snap? opt.snap : 0,
                 zoomer = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomer = String(zoomer).indexOf('zoomable')>-1;
             el.zoomer = zoomer||null;
+            el.edge = (opt.edge!=null)? opt.edge : 1;
             el.whP0 = el.whP;
             if( !el.nextSibling ){ el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.appendChild(el.trig) }else{ if( el.nextSibling.className==='dragpad' ){ el.trig = el.nextSibling; }else{ el.trig = document.createElement('div'); el.trig.setAttribute('class', 'dragpad'); el.P.insertBefore(el.trig, el.nextSibling); } }
             el.trig.onmousedown = dragZoom.touch;
@@ -80,30 +81,35 @@ var dragZoom = {
             }
             el.move = function(xy){
                 var x=xy[0], y=xy[1], r;
-                if( this.wh[0]>this.whP[0] ){
-                    if( el.loop ){
-                        if( x>0 ){ x-=this.wh[0]/3; }
-                        else if( x<-this.wh[0]/3 ){ x+=this.wh[0]/3; }
-                    }else{
-                        if( x>0 ){ x=0; r=this.wh[0]>this.whP[0]?[1,0]:null; }
-                        else if( x<this.whP[0]-this.wh[0] ){ x=this.whP[0]-this.wh[0]; r=this.wh[0]>this.whP[0]?[-1,0]:null; }
+                if( el.edge ){
+                    if( this.wh[0]>this.whP[0] ){
+                        if( el.loop ){
+                            if( x>0 ){ x-=this.wh[0]/3; }
+                            else if( x<-this.wh[0]/3 ){ x+=this.wh[0]/3; }
+                        }else{
+                            if( x>0 ){ x=0; r=this.wh[0]>this.whP[0]?[1,0]:null; }
+                            else if( x<this.whP[0]-this.wh[0] ){ x=this.whP[0]-this.wh[0]; r=this.wh[0]>this.whP[0]?[-1,0]:null; }
+                        }
+                        this.style.left = x+'px';
                     }
+                    if( this.wh[1]>this.whP[1] ){
+                        if( el.loop ){
+                            if( y>0 ){ y-=this.wh[1]/3; }
+                            else if( y<-this.wh[1]/3 ){ y+=this.wh[1]/3; }
+                        }else{
+                            if( y>0 ){ y=0; r=this.wh[1]>this.whP[1]?[0,1]:r; }
+                            else if( y<this.whP[1]-this.wh[1] ){ y=this.whP[1]-this.wh[1]; r=this.wh[1]>this.whP[1]?[0,-1]:r; }
+                        }
+                        this.style.top = y+'px';
+                    }
+                }else{
                     this.style.left = x+'px';
-                }
-                if( this.wh[1]>this.whP[1] ){
-                    if( el.loop ){
-                        if( y>0 ){ y-=this.wh[1]/3; }
-                        else if( y<-this.wh[1]/3 ){ y+=this.wh[1]/3; }
-                    }else{
-                        if( y>0 ){ y=0; r=this.wh[1]>this.whP[1]?[0,1]:r; }
-                        else if( y<this.whP[1]-this.wh[1] ){ y=this.whP[1]-this.wh[1]; r=this.wh[1]>this.whP[1]?[0,-1]:r; }
-                    }
                     this.style.top = y+'px';
                 }
                 this.xy = [x,y];
                 return r || null;
             };
-            el.drop = function(){
+            el.drop = !!opt.drop? opt.drop : function(){
                 var f = Math.abs(this.v[0])+Math.abs(this.v[1])>50?0.98:0.88, r;
                 this.v = [this.v[0]*f, this.v[1]*f];
                 var r = this.move([this.xy[0]+this.v[0], this.xy[1]+this.v[1]]);
@@ -165,6 +171,7 @@ var dragZoom = {
         if( e.type==='touchstart' && e.touches && e.touches.length>2 ){ return; }
         dragZoom.el = this.parentNode.getElementsByClassName('draggable')[0];
         window.clearTimeout(dragZoom.el.t);
+        if( !dragZoom.el.edge ){ dragZoom.el.xy = [getComputed(dragZoom.el,'left'), getComputed(dragZoom.el,'top')]; }
         dragZoom.v0 = dragZoom.el.v;
         dragZoom.el.v = [0,0];
         dragZoom.xy0 = dragZoom.el.xy;
