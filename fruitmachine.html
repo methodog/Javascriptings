@@ -15,7 +15,7 @@
         .reel { float:left; }
         .reel .draggable { height:auto; }
         .reel.clip { width:25%; }
-        #container { max-height:415px; max-width:940px; }
+        #container { max-height:415px; max-width:960px; }
     </style>
 </head>
 <body>
@@ -23,16 +23,16 @@
 <div id="container">
     <div id="fruity">
         <div class="reel clip">
-            <div class="draggable"><img src="img/fruitmachine/v.01.png" alt="V"><img src="img/fruitmachine/v.02.png" alt="V"><img src="img/fruitmachine/v.03.png" alt="V"><img src="img/fruitmachine/v.04.png" alt="V"></div>
+            <div class="draggable"><img src="img/fruitmachine/v.01.jpg" alt="V"><img src="img/fruitmachine/v.02.jpg" alt="V"><img src="img/fruitmachine/v.03.jpg" alt="V"></div>
         </div>
         <div class="reel clip">
-            <div class="draggable"><img src="img/fruitmachine/a.01.png" alt="A"><img src="img/fruitmachine/a.02.png" alt="A"><img src="img/fruitmachine/a.03.png" alt="A"><img src="img/fruitmachine/a.04.png" alt="A"></div>
+            <div class="draggable"><img src="img/fruitmachine/a.01.jpg" alt="A"><img src="img/fruitmachine/a.02.jpg" alt="A"><img src="img/fruitmachine/a.03.jpg" alt="A"></div>
         </div>
         <div class="reel clip">
-            <div class="draggable"><img src="img/fruitmachine/r.01.png" alt="R"><img src="img/fruitmachine/r.02.png" alt="R"><img src="img/fruitmachine/r.03.png" alt="R"><img src="img/fruitmachine/r.04.png" alt="R"></div>
+            <div class="draggable"><img src="img/fruitmachine/r.01.jpg" alt="R"><img src="img/fruitmachine/r.02.jpg" alt="R"><img src="img/fruitmachine/r.03.jpg" alt="R"></div>
         </div>
         <div class="reel clip">
-            <div class="draggable"><img src="img/fruitmachine/i.01.png" alt="I"><img src="img/fruitmachine/i.02.png" alt="I"><img src="img/fruitmachine/i.03.png" alt="I"><img src="img/fruitmachine/i.04.png" alt="I"></div>
+            <div class="draggable"><img src="img/fruitmachine/i.01.jpg" alt="I"><img src="img/fruitmachine/i.02.jpg" alt="I"><img src="img/fruitmachine/i.03.jpg" alt="I"></div>
         </div>
     </div>
 </div>
@@ -254,7 +254,7 @@ for( var i=0; i<draggables.length; ++i ){
 }
 var resize = function(){
     var c = document.getElementById('container');
-    c.style.height = (415/940)*getComputed(c,'width')+'px';
+    c.style.height = (415/960)*getComputed(c,'width')+'px';
     for( var i=0; i<draggables.length; ++i ){
         dragZoom.size(draggables[i]);
     }
