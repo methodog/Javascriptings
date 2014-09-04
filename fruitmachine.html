@@ -49,6 +49,7 @@ var dragZoom = {
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
         el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
         el.xyP = getPgOffset(el.P);
+        el.hv = el.wh[0]>el.wh[1]? 0 : 1;
     },
     init: function(el, opt){
         if( typeof el==='string' ){ el = document.querySelector(el); } if( !el ){ return; }
@@ -64,8 +65,7 @@ var dragZoom = {
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
         el.v = [0,0];
         if( !el.move ){
-            var hv = el.whP[0]>el.whP[1]? 1 : 0,
-                snap = !!opt.snap? opt.snap : 0,
+            var snap = !!opt.snap? opt.snap : 0,
                 zoomer = el.nodeName.toLowerCase()==='svg'?el.className.baseVal:el.className, zoomer = String(zoomer).indexOf('zoomable')>-1;
             el.zoomer = zoomer||null;
             el.edge = (opt.edge!=null)? opt.edge : 1;
@@ -116,10 +116,10 @@ var dragZoom = {
                 if( r || Math.abs(this.v[0])+Math.abs(this.v[1])<(snap?10:0.5) ){
                     dragZoom.v0=this.v=[0,0]; window.clearTimeout(this.t);
                     if( snap ){
-                        if( Math.abs(this.xy[hv])%this.whP[hv]>this.whP[hv]/2 ){
-                            var d=-1, dest=this.xy[hv]-this.whP[hv]+(-1*this.xy[hv])%this.whP[hv];
+                        if( Math.abs(this.xy[this.hv])%this.whP[this.hv]>this.whP[this.hv]/2 ){
+                            var d=-1, dest=this.xy[this.hv]-this.whP[this.hv]+(-1*this.xy[this.hv])%this.whP[this.hv];
                         }else{
-                            var d=1, dest=this.xy[hv]+(-1*this.xy[hv])%this.whP[hv];
+                            var d=1, dest=this.xy[this.hv]+(-1*this.xy[this.hv])%this.whP[this.hv];
                         }
                         this.snap(d, dest);
                     } 
@@ -128,14 +128,14 @@ var dragZoom = {
                 this.t = window.setTimeout(function(){ el.drop(); }, 23);
             };
             el.snap = function(d, dest){
-                var p = this.xy[hv]+Math.ceil(d*((d*dest)-(d*this.xy[hv]))/4);
+                var p = this.xy[this.hv]+Math.ceil(d*((d*dest)-(d*this.xy[this.hv]))/4);
                 if( (d<0 && p<=dest+5) || (d>0 && p>=dest-5) ){
                     window.clearTimeout(this.t);
                     p = dest;
-                    this.move((hv?[this.xy[0],p]:[p,this.xy[1]]));
+                    this.move((this.hv?[this.xy[0],p]:[p,this.xy[1]]));
                     return;
                 }
-                this.move((hv?[this.xy[0],p]:[p,this.xy[1]]));
+                this.move((this.hv?[this.xy[0],p]:[p,this.xy[1]]));
                 this.t = window.setTimeout(function(){ el.snap(d, dest); }, 23);
             };
             if( el.zoomer ){
