@@ -133,6 +133,7 @@ var dragZoom = {
                     window.clearTimeout(this.t);
                     p = dest;
                     this.move((this.hv?[this.xy[0],p]:[p,this.xy[1]]));
+                    if( typeof(opt.onsnap)==='function' ){ opt.onsnap.call(this); }
                     return;
                 }
                 this.move((this.hv?[this.xy[0],p]:[p,this.xy[1]]));
@@ -250,7 +251,7 @@ var dragZoom = {
 
 var draggables = document.getElementsByClassName('draggable');
 for( var i=0; i<draggables.length; ++i ){ 
-    dragZoom.init(draggables[i], {'loop':1, 'snap':1}); 
+    dragZoom.init(draggables[i], {loop:1, snap:1, onsnap:function(){console.log('snap')}}); 
 }
 var resize = function(){
     var c = document.getElementById('container');
