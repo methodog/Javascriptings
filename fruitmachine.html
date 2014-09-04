@@ -109,7 +109,7 @@ var dragZoom = {
                 this.xy = [x,y];
                 return r || null;
             };
-            el.drop = !!opt.drop? opt.drop : function(){
+            el.drop = typeof(opt.drop)==='function'? opt.drop : function(){
                 var f = Math.abs(this.v[0])+Math.abs(this.v[1])>50?0.98:0.88, r;
                 this.v = [this.v[0]*f, this.v[1]*f];
                 var r = this.move([this.xy[0]+this.v[0], this.xy[1]+this.v[1]]);
