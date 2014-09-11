@@ -248,13 +248,9 @@ var dragZoom = {
 (function(){ 
     var freels = document.getElementsByClassName('freel');
     function bingo(freel){
-        var i, l=freels.length, x=0, y=0, w=freel.wh[0]/3, h=freel.wh[1]/3;
-        if( freel.hv ){
-            for( i=0; i<l; ++i ){ y+=freels[i].xy[1].mod(h); }
-            if( Math.round(y/l)!==Math.round(freel.xy[1].mod(h)) ){ return; }
-        }else{
-            for( i=0; i<l; ++i ){ x+=freels[i].xy[0].mod(w); }
-            if( Math.round(x/l)!==Math.round(freel.xy[0].mod(w)) ){ return; }
+        var i, l=freels.length, hv=freel.hv, d=freel.wh[hv]/3;
+        for( i=0; i<l; ++i ){
+            if( Math.round(freels[i].xy[hv].mod(d))!==Math.round(freel.xy[hv].mod(d)) ){ return; }
         }
         alert('bingo');
     }
