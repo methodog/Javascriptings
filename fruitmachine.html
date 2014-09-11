@@ -12,9 +12,8 @@
         img { height:auto; max-width:100%; vertical-align:top; }
         .clip { height:100%; width:100%; overflow:hidden; position:relative; }
         .dragpad, .draggable { cursor:pointer; width:100%; height:100%; position:absolute; left:0; top:0; }
-        .reel { float:left; }
-        .reel .draggable { height:auto; }
-        .reel.clip { width:33.33%; }
+        .reel { float:left; width:33.33%; }
+        .freel { height:auto; }
         #container { max-height:400px; max-width:1200px; }
     </style>
 </head>
@@ -23,13 +22,13 @@
 <div id="container">
     <div id="fruity">
         <div class="reel clip">
-            <div class="draggable"><img src="img/fruitmachine/sophie/laugh.jpg" alt=""><img src="img/fruitmachine/sophie/munch.jpg" alt=""><img src="img/fruitmachine/sophie/scream.jpg" alt=""></div>
+            <div class="draggable freel"><img src="img/fruitmachine/sophie/laugh.jpg" alt=""><img src="img/fruitmachine/sophie/munch.jpg" alt=""><img src="img/fruitmachine/sophie/scream.jpg" alt=""></div>
         </div>
         <div class="reel clip">
-            <div class="draggable"><img src="img/fruitmachine/sophie/laugh.jpg" alt=""><img src="img/fruitmachine/sophie/munch.jpg" alt=""><img src="img/fruitmachine/sophie/scream.jpg" alt=""></div>
+            <div class="draggable freel"><img src="img/fruitmachine/sophie/laugh.jpg" alt=""><img src="img/fruitmachine/sophie/munch.jpg" alt=""><img src="img/fruitmachine/sophie/scream.jpg" alt=""></div>
         </div>
         <div class="reel clip">
-            <div class="draggable"><img src="img/fruitmachine/sophie/laugh.jpg" alt=""><img src="img/fruitmachine/sophie/munch.jpg" alt=""><img src="img/fruitmachine/sophie/scream.jpg" alt=""></div>
+            <div class="draggable freel"><img src="img/fruitmachine/sophie/laugh.jpg" alt=""><img src="img/fruitmachine/sophie/munch.jpg" alt=""><img src="img/fruitmachine/sophie/scream.jpg" alt=""></div>
         </div>
     </div>
 </div>
@@ -246,17 +245,17 @@ var dragZoom = {
     }
 };
 (function(){ 
-    var draggables = document.getElementsByClassName('draggable');
-    for( var i=0; i<draggables.length; ++i ){ 
-        dragZoom.init(draggables[i], {loop:1, snap:1, onsnap:function(){console.log('snap')}}); 
+    var freels = document.getElementsByClassName('freel');
+    for( var i=0; i<freels.length; ++i ){
+        dragZoom.init(freels[i], {loop:1, snap:1, onsnap:function(){console.log('snap', this.xy)}}); 
     }
-    var resize = function(){
+    function resize(){
         var c = document.getElementById('container');
         c.style.height = (400/1200)*getComputed(c,'width')+'px';
-        for( var i=0; i<draggables.length; ++i ){
-            dragZoom.size(draggables[i]);
+        for( var i=0; i<freels.length; ++i ){
+            dragZoom.size(freels[i]);
         }
-    };
+    }
     addHandler(window,'load',resize); addHandler(window,'resize',resize);
     addHandler(document.getElementById('fruity'),'click',function(){
         var reels = this.children, v=(1+Math.random())*100, i, d;
