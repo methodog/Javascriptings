@@ -34,6 +34,7 @@
 </div>
 
 <script type="text/javascript">
+Number.prototype.mod = function(n) { return ((this%n)+n)%n; }
 function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
 function rmHandler(el,evt,fn){ if( el.removeEventListener ){el.removeEventListener(evt,fn,false); }else if( el.detachEvent ){ el.detachEvent('on'+evt,fn); } }
 function getComputed(el,style){ if(el.currentStyle){ var y=el.currentStyle[style]; }else if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); } return parseFloat(y); }
@@ -246,8 +247,19 @@ var dragZoom = {
 };
 (function(){ 
     var freels = document.getElementsByClassName('freel');
+    function bingo(freel){
+        var i, l=freels.length, x=0, y=0, w=freel.wh[0]/3, h=freel.wh[1]/3;
+        if( freel.hv ){
+            for( i=0; i<l; ++i ){ y+=freels[i].xy[1].mod(h); }
+            if( Math.round(y/l)!==Math.round(freel.xy[1].mod(h)) ){ return; }
+        }else{
+            for( i=0; i<l; ++i ){ x+=freels[i].xy[0].mod(w); }
+            if( Math.round(x/l)!==Math.round(freel.xy[0].mod(w)) ){ return; }
+        }
+        alert('bingo');
+    }
     for( var i=0; i<freels.length; ++i ){
-        dragZoom.init(freels[i], {loop:1, snap:1, onsnap:function(){console.log('snap', this.xy)}}); 
+        dragZoom.init(freels[i], {loop:1, snap:1, onsnap:function(){bingo(this)}}); 
     }
     function resize(){
         var c = document.getElementById('container');
