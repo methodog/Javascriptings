@@ -22,13 +22,13 @@
 <div id="container">
     <div id="fruity">
         <div class="reel clip">
-            <div class="draggable freel"><img src="img/fruitmachine/sophie/laugh.jpg" alt=""><img src="img/fruitmachine/sophie/munch.jpg" alt=""><img src="img/fruitmachine/sophie/scream.jpg" alt=""></div>
+            <div class="draggable freel"><img src="img/fruitmachine/sophie/laugh.jpg" alt=""><img src="img/fruitmachine/sophie/munch.jpg" alt=""><img src="img/fruitmachine/sophie/cry.jpg" alt=""></div>
         </div>
         <div class="reel clip">
-            <div class="draggable freel"><img src="img/fruitmachine/sophie/laugh.jpg" alt=""><img src="img/fruitmachine/sophie/munch.jpg" alt=""><img src="img/fruitmachine/sophie/scream.jpg" alt=""></div>
+            <div class="draggable freel"><img src="img/fruitmachine/sophie/laugh.jpg" alt=""><img src="img/fruitmachine/sophie/munch.jpg" alt=""><img src="img/fruitmachine/sophie/cry.jpg" alt=""></div>
         </div>
         <div class="reel clip">
-            <div class="draggable freel"><img src="img/fruitmachine/sophie/laugh.jpg" alt=""><img src="img/fruitmachine/sophie/munch.jpg" alt=""><img src="img/fruitmachine/sophie/scream.jpg" alt=""></div>
+            <div class="draggable freel"><img src="img/fruitmachine/sophie/laugh.jpg" alt=""><img src="img/fruitmachine/sophie/munch.jpg" alt=""><img src="img/fruitmachine/sophie/cry.jpg" alt=""></div>
         </div>
     </div>
 </div>
@@ -254,7 +254,7 @@ addHandler(window,'load',function(){
         for( i=0; i<l; ++i ){
             if( Math.round(freels[i].xy[hv].mod(d))!==Math.round(freel.xy[hv].mod(d)) ){ return; }
         }
-        alert('bingo');
+        console.log(freel.wh[hv]/(3*l), Math.round(freel.xy[hv].mod(d)));
     }
     for( var i=0; i<freels.length; ++i ){
         dragZoom.init(freels[i], {loop:1, snap:1, onsnap:function(){bingo(this)}}); 

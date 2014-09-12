@@ -1,0 +1,2 @@
+ffmpeg -i Giggles.mov -ss 00:00:24.75 -t 00:00:05 -vn -acodec libvorbis laugh.ogg
+ffmpeg -i Giggles.mov -ss 00:00:24.75 -t 00:00:05 -vn -acodec mp3 laugh.mp3
