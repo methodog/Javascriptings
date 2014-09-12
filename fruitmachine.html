@@ -245,8 +245,10 @@ var dragZoom = {
         }
     }
 };
-(function(){ 
-    var freels = document.getElementsByClassName('freel');
+
+addHandler(window,'load',function(){
+    var fruity = document.getElementById('fruity'),
+        freels = fruity.getElementsByClassName('freel');
     function bingo(freel){
         var i, l=freels.length, hv=freel.hv, d=freel.wh[hv]/3;
         for( i=0; i<l; ++i ){
@@ -264,17 +266,19 @@ var dragZoom = {
             dragZoom.size(freels[i]);
         }
     }
-    addHandler(window,'load',resize); addHandler(window,'resize',resize);
-    addHandler(document.getElementById('fruity'),'click',function(){
-        var reels = this.children, v=(1+Math.random())*100, i, d;
+    resize(); addHandler(window,'resize',resize);
+    function fire(){
+        var reels = fruity.children, v=(1+Math.random())*58, i, d;
         for( i=0; i<reels.length; ++i ){
             d = reels[i].children[0];
-            d.v = [0,v+(i*v)];
+            d.v = [0,v+(i*v/2)];
             d.drop();
         }
         return false;
-    });
-})();
+    }
+    addHandler(fruity,'click',fire);
+    fire();
+});
 </script>
 
 </body>
