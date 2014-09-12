@@ -15,6 +15,7 @@
         .reel { float:left; width:33.33%; }
         .freel { height:auto; }
         #container { max-height:400px; max-width:1200px; }
+        #player { display:none; }
     </style>
 </head>
 <body>
@@ -32,6 +33,7 @@
         </div>
     </div>
 </div>
+<audio id="player" preload="metadata"></audio>
 
 <script type="text/javascript">
 Number.prototype.mod = function(n) { return ((this%n)+n)%n; }
@@ -248,13 +250,18 @@ var dragZoom = {
 
 addHandler(window,'load',function(){
     var fruity = document.getElementById('fruity'),
-        freels = fruity.getElementsByClassName('freel');
+        freels = fruity.getElementsByClassName('freel'),
+        player = document.getElementById('player');
     function bingo(freel){
-        var i, l=freels.length, hv=freel.hv, d=freel.wh[hv]/3;
+        var i, l=freels.length, c=freel.children.length/3, hv=freel.hv, d=freel.wh[hv]/3, s;
         for( i=0; i<l; ++i ){
             if( Math.round(freels[i].xy[hv].mod(d))!==Math.round(freel.xy[hv].mod(d)) ){ return; }
         }
-        console.log(freel.wh[hv]/(3*l), Math.round(freel.xy[hv].mod(d)));
+        s = freel.children[Math.round((((-freel.xy[hv])%d)/d)*c)].src;
+        s = s.slice(0,-3);
+        //$(media).append('<source src="'+file+'.mp3" type="video/mpeg"></source><source src="'+file+'.ogg" type="video/ogg"></source>');
+        player.src = s+'mp3';
+        player.play();
     }
     for( var i=0; i<freels.length; ++i ){
         dragZoom.init(freels[i], {loop:1, snap:1, onsnap:function(){bingo(this)}}); 
