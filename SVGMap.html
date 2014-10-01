@@ -44,7 +44,7 @@
 <script type="text/javascript">
 function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
 function rmHandler(el,evt,fn){ if( el.removeEventListener ){el.removeEventListener(evt,fn,false); }else if( el.detachEvent ){ el.detachEvent('on'+evt,fn); } }
-function getComputed(el,style){ if(el.currentStyle){ var y=el.currentStyle[style]; }else if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); } return parseFloat(y); }
+function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ if( style=='width' ){ y=el.getBoundingClientRect().right-el.getBoundingClientRect().left }else if( style=='height' ){ y=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else{ var y=el.currentStyle[style] } } return parseFloat(y); }
 function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 var dragZoom = {
@@ -125,7 +125,7 @@ var dragZoom = {
     touch: function(e){
         e = e || window.event;
         if( e.type==='touchstart' && e.touches && e.touches.length>2 ){ return; }
-        dragZoom.el = this.parentNode.getElementsByClassName('draggable')[0];
+        dragZoom.el = this.parentNode.querySelector('.draggable');
         window.clearTimeout(dragZoom.el.t);
         dragZoom.v0 = dragZoom.el.v;
         dragZoom.el.v = [0,0];
@@ -194,7 +194,7 @@ var dragZoom = {
     }
 };
 
-var draggables = document.getElementsByClassName('draggable');
+var draggables = document.querySelectorAll('.draggable');
 for( var i=0; i<draggables.length; ++i ){ 
     dragZoom.init(draggables[i]); 
 }
@@ -220,7 +220,7 @@ addHandler(window,'resize',function(){
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-var lis = document.getElementsByTagName('li');
+var lis = document.querySelectorAll('li');
 for( var i=0; i<lis.length; ++i ){ 
     addHandler(lis[i],'click',function(){ this.style.opacity = getComputed(this,'opacity')===1? 0.3:1; });
 }

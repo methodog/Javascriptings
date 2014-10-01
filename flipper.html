@@ -133,7 +133,7 @@ var dragZoom = {
     touch: function(e){
         e = e || window.event;
         if( e.type==='touchstart' && e.touches && e.touches.length>2 ){ return; }
-        dragZoom.el = this.parentNode.getElementsByClassName('draggable')[0];
+        dragZoom.el = this.parentNode.querySelector('.draggable');
         window.clearTimeout(dragZoom.el.t);
         dragZoom.v0 = dragZoom.el.v;
         dragZoom.el.v = [0,0];
@@ -242,8 +242,8 @@ var dragZoom = {
         return false;
     }
 };
-var draggables = document.getElementsByClassName('draggable'),
-    flipperIms = document.getElementById('flipper').getElementsByTagName('img');
+var draggables = document.querySelectorAll('.draggable'),
+    flipperIms = document.getElementById('flipper').querySelectorAll('img');
 for( var i=0; i<draggables.length; ++i ){ 
     dragZoom.init(draggables[i]); 
 }

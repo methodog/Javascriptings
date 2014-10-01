@@ -39,7 +39,7 @@
 Number.prototype.mod = function(n) { return ((this%n)+n)%n; }
 function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
 function rmHandler(el,evt,fn){ if( el.removeEventListener ){el.removeEventListener(evt,fn,false); }else if( el.detachEvent ){ el.detachEvent('on'+evt,fn); } }
-function getComputed(el,style){ if(el.currentStyle){ var y=el.currentStyle[style]; }else if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); } return parseFloat(y); }
+function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ if( style=='width' ){ y=el.getBoundingClientRect().right-el.getBoundingClientRect().left }else if( style=='height' ){ y=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else{ var y=el.currentStyle[style] } } return parseFloat(y); }
 function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 var dragZoom = {
@@ -48,7 +48,7 @@ var dragZoom = {
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
         el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
         el.xyP = getPgOffset(el.P);
-        el.hv = el.wh[0]>el.wh[1]? 0 : 1;
+        el.hv = el.wh[0]>el.wh[1]? 0 : 1;console.log(el.wh);
     },
     init: function(el, opt){
         if( typeof el==='string' ){ el = document.querySelector(el); } if( !el ){ return; }
@@ -169,7 +169,7 @@ var dragZoom = {
     touch: function(e){
         e = e || window.event;
         if( e.type==='touchstart' && e.touches && e.touches.length>2 ){ return; }
-        dragZoom.el = this.parentNode.getElementsByClassName('draggable')[0];
+        dragZoom.el = this.parentNode.querySelector('.draggable');
         window.clearTimeout(dragZoom.el.t);
         if( !dragZoom.el.edge ){ dragZoom.el.xy = [getComputed(dragZoom.el,'left'), getComputed(dragZoom.el,'top')]; }
         dragZoom.v0 = dragZoom.el.v;
@@ -250,7 +250,7 @@ var dragZoom = {
 
 addHandler(window,'load',function(){
     var fruity = document.getElementById('fruity'),
-        freels = fruity.getElementsByClassName('freel'),
+        freels = fruity.querySelectorAll('.freel'),
         player = document.getElementById('player');
     function bingo(freel){
         var i, l=freels.length, c=freel.children.length/3, hv=freel.hv, d=freel.wh[hv]/3, s;
