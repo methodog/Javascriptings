@@ -98,10 +98,10 @@ function plot(e) {
         if(!e) var e = cnv.event;
         var plot = plots[plots.length-1];
         plot.push([e.clientX-cnvX-x0, -e.clientY-cnvY+y0, 0]);
-        plot.push([e.clientX-cnvX-x0, -e.clientY-cnvY+y0, 40]);
+        plot.push([e.clientX-cnvX-x0, -e.clientY-cnvY+y0, 2]);
         things = [];
         for(var i=0; i<plots.length; ++i ){
-            things.push(new Thing(plots[i], 0, 0, 200));
+            things.push(new Thing(plots[i], 0, 0, 500));
         }
         draw();
         if(e.preventDefault) e.preventDefault(); else e.returnValue = false; 

@@ -111,9 +111,9 @@ cnvPad = {
             plot = cnvPad.cnv.plots[cnvPad.cnv.plots.length-1],
             xyE = getXY(e);
         plot.push([xyE[0]-cnvPad.cnv.xy[0]-cnvPad.cnv.xy0[0], -xyE[1]-cnvPad.cnv.xy[1]+cnvPad.cnv.xy0[1], 0]);
-        plot.push([xyE[0]-cnvPad.cnv.xy[0]-cnvPad.cnv.xy0[0], -xyE[1]-cnvPad.cnv.xy[1]+cnvPad.cnv.xy0[1], 40]);
+        plot.push([xyE[0]-cnvPad.cnv.xy[0]-cnvPad.cnv.xy0[0], -xyE[1]-cnvPad.cnv.xy[1]+cnvPad.cnv.xy0[1], 2]);
         cnvPad.cnv.things = [];
-        for( ; i<cnvPad.cnv.plots.length; ++i ){ cnvPad.cnv.things.push(new Thing(cnvPad.cnv.plots[i], 0, 0, 200)); }
+        for( ; i<cnvPad.cnv.plots.length; ++i ){ cnvPad.cnv.things.push(new Thing(cnvPad.cnv.plots[i], 0, 0, 500)); }
         cnvPad.cnv.draw();
 		return false;
 	},
