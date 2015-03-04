@@ -55,15 +55,17 @@ var flicker = {
             el.onmousedown = flicker.touch;
             el.ontouchstart = flicker.touch;
             el.move = function(xy){
-                var i, vis, op;
+                var i, vis, op, e = 0;
                 this.val = this.min+(xy[0]/this.wh[0]*(this.rng));
                 if( this.loop ){ this.val = this.val.mod(this.rng); }
-                vis = Math.ceil(this.val*this.arcs);
-                for( i=1; i<=this.arcs; ++i ){
+                else if( this.val<this.min ){ this.val = this.min; e = 1; }
+                else if( this.val>this.max ){ this.val = this.max; e = 1; }
+                vis = Math.ceil(this.val*this.arcs);console.log(this.val);
+                for( i=(this.loop||vis<=1?1:vis-1); i<=(this.loop||vis>=this.arcs?this.arcs:vis+1); ++i ){
                     op = i>vis? 0 : ( i===vis? (this.val%(1/this.arcs))*this.arcs : 1 );
                     this.childNodes[i].style.opacity = op;
                 }
-                this.xy = [xy[0],xy[1]];
+                if( !e ){ this.xy = [xy[0],xy[1]]; }
             };
             el.drop = function(){
                 var f = 0.98;
@@ -84,8 +86,8 @@ var flicker = {
         flicker.el.v = [0,0];
         flicker.xy0 = flicker.el.xy;
         flicker.xyT = getXY(e);
-        flicker.el.min = flicker.el.val-(flicker.xyT[0]/flicker.el.wh[0]*(flicker.el.max-flicker.el.min));
-        flicker.el.max = flicker.el.min+flicker.el.rng;
+        //~ flicker.el.min = flicker.el.val-(flicker.xyT[0]/flicker.el.wh[0]*(flicker.el.max-flicker.el.min));
+        //~ flicker.el.max = flicker.el.min+flicker.el.rng;
         if( e.type==='touchstart' ){
             this.ontouchmove = flicker.drag;
             this.onmousedown = null;
@@ -124,7 +126,7 @@ var flicker = {
 
 var i, els = document.querySelectorAll('.flicker'), el;
 for( i=0; i<els.length; ++i ){
-    flicker.init(els[i], {'loop':1});
+    flicker.init(els[i], {'loop':0});
 }
 addHandler(window,'resize',function(){
     for( i=0; i<els.length; ++i ){
