@@ -9,15 +9,20 @@
     <style type="text/css">
         html, body { height:100%; margin:0; width:100%; overflow:hidden; }
         body { background:#888; font:40px/1 helvetica,arial,freesans,sans-serif; font-weight:600; }
-        #bird { background:transparent url(img/sprites/bird_transp_black_stat.gif) 0 0 no-repeat; cursor:pointer; width:148px; height:156px; position:relative; left:0; top:0; }
-        .thing>img { display:none; }
-        .thing.dragged { background:0!important; }
-        .thing.dragged>img { display:block; }
+        .bird { background:transparent url(img/sprites/bird_transp_black_stat.gif) 0 0 no-repeat; cursor:pointer; width:148px; height:156px; position:relative; }
+        .bird>img { display:none; }
+        .bird.dragged { background:0!important; }
+        .bird.dragged>img { display:block; }
     </style>	
 </head>
 
 <body>
-    <div id="bird" class="thing"><img src="img/sprites/bird_transp_black.gif" /></div>
+    <div class="bird"><img src="img/sprites/bird_transp_black.gif" /></div>
+    <div class="bird"><img src="img/sprites/bird_transp_black.gif" /></div>
+    <div class="bird"><img src="img/sprites/bird_transp_black.gif" /></div>
+    <div class="bird"><img src="img/sprites/bird_transp_black.gif" /></div>
+    <div class="bird"><img src="img/sprites/bird_transp_black.gif" /></div>
+    <div class="bird"><img src="img/sprites/bird_transp_black.gif" /></div>
 
 <script type="text/javascript">
 function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
@@ -112,9 +117,9 @@ dragDrop = {
 	}
 };
 
-var i, els = document.querySelectorAll('.thing');
+var i, els = document.querySelectorAll('.bird');
 for( i=0; i<els.length; ++i ){
-    dragDrop.init(els[i],0);
+    dragDrop.init(els[i],1);
 }
 
 addHandler(window,'resize',function(){
