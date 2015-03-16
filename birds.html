@@ -60,7 +60,7 @@ dragDrop = {
                 if( r ){
                     if( r[0] ){ this.v = [-this.v[0]*f, this.v[1]*f]; }
                     if( r[1] ){ this.v = [this.v[0]*f, -this.v[1]*f]; }
-                    if( r[1]>0 && Math.abs(this.v[0])+Math.abs(this.v[1]) < 0.5 ){ 
+                    if( r[1]>0  ){ 
                         clearTimeout(this.t); 
                         this.className = this.className.replace(' dragged','');
                         return; 
