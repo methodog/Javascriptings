@@ -74,6 +74,14 @@ dragDrop = {
                 this.t = setTimeout(function(){ el.drop(); }, 23);
                 return false;
             };
+            el.jump = function(x,y){
+                clearTimeout(this.t);
+                this.v = [x,y];
+                this.className = this.className.replace(' dragged','');
+                this.className += ' dragged';
+                this.drop();
+                return false;
+            };
         }
 	},
 	touch: function(e){
@@ -120,11 +128,13 @@ dragDrop = {
 var i, els = document.querySelectorAll('.bird');
 for( i=0; i<els.length; ++i ){
     dragDrop.init(els[i],1);
+    els[i].jump(Math.random()*50, -20-Math.random()*20);
 }
 
 addHandler(window,'resize',function(){
     for( i=0; i<els.length; ++i ){
         dragDrop.size(els[i]);
+        els[i].jump((Math.random()<0.5?-1:1)*Math.random()*50, -20-Math.random()*20);
     }
 });
 
