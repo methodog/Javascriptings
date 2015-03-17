@@ -137,6 +137,11 @@ addHandler(window,'resize',function(){
         els[i].jump((Math.random()<0.5?-1:1)*Math.random()*50, -20-Math.random()*20);
     }
 });
+addHandler(window,'click',function(){
+    for( i=0; i<els.length; ++i ){
+        els[i].jump((Math.random()<0.5?-1:1)*Math.random()*50, -20-Math.random()*20);
+    }
+});
 
 </script>
 </body>
