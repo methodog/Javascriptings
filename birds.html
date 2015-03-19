@@ -9,22 +9,22 @@
     <style type="text/css">
         html, body { height:100%; margin:0; width:100%; overflow:hidden; }
         body { background:#888; font:40px/1 helvetica,arial,freesans,sans-serif; font-weight:600; }
-        .bird { background:transparent url(img/birds/bird_transp_black_stat.gif) 0 0 no-repeat; cursor:pointer; width:148px; height:156px; position:relative; left:0; top:0; }
-        .bird>img { display:none; }
-        .bird.dragged { background:0!important; }
-        .bird.dragged>img { display:block; }
-        .tree { background:transparent url(img/birds/tree.2.gif) 0 0 no-repeat; width:687px; height:627px; position:absolute; left:10%; bottom:10%; }
+        .bird { background:transparent url(img/birds/bird-st.gif) 0 0 no-repeat; cursor:pointer; width:148px; height:156px; position:relative; left:0; top:0; }
+        .bird.right { background-image:url(img/birds/bird-r-st.gif); }
+        .bird.dragged { background-image:url(img/birds/bird.gif); }
+        .bird.dragged.right { background-image:url(img/birds/bird-r.gif); }
+        .tree { background:transparent url(img/birds/tree.gif) 0 0 no-repeat; width:687px; height:627px; position:absolute; left:5%; bottom:10%; }
     </style>	
 </head>
 
 <body>
     <div class="tree"></div>
-    <div class="bird"><img src="img/birds/bird_transp_black.gif" /></div>
-    <div class="bird"><img src="img/birds/bird_transp_black.gif" /></div>
-    <div class="bird"><img src="img/birds/bird_transp_black.gif" /></div>
-    <div class="bird"><img src="img/birds/bird_transp_black.gif" /></div>
-    <div class="bird"><img src="img/birds/bird_transp_black.gif" /></div>
-    <div class="bird"><img src="img/birds/bird_transp_black.gif" /></div>
+    <div class="bird right"></div>
+    <div class="bird right"></div>
+    <div class="bird right"></div>
+    <div class="bird right"></div>
+    <div class="bird right"></div>
+    <div class="bird right"></div>
 
 <script type="text/javascript">
 function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
@@ -65,7 +65,11 @@ dragDrop = {
                 this.v = [this.v[0], this.v[1]+g]; //v=u+at
                 var r = this.move([this.xy[0]+this.v[0], this.xy[1]+this.v[1]]);
                 if( r ){
-                    if( r[0] ){ this.v = [-this.v[0]*f, this.v[1]*f]; }
+                    if( r[0] ){ 
+                        this.v = [-this.v[0]*f, this.v[1]*f];
+                        if( this.v[0]>0 ){ this.className = this.className.replace(' left',' right') }
+                        else{ this.className = this.className.replace(' right',' left') }
+                    }
                     if( r[1] ){ this.v = [this.v[0]*f, -this.v[1]*f]; }
                     if( r[1]>0  ){ 
                         clearTimeout(this.t); 
@@ -79,8 +83,7 @@ dragDrop = {
             el.jump = function(x,y){
                 clearTimeout(this.t);
                 this.v = [x,y];
-                this.className = this.className.replace(' dragged','');
-                this.className += ' dragged';
+                this.className = this.className.replace(' dragged','') + ' dragged';
                 this.drop();
                 return false;
             };
@@ -132,7 +135,6 @@ for( i=0; i<els.length; ++i ){
     dragDrop.init(els[i],1);
     els[i].jump(Math.random()*50, -20-Math.random()*20);
 }
-
 addHandler(window,'resize',function(){
     for( i=0; i<els.length; ++i ){
         dragDrop.size(els[i]);
