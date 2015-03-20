@@ -12,6 +12,9 @@
         .flicker { display:table; margin:0 auto 3em; position:relative; left:0; top:0; }
         .flicker img { height:auto; max-width:100%; opacity:0; position:absolute; left:0; top:0; }
         .flicker img:nth-child(1) { opacity:1; position:relative; }
+        @media screen and (max-width:800px) {
+            .flicker { display:block; }
+        }
     </style>	
 </head>
 
