@@ -11,7 +11,7 @@
         body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
         .lenticule { display:table; margin:0 auto 3em; position:relative; left:0; top:0; }
         .lenticule img { height:auto; max-width:100%; opacity:0; position:absolute; left:0; top:0; }
-        .lenticule img:nth-child(1) { opacity:1; position:relative; }
+        .lenticule img:nth-child(1) { opacity:1!important; position:relative; }
         @media screen and (max-width:800px) {
             .lenticule { display:block; }
         }
@@ -19,7 +19,7 @@
 </head>
 
 <body>
-<p class="lenticule" id="liam"></p>
+<p class="lenticule"></p>
 <script type="text/javascript">//(function() {var l=document.getElementById('liam'); for( i=65; i<171; ++i ){ l.innerHTML += '<img src="img/liam_st_paul/blend_'+ (i<100?'0':'')+i +'c.jpg" alt="">' }})();</script>
 <script type="text/javascript">//(function() {var l=document.getElementById('liam'); for( i=1; i<=171; ++i ){ l.innerHTML += '<img src="img/liam_st_paul/pure_'+ (i<10?'00':(i<100?'0':''))+i +'.jpg" alt="">' }})();</script>
 <!--<p class="lenticule"><img src="img/liam_st_paul/blend_078c.jpg" alt=""><img src="img/liam_st_paul/blend_081c.jpg" alt=""><img src="img/liam_st_paul/blend_095c.jpg" alt=""><img src="img/liam_st_paul/blend_105c.jpg" alt=""><img src="img/liam_st_paul/blend_109c.jpg" alt=""><img src="img/liam_st_paul/blend_110c.jpg" alt=""><img src="img/liam_st_paul/blend_111c.jpg" alt=""><img src="img/liam_st_paul/blend_116c.jpg" alt=""><img src="img/liam_st_paul/blend_117c.jpg" alt=""><img src="img/liam_st_paul/blend_118c.jpg" alt=""><img src="img/liam_st_paul/blend_123c.jpg" alt=""><img src="img/liam_st_paul/blend_125c.jpg" alt=""><img src="img/liam_st_paul/blend_126c.jpg" alt=""><img src="img/liam_st_paul/blend_127c.jpg" alt=""><img src="img/liam_st_paul/blend_135c.jpg" alt=""><img src="img/liam_st_paul/blend_152c.jpg" alt=""><img src="img/liam_st_paul/blend_162c.jpg" alt=""><img src="img/liam_st_paul/blend_168c.jpg" alt=""></p>-->
@@ -39,7 +39,7 @@ function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defa
 function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 var lenticule = {
-    el: null, xy0:null, xyT:null, 
+    el:null, xy0:null, xyT:null, id:0,
     size: function(el){
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
     },
@@ -54,7 +54,9 @@ var lenticule = {
         el.arcs = el.childNodes.length-1;
         el.rng = el.max-el.min;
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
-        if( !el.cloned ){ for( var i=el.childNodes.length-2; i>=0; --i){ el.appendChild(el.childNodes[i].cloneNode(true)); } el.cloned = 1; }
+        if( !el.cloned && el.loop ){ for( var i=el.childNodes.length-2; i>=0; --i){ el.appendChild(el.childNodes[i].cloneNode(true)); } el.cloned = 1; }
+        if( !el.styled ){ el.appendChild(document.createElement('style')); el.styled = 1; }
+        if( !el.id ){ el.id = el.className+(++lenticule.id); }
         if( typeof(opt.slide)==='function' ){ el.slide = opt.slide; }
         if( typeof(opt.stop)==='function' ){ el.stop = opt.stop; }
         if( !el.move ){
@@ -65,10 +67,7 @@ var lenticule = {
                 this.val = this.min+(xy[0]/this.wh[0]*(this.rng));
                 if( this.loop ){ this.val = this.val.mod(this.rng); }
                 vis = Math.ceil(this.val*this.arcs);
-                for( i=1; i<=this.arcs; ++i ){
-                    op = i>vis? 0 : ( i===vis? (this.val%(1/this.arcs))*this.arcs : 1 );
-                    this.childNodes[i].style.opacity = op;
-                }
+                this.querySelector('style').innerHTML = '#'+el.id+' :nth-child('+(vis-1)+'){opacity:1} #'+el.id+' :nth-child('+vis+'){opacity:'+(this.val%(1/this.arcs))*this.arcs+'}';
                 this.xy = [xy[0],xy[1]];
             };
         }
