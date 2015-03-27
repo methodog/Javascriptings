@@ -19,7 +19,8 @@
 </head>
 
 <body>
-<p class="level"><img src="img/level/circle_squares.jpg"><img src="img/level/circle_squares.jpg"><img src="img/level/circle_squares.jpg"></p>
+<!--<p class="level"><img src="img/level/circle_squares.jpg"><img src="img/level/circle_squares.jpg"><img src="img/level/circle_squares.jpg"></p>-->
+<p class="level"><img src="img/level/squared_dots.jpg"><img src="img/level/squared_dots.jpg"><img src="img/level/squared_dots.jpg"></p>
 
 <script type="text/javascript">
 Number.prototype.mod = function(n) { return ((this%n)+n)%n; }
@@ -120,7 +121,7 @@ if( !!window.DeviceOrientationEvent ){
         if( !level.el ){
             for( i=0; i<els.length; ++i ){
                 level.el = els[i];
-                xy = [(e.gamma/45)*level.el.wh[0], (e.gamma/45)*level.el.wh[1]];
+                xy = [(e.beta/45)*level.el.wh[0], (e.gamma/45)*level.el.wh[1]];
                 level.el.move(xy);
                 level.el = null;
             }
