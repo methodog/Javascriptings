@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>level</title>
+    <style type="text/css">
+        html, body { margin:0; }
+        body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
+        .level { display:table; margin:0 auto 3em; position:relative; left:0; top:0; }
+        .level img { height:auto; max-width:100%; opacity:0.5; position:absolute; left:0; top:0; }
+        .level img:nth-child(1) { opacity:1; position:relative; }
+        @media screen and (max-width:800px) {
+            .level { display:block; }
+        }
+    </style>	
+</head>
+
+<body>
+<p class="level"><img src="img/level/circle_squares.jpg"><img src="img/level/circle_squares.jpg"><img src="img/level/circle_squares.jpg"></p>
+
+<script type="text/javascript">
+Number.prototype.mod = function(n) { return ((this%n)+n)%n; }
+function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
+function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ if( style=='width' ){ y=el.getBoundingClientRect().right-el.getBoundingClientRect().left }else if( style=='height' ){ y=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else{ var y=el.currentStyle[style] } } return parseFloat(y); }
+function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
+function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
+var level = {
+    el:null, xy0:null, xyT:null, id:0,
+    size: function(el){
+        el.wh = [getComputed(el,'width'), getComputed(el,'height')];
+    },
+    init: function(el, opt){
+        if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
+        level.size(el);
+        if( !opt ) var opt = {};
+        //~ el.val = !!opt.val? opt.val : 0; 
+        //~ el.min = !!opt.min? opt.min : 0; 
+        //~ el.max = !!opt.max? opt.max : 1;
+        //~ el.loop = !!opt.loop? opt.loop : 0;
+        el.arcs = el.childNodes.length-1;
+        //~ el.rng = el.max-el.min;
+        el.xy = [getComputed(el,'left'), getComputed(el,'top')];
+        //~ if( !el.cloned && el.loop ){ for( var i=el.childNodes.length-2; i>=0; --i){ el.appendChild(el.childNodes[i].cloneNode(true)); } el.cloned = 1; }
+        //~ if( !el.styled ){ el.appendChild(document.createElement('style')); el.styled = 1; }
+        //~ if( !el.id ){ el.id = el.className+(++level.id); }
+        //~ if( typeof(opt.slide)==='function' ){ el.slide = opt.slide; }
+        //~ if( typeof(opt.stop)==='function' ){ el.stop = opt.stop; }
+        if( !el.move ){
+            el.onmousedown = level.touch;
+            el.ontouchstart = level.touch;
+            el.move = function(xy){
+                var i, vis;
+                //~ this.val = this.min+(xy[0]/this.wh[0]*(this.rng));
+                //~ if( this.loop ){ this.val = this.val.mod(this.rng); }
+                //~ vis = Math.ceil(this.val*this.arcs);
+                //~ this.querySelector('style').innerHTML = '#'+el.id+' :nth-child('+(vis-1)+'){opacity:1} #'+el.id+' :nth-child('+vis+'){opacity:'+(this.val%(1/this.arcs))*this.arcs+'}';
+                for( i=1; i<=this.arcs; ++i ){
+                    this.childNodes[i].style.left = (i/this.arcs)*xy[0]+'px';
+                    this.childNodes[i].style.top = (i/this.arcs)*xy[1]+'px';
+                }console.log(xy);
+                this.xy = [xy[0],xy[1]];
+            };
+        }
+    },
+    touch: function(e){
+        e = e || window.event;
+        if( e.type==='touchstart' && e.touches && e.touches.length>2 ){ return; }
+        level.el = this;
+        level.xy0 = level.el.xy;
+        level.xyT = getXY(e);
+        level.el.min = level.el.val-(level.xyT[0]/level.el.wh[0]*(level.el.max-level.el.min));
+        level.el.max = level.el.min+level.el.rng;
+        if( e.type==='touchstart' ){
+            this.ontouchmove = level.drag;
+            this.onmousedown = null;
+            this.ontouchend = function(){
+                this.ontouchmove = null;
+                this.ontouchend = null;
+                level.release();
+            };
+        }else{
+            document.onmousemove = level.drag;
+            document.onmouseup = function(){
+                document.onmousemove = null;
+                document.onmouseup = null;
+                level.release();
+            };
+        }
+        return false;
+    },
+    drag: function(e){
+        e = e || window.event;
+        if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
+        var xyE = getXY(e),
+            xy = [level.xy0[0]+xyE[0]-level.xyT[0], level.xy0[1]+xyE[1]-level.xyT[1]];
+        level.el.move(xy);
+        if( !!level.el.slide ){ level.el.slide.call(this); }
+        return false;
+    },
+    release: function(){
+        if( !!level.el.stop ){ level.el.stop.call(this); }
+        level.el = null;
+    }
+};
+
+var i, els = document.querySelectorAll('.level'), el;
+for( i=0; i<els.length; ++i ){
+    level.init(els[i], {'loop':0});
+}
+addHandler(window,'resize',function(){
+    for( i=0; i<els.length; ++i ){
+        level.size(els[i]);
+    }
+});
+if( !!window.DeviceOrientationEvent ){
+    addHandler(window,'deviceorientation',function(e){
+        if( !level.el ){
+            for( i=0; i<els.length; ++i ){
+                level.el = els[i];
+                xy = [(e.gamma/45)*level.el.wh[0], (e.gamma/45)*level.el.wh[1]];
+                level.el.move(xy);
+                level.el = null;
+            }
+        }
+    });
+}
+</script>
+</body>
+</html>
