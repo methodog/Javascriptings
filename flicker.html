@@ -35,13 +35,15 @@ function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defa
 function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 var flicker = {
-    el: null, xy0:null, v0:null, xyT:null, 
+    el:null, xy0:null, v0:null, xyT:null, id:0, 
     size: function(el){
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
     },
     init: function(el, opt){
         if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
-        if( !el.cloned ){ el.appendChild(el.childNodes[0].cloneNode(true)); el.cloned = 1; }
+        if( !el.cloned && el.loop ){ el.appendChild(el.childNodes[0].cloneNode(true)); el.cloned = 1; }
+        if( !el.styled ){ el.appendChild(document.createElement('style')); el.styled = 1; }
+        if( !el.id ){ el.id = el.className+(++lenticule.id); }
         flicker.size(el);
         if( !opt ) var opt = {};
         el.val = !!opt.val? opt.val : 0; 
@@ -64,10 +66,7 @@ var flicker = {
                 else if( this.val<this.min ){ this.val = this.min; e = 1; }
                 else if( this.val>this.max ){ this.val = this.max; e = 1; }
                 vis = Math.ceil(this.val*this.arcs);
-                for( i=(this.loop||vis<=1?1:vis-1); i<=(this.loop||vis>=this.arcs?this.arcs:vis+1); ++i ){
-                    op = i>vis? 0 : ( i===vis? (this.val%(1/this.arcs))*this.arcs : 1 );
-                    this.childNodes[i].style.opacity = op;
-                }
+                this.querySelector('style').innerHTML = '#'+el.id+' :nth-child('+(vis-1)+'){opacity:1} #'+el.id+' :nth-child('+vis+'){opacity:'+(this.val%(1/this.arcs))*this.arcs+'}';
                 if( !e ){ this.xy = [xy[0],xy[1]]; }
             };
             el.drop = function(){
@@ -129,7 +128,7 @@ var flicker = {
 
 var i, els = document.querySelectorAll('.flicker'), el;
 for( i=0; i<els.length; ++i ){
-    flicker.init(els[i], {'loop':0});
+    flicker.init(els[i], {'loop':1});
 }
 addHandler(window,'resize',function(){
     for( i=0; i<els.length; ++i ){
