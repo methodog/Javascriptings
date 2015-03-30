@@ -8,10 +8,10 @@
     <title>level</title>
     <style type="text/css">
         html, body { margin:0; }
-        body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
+        body { background:#fff; font:14px/1 helvetica,arial,freesans,sans-serif; }
         .level { display:table; margin:0 auto 3em; position:relative; left:0; top:0; }
-        .level img { height:auto; max-width:100%; opacity:0.5; position:absolute; left:0; top:0; }
-        .level img:nth-child(1) { opacity:1; position:relative; }
+        .level img { height:auto; max-width:100%; position:absolute; left:0; top:0; }
+        .level img:nth-child(1) { position:relative; }
         @media screen and (max-width:800px) {
             .level { display:block; }
         }
@@ -19,8 +19,10 @@
 </head>
 
 <body>
-<!--<p class="level"><img src="img/level/circle_squares.jpg"><img src="img/level/circle_squares.jpg"><img src="img/level/circle_squares.jpg"></p>-->
-<p class="level"><img src="img/level/squared_dots.jpg"><img src="img/level/squared_dots.jpg"><img src="img/level/squared_dots.jpg"></p>
+<p class="level"><img src="img/level/circle_squares.png"><img src="img/level/circle_squares.png"><img src="img/level/circle_squares.png"></p>
+<!--
+<p class="level"><img src="img/level/squared_dots.png"><img src="img/level/squared_dots.png"><img src="img/level/squared_dots.png"></p>
+-->
 
 <script type="text/javascript">
 Number.prototype.mod = function(n) { return ((this%n)+n)%n; }
@@ -37,31 +39,17 @@ var level = {
         if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
         level.size(el);
         if( !opt ) var opt = {};
-        //~ el.val = !!opt.val? opt.val : 0; 
-        //~ el.min = !!opt.min? opt.min : 0; 
-        //~ el.max = !!opt.max? opt.max : 1;
-        //~ el.loop = !!opt.loop? opt.loop : 0;
         el.arcs = el.childNodes.length-1;
-        //~ el.rng = el.max-el.min;
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
-        //~ if( !el.cloned && el.loop ){ for( var i=el.childNodes.length-2; i>=0; --i){ el.appendChild(el.childNodes[i].cloneNode(true)); } el.cloned = 1; }
-        //~ if( !el.styled ){ el.appendChild(document.createElement('style')); el.styled = 1; }
-        //~ if( !el.id ){ el.id = el.className+(++level.id); }
-        //~ if( typeof(opt.slide)==='function' ){ el.slide = opt.slide; }
-        //~ if( typeof(opt.stop)==='function' ){ el.stop = opt.stop; }
         if( !el.move ){
             el.onmousedown = level.touch;
             el.ontouchstart = level.touch;
             el.move = function(xy){
                 var i, vis;
-                //~ this.val = this.min+(xy[0]/this.wh[0]*(this.rng));
-                //~ if( this.loop ){ this.val = this.val.mod(this.rng); }
-                //~ vis = Math.ceil(this.val*this.arcs);
-                //~ this.querySelector('style').innerHTML = '#'+el.id+' :nth-child('+(vis-1)+'){opacity:1} #'+el.id+' :nth-child('+vis+'){opacity:'+(this.val%(1/this.arcs))*this.arcs+'}';
                 for( i=1; i<=this.arcs; ++i ){
                     this.childNodes[i].style.left = (i/this.arcs)*xy[0]+'px';
                     this.childNodes[i].style.top = (i/this.arcs)*xy[1]+'px';
-                }console.log(xy);
+                }
                 this.xy = [xy[0],xy[1]];
             };
         }
@@ -109,7 +97,7 @@ var level = {
 
 var i, els = document.querySelectorAll('.level'), el;
 for( i=0; i<els.length; ++i ){
-    level.init(els[i], {'loop':0});
+    level.init(els[i]);
 }
 addHandler(window,'resize',function(){
     for( i=0; i<els.length; ++i ){
