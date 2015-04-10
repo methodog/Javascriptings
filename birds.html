@@ -61,7 +61,7 @@ dragDrop = {
                 return r;
             };
             el.drop = function(){
-                var g = 1, f = 0.6, r;
+                var g = 0.5, f = 1, r;
                 this.v = [this.v[0], this.v[1]+g]; //v=u+at
                 var r = this.move([this.xy[0]+this.v[0], this.xy[1]+this.v[1]]);
                 if( r ){
@@ -72,7 +72,8 @@ dragDrop = {
                     }
                     if( r[1] ){ this.v = [this.v[0]*f, -this.v[1]*f]; }
                     if( r[1]>0  ){ 
-                        clearTimeout(this.t); 
+                        clearTimeout(this.t);
+                        this.v = [0,0];
                         this.className = this.className.replace(' dragged','');
                         return; 
                     }
@@ -81,10 +82,12 @@ dragDrop = {
                 return false;
             };
             el.jump = function(x,y){
-                clearTimeout(this.t);
-                this.v = [x,y];
-                this.className = this.className.replace(' dragged','') + ' dragged';
-                this.drop();
+                if( this.v[1]==0 ){
+                    clearTimeout(this.t);
+                    this.v = [x,y];
+                    this.className = this.className.replace(' dragged','') + ' dragged';
+                    this.drop();
+                }
                 return false;
             };
         }
@@ -141,12 +144,15 @@ addHandler(window,'resize',function(){
         els[i].jump((Math.random()<0.5?-1:1)*Math.random()*50, -20-Math.random()*20);
     }
 });
-addHandler(window,'click',function(){
-    for( i=0; i<els.length; ++i ){
-        els[i].jump((Math.random()<0.5?-1:1)*Math.random()*50, -20-Math.random()*20);
-    }
-});
-
+if( !!window.DeviceOrientationEvent ){
+    addHandler(window,'deviceorientation',function(e){
+        if( !dragDrop.el && Math.abs(e.gamma)>30 ){
+            for( i=0; i<els.length; ++i ){
+                els[i].jump((Math.random()<0.5?-1:1)*Math.random()*e.gamma, -Math.random()*e.gamma);
+            }
+        }
+    });
+}
 </script>
 </body>
 </html>
