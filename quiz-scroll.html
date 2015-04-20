@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>Quiz-Scroll</title>
+    <style type="text/css">
+        html, body, #quiz-scroll, #quiz-scroll-frame, .quiz-scroll-page { box-sizing:border-box; height:100%; margin:0; width:100%; }
+        h1, h2 { color:#000; font-size:2em; margin:0 0 0.3em; }
+        h2 { font-size:1.5em; }
+        hr { background-color:transparent; border:solid #c59c5a; border-width:0 0 2px; clear:both; color:#c59c5a; width:5%; }
+        a { outline:0 }
+        img { max-width:100%; width:5%; height:auto; min-width:44px; }
+        #quiz-scroll { background:transparent; color:#c59c5a; font:16px/1.5 helvetica,arial,freesans,sans-serif; }
+        #quiz-scroll-frame { border:1vw solid #000; width:91%; height:74%; position:fixed; left:3%; top:12%; z-index:-1; }
+        .quiz-scroll-page { border:1vw solid #c59c5a; display:table; width:91%; height:74%; padding:6% 8% 8% 4%; position:relative; left:6%; }
+        .quiz-scroll-copy, .quiz-scroll-nav { display:table-cell; text-align:center; vertical-align:middle; }
+        .quiz-scroll-prev, .quiz-scroll-next { display:table; width:100%; }
+        .quiz-scroll-prev { height:14%; }
+        .quiz-scroll-next { height:12%; }
+    </style>	
+</head>
+
+<body>
+<div id="quiz-scroll">
+    <div id="quiz-scroll-frame"></div>
+    <a class="quiz-scroll-prev" id="p1"></a>
+    <div class="quiz-scroll-page">
+        <div class="quiz-scroll-copy">
+            <h2>PAGE 1</h2>
+            <hr>
+            copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy 
+        </div>
+    </div>
+    <a class="quiz-scroll-next" href="#p2" title="next"><span class="quiz-scroll-nav"><img src="img/quiz-scroll/next.png" alt="next"></span></a>
+    <a class="quiz-scroll-prev" id="p2" href="#p1" title="previous"><span class="quiz-scroll-nav"><img src="img/quiz-scroll/prev.png" alt="previous"></span></a>
+    <div class="quiz-scroll-page">
+        <div class="quiz-scroll-copy">
+            <h2>PAGE 2</h2>
+            <hr>
+            copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy 
+        </div>
+    </div>
+    <a class="quiz-scroll-next" href="#p3" title="next"><span class="quiz-scroll-nav"><img src="img/quiz-scroll/next.png" alt="next"></span></a>
+    <a class="quiz-scroll-prev" id="p3" href="#p2" title="previous"><span class="quiz-scroll-nav"><img src="img/quiz-scroll/prev.png" alt="previous"></span></a>
+    <div class="quiz-scroll-page">
+        <div class="quiz-scroll-copy">
+            <h2>PAGE 3</h2>
+            <hr>
+            copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy 
+        </div>
+    </div>
+    <a class="quiz-scroll-next" href="#p4" title="next"><span class="quiz-scroll-nav"><img src="img/quiz-scroll/next.png" alt="next"></span></a>
+    <a class="quiz-scroll-prev" id="p4" href="#p3" title="previous"><span class="quiz-scroll-nav"><img src="img/quiz-scroll/prev.png" alt="previous"></span></a>
+</div>
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script type="text/javascript">
+</script>
+</body>
+</html>
