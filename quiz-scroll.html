@@ -93,6 +93,7 @@ jQuery(document).ready(function() {
     $('#quiz-scroll').on('click', '.quiz-scroll-next', function(e){ e.preventDefault(); pageSnap(1); });
     $('#quiz-scroll').on('click', '.quiz-scroll-prev', function(e){ e.preventDefault(); pageSnap(-1); });
     $(window).on('scroll', function(e){ e.preventDefault(); pageSnap(scrollDir()); });
+    $(window).on('resize', function(e){ e.preventDefault(); pageSnap(0); });
     
 });    
 </script>
