@@ -58,6 +58,43 @@
 
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script type="text/javascript">
+jQuery(document).ready(function() {
+    
+    (function(){
+        var resize = function(){
+            if( $(window).width()<=800 ){
+                $('#quiz-scroll').addClass('portrait');
+            }
+        }; resize(); $(window).on('resize', function(){ resize(); });
+        
+        
+    })();
+    
+    var p = 1,
+        winTop = $(window).scrollTop(),
+        scrolling = 0;
+        
+    function scrollDir() {
+        var s = $(window).scrollTop();
+        var d = (s > winTop)? 1:-1;
+        winTop = s;
+        return d;
+    }
+    
+    function pageSnap(direction){
+        if( !scrolling ){
+            p += direction*1;
+            if( !$('#p'+p).length ){ p -= direction*1; return; }
+            scrolling = 1; 
+            $('html, body').animate({scrollTop:$('#p'+p).offset().top}, 1000, function(){winTop=$(window).scrollTop(); scrolling=0});
+        }
+    }
+    
+    $('#quiz-scroll').on('click', '.quiz-scroll-next', function(e){ e.preventDefault(); pageSnap(1); });
+    $('#quiz-scroll').on('click', '.quiz-scroll-prev', function(e){ e.preventDefault(); pageSnap(-1); });
+    $(window).on('scroll', function(e){ console.log('onscroll'); e.preventDefault(); pageSnap(scrollDir()); });
+    
+});    
 </script>
 </body>
 </html>
