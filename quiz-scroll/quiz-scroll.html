@@ -7,15 +7,19 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <title>pg-scroll</title>
     <style type="text/css">
-        html, body, #pg-scroll, #pg-scroll-frame, .pg-scroll-wrap, .pg-scroll-page { box-sizing:border-box; height:100%; margin:0; width:100%; }
-        h1, h2 { color:#000; font-size:2em; letter-spacing: 0.3em; margin:0 0 0.3em; }
+        html, body, form, #pg-scroll, #pg-scroll-frame, .pg-scroll-wrap, .pg-scroll-page { box-sizing:border-box; height:100%; margin:0; width:100%; }
+        h1, h2 { color:#000; font-size:2em; letter-spacing: 0.3em; margin:0 0 0.5em; }
         h2 { font-size:1.5em; }
-        hr { background-color:transparent; border:solid #c59c5a; border-width:0 0 2px; clear:both; color:#c59c5a; width:5%; }
-        a { outline:0 }
+        hr { background-color:transparent; border:solid #c59c5a; border-width:0 0 2px; clear:both; color:#c59c5a; margin:0 auto 1em; width:5%; }
+        a { outline:0; }
         img { max-width:100%; width:5%; height:auto; min-width:34px; }
+        input, .btn { border:2px solid #c59c5a; outline:0; box-sizing:border-box; margin:0 0.5em; padding:2px 1px 1px 1px; text-align:center; vertical-align:middle; white-space:normal; width:40%; }
+        input[type=radio] {  }
+        .btn { display:inline-block; padding:2em; position:relative; }
+        .btn:active { top:5px; left:5px; }
         #pg-scroll { background:transparent; color:#c59c5a; font:16px/1.5 helvetica,arial,freesans,sans-serif; }
         #pg-scroll-frame, .pg-scroll-page { border:1vw solid #c59c5a; width:90.5%; height:74%; }
-        #pg-scroll-frame { position:fixed; left:5.4%; top:13.5%; z-index:1; }
+        #pg-scroll-frame { position:fixed; left:5.4%; top:13.5%; }
         .pg-scroll-page { border-color:#000; display:table; padding:6% 4% 8% 6%; position:relative; left:3.6%; }
         .pg-scroll-copy, .pg-scroll-nav { display:table-cell; text-align:center; vertical-align:middle; }
         .pg-scroll-prev, .pg-scroll-next { display:table; width:100%; }
@@ -27,39 +31,49 @@
 <body>
 <div id="pg-scroll">
     <div id="pg-scroll-frame"></div>
-    <div class="pg-scroll-wrap">
-        <a class="pg-scroll-prev" id="p1"></a>
-        <div class="pg-scroll-page">
-            <div class="pg-scroll-copy">
-                <h1>WHAT IS LUXURY?</h1>
-                <hr>
-                copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy 
+    <form method="post" action="#">
+        <div class="pg-scroll-wrap">
+            <a class="pg-scroll-prev" id="p1"></a>
+            <div class="pg-scroll-page">
+                <div class="pg-scroll-copy">
+                    <h1>WHAT IS LUXURY?</h1>
+                    <hr>
+                    copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy 
+                </div>
             </div>
+            <a class="pg-scroll-next" href="#p2" title="next"><span class="pg-scroll-nav"><img src="img/next.png" alt="next"></span></a>
         </div>
-        <a class="pg-scroll-next" href="#p2" title="next"><span class="pg-scroll-nav"><img src="img/next.png" alt="next"></span></a>
-    </div>
-    <div class="pg-scroll-wrap">
-        <a class="pg-scroll-prev" id="p2" href="#p1" title="previous"><span class="pg-scroll-nav"><img src="img/prev.png" alt="previous"></span></a>
-        <div class="pg-scroll-page">
-            <div class="pg-scroll-copy">
-                <h2>PAGE 2</h2>
-                <hr>
-                copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy 
+        <div class="pg-scroll-wrap">
+            <a class="pg-scroll-prev" id="p2" href="#p1" title="previous"><span class="pg-scroll-nav"><img src="img/prev.png" alt="previous"></span></a>
+            <div class="pg-scroll-page">
+                <div class="pg-scroll-copy">
+                    <h2>WHAT IS YOUR OBJECT?</h2>
+                    <input type="text" id="a-object">
+                </div>
             </div>
+            <a class="pg-scroll-next" href="#p3" title="next"><span class="pg-scroll-nav"><img src="img/next.png" alt="next"></span></a>
         </div>
-        <a class="pg-scroll-next" href="#p3" title="next"><span class="pg-scroll-nav"><img src="img/next.png" alt="next"></span></a>
-    </div>
-    <div class="pg-scroll-wrap">
-        <a class="pg-scroll-prev" id="p3" href="#p2" title="previous"><span class="pg-scroll-nav"><img src="img/prev.png" alt="previous"></span></a>
-        <div class="pg-scroll-page">
-            <div class="pg-scroll-copy">
-                <h2>PAGE 3</h2>
-                <hr>
-                copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy 
+        <div class="pg-scroll-wrap">
+            <a class="pg-scroll-prev" id="p3" href="#p2" title="previous"><span class="pg-scroll-nav"><img src="img/prev.png" alt="previous"></span></a>
+            <div class="pg-scroll-page">
+                <div class="pg-scroll-copy">
+                    <h2>Is it handmade or mass-produced?</h2>
+                    <label class="btn" for="a-handmade">handmade</label><input type="radio" name="a-handmade" id="a-handmade" value="handmade">
+                    <label class="btn" for="a-handmade">mass-produced</label><input type="radio" name="a-handmade" id="a-mass-produced" value="mass-produced">
+                </div>
             </div>
+            <a class="pg-scroll-next" href="#p4" title="next"><span class="pg-scroll-nav"><img src="img/next.png" alt="next"></span></a>
         </div>
-        <a class="pg-scroll-next"></a>
-    </div>
+        <div class="pg-scroll-wrap">
+            <a class="pg-scroll-prev" id="p4" href="#p3" title="previous"><span class="pg-scroll-nav"><img src="img/prev.png" alt="previous"></span></a>
+            <div class="pg-scroll-page">
+                <div class="pg-scroll-copy">
+                    copy copy copy copy copy copy copy copy 
+                </div>
+            </div>
+            <a class="pg-scroll-next"></a>
+        </div>
+    </form>
 </div>
 
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -78,12 +92,12 @@ jQuery(document).ready(function() {
             }
         }; resize(); $(window).on('resize', function(){ resize(); });
         
-        $('.pg-scroll-wrap:nth-child(n+'+(p+ps+1)+')').hide(0);
-        $('.pg-scroll-wrap:nth-child(n+'+(p+ps)+')>.pg-scroll-next').css('visibility','hidden');
+        $('.pg-scroll-wrap:nth-child(n+'+(p+ps)+')').hide(0);
+        $('.pg-scroll-wrap:nth-child(n+'+(p+ps-1)+')>.pg-scroll-next').css('opacity',0);
         
     })();
         
-    function scrollDir() {
+    function scrollDir(){
         var s = $(window).scrollTop();
         var d = (s > winTop)? 1:-1;
         winTop = s;
@@ -103,6 +117,25 @@ jQuery(document).ready(function() {
     $('#pg-scroll').on('click', '.pg-scroll-prev', function(e){ e.preventDefault(); pageSnap(-1); });
     $(window).on('scroll', function(e){ e.preventDefault(); pageSnap(scrollDir()); });
     $(window).on('resize', function(e){ e.preventDefault(); pageSnap(0); });
+    
+    function validate(input){
+        return true;
+    }
+    
+    $('form').on('change', 'input', function(e){
+        e.preventDefault();
+        if( validate(this) ){console.log(p);
+            $('.pg-scroll-wrap:nth-child('+p+')>.pg-scroll-next').animate({'opacity':1}, 800);
+            $('.pg-scroll-wrap:nth-child('+(p+1)+')').show(800);
+        }
+    });
+    
+    function definery(form){
+        console.log('submitted '+$(this).find('.a-handmade').value);
+        return false;
+    }
+    
+    $('form').on('submit', function(e){ e.preventDefault(); definery(this) });
     
 });    
 </script>
