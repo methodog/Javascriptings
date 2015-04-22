@@ -8,7 +8,7 @@
     <title>Quiz-Scroll</title>
     <style type="text/css">
         html, body, #quiz-scroll, #quiz-scroll-frame, .quiz-scroll-page { box-sizing:border-box; height:100%; margin:0; width:100%; }
-        h1, h2 { color:#000; font-size:2em; margin:0 0 0.3em; }
+        h1, h2 { color:#000; font-size:2em; letter-spacing: 0.3em; margin:0 0 0.3em; }
         h2 { font-size:1.5em; }
         hr { background-color:transparent; border:solid #c59c5a; border-width:0 0 2px; clear:both; color:#c59c5a; width:5%; }
         a { outline:0 }
@@ -30,7 +30,7 @@
     <a class="quiz-scroll-prev" id="p1"></a>
     <div class="quiz-scroll-page">
         <div class="quiz-scroll-copy">
-            <h2>PAGE 1</h2>
+            <h1>WHAT IS LUXURY?</h1>
             <hr>
             copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy 
         </div>
@@ -53,8 +53,7 @@
             copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy 
         </div>
     </div>
-    <a class="quiz-scroll-next" href="#p4" title="next"><span class="quiz-scroll-nav"><img src="img/next.png" alt="next"></span></a>
-    <a class="quiz-scroll-prev" id="p4" href="#p3" title="previous"><span class="quiz-scroll-nav"><img src="img/prev.png" alt="previous"></span></a>
+    <a class="quiz-scroll-next"></a>
 </div>
 
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -67,8 +66,6 @@ jQuery(document).ready(function() {
                 $('#quiz-scroll').addClass('portrait');
             }
         }; resize(); $(window).on('resize', function(){ resize(); });
-        
-        
     })();
     
     var p = 1,
