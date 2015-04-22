@@ -7,7 +7,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <title>pg-scroll</title>
     <style type="text/css">
-        html, body, #pg-scroll, #pg-scroll-frame, .pg-scroll-page { box-sizing:border-box; height:100%; margin:0; width:100%; }
+        html, body, #pg-scroll, #pg-scroll-frame, .pg-scroll-wrap, .pg-scroll-page { box-sizing:border-box; height:100%; margin:0; width:100%; }
         h1, h2 { color:#000; font-size:2em; letter-spacing: 0.3em; margin:0 0 0.3em; }
         h2 { font-size:1.5em; }
         hr { background-color:transparent; border:solid #c59c5a; border-width:0 0 2px; clear:both; color:#c59c5a; width:5%; }
@@ -27,33 +27,39 @@
 <body>
 <div id="pg-scroll">
     <div id="pg-scroll-frame"></div>
-    <a class="pg-scroll-prev" id="p1"></a>
-    <div class="pg-scroll-page">
-        <div class="pg-scroll-copy">
-            <h1>WHAT IS LUXURY?</h1>
-            <hr>
-            copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy 
+    <div class="pg-scroll-wrap">
+        <a class="pg-scroll-prev" id="p1"></a>
+        <div class="pg-scroll-page">
+            <div class="pg-scroll-copy">
+                <h1>WHAT IS LUXURY?</h1>
+                <hr>
+                copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy 
+            </div>
         </div>
+        <a class="pg-scroll-next" href="#p2" title="next"><span class="pg-scroll-nav"><img src="img/next.png" alt="next"></span></a>
     </div>
-    <a class="pg-scroll-next" href="#p2" title="next"><span class="pg-scroll-nav"><img src="img/next.png" alt="next"></span></a>
-    <a class="pg-scroll-prev" id="p2" href="#p1" title="previous"><span class="pg-scroll-nav"><img src="img/prev.png" alt="previous"></span></a>
-    <div class="pg-scroll-page">
-        <div class="pg-scroll-copy">
-            <h2>PAGE 2</h2>
-            <hr>
-            copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy 
+    <div class="pg-scroll-wrap">
+        <a class="pg-scroll-prev" id="p2" href="#p1" title="previous"><span class="pg-scroll-nav"><img src="img/prev.png" alt="previous"></span></a>
+        <div class="pg-scroll-page">
+            <div class="pg-scroll-copy">
+                <h2>PAGE 2</h2>
+                <hr>
+                copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy 
+            </div>
         </div>
+        <a class="pg-scroll-next" href="#p3" title="next"><span class="pg-scroll-nav"><img src="img/next.png" alt="next"></span></a>
     </div>
-    <a class="pg-scroll-next" href="#p3" title="next"><span class="pg-scroll-nav"><img src="img/next.png" alt="next"></span></a>
-    <a class="pg-scroll-prev" id="p3" href="#p2" title="previous"><span class="pg-scroll-nav"><img src="img/prev.png" alt="previous"></span></a>
-    <div class="pg-scroll-page">
-        <div class="pg-scroll-copy">
-            <h2>PAGE 3</h2>
-            <hr>
-            copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy 
+    <div class="pg-scroll-wrap">
+        <a class="pg-scroll-prev" id="p3" href="#p2" title="previous"><span class="pg-scroll-nav"><img src="img/prev.png" alt="previous"></span></a>
+        <div class="pg-scroll-page">
+            <div class="pg-scroll-copy">
+                <h2>PAGE 3</h2>
+                <hr>
+                copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy 
+            </div>
         </div>
+        <a class="pg-scroll-next"></a>
     </div>
-    <a class="pg-scroll-next"></a>
 </div>
 
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -61,6 +67,7 @@
 jQuery(document).ready(function() {
     
     var p = 1,
+        ps = 2, //initial no of pgs to show
         winTop = $(window).scrollTop(),
         scrolling = 0;
         
@@ -70,6 +77,10 @@ jQuery(document).ready(function() {
                 $('#pg-scroll').addClass('portrait');
             }
         }; resize(); $(window).on('resize', function(){ resize(); });
+        
+        $('.pg-scroll-wrap:nth-child(n+'+(p+ps+1)+')').hide(0);
+        $('.pg-scroll-wrap:nth-child(n+'+(p+ps)+')>.pg-scroll-next').css('visibility','hidden');
+        
     })();
         
     function scrollDir() {
