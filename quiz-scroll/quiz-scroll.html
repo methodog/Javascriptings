@@ -5,55 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <title>Quiz-Scroll</title>
+    <title>pg-scroll</title>
     <style type="text/css">
-        html, body, #quiz-scroll, #quiz-scroll-frame, .quiz-scroll-page { box-sizing:border-box; height:100%; margin:0; width:100%; }
+        html, body, #pg-scroll, #pg-scroll-frame, .pg-scroll-page { box-sizing:border-box; height:100%; margin:0; width:100%; }
         h1, h2 { color:#000; font-size:2em; letter-spacing: 0.3em; margin:0 0 0.3em; }
         h2 { font-size:1.5em; }
         hr { background-color:transparent; border:solid #c59c5a; border-width:0 0 2px; clear:both; color:#c59c5a; width:5%; }
         a { outline:0 }
         img { max-width:100%; width:5%; height:auto; min-width:34px; }
-        #quiz-scroll { background:transparent; color:#c59c5a; font:16px/1.5 helvetica,arial,freesans,sans-serif; }
-        #quiz-scroll-frame, .quiz-scroll-page { border:1vw solid #000; width:90.5%; height:74%; }
-        #quiz-scroll-frame { position:fixed; left:3.6%; top:12%; z-index:-1; }
-        .quiz-scroll-page { border-color:#c59c5a; display:table; padding:6% 8% 8% 4%; position:relative; left:5.4%; }
-        .quiz-scroll-copy, .quiz-scroll-nav { display:table-cell; text-align:center; vertical-align:middle; }
-        .quiz-scroll-prev, .quiz-scroll-next { display:table; width:100%; }
-        .quiz-scroll-prev { height:14.2%; }
-        .quiz-scroll-next { height:11.8%; }
+        #pg-scroll { background:transparent; color:#c59c5a; font:16px/1.5 helvetica,arial,freesans,sans-serif; }
+        #pg-scroll-frame, .pg-scroll-page { border:1vw solid #000; width:90.5%; height:74%; }
+        #pg-scroll-frame { position:fixed; left:3.6%; top:12%; z-index:-1; }
+        .pg-scroll-page { border-color:#c59c5a; display:table; padding:6% 8% 8% 4%; position:relative; left:5.4%; }
+        .pg-scroll-copy, .pg-scroll-nav { display:table-cell; text-align:center; vertical-align:middle; }
+        .pg-scroll-prev, .pg-scroll-next { display:table; width:100%; }
+        .pg-scroll-prev { height:14.2%; }
+        .pg-scroll-next { height:11.8%; }
     </style>	
 </head>
 
 <body>
-<div id="quiz-scroll">
-    <div id="quiz-scroll-frame"></div>
-    <a class="quiz-scroll-prev" id="p1"></a>
-    <div class="quiz-scroll-page">
-        <div class="quiz-scroll-copy">
+<div id="pg-scroll">
+    <div id="pg-scroll-frame"></div>
+    <a class="pg-scroll-prev" id="p1"></a>
+    <div class="pg-scroll-page">
+        <div class="pg-scroll-copy">
             <h1>WHAT IS LUXURY?</h1>
             <hr>
             copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy 
         </div>
     </div>
-    <a class="quiz-scroll-next" href="#p2" title="next"><span class="quiz-scroll-nav"><img src="img/next.png" alt="next"></span></a>
-    <a class="quiz-scroll-prev" id="p2" href="#p1" title="previous"><span class="quiz-scroll-nav"><img src="img/prev.png" alt="previous"></span></a>
-    <div class="quiz-scroll-page">
-        <div class="quiz-scroll-copy">
+    <a class="pg-scroll-next" href="#p2" title="next"><span class="pg-scroll-nav"><img src="img/next.png" alt="next"></span></a>
+    <a class="pg-scroll-prev" id="p2" href="#p1" title="previous"><span class="pg-scroll-nav"><img src="img/prev.png" alt="previous"></span></a>
+    <div class="pg-scroll-page">
+        <div class="pg-scroll-copy">
             <h2>PAGE 2</h2>
             <hr>
             copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy 
         </div>
     </div>
-    <a class="quiz-scroll-next" href="#p3" title="next"><span class="quiz-scroll-nav"><img src="img/next.png" alt="next"></span></a>
-    <a class="quiz-scroll-prev" id="p3" href="#p2" title="previous"><span class="quiz-scroll-nav"><img src="img/prev.png" alt="previous"></span></a>
-    <div class="quiz-scroll-page">
-        <div class="quiz-scroll-copy">
+    <a class="pg-scroll-next" href="#p3" title="next"><span class="pg-scroll-nav"><img src="img/next.png" alt="next"></span></a>
+    <a class="pg-scroll-prev" id="p3" href="#p2" title="previous"><span class="pg-scroll-nav"><img src="img/prev.png" alt="previous"></span></a>
+    <div class="pg-scroll-page">
+        <div class="pg-scroll-copy">
             <h2>PAGE 3</h2>
             <hr>
             copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy 
         </div>
     </div>
-    <a class="quiz-scroll-next"></a>
+    <a class="pg-scroll-next"></a>
 </div>
 
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -63,7 +63,7 @@ jQuery(document).ready(function() {
     (function(){
         var resize = function(){
             if( $(window).width()<=800 ){
-                $('#quiz-scroll').addClass('portrait');
+                $('#pg-scroll').addClass('portrait');
             }
         }; resize(); $(window).on('resize', function(){ resize(); });
     })();
@@ -88,8 +88,8 @@ jQuery(document).ready(function() {
         }
     }
     
-    $('#quiz-scroll').on('click', '.quiz-scroll-next', function(e){ e.preventDefault(); pageSnap(1); });
-    $('#quiz-scroll').on('click', '.quiz-scroll-prev', function(e){ e.preventDefault(); pageSnap(-1); });
+    $('#pg-scroll').on('click', '.pg-scroll-next', function(e){ e.preventDefault(); pageSnap(1); });
+    $('#pg-scroll').on('click', '.pg-scroll-prev', function(e){ e.preventDefault(); pageSnap(-1); });
     $(window).on('scroll', function(e){ e.preventDefault(); pageSnap(scrollDir()); });
     $(window).on('resize', function(e){ e.preventDefault(); pageSnap(0); });
     
