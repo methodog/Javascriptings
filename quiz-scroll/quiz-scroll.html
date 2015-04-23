@@ -14,7 +14,7 @@
         a { outline:0; }
         img { max-width:100%; width:5%; height:auto; min-width:34px; }
         input, .btn { border:2px solid #c59c5a; outline:0; box-sizing:border-box; margin:0 0.5em; padding:2px 1px 1px 1px; text-align:center; vertical-align:middle; white-space:normal; width:40%; }
-        input[type=radio] {  }
+        input[type=radio] { display:none; }
         .btn { display:inline-block; padding:2em; position:relative; }
         .btn:active { top:5px; left:5px; }
         #pg-scroll { background:transparent; color:#c59c5a; font:16px/1.5 helvetica,arial,freesans,sans-serif; }
@@ -59,7 +59,7 @@
                 <div class="pg-scroll-copy">
                     <h2>Is it handmade or mass-produced?</h2>
                     <label class="btn" for="a-handmade">handmade</label><input type="radio" name="a-handmade" id="a-handmade" value="handmade">
-                    <label class="btn" for="a-handmade">mass-produced</label><input type="radio" name="a-handmade" id="a-mass-produced" value="mass-produced">
+                    <label class="btn" for="a-mass-produced">mass-produced</label><input type="radio" name="a-handmade" id="a-mass-produced" value="mass-produced">
                 </div>
             </div>
             <a class="pg-scroll-next" href="#p4" title="next"><span class="pg-scroll-nav"><img src="img/next.png" alt="next"></span></a>
@@ -81,7 +81,7 @@
 jQuery(document).ready(function() {
     
     var p = 1,
-        ps = 2, //initial no of pgs to show
+        ps = 3, //initial no of pgs to show
         winTop = $(window).scrollTop(),
         scrolling = 0;
         
@@ -94,9 +94,10 @@ jQuery(document).ready(function() {
         
         $('.pg-scroll-wrap:nth-child(n+'+(p+ps)+')').hide(0);
         $('.pg-scroll-wrap:nth-child(n+'+(p+ps-1)+')>.pg-scroll-next').css('opacity',0);
+        $(window).scrollTop(0);
         
     })();
-        
+    
     function scrollDir(){
         var s = $(window).scrollTop();
         var d = (s > winTop)? 1:-1;
@@ -119,19 +120,20 @@ jQuery(document).ready(function() {
     $(window).on('resize', function(e){ e.preventDefault(); pageSnap(0); });
     
     function validate(input){
+        console.log(input);
         return true;
     }
     
     $('form').on('change', 'input', function(e){
         e.preventDefault();
-        if( validate(this) ){console.log(p);
+        if( validate(this) ){
             $('.pg-scroll-wrap:nth-child('+p+')>.pg-scroll-next').animate({'opacity':1}, 800);
             $('.pg-scroll-wrap:nth-child('+(p+1)+')').show(800);
         }
     });
     
     function definery(form){
-        console.log('submitted '+$(this).find('.a-handmade').value);
+        console.log($("input[name=a-handmade]:checked").val());
         return false;
     }
     
