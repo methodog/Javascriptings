@@ -25,6 +25,7 @@
         .pg-scroll-prev, .pg-scroll-next { display:table; width:100%; }
         .pg-scroll-prev { height:11%; }
         .pg-scroll-next { height:15%; }
+        .invalid { background:#f55a58; }
         @media screen and (max-width:800px) {
             input, .btn { width:80%; }
         }
@@ -133,16 +134,17 @@ jQuery(document).ready(function() {
     }
     
     function halt_quiz(input){
-        $('.pg-scroll-wrap:nth-child('+p+')>.pg-scroll-next').css({'opacity':0});
-        $('.pg-scroll-wrap:nth-child('+(p+1)+')').hide(0);
+        $('.pg-scroll-wrap:nth-child('+p+')>.pg-scroll-next').stop(1).css({'opacity':0});
+        $('.pg-scroll-wrap:nth-child('+(p+1)+')').stop(1).hide(0);
     }
     
     function validate(input){
         var t = input.type,
             v = input.value;
+        $(input).removeClass('invalid');
         if( t==='text' ){
             if( v.length < 3 ){ halt_quiz(); return false; }
-            if( in_array(stopwords, v) ){ alert('try again'); halt_quiz(); return false; }
+            if( in_array(stopwords, v) ){ $(input).addClass('invalid'); halt_quiz(); return false; }
         }
         return true;
     }
