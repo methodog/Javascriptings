@@ -84,10 +84,12 @@
 jQuery(document).ready(function() {
     
     var p = 1,
-        ps = 3, //initial no of pgs to show
+        ps = 2, //initial no of pgs to show
         winTop = $(window).scrollTop(),
-        scrolling = 0;
+        scrolling = 0,
+        stopwords = ['luca','keith','tania','tom','chris'];
         
+    /* init */
     (function(){
         var resize = function(){
             if( $(window).width()<=800 ){
@@ -98,9 +100,9 @@ jQuery(document).ready(function() {
         $('.pg-scroll-wrap:nth-child(n+'+(p+ps)+')').hide(0);
         $('.pg-scroll-wrap:nth-child(n+'+(p+ps-1)+')>.pg-scroll-next').css('opacity',0);
         $(window).scrollTop(0);
-        
     })();
     
+    /* scrolling */
     function scrollDir(){
         var s = $(window).scrollTop();
         var d = (s > winTop)? 1:-1;
@@ -122,19 +124,37 @@ jQuery(document).ready(function() {
     $(window).on('scroll', function(e){ e.preventDefault(); pageSnap(scrollDir()); });
     $(window).on('resize', function(e){ e.preventDefault(); pageSnap(0); });
     
+    /* validation */
+    function in_array(arr, val) {
+      for (var i = 0, len = arr.length; i < len; i++) {
+        if (arr[i] == val) return true;
+      }
+      return false;
+    }
+    
+    function halt_quiz(input){
+        $('.pg-scroll-wrap:nth-child('+p+')>.pg-scroll-next').css({'opacity':0});
+        $('.pg-scroll-wrap:nth-child('+(p+1)+')').hide(0);
+    }
+    
     function validate(input){
-        console.log(input);
+        var t = input.type,
+            v = input.value;
+        if( t==='text' ){
+            if( v.length < 3 ){ halt_quiz(); return false; }
+            if( in_array(stopwords, v) ){ alert('try again'); halt_quiz(); return false; }
+        }
         return true;
     }
     
-    $('form').on('change', 'input', function(e){
-        e.preventDefault();
+    $('form').on('change keyup', 'input', function(){
         if( validate(this) ){
             $('.pg-scroll-wrap:nth-child('+p+')>.pg-scroll-next').animate({'opacity':1}, 800);
             $('.pg-scroll-wrap:nth-child('+(p+1)+')').show(800);
         }
     });
     
+    /* validation */
     function definery(form){
         console.log($("input[name=a-handmade]:checked").val());
         return false;
