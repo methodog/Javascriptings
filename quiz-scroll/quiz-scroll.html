@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1, maximum-scale=1" />
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <title>scroller</title>
+    <title>quiz-scroll</title>
     <style type="text/css">
         html, body, form, #scroller, #scroller-frame, .scroller-wrap, .scroller-mid { box-sizing:border-box; height:100%; margin:0; width:100%; }
         h1, h2 { color:#231f20; font-size:1.8em; letter-spacing: 0.3em; margin:0 0 0.5em; }
@@ -18,7 +18,7 @@
         .btn { box-shadow: 10px 10px 0 0 #b89b5d; display:inline-block; padding:2em; position:relative; }
         .btn:active { box-shadow:none; top:10px; left:10px; }
         #scroller { background:transparent; color:#a16d19; font:18px/1.5 helvetica,arial,freesans,sans-serif; }
-        #scroller-frame, .scroller-mid { border:1vw solid #b89b5d; width:90.5%; height:74%; }
+        #scroller-frame, .scroller-mid { border:0px solid #b89b5d; border-width:1vw; width:90.5%; height:74%; }
         #scroller-frame { position:fixed; left:5.4%; top:13.5%; z-index:1; }
         #header { width:92.3%; position:fixed; left:3.6%; }
         .scroller-mid { border-color:#231f20; display:table; padding:6% 4% 8% 6%; position:relative; left:3.6%; }
@@ -41,8 +41,8 @@
     <div id="header" class="scroller-top"><div class="tcell"><a class="left" title="Back to the exhibition" href="?"><img src="img/logo_va.png" alt="V&A"></a><a class="right" href="?"><img src="img/logo_sponsors.png" alt="Sponsors"></a></div></div>
     <div id="scroller-frame"></div>
     <form method="post" action="#">
-        <div class="scroller-wrap">
-            <div class="scroller-top" id="p1"></div>
+        <div class="scroller-wrap" id="p1">
+            <div class="scroller-top"></div>
             <div class="scroller-mid">
                 <div class="tcell">
                     <h1>WHAT IS LUXURY?</h1>
@@ -52,8 +52,8 @@
             </div>
             <div class="scroller-foot"><a class="scroller-nav tcell" href="#p2" title="next"><img src="img/next.png" alt="next"></a></div>
         </div>
-        <div class="scroller-wrap">
-            <div class="scroller-top" id="p2"><a class="scroller-nav tcell" href="#p1" title="back"><img src="img/prev.png" alt="back"></a></div>
+        <div class="scroller-wrap" id="p2">
+            <div class="scroller-top"><a class="scroller-nav tcell" href="#p1" title="back"><img src="img/prev.png" alt="back"></a></div>
             <div class="scroller-mid">
                 <div class="tcell">
                     <h2>WHAT IS YOUR OBJECT?</h2>
@@ -62,8 +62,8 @@
             </div>
             <div class="scroller-foot"><a class="scroller-nav tcell" href="#p3" title="next"><img src="img/next.png" alt="next"></a></div>
         </div>
-        <div class="scroller-wrap">
-            <div class="scroller-top" id="p3"><a class="scroller-nav tcell" href="#p2" title="back"><img src="img/prev.png" alt="back"></a></div>
+        <div class="scroller-wrap" id="p3">
+            <div class="scroller-top"><a class="scroller-nav tcell" href="#p2" title="back"><img src="img/prev.png" alt="back"></a></div>
             <div class="scroller-mid">
                 <div class="tcell">
                     <h2>Is it handmade or mass-produced?</h2>
@@ -73,8 +73,8 @@
             </div>
             <div class="scroller-foot"><a class="scroller-nav tcell" href="#p4" title="next"><img src="img/next.png" alt="next"></a></div>
         </div>
-        <div class="scroller-wrap">
-            <div class="scroller-top" id="p4"><a class="scroller-nav tcell" href="#p3" title="back"><img src="img/prev.png" alt="back"></a></div>
+        <div class="scroller-wrap" id="p4">
+            <div class="scroller-top"><a class="scroller-nav tcell" href="#p3" title="back"><img src="img/prev.png" alt="back"></a></div>
             <div class="scroller-mid">
                 <div class="tcell">
                     copy copy copy copy copy copy copy copy 
@@ -94,13 +94,12 @@ jQuery(document).ready(function() {
         winTop = $(window).scrollTop(),
         scrolling = 0,
         stopwords = ['luca','keith','tania','tom','chris'];
-        
+
     /* init */
     (function(){
         var resize = function(){
-            if( $(window).width()<=800 ){
-                $('#scroller').addClass('portrait');
-            }
+            //if( $(window).width()<=800 ){ $('#scroller').addClass('portrait'); }
+            if( $('#scroller-frame').outerWidth()===$('#scroller-frame').innerWidth() ){ $('#scroller-frame, .scroller-mid').css('border-width',($(window).width()/100)+'px') }
         }; resize(); $(window).on('resize', function(){ resize(); });
         
         $('.scroller-wrap:nth-child(n+'+(p+ps)+')').hide(0);
@@ -118,17 +117,19 @@ jQuery(document).ready(function() {
     
     function pageSnap(direction){
         if( !scrolling ){
-            p += direction*1;
-            if( !$('#p'+p).length ){ p -= direction*1; return; }
+            p += direction*1; 
+            if( !$('#p'+p).filter(':visible').length ){ p -= direction*1; return; }
             scrolling = 1; 
-            $('html, body').animate({scrollTop:$('#p'+p).offset().top}, 1000, function(){winTop=$(window).scrollTop(); setTimeout(function(){scrolling=0},100)});
+            $('html, body').animate({scrollTop:$('#p'+p).offset().top}, 500, function(){winTop=$(window).scrollTop(); setTimeout(function(){scrolling=0},100)});
         }
+        return false;
     }
     
-    $('#scroller').on('click', '.scroller-foot', function(e){ e.preventDefault(); pageSnap(1); });
-    $('#scroller').on('click', '.scroller-top', function(e){ e.preventDefault(); pageSnap(-1); });
+    $('#scroller').on('click', '.scroller-foot>.scroller-nav', function(e){ e.preventDefault(); pageSnap(1); });
+    $('#scroller').on('click', '.scroller-top>.scroller-nav', function(e){ e.preventDefault(); pageSnap(-1); });
     $(window).on('scroll', function(e){ e.preventDefault(); pageSnap(scrollDir()); });
     $(window).on('resize', function(e){ e.preventDefault(); pageSnap(0); });
+    $('form').on('focusout', 'input', function(e){ e.preventDefault(); pageSnap(0); });
     
     /* validation */
     function in_array(arr, val) {
@@ -139,8 +140,8 @@ jQuery(document).ready(function() {
     }
     
     function halt_quiz(input){
-        $('.scroller-wrap:nth-child('+p+')>.scroller-foot').stop(1).css({'opacity':0});
-        $('.scroller-wrap:nth-child('+(p+1)+')').stop(1).hide(0);
+        $('.scroller-wrap:nth-child(n+'+p+')>.scroller-foot').stop(1).css({'opacity':0});
+        $('.scroller-wrap:nth-child(n+'+(p+1)+')').stop(1).hide(0);
     }
     
     function validate(input){
@@ -154,10 +155,10 @@ jQuery(document).ready(function() {
         return true;
     }
     
-    $('form').on('change keyup', 'input', function(){
+    $('form').on('change keyup focus focusout', 'input', function(){
         if( validate(this) ){
-            $('.scroller-wrap:nth-child('+p+')>.scroller-foot').animate({'opacity':1}, 800);
-            $('.scroller-wrap:nth-child('+(p+1)+')').show(800);
+            $('#p'+p+'>.scroller-foot').animate({'opacity':1}, 500);
+            $('#p'+(p+1)).show(500);
         }
     });
     
