@@ -92,13 +92,12 @@ jQuery(document).ready(function() {
     var p = 1,
         ps = 2, //initial no of pgs to show
         winTop = $(window).scrollTop(),
-        scrolling = 0,
+        canscroll = 1,
         stopwords = ['luca','keith','tania','tom','chris'];
 
     /* init */
     (function(){
         var resize = function(){
-            //if( $(window).width()<=800 ){ $('#scroller').addClass('portrait'); }
             if( $('#scroller-frame').outerWidth()===$('#scroller-frame').innerWidth() ){ $('#scroller-frame, .scroller-mid').css('border-width',($(window).width()/100)+'px') }
         }; resize(); $(window).on('resize', function(){ resize(); });
         
@@ -116,11 +115,11 @@ jQuery(document).ready(function() {
     }
     
     function pageSnap(direction){
-        if( !scrolling ){
+        if( !!canscroll ){
             p += direction*1; 
             if( !$('#p'+p).filter(':visible').length ){ p -= direction*1; return; }
-            scrolling = 1; 
-            $('html, body').animate({scrollTop:$('#p'+p).offset().top}, 500, function(){winTop=$(window).scrollTop(); setTimeout(function(){scrolling=0},100)});
+            canscroll = 0; 
+            $('html, body').animate({scrollTop:$('#p'+p).offset().top}, 500, function(){winTop=$(window).scrollTop(); setTimeout(function(){canscroll=1},100)});
         }
         return false;
     }
@@ -129,7 +128,10 @@ jQuery(document).ready(function() {
     $('#scroller').on('click', '.scroller-top>.scroller-nav', function(e){ e.preventDefault(); pageSnap(-1); });
     $(window).on('scroll', function(e){ e.preventDefault(); pageSnap(scrollDir()); });
     $(window).on('resize', function(e){ e.preventDefault(); pageSnap(0); });
-    $('form').on('focusout', 'input', function(e){ e.preventDefault(); pageSnap(0); });
+    $('form').on('focusout', 'input', function(){ canscroll=1; pageSnap(0); });
+    if( !!('ontouchstart' in window) ){
+        $('form').on('focus', 'input', function(){ canscroll=0; });
+    }
     
     /* validation */
     function in_array(arr, val) {
@@ -155,7 +157,7 @@ jQuery(document).ready(function() {
         return true;
     }
     
-    $('form').on('change keyup focus focusout', 'input', function(){
+    $('form').on('change keyup focusout', 'input', function(){
         if( validate(this) ){
             $('#p'+p+'>.scroller-foot').animate({'opacity':1}, 500);
             $('#p'+(p+1)).show(500);
