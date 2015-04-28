@@ -82,6 +82,7 @@
             </div>
             <div class="scroller-foot"></div>
         </div>
+        <div class="scroller-foot"></div>
     </form>
 </div>
 
@@ -98,8 +99,9 @@ jQuery(document).ready(function() {
     /* init */
     (function(){
         var resize = function(){
-            if( $('#scroller-frame').outerWidth()===$('#scroller-frame').innerWidth() ){ $('#scroller-frame, .scroller-mid').css('border-width',($(window).width()/100)+'px') }
-            //$('#scroller-frame').css('position','table').css('position','fixed');
+            var vw = $(window).width()/100;
+            if( $('#scroller-frame').outerWidth()===$('#scroller-frame').innerWidth() ){ $('#scroller-frame, .scroller-mid').css('border-width',vw+'px') }
+            $('#scroller-frame').height($('.scroller-mid').innerHeight());//.css({'top':'inherit','bottom':($('.scroller-mid').offset().top+$('.scroller-mid').innerHeight()+1.8*vw)+'px'});
         }; resize(); $(window).on('resize', function(){ resize(); });
         $('.scroller-wrap:nth-child(n+'+(p+ps)+')').hide(0);
         $('.scroller-wrap:nth-child(n+'+(p+ps-1)+')>.scroller-foot').css('opacity',0);
@@ -117,7 +119,7 @@ jQuery(document).ready(function() {
     function pageSnap(direction){
         if( !!canscroll ){
             p += direction*1; 
-            if( !$('#p'+p).filter(':visible').length ){ p -= direction*1; return; }
+            if( !$('#p'+p).filter(':visible').length ){ p -= direction*1; pageSnap(0); return; }
             canscroll = 0; 
             $('html, body').animate({scrollTop:$('#p'+p).offset().top}, 500, function(){winTop=$(window).scrollTop(); setTimeout(function(){canscroll=1},100)});
         }
