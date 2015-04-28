@@ -13,7 +13,7 @@
         hr { background-color:transparent; border:solid #b89b5d; border-width:0 0 2px; clear:both; color:#b89b5d; margin:0 auto 1em; width:5%; }
         a { outline:0; }
         img { max-width:100%; height:auto; }
-        input, .btn { border:2px solid #b89b5d; outline:0; box-sizing:border-box; margin:0 0.5em; padding:2px 1px 1px 1px; text-align:center; vertical-align:middle; white-space:normal; width:40%; }
+        input, .btn { border:2px solid #b89b5d; outline:0; box-sizing:border-box; margin:0 0.5em 1em; padding:2px 1px 1px 1px; text-align:center; vertical-align:middle; white-space:normal; width:40%; }
         input[type=radio] { display:none; }
         .btn { box-shadow: 10px 10px 0 0 #b89b5d; display:inline-block; padding:2em; position:relative; }
         .btn:active { box-shadow:none; top:10px; left:10px; }
@@ -38,7 +38,7 @@
 
 <body>
 <div id="scroller">
-    <div id="header" class="scroller-top"><div class="tcell"><a class="left" title="Back to the exhibition" href="?"><img src="img/logo_va.png" alt="V&A"></a><a class="right" href="?"><img src="img/logo_sponsors.png" alt="Sponsors"></a></div></div>
+    <!--<div id="header" class="scroller-top"><div class="tcell"><a class="left" title="Back to the exhibition" href="?"><img src="img/logo_va.png" alt="V&A"></a><a class="right" href="?"><img src="img/logo_sponsors.png" alt="Sponsors"></a></div></div>-->
     <div id="scroller-frame"></div>
     <form method="post" action="#">
         <div class="scroller-wrap" id="p1">
@@ -99,8 +99,8 @@ jQuery(document).ready(function() {
     (function(){
         var resize = function(){
             if( $('#scroller-frame').outerWidth()===$('#scroller-frame').innerWidth() ){ $('#scroller-frame, .scroller-mid').css('border-width',($(window).width()/100)+'px') }
+            //$('#scroller-frame').css('position','table').css('position','fixed');
         }; resize(); $(window).on('resize', function(){ resize(); });
-        
         $('.scroller-wrap:nth-child(n+'+(p+ps)+')').hide(0);
         $('.scroller-wrap:nth-child(n+'+(p+ps-1)+')>.scroller-foot').css('opacity',0);
         $(window).scrollTop(0);
@@ -129,9 +129,6 @@ jQuery(document).ready(function() {
     $(window).on('scroll', function(e){ e.preventDefault(); pageSnap(scrollDir()); });
     $(window).on('resize', function(e){ e.preventDefault(); pageSnap(0); });
     $('form').on('focusout', 'input', function(){ canscroll=1; pageSnap(0); });
-    if( !!('ontouchstart' in window) ){
-        $('form').on('focus', 'input', function(){ canscroll=0; });
-    }
     
     /* validation */
     function in_array(arr, val) {
@@ -157,7 +154,10 @@ jQuery(document).ready(function() {
         return true;
     }
     
-    $('form').on('change keyup focusout', 'input', function(){
+    $('form').on('change keyup focus focusout', 'input', function(){
+        if( !!('ontouchstart' in window) ){
+            canscroll=0;
+        }
         if( validate(this) ){
             $('#p'+p+'>.scroller-foot').animate({'opacity':1}, 500);
             $('#p'+(p+1)).show(500);
