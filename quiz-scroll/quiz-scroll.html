@@ -105,11 +105,11 @@ jQuery(document).ready(function() {
         var resize = function(){
             var vw = $(window).width()/100;
             if( $('#scroller-frame').outerWidth()===$('#scroller-frame').innerWidth() ){ $('#scroller-frame, .scroller-mid').css('border-width',vw+'px') }
-            $('#scroller-frame').height($('.scroller-mid').innerHeight());//.css({'top':'inherit','bottom':($('.scroller-mid').offset().top+$('.scroller-mid').innerHeight()+1.8*vw)+'px'});
+            $('#scroller-frame').height($('.scroller-mid').innerHeight());
         }; resize(); $(window).on('resize', function(){ resize(); });
         $('.scroller-wrap:nth-child(n+'+(p+ps)+')').hide(0);
         $('.scroller-wrap:nth-child(n+'+(p+ps-1)+')>.scroller-foot').css('opacity',0);
-        $(window).scrollTop(0);
+        pageSnap(0);
     })();
     
     /* scrolling */
