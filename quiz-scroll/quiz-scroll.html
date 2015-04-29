@@ -132,8 +132,8 @@ jQuery(document).ready(function() {
         return false;
     }
     
-    $('#scroller').on('click', '.scroller-foot>.scroller-nav', function(e){ e.preventDefault(); pageSnap(1); });
-    $('#scroller').on('click', '.scroller-top>.scroller-nav', function(e){ e.preventDefault(); pageSnap(-1); });
+    $('#scroller').on('click', '.scroller-foot .scroller-nav', function(e){ e.preventDefault(); pageSnap(1); });
+    $('#scroller').on('click', '.scroller-top .scroller-nav', function(e){ e.preventDefault(); pageSnap(-1); });
     $(window).on('scroll', function(e){ e.preventDefault(); pageSnap(scrollDir()); });
     $(window).on('resize', function(e){ e.preventDefault(); pageSnap(0); });
     $('form').on('focusout', 'input', function(){ canscroll=1; pageSnap(0); });
