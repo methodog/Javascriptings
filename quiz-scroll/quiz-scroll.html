@@ -20,7 +20,7 @@
         input, .btn { border:2px solid #b89b5d; outline:0; box-sizing:border-box; margin:0 0.5em 1em; padding:2px 1px 1px 1px; text-align:center; vertical-align:middle; white-space:normal; width:40%; }
         input[type=radio] { display:none; }
         .btn { box-shadow: 10px 10px 0 0 #b89b5d; display:inline-block; padding:2em; position:relative; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
-        .btn:active { box-shadow:none; top:10px; left:10px; }
+        .btn:hover, .btn:active, .btn.selected { box-shadow:none; top:10px; left:10px; }
         #scroller { background:transparent; color:#a16d19; font:20px/1.5 TimesNewRoman,Times New Roman,Times,Baskerville,Georgia,serif; }
         #scroller-frame, .scroller-mid { border:0px solid #b89b5d; border-width:1vw; width:90.5%; height:74%; }
         #scroller-frame { position:fixed; left:5.4%; top:13.5%; z-index:1; }
@@ -94,7 +94,8 @@
 <script type="text/javascript">
 jQuery(document).ready(function() {
     
-    var p = 1,
+    var touchscreen = !!('ontouchstart' in window),
+        p = 1,
         ps = 2, //initial no of pgs to show
         winTop = $(window).scrollTop(),
         canscroll = 1,
@@ -135,7 +136,7 @@ jQuery(document).ready(function() {
     $(window).on('scroll', function(e){ e.preventDefault(); pageSnap(scrollDir()); });
     $(window).on('resize', function(e){ e.preventDefault(); pageSnap(0); });
     $('form').on('focusout', 'input', function(){ canscroll=1; pageSnap(0); });
-    
+
     /* validation */
     function in_array(arr, val) {
       for (var i = 0, len = arr.length; i < len; i++) {
@@ -161,16 +162,17 @@ jQuery(document).ready(function() {
     }
     
     $('form').on('change keyup focus focusout', 'input', function(){
-        if( !!('ontouchstart' in window) ){
-            canscroll=0;
+        if( touchscreen ){
+            if( this.type==='text' ){ canscroll=0 }
         }
         if( validate(this) ){
             $('#p'+p+'>.scroller-foot').animate({'opacity':1}, 500);
             $('#p'+(p+1)).show(500);
         }
     });
+    $('form').on('click', '.btn', function(){ $(this).addClass('selected').siblings('.btn').removeClass('selected'); });
     
-    /* validation */
+    /* submission */
     function definery(form){
         console.log($("input[name=a-handmade]:checked").val());
         return false;
