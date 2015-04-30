@@ -96,6 +96,7 @@
                     <h2 id="q_result"></h2>
                     <input type="hidden" id="q_data_1" name="q_data_1" value="">
                     <input type="hidden" id="q_data_2" name="q_data_2" value="">
+                    <input type="hidden" id="tag_manager_submit">
                 </div>
             </div>
             <div class="scroller-foot"></div>
@@ -199,6 +200,7 @@ jQuery(document).ready(function() {
         $('#q_data_2').val(date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate()+':'+q_result+':'+q_object+','+q_handmade);
         $('#q_result_title').html(q_object);
         $('#q_result').html(q_result);
+        $('#tag_manager_submit').click();
         pageSnap(1);
         return false;
     }
