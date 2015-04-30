@@ -25,6 +25,7 @@
         #scroller-frame, .scroller-mid { border:0px solid #b89b5d; border-width:1vw; width:90.5%; height:74%; }
         #scroller-frame { position:fixed; left:5.4%; top:13.5%; z-index:1; }
         #header { width:92.3%; position:fixed; left:3.6%; }
+        #q_result_title, #q_result { color:#a16d19; }
         .scroller-mid { border-color:#231f20; display:table; padding:6% 4% 8% 6%; position:relative; left:3.6%; }
         .tcell { display:table-cell; text-align:center; vertical-align:middle; position:relative; z-index:1; }
         .scroller-nav img { min-width:53px; width:20%;  }
@@ -61,7 +62,7 @@
             <div class="scroller-mid">
                 <div class="tcell">
                     <h2>WHAT IS YOUR OBJECT?</h2>
-                    <input type="text" id="a-object">
+                    <input type="text" id="q_object" name="q_object">
                 </div>
             </div>
             <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="#p3" title="next"><img src="img/next.png" alt="next"></div></a></div>
@@ -71,8 +72,8 @@
             <div class="scroller-mid">
                 <div class="tcell">
                     <h2>Is it handmade or mass-produced?</h2>
-                    <label class="btn" for="a-handmade">handmade</label><input type="radio" name="a-handmade" id="a-handmade" value="handmade">
-                    <label class="btn" for="a-mass-produced">mass-produced</label><input type="radio" name="a-handmade" id="a-mass-produced" value="mass-produced">
+                    <label class="btn" for="q_handmade">handmade</label><input type="radio" name="q_handmade" id="q_handmade" value="handmade">
+                    <label class="btn" for="q_mass-produced">mass-produced</label><input type="radio" name="q_handmade" id="q_mass-produced" value="mass-produced">
                 </div>
             </div>
             <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="#p4" title="next"><img src="img/next.png" alt="next"></div></a></div>
@@ -81,7 +82,20 @@
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="#p3" title="back"><img src="img/prev.png" alt="back"></div></a></div>
             <div class="scroller-mid">
                 <div class="tcell">
-                    copy copy copy copy copy copy copy copy 
+                <h2>Do you want to know?</h2>
+                    <input class="btn" type="submit" id="q_submit" name="q_submit" value="Tell it to me">
+                </div>
+            </div>
+            <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="#p5" title="next"><img src="img/next.png" alt="next"></div></a></div>
+        </div>
+        <div class="scroller-wrap" id="p5">
+            <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="#p3" title="back"><img src="img/prev.png" alt="back"></div></a></div>
+            <div class="scroller-mid">
+                <div class="tcell">
+                    <h2>Your <span id="q_result_title"></span> is...</h2>
+                    <h2 id="q_result"></h2>
+                    <input type="hidden" id="q_data_1" name="q_data_1">
+                    <input type="hidden" id="q_data_2" name="q_data_2">
                 </div>
             </div>
             <div class="scroller-foot"></div>
@@ -99,7 +113,9 @@ jQuery(document).ready(function() {
         ps = 2, //initial no of pgs to show
         winTop = $(window).scrollTop(),
         canscroll = 1,
-        stopwords = ['luca','keith','tania','tom','chris'];
+        stopwords = ['luca','keith','tania','tom','chris'],
+        triggers_luxury = ['time','holiday','peace','friend','pet','cat','dog'],
+        triggers_vulgar = ['gold','car'];
 
     /* init */
     (function(){
@@ -152,7 +168,8 @@ jQuery(document).ready(function() {
     
     function validate(input){
         var t = input.type,
-            v = input.value;
+            v = input.value.trim().replace(',',' ');
+        $(input).val(v);
         $(input).removeClass('invalid');
         if( t==='text' ){
             if( v.length < 3 ){ halt_quiz(); return false; }
@@ -170,11 +187,22 @@ jQuery(document).ready(function() {
             $('#p'+(p+1)).show(0);
         }
     });
-    $('form').on('click', '.btn', function(){ $(this).addClass('selected').siblings('.btn').removeClass('selected'); });
+    $('form').on('click', '.btn', function(){ if( this.type!=='submit' ){ $(this).addClass('selected').siblings('.btn').removeClass('selected') } });
     
     /* submission */
     function definery(form){
-        console.log($("input[name=a-handmade]:checked").val());
+        var q_object = $('#q_object').val(),
+            q_handmade = $('input[name=q_handmade]:checked').val(),
+            q_result,
+            date = new Date();
+        if( in_array(triggers_luxury, q_object) ){ q_result = 'luxury'; }
+        else if( in_array(triggers_vulgar, q_object) ){ q_result = 'vulgar'; }
+        else { q_result = Math.random()>0.5? 'luxury' : 'vulgar'; }
+        $('#q_data_1').val(q_result);
+        $('#q_data_2').val(date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate()+':'+q_result+':'+q_object+','+q_handmade);
+        $('#q_result_title').html(q_object);
+        $('#q_result').html(q_result);
+        pageSnap(1);
         return false;
     }
     
