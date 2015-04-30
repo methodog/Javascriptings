@@ -176,11 +176,9 @@ jQuery(document).ready(function() {
         return true;
     }
     
-    $('form').on('focusout', 'input', function(){ if( touchscreen ){ canscroll=1; pageSnap(0); } }); // because of ios screen keyboard
+    $('form').on('focusout', 'input', function(){ if( touchscreen && this.type==='text' ){ canscroll=1; pageSnap(0); } }); // because of ios screen keyboard
     $('form').on('change keyup focus focusout', 'input', function(){
-        if( touchscreen ){
-            if( this.type==='text' ){ canscroll=0 } // because of ios screen keyboard
-        }
+        if( touchscreen && this.type==='text' ){ canscroll=0 } // because of ios screen keyboard
         if( validate(this) ){
             $('#p'+p+'>.scroller-foot').animate({'opacity':1}, 500);
             $('#p'+(p+1)).show(0);
