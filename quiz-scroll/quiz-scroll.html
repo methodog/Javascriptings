@@ -17,7 +17,7 @@
         hr { background-color:transparent; border:solid #b89b5d; border-width:0 0 2px; clear:both; color:#b89b5d; margin:0 auto 1em; width:5%; }
         a { outline:0; }
         img { max-width:100%; height:auto; }
-        input, .btn { border:2px solid #b89b5d; color:#a16d19; outline:0; box-sizing:border-box; font-size:1.8em; margin:0 0.5em 1em; padding:2px 1px 1px 1px; text-align:center; vertical-align:middle; white-space:normal; width:40%; }
+        input, .btn { background:#fff; border:2px solid #b89b5d; box-sizing:border-box; color:#a16d19; font-size:1.8em; margin:0 0.5em 1em; outline:0; padding:2px 1px 1px 1px; text-align:center; vertical-align:middle; white-space:normal; width:40%; }
         input[type=radio] { display:none; }
         .btn { box-shadow: 10px 10px 0 0 #b89b5d; display:inline-block; padding:2em 0; position:relative; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
         .btn:hover, .btn:active, .btn.selected { box-shadow:none; top:10px; left:10px; }
@@ -94,8 +94,8 @@
                 <div class="tcell">
                     <h2>Your <span id="q_result_title"></span> is...</h2>
                     <h2 id="q_result"></h2>
-                    <input type="hidden" id="q_data_1" name="q_data_1">
-                    <input type="hidden" id="q_data_2" name="q_data_2">
+                    <input type="hidden" id="q_data_1" name="q_data_1" value="">
+                    <input type="hidden" id="q_data_2" name="q_data_2" value="">
                 </div>
             </div>
             <div class="scroller-foot"></div>
@@ -113,7 +113,7 @@ jQuery(document).ready(function() {
         ps = 2, //initial no of pgs to show
         winTop = $(window).scrollTop(),
         canscroll = 1,
-        stopwords = ['luca','keith','tania','tom','chris'],
+        stopwords = ['luca','keith','andrew','tania','tom','chris'],
         triggers_luxury = ['time','holiday','peace','friend','pet','cat','dog'],
         triggers_vulgar = ['gold','car'];
 
@@ -139,9 +139,9 @@ jQuery(document).ready(function() {
     
     function pageSnap(direction){
         if( !!canscroll ){
-            p += direction*1; 
+            p += direction*1;
             if( !$('#p'+p).filter(':visible').length ){ p -= direction*1; pageSnap(0); return; }
-            canscroll = 0; 
+            canscroll = 0;
             $('html, body').animate({scrollTop:$('#p'+p).offset().top}, 500, function(){winTop=$(window).scrollTop(); setTimeout(function(){canscroll=1},100)});
         }
         return false;
@@ -151,7 +151,6 @@ jQuery(document).ready(function() {
     $('#scroller').on('click', '.scroller-top .scroller-nav', function(e){ e.preventDefault(); pageSnap(-1); });
     $(window).on('scroll', function(e){ e.preventDefault(); pageSnap(scrollDir()); });
     $(window).on('resize', function(e){ e.preventDefault(); pageSnap(0); });
-    $('form').on('focusout', 'input', function(){ canscroll=1; pageSnap(0); });
 
     /* validation */
     function in_array(arr, val) {
@@ -177,9 +176,10 @@ jQuery(document).ready(function() {
         return true;
     }
     
+    $('form').on('focusout', 'input', function(){ if( touchscreen ){ canscroll=1; pageSnap(0); } }); // because of ios screen keyboard
     $('form').on('change keyup focus focusout', 'input', function(){
         if( touchscreen ){
-            if( this.type==='text' ){ canscroll=0 }
+            if( this.type==='text' ){ canscroll=0 } // because of ios screen keyboard
         }
         if( validate(this) ){
             $('#p'+p+'>.scroller-foot').animate({'opacity':1}, 500);
