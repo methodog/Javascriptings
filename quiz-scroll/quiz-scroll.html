@@ -34,7 +34,17 @@
         .scroller-top, .scroller-foot { display:table; margin:0 auto; width:25%; }
         .scroller-top { height:11%; }
         .scroller-foot { height:15%; }
-        .invalid { background:#231f20; }
+        @-webkit-keyframes shake {
+            0%, 100% { -webkit-transform:translate3d(0, 0, 0); transform:translate3d(0, 0, 0); }
+            10%, 30%, 50%, 70%, 90% { -webkit-transform:translate3d(-10px, 0, 0); transform:translate3d(-10px, 0, 0); }
+            20%, 40%, 60%, 80% {-webkit-transform:translate3d(10px, 0, 0); transform:translate3d(10px, 0, 0); }
+        }
+        @keyframes shake {
+            0%, 100% { -webkit-transform:translate3d(0, 0, 0); transform:translate3d(0, 0, 0); }
+            10%, 30%, 50%, 70%, 90% { -webkit-transform:translate3d(-10px, 0, 0); transform:translate3d(-10px, 0, 0); }
+            20%, 40%, 60%, 80% { -webkit-transform:translate3d(10px, 0, 0); transform:translate3d(10px, 0, 0); }
+        }
+        .invalid { background:#231f20; -webkit-animation-name:shake; animation-name:shake; -webkit-animation-duration:1s; animation-duration:1s; }
         .left { float:left; }
         .right { float:right; }
         @media screen and (max-width:800px) {
