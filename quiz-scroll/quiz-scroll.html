@@ -27,10 +27,11 @@
         #scroller-frame, .scroller-mid { border:0px solid #b89b5d; border-width:1vw; width:90.5%; height:74%; }
         #scroller-frame { position:fixed; left:5.4%; top:13.5%; z-index:1; }
         #header { width:92.3%; position:fixed; left:3.6%; }
+        #logo_va { max-width:110px; min-width:44px; width:40%; }
         #q_result_title, #q_result { color:#a16d19; }
         .scroller-mid { border-color:#231f20; display:table; padding:6% 4% 8% 6%; position:relative; left:3.6%; }
         .tcell { display:table-cell; text-align:center; vertical-align:middle; position:relative; z-index:1; }
-        .scroller-nav img { min-width:53px; width:20%;  }
+        .scroller-nav img { min-width:44px; width:20%;  }
         .scroller-top, .scroller-foot { display:table; margin:0 auto; width:25%; }
         .scroller-top { height:11%; }
         .scroller-foot { height:15%; }
@@ -52,12 +53,15 @@
             h1, h2 { letter-spacing:0.25em; }
             input, .btn { width:80%; }
         }
+        @media screen and (orientation:portrait) {
+            #logo_va { min-width:70px; }
+        }
     </style>	
 </head>
 
 <body>
 <div id="scroller">
-    <div id="header"><div class="scroller-top left"><a class="tcell" title="Back to the exhibition" href="?"><img class="left" id="logo_va" src="img/logo_va.png" alt="V&A"></a></div></div>
+    <div id="header"><div class="scroller-top left"><a class="tcell" title="Back to the exhibition" href="?"><img id="logo_va" class="left" id="logo_va" src="img/logo_va.png" alt="V&A"></a></div></div>
     <div id="scroller-frame"></div>
     <form method="post" action="#">
         <div class="scroller-wrap">
