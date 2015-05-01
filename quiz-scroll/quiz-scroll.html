@@ -74,6 +74,27 @@
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></div></a></div>
             <div class="scroller-mid">
                 <div class="tcell">
+                    <h2>WOULD IT COST YOU ANYTHING?</h2>
+                    <label class="btn" for="q_not-free">yes</label><input type="radio" name="q_free" id="q_not-free" value="not-free">
+                    <label class="btn" for="q_free">no</label><input type="radio" name="q_free" id="q_free" value="free">
+                </div>
+            </div>
+            <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></div></a></div>
+        </div>
+        <div class="scroller-wrap">
+            <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></div></a></div>
+            <div class="scroller-mid">
+                <div class="tcell">
+                    <h2>HOW MUCH WOULD IT COST?</h2>
+                    £<input type="text" id="q_cost" name="q_cost">
+                </div>
+            </div>
+            <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></div></a></div>
+        </div>
+        <div class="scroller-wrap">
+            <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></div></a></div>
+            <div class="scroller-mid">
+                <div class="tcell">
                     <h2>Is it handmade or mass-produced?</h2>
                     <label class="btn" for="q_handmade">handmade</label><input type="radio" name="q_handmade" id="q_handmade" value="handmade">
                     <label class="btn" for="q_mass-produced">mass-produced</label><input type="radio" name="q_handmade" id="q_mass-produced" value="mass-produced">
@@ -115,6 +136,7 @@ jQuery(document).ready(function() {
     var touchscreen = !!('ontouchstart' in window),
         p = 1,
         ps = 2, //initial no of pgs to show
+        plen = $('.scroller-wrap').length,
         winTop = $(window).scrollTop(),
         canscroll = 1,
         stopwords = ['luca','keith','andrew','tania','tom','chris'],
@@ -141,10 +163,16 @@ jQuery(document).ready(function() {
         return d;
     }
     
-    function pageSnap(direction){
-        if( !!canscroll ){
-            p += direction*1;
-            if( !$('.scroller-wrap:nth-child('+p+')').filter(':visible').length ){ p -= direction*1; pageSnap(0); return; }
+    function pageSnap(dir){
+        if( canscroll ){
+            if( dir!==0 ){
+                var p1 = p;
+                for ( var i=0, len=dir<0?p:plen-p; i<len; ++i){
+                    p1 += dir;
+                    if( $('.scroller-wrap:nth-child('+p1+')').filter(':visible').length ){ p = p1; break; }
+                }
+                if( p1===p ){ pageSnap(0); return; }
+            }
             canscroll = 0;
             $('html, body').animate({scrollTop:$('.scroller-wrap:nth-child('+p+')').offset().top}, 500, function(){winTop=$(window).scrollTop(); setTimeout(function(){canscroll=1},100)});
         }
@@ -163,28 +191,38 @@ jQuery(document).ready(function() {
         return false;
     }
     
-    function halt_quiz(input){
-        $('.scroller-wrap:nth-child(n+'+p+')>.scroller-foot').stop(1).css({'opacity':0});
-        $('.scroller-wrap:nth-child(n+'+(p+1)+')').stop(1).hide(0);
+    function hide_next(halt){
+        var n = '';
+        if( !!halt ){
+            n = 'n+'; 
+            for ( var i=p+1; i<=plen; ++i){
+                $('.scroller-wrap:nth-child('+i+')').find('input[type=text], label').removeClass('selected').val('');
+            }
+        }
+        $('.scroller-wrap:nth-child('+p+')>.scroller-foot').stop(1).css({'opacity':0});
+        $('.scroller-wrap:nth-child('+n+(p+1)+')').stop(1).hide(0);
     }
     
     function validate(input){
         var t = input.type,
-            v = input.value.trim();
+            v = input.value.trim(),
+            np = p + 1; // next pg
         $(input).removeClass('invalid');
         if( t==='text' ){
-            if( v.length < 3 ){ halt_quiz(); return false; }
-            if( in_array(stopwords, v) ){ $(input).addClass('invalid'); halt_quiz(); return false; }
+            if( v.length < 3 ){ hide_next(1); return false; }
+            if( in_array(stopwords, v) ){ $(input).addClass('invalid'); hide_next(1); return false; }
         }
-        return true;
+        else if( input.name==='q_free' && v==='free' ){ hide_next(); np+=1; }
+        return np;
     }
     
     $('form').on('focusout', 'input', function(){ if( touchscreen && this.type==='text' ){ canscroll=1; pageSnap(0); } }); // because of ios screen keyboard
     $('form').on('change keyup focus focusout click', 'input', function(){
+        var np = validate(this);
         if( touchscreen && this.type==='text' ){ canscroll=0 } // because of ios screen keyboard
-        if( validate(this) ){
-            $('.scroller-wrap:nth-child('+p+')>.scroller-foot').animate({'opacity':1}, 500);
-            $('.scroller-wrap:nth-child('+(p+1)+')').show(0);
+        if( np ){
+            $(this).closest('.scroller-wrap').find('.scroller-foot').animate({'opacity':1}, 500);
+            $('.scroller-wrap:nth-child('+np+')').show(0);
         }
     });
     $('form').on('click', '.btn', function(){ if( this.type!=='submit' ){ $(this).addClass('selected').siblings('.btn').removeClass('selected') } });
