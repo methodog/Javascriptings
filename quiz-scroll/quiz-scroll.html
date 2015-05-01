@@ -244,6 +244,7 @@ jQuery(document).ready(function() {
         if( next ){
             $(this).closest('.scroller-wrap').find('.scroller-foot').animate({'opacity':1}, 500).addClass('shake');
             $('.scroller-wrap:nth-child('+next+')').show(0);
+            if( this.type==='radio' ){ pageSnap(1); }
         }
     });
     $('form').on('click', '.btn', function(){ if( this.type!=='submit' ){ $(this).addClass('selected').siblings('.btn').removeClass('selected') } });
