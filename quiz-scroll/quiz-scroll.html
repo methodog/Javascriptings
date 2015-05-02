@@ -18,9 +18,18 @@
         hr { background-color:transparent; border:solid #b89b5d; border-width:0 0 2px; clear:both; color:#b89b5d; margin:0 auto 1em; width:5%; }
         a { outline:0; }
         img { max-width:100%; height:auto; }
-        input, .btn { background:#fff; border:2px solid #b89b5d; border-radius:0; box-sizing:border-box; color:#a16d19; font-size:1.3em; margin:0.5em 1%; outline:0; padding:2px 1px 1px 1px; text-align:center; vertical-align:middle; white-space:normal; width:40%; }
+        label { vertical-align:middle; }
+        input, .btn { background:#fff; border:2px solid #b89b5d; border-radius:0; box-sizing:border-box; color:#a16d19; cursor:pointer; font-size:1.3em; margin:0.5em 1%; outline:0; padding:2px 1px 1px 1px; text-align:center; vertical-align:middle; white-space:normal; width:40%; }
+        input:focus { outline:none; }
         input[type=radio] { display:none; }
-        input[type=submit] { -webkit-appearance:none; appearance:none; }
+        input[type=submit], input[type=range] { appearance:none; -webkit-appearance:none; }
+        input[type=range] { border:0; height:1.2em; outline:none; }
+        input[type=range]::-moz-range-thumb { background:#231f20; border:0; border-radius:4px; width:8px; height:100%; }
+        input[type=range]::-webkit-slider-thumb { background:#231f20; border:0; border-radius:4px; width:8px; height:38px; -webkit-appearance:none; margin-top:-15px; }
+        input[type=range]::-ms-thumb { background:#231f20; border:0; border-radius:4px; width:8px; height:100%; }
+        input[type=range]::-moz-range-track { background:#b89b5d; border-radius:4px; height:8px; }
+        input[type=range]::-webkit-slider-runnable-track { background:#b89b5d; border-radius:4px; height:8px; }
+        input[type=range]::-ms-track { background:#b89b5d; border-radius:4px; height:8px; }
         .btn { box-shadow: 10px 10px 0 0 #b89b5d; display:inline-block; padding:4% 0; position:relative; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
         .btn:hover, .btn:active, .btn.selected { box-shadow:none; top:10px; left:10px; }
         #scroller { background:transparent; color:#a16d19; font:20px/1.5 TimesNewRoman,Times New Roman,Times,Baskerville,Georgia,serif; }
@@ -49,6 +58,7 @@
         .invalid { background:#231f20; }
         .left { float:left; }
         .right { float:right; }
+        .icon { font-size:3em; line-height:1em; }
         @media screen and (max-width:800px) {
             h1, h2 { font-size:1.3em; letter-spacing:0.25em; }
             #scroller { font-size:18px; }
@@ -104,7 +114,7 @@
             <div class="scroller-mid">
                 <div class="tcell">
                     <h2>HOW MUCH WOULD IT COST?</h2>
-                    £<input type="text" id="q_cost" name="q_cost">
+                    <label class="icon" for="q_cost">£</label><input type="text" id="q_cost" name="q_cost">
                 </div>
             </div>
             <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
@@ -153,9 +163,17 @@
             </div>
             <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
         </div>
-        
-        
-        
+        <div class="scroller-wrap">
+            <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
+            <div class="scroller-mid">
+                <div class="tcell">
+                    <h2>HOW DO YOU FEEL IF PEOPLE TALK ABOUT YOUR OBJECT?</h2>
+                    <label for="q_pride">Indifferent</label><br>
+                    <input type="range" name="q_pride" id="q_pride" min="1" max="5" value="3" step="1">
+                </div>
+            </div>
+            <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
+        </div>
         <div class="scroller-wrap">
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
             <div class="scroller-mid">
@@ -167,9 +185,6 @@
             </div>
             <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
         </div>
-        
-        
-        
         <div class="scroller-wrap">
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
             <div class="scroller-mid">
@@ -181,10 +196,6 @@
             </div>
             <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
         </div>
-        
-        
-        
-        
         <div class="scroller-wrap">
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
             <div class="scroller-mid">
@@ -224,7 +235,8 @@ jQuery(document).ready(function() {
         canscroll = 1,
         stopwords = ['luca','keith','andrew','tania','tom','chris'],
         triggers_luxury = ['time','holiday','peace','friend','pet','cat','dog'],
-        triggers_vulgar = ['gold','car'];
+        triggers_vulgar = ['gold','car'],
+        pride_vals = ['Mildly embarrassed', 'Warm inside', 'Indifferent', 'Proud', 'Shouting from the rooftops'];
 
     /* init */
     (function(){
@@ -296,8 +308,13 @@ jQuery(document).ready(function() {
             if( v.length<3 ){ hide_next(1); return false; }
             if( in_array(stopwords, v) ){ hide_next(1); return false; }
         }
-        else if( n==='q_free' && v==='free' ){ hide_next(); np+=1; }
         else if( n==='q_cost' && ( v.length<1 || isNaN(v) ) ){ hide_next(1); return false; }
+        else if( n==='q_free' && v==='free' ){ hide_next(); np+=1; }
+        else if( n==='q_visible' && v==='no' ){ hide_next(); np+=1; }
+        else if( t==='range' ){
+            if( n==='q_pride' ){ v=pride_vals[v-1]; }
+            $('label[for='+n+']').html(v);
+        }
         return np;
     }
     
@@ -324,9 +341,8 @@ jQuery(document).ready(function() {
             'limited':$('input[name=q_limited]:checked').val(),
             'decorative':$('input[name=q_decorative]:checked').val(),
             'visible':$('input[name=q_visible]:checked').val(),
-            
+            'pride':$('input[name=q_pride]').val(),
             'inherit':$('input[name=q_inherit]:checked').val(),
-            
             'bequeath':$('input[name=q_bequeath]:checked').val(),
             },
             result,
