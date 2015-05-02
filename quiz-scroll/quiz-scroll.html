@@ -113,7 +113,7 @@
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
             <div class="scroller-mid">
                 <div class="tcell">
-                    <h2>Is it handmade or mass-produced?</h2>
+                    <h2>IS IT HANDMADE OR MASS-PRODUCED?</h2>
                     <label class="btn" for="q_handmade">handmade</label><input type="radio" name="q_handmade" id="q_handmade" value="handmade">
                     <label class="btn" for="q_mass-produced">mass-produced</label><input type="radio" name="q_handmade" id="q_mass-produced" value="mass-produced">
                 </div>
@@ -124,8 +124,73 @@
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
             <div class="scroller-mid">
                 <div class="tcell">
-                <h2>Do you want to know?</h2>
-                    <input class="btn" type="submit" id="q_submit" name="q_submit" value="Tell it to me">
+                    <h2>IS IT A ONE-OFF OR LIMITED EDITION?</h2>
+                    <label class="btn" for="q_limited">yes</label><input type="radio" name="q_limited" id="q_limited" value="yes">
+                    <label class="btn" for="q_limited-no">no</label><input type="radio" name="q_limited" id="q_limited-no" value="no">
+                </div>
+            </div>
+            <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
+        </div>
+        <div class="scroller-wrap">
+            <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
+            <div class="scroller-mid">
+                <div class="tcell">
+                    <h2>WOULD YOU SAY IT'S MORE DECORATIVE OR PRACTICAL?</h2>
+                    <label class="btn" for="q_decorative">decorative</label><input type="radio" name="q_decorative" id="q_decorative" value="decorative">
+                    <label class="btn" for="q_practical">practical</label><input type="radio" name="q_decorative" id="q_practical" value="practical">
+                </div>
+            </div>
+            <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
+        </div>
+        <div class="scroller-wrap">
+            <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
+            <div class="scroller-mid">
+                <div class="tcell">
+                    <h2>IS IT VISIBLE TO OTHER PEOPLE?</h2>
+                    <label class="btn" for="q_visible">yes</label><input type="radio" name="q_visible" id="q_visible" value="yes">
+                    <label class="btn" for="q_visible-no">no</label><input type="radio" name="q_visible" id="q_visible-no" value="no">
+                </div>
+            </div>
+            <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
+        </div>
+        
+        
+        
+        <div class="scroller-wrap">
+            <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
+            <div class="scroller-mid">
+                <div class="tcell">
+                    <h2>DID YOU INHERIT THIS OBJECT?</h2>
+                    <label class="btn" for="q_inherit">yes</label><input type="radio" name="q_inherit" id="q_inherit" value="yes">
+                    <label class="btn" for="q_inherit-no">no</label><input type="radio" name="q_inherit" id="q_inherit-no" value="no">
+                </div>
+            </div>
+            <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
+        </div>
+        
+        
+        
+        <div class="scroller-wrap">
+            <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
+            <div class="scroller-mid">
+                <div class="tcell">
+                    <h2>WOULD YOU BEQUEATH IT TO ANOTHER PERSON?</h2>
+                    <label class="btn" for="q_bequeath">yes</label><input type="radio" name="q_bequeath" id="q_bequeath" value="yes">
+                    <label class="btn" for="q_bequeath-no">no</label><input type="radio" name="q_bequeath" id="q_bequeath-no" value="no">
+                </div>
+            </div>
+            <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
+        </div>
+        
+        
+        
+        
+        <div class="scroller-wrap">
+            <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
+            <div class="scroller-mid">
+                <div class="tcell">
+                <h2>Ready for judgement?</h2>
+                    <input class="btn" type="submit" id="q_submit" name="q_submit" value="Run the Definery">
                 </div>
             </div>
             <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
@@ -256,6 +321,13 @@ jQuery(document).ready(function() {
             'free':$('input[name=q_free]:checked').val(),
             'cost':$('#q_cost').val().trim().replace(',',' '),
             'handmade':$('input[name=q_handmade]:checked').val(),
+            'limited':$('input[name=q_limited]:checked').val(),
+            'decorative':$('input[name=q_decorative]:checked').val(),
+            'visible':$('input[name=q_visible]:checked').val(),
+            
+            'inherit':$('input[name=q_inherit]:checked').val(),
+            
+            'bequeath':$('input[name=q_bequeath]:checked').val(),
             },
             result,
             date = new Date(),
