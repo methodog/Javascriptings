@@ -251,19 +251,25 @@ jQuery(document).ready(function() {
     
     /* submission */
     function definery(form){
-        var q_object = $('#q_object').val().trim().replace(',',' '),
-            q_handmade = $('input[name=q_handmade]:checked').val(),
-            q_result,
-            date = new Date();
-        if( in_array(triggers_luxury, q_object) ){ q_result = 'luxury'; }
-        else if( in_array(triggers_vulgar, q_object) ){ q_result = 'vulgar'; }
-        else { q_result = Math.random()>0.5? 'luxury' : 'vulgar'; }
-        $('#q_result_title').html(q_object);
-        $('#q_result').html(q_result);
+        var qd = {
+            'object':$('#q_object').val().trim().replace(',',' '),
+            'free':$('input[name=q_free]:checked').val(),
+            'cost':$('#q_cost').val().trim().replace(',',' '),
+            'handmade':$('input[name=q_handmade]:checked').val(),
+            },
+            result,
+            date = new Date(),
+            gdata = '';
+        if( in_array(triggers_luxury, qd.object) ){ result = 'luxury'; }
+        else if( in_array(triggers_vulgar, qd.object) ){ result = 'vulgar'; }
+        else { result = Math.random()>0.5? 'luxury' : 'vulgar'; }
+        $('#q_result_title').html(qd.object);
+        $('#q_result').html(result);
         pageSnap(1);
         //google analytics
-        $('#q_data_1').val(q_result);
-        $('#q_data_2').val(date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate()+','+q_result+','+q_object+','+q_handmade);
+        for( d in qd ){ gdata += ','+qd[d]; }
+        $('#q_data_1').val(result);
+        $('#q_data_2').val(date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate()+','+ result + gdata);
         $('#tag_manager_submit').click();
         return false;
     }
