@@ -56,9 +56,10 @@
         }
         .invalid, .shake { -webkit-animation-name:shake; animation-name:shake; -webkit-animation-duration:1s; animation-duration:1s; }
         .invalid { background:#231f20; }
+        .icon { font-size:3em; line-height:1em; }
         .left { float:left; }
         .right { float:right; }
-        .icon { font-size:3em; line-height:1em; }
+        .show { opacity:1 !important; }
         @media screen and (max-width:800px) {
             h1, h2 { font-size:1.1em; letter-spacing:0.2em; }
             #scroller { font-size:16px; }
@@ -293,6 +294,7 @@ jQuery(document).ready(function() {
         }; resize(); $(window).on('resize', function(){ resize(); });
         $('.scroller-wrap').slice(p+ps-1).hide(0);
         $('.scroller-wrap').slice(p+ps-2).find('.scroller-foot').css('opacity',0);
+        $('input[type=range]').closest('.scroller-wrap').find('.scroller-foot').addClass('show');
         pageSnap(0);
     })();
     
