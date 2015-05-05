@@ -317,7 +317,7 @@ jQuery(document).ready(function() {
                 if( p1===p ){ pageSnap(0); return; }
             }
             canscroll = 0;
-            $('html, body').animate({scrollTop:$('.scroller-wrap').eq(p-1).offset().top}, 500, function(){winTop=$(window).scrollTop(); setTimeout(function(){canscroll=1},100)});
+            $('html, body').animate({scrollTop:$('.scroller-wrap').eq(p-1).offset().top}, 500, function(){ winTop=$(window).scrollTop(); setTimeout(function(){ canscroll=1; if( Math.abs(winTop-$('.scroller-wrap').eq(p-1).offset().top)>1 ){ pageSnap(0) } },100)});
         }
         return false;
     }
