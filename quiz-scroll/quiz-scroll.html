@@ -280,6 +280,8 @@ jQuery(document).ready(function() {
         ps = 2, //initial no of pgs to show
         plen = $('.scroller-wrap').length,
         winTop = $(window).scrollTop(),
+        winW = $(window).width(),
+        winH = $(window).height(),
         canscroll = 1,
         stopwords = ['luca','keith','andrew','tania','tom','chris'],
         triggers_luxury = ['time','holiday','peace','friend','pet','cat','dog'],
@@ -288,8 +290,14 @@ jQuery(document).ready(function() {
     /* init */
     (function(){
         var resize = function(){
-            var vw = $(window).width()/100;
-            if( $('#scroller-frame').outerWidth()===$('#scroller-frame').innerWidth() ){ $('#scroller-frame, .scroller-mid').css('border-width',vw+'px') }
+            var winW2 = $(window).width(),
+                winH2 = $(window).height();
+            if( touchscreen && Math.abs(winW2-winW)<1 && winH2-winH>100 ){
+                canscroll=1; pageSnap(0);
+            }
+            winW = winW2;
+            winH = winH2;
+            if( $('#scroller-frame').outerWidth()===$('#scroller-frame').innerWidth() ){ $('#scroller-frame, .scroller-mid').css('border-width',(winW2/100)+'px') }
             $('#scroller-frame').height($('.scroller-mid').innerHeight());
         }; resize(); $(window).on('resize', function(){ resize(); });
         $('.scroller-wrap').slice(p+ps-1).hide(0);
@@ -367,7 +375,9 @@ jQuery(document).ready(function() {
         return np;
     }
     
-    $('form').on('focusout', 'input', function(){ if( touchscreen && this.type==='text' ){ canscroll=1; pageSnap(0); } }); // because of ios screen keyboard
+    if( touchscreen ){
+        $('form').on('focusout', 'input[type=text]', function(){ canscroll=1; pageSnap(0) }); // because of ios screen keyboard
+    }
     $('form').on('change keyup focus focusout click', 'input', function(){
         var next = validate(this);
         if( !next ){ if( $(this).val().length>0 ){ $(this).addClass('invalid'); } }
