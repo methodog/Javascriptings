@@ -56,10 +56,9 @@
         }
         .invalid, .shake { -webkit-animation-name:shake; animation-name:shake; -webkit-animation-duration:1s; animation-duration:1s; }
         .invalid { background:#231f20; }
-        .icon { font-size:3em; line-height:1em; }
+        .em { font-size:3em; line-height:1em; }
         .left { float:left; }
         .right { float:right; }
-        .show { opacity:1 !important; }
         @media screen and (max-width:800px) {
             h1, h2 { font-size:1.1em; letter-spacing:0.2em; }
             #scroller { font-size:16px; }
@@ -115,7 +114,7 @@
             <div class="scroller-mid">
                 <div class="tcell">
                     <h2>HOW MUCH WOULD IT COST?</h2>
-                    <label class="icon" for="q_cost">£</label><input type="text" id="q_cost" name="q_cost" value="">
+                    <label class="em" for="q_cost">£</label><input type="text" id="q_cost" name="q_cost" value="">
                 </div>
             </div>
             <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
@@ -169,7 +168,7 @@
             <div class="scroller-mid">
                 <div class="tcell">
                     <h2>HOW DO YOU FEEL IF PEOPLE TALK ABOUT YOUR OBJECT?</h2>
-                    <label for="q_pride">Indifferent</label><br>
+                    <label for="q_pride"></label><br>
                     <input type="range" name="q_pride" id="q_pride" min="1" max="5" value="3" step="1" data-choices='["Mildly embarrassed", "Warm inside", "Indifferent", "Proud", "Shouting from the rooftops"]'>
                 </div>
             </div>
@@ -181,7 +180,7 @@
                 <div class="tcell">
                     <h2>HOW FASHIONABLE IS YOUR OBJECT?</h2>
                     On a scale of 1&ndash;5 (5 being the most)<br>
-                    <label for="q_fashionable"></label><br>
+                    <label class="em" for="q_fashionable"></label><br>
                     <input type="range" name="q_fashionable" id="q_fashionable" min="1" max="5" value="3" step="1">
                 </div>
             </div>
@@ -215,7 +214,7 @@
                 <div class="tcell">
                     <h2>HOW MUCH DO YOU EXPECT TO LOVE YOUR PURCHASE?</h2>
                     On a scale of 0&ndash;10 (10 being the most)<br>
-                    <label for="q_love"></label><br>
+                    <label class="em" for="q_love"></label><br>
                     <input type="range" name="q_love" id="q_love" min="0" max="10" value="5" step="1">
                 </div>
             </div>
@@ -227,7 +226,7 @@
                 <div class="tcell">
                     <h2>HOW MUCH POORER WOULD YOUR LIFE BE WITHOUT THIS OBJECT?</h2>
                     On a scale of 0&ndash;10 (10 being the most)<br>
-                    <label for="q_richness"></label><br>
+                    <label class="em" for="q_richness"></label><br>
                     <input type="range" name="q_richness" id="q_richness" min="0" max="10" value="5" step="1">
                 </div>
             </div>
@@ -302,7 +301,6 @@ jQuery(document).ready(function() {
         }; resize(); $(window).on('resize', function(){ resize(); });
         $('.scroller-wrap').slice(p+ps-1).hide(0);
         $('.scroller-wrap').slice(p+ps-2).find('.scroller-foot').css('opacity',0);
-        $('input[type=range]').closest('.scroller-wrap').find('.scroller-foot').addClass('show');
         pageSnap(0);
     })();
     
