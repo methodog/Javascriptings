@@ -280,7 +280,7 @@ jQuery(document).ready(function() {
         plen = $('.scroller-wrap').length,
         winTop = $(window).scrollTop(),
         winW = $(window).width(),
-        winH = $(window).height(),
+        winH = !!window.innerHeight? window.innerHeight : $(window).height(),
         canscroll = 1,
         stopwords = ['luca','keith','andrew','tania','tom','chris'],
         triggers_luxury = ['time','holiday','peace','friend','pet','cat','dog'],
@@ -290,8 +290,9 @@ jQuery(document).ready(function() {
     (function(){
         var resize = function(){
             var winW2 = $(window).width(),
-                winH2 = $(window).height();
+                winH2 = !!window.innerHeight? window.innerHeight : $(window).height();
             if( touchscreen && Math.abs(winH2-winH)>1 ){
+                $('.scroller-wrap').height(winH2);
                 canscroll=1; pageSnap(0);
             }
             winW = winW2;
