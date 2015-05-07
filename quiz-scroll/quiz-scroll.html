@@ -292,7 +292,7 @@ jQuery(document).ready(function() {
         var resize = function(){
             var winW2 = $(window).width(),
                 winH2 = $(window).height();
-            if( touchscreen && Math.abs(winW2-winW)<1 && winH2-winH>100 ){
+            if( touchscreen && Math.abs(winH2-winH)>1 ){
                 canscroll=1; pageSnap(0);
             }
             winW = winW2;
