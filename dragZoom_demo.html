@@ -16,7 +16,7 @@
             el.wh = [getComputed(el,'width'), getComputed(el,'height')];
             el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
             el.xyP = getPgOffset(el.P);
-            el.hv = el.wh[0]>el.wh[1]? 0 : 1;console.log(el.wh, el.whP);   
+            el.hv = el.wh[0]>el.wh[1]? 0 : 1;
         },
         init: function(el, opt){
             if( typeof el==='string' ){ el = document.querySelector(el); } if( !el ){ return; }
@@ -159,7 +159,7 @@
                     dragZoom.release();
                 };
             }else{
-                if( e.type==='DOMMouseScroll' || e.type==='mousewheel' ){ 
+                if( e.type==='DOMMouseScroll' || e.type==='mousewheel' ){
                     if( dragZoom.el.zoomer ){ dragZoom.zoom(e); }
                 }else{
                     document.onmousemove = dragZoom.drag;
