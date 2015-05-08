@@ -38,6 +38,7 @@
         #header { width:92.3%; position:fixed; left:3.6%; }
         #logo_va { max-width:110px; min-width:44px; width:40%; }
         #q_result_title, #q_result { color:#a16d19; }
+        #q_result { color:#a16d19; font-size:4em; letter-spacing:0.4em; }
         .scroller-mid { border-color:#231f20; display:table; padding:2% 1% 0.5% 2.5%; position:relative; left:3.6%; }
         .tcell { display:table-cell; text-align:center; vertical-align:middle; position:relative; z-index:1; }
         .scroller-nav img { min-width:44px; width:20%;  }
@@ -247,7 +248,7 @@
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
             <div class="scroller-mid">
                 <div class="tcell">
-                <h2>Ready for judgement?</h2>
+                <h2>READY FOR JUDGEMENT?</h2>
                     <input class="btn" type="submit" id="q_submit" name="q_submit" value="Run the Definery">
                 </div>
             </div>
@@ -257,8 +258,8 @@
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
             <div class="scroller-mid">
                 <div class="tcell">
-                    <h2>Your <span id="q_result_title"></span> is...</h2>
-                    <h2 id="q_result"></h2>
+                    <h2>YOUR <span id="q_result_title"></span> IS</h2>
+                    <span id="q_result"></span>
                     <input type="hidden" id="q_data_1" name="q_data_1" value="">
                     <input type="hidden" id="q_data_2" name="q_data_2" value="">
                     <input type="hidden" id="tag_manager_submit">
@@ -398,10 +399,10 @@ jQuery(document).ready(function() {
         $(form).find('input[type=text], input[type=radio]:checked').each(function(){
             qd[this.name.replace('q_','')] = $(this).val().trim().replace(',',' ');
         });
-        if( in_array(triggers_luxury, qd.object) ){ result = 'luxury'; }
-        else if( in_array(triggers_vulgar, qd.object) ){ result = 'vulgar'; }
-        else { result = Math.random()>0.5? 'luxury' : 'vulgar'; }
-        $('#q_result_title').html(qd.object);
+        if( in_array(triggers_luxury, qd.object) ){ result = 'LUXURY'; }
+        else if( in_array(triggers_vulgar, qd.object) ){ result = 'VULGAR'; }
+        else { result = Math.random()>0.5? 'LUXURY' : 'VULGAR'; }
+        $('#q_result_title').html(qd['object'].toUpperCase());
         $('#q_result').html(result);
         pageSnap(1);
         //google analytics
