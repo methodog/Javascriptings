@@ -195,9 +195,9 @@
             <div class="scroller-mid">
                 <div class="tcell">
                     <h2>HOW FASHIONABLE IS YOUR OBJECT?</h2>
-                    On a scale of 1&ndash;5 (5 being the most)<br>
+                    On a scale of 0&ndash;10 (10 being the most)<br>
                     <label class="em" for="q_fashionable"></label><br>
-                    <input type="range" name="q_fashionable" id="q_fashionable" min="1" max="5" value="3" step="1">
+                    <input type="range" name="q_fashionable" id="q_fashionable" min="0" max="10" value="5" step="1">
                 </div>
             </div>
             <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
@@ -407,7 +407,28 @@ jQuery(document).ready(function() {
         });
         if( in_array(triggers_luxury, qd.object) ){ result = 'LUXURY'; }
         else if( in_array(triggers_vulgar, qd.object) ){ result = 'VULGAR'; }
-        else { result = Math.random()>0.5? 'LUXURY' : 'VULGAR'; }
+        else { 
+            result = 0;
+            if( qd.free==='yes' ){ result += 5 }
+            if( qd.cost<50 ){
+                if( qd.handmade==='yes' ){ result += 1 }
+                else{ result -= 1 }
+            }
+            if( qd.handmade==='yes' ){ result += 1 }else{ result -= 1 }
+            if( qd.limited==='yes' ){ result += 3 }
+            if( qd.decorative==='yes' ){ result += 1 }else{ result -= 1 }
+            if( qd.visible==='yes' ){
+                if( qd.decorative==='yes' ){ result += 1 }
+            }
+            if( qd.pride>3 ){ result -= 2*qd.pride }
+            result -= 2*qd.fashionable;
+            if( qd.inherit==='yes' ){ result += 1000 }
+            if( qd.bequeath==='no' ){ result -= 1 }
+            result += qd.love;
+            result += qd.richness;
+            if( qd.alternative>2 ){ result -= 3 }
+            result = result>0? 'LUXURY' : 'VULGAR';
+        }
         $('#q_result_title').html(qd['object'].toUpperCase());
         $('#q_result').html(result);
         pageSnap(1);
