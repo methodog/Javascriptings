@@ -284,12 +284,22 @@ jQuery(document).ready(function() {
         winW = $(window).width(),
         winH = !!window.innerHeight? window.innerHeight : $(window).height(),
         canscroll = 1,
-        stopwords = ['luca','keith','andrew','tania','tom','chris'],
+        stopwords,
         triggers_luxury = ['time','holiday','peace','friend','pet','cat','dog'],
         triggers_vulgar = ['gold','car'];
+        
+    /* switch this to vam hosted json file once finalised after launch */
+    $.ajax('//spreadsheets.google.com/feeds/cells/1CClyauFEPp-17GFaRq3uEhJlYvOA_ojYExvlkX0uAW0/od6/public/full?alt=json-in-script&callback=?', { dataType:'jsonp', timeout:3000 }).done(function(data){
+        stopwords = [];
+        for( var i=0; i<data.feed.entry.length; i++ ){
+            stopwords[i] = data.feed.entry[i].gs$cell.$t;
+        }
+    }).fail(function(data){ stopwords='fail' });
 
     /* init */
-    (function(){
+    (function init(){
+        if( !stopwords ){ setTimeout(function(){ init(); }, 50); return; }
+        else if( stopwords==='fail' ){ console.log('stopwords failed to load!') };
         var resize = function(){
             var winW2 = $(window).width(),
                 winH2 = !!window.innerHeight? window.innerHeight : $(window).height();
