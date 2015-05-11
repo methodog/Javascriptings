@@ -377,7 +377,7 @@ jQuery(document).ready(function() {
             result,
             date = new Date(),
             qdata = '';
-        $(form).find('input[type=text], input[type=radio]:checked').each(function(){
+        $(form).find('input[type=text], input[type=radio]:checked, input[type=range]').each(function(){
             qd[this.name.replace('q_','')] = $(this).val().trim().replace(',',' ');
         });
         if( in_array(triggers_luxury, qd.object) ){ result = 'LUXURY'; }
