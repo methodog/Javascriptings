@@ -289,6 +289,7 @@
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script type="text/javascript">
 function getY(e){ var y; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ y = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ y = e.touches[0].pageY; } }else{ y = e.pageY; } return y; }
+function getQrystr(name){ var match = RegExp('[?&]'+ name +'=([^&]*)').exec(window.location.search); return match && decodeURIComponent(match[1].replace(/\+/g, ' ')); }
 jQuery(document).ready(function() {
     
     var touchscreen = !!('ontouchstart' in window),
@@ -301,7 +302,9 @@ jQuery(document).ready(function() {
         canscroll = 1,
         stopwords,
         triggers_luxury = ['time','holiday','peace','friend','pet','cat','dog'],
-        triggers_vulgar = ['gold','car'];
+        triggers_vulgar = ['gold','car'],
+        result = 0,
+        qd = {};
         
     /* switch this to vam hosted json file once finalised after launch */
     $.ajax('//spreadsheets.google.com/feeds/cells/1CClyauFEPp-17GFaRq3uEhJlYvOA_ojYExvlkX0uAW0/od6/public/full?alt=json-in-script&callback=?', { dataType:'jsonp', timeout:3000 }).done(function(data){
@@ -393,15 +396,28 @@ jQuery(document).ready(function() {
             if( choices = $(input).data('choices') ){ v = choices[v-1]; }
             $('label[for='+n+']').html(v);
         }
+        if( getQrystr('dev') ){ var debug = $('.scroller-wrap').eq(p-1).find('.scroller-foot'); debug.find('h2').remove(); debug.append('<h2 class="tcell">'+definery($('form')[0])+'</h2>') }
         return np;
     }
     
     /* submission */
-    function definery(form){
-        var qd = {},
-            result,
-            date = new Date(),
+    function q_submit(form){
+        var date = new Date(),
             qdata = '';
+        definery(form);
+        result = result>0? 'LUXURY' : 'VULGAR';
+        $('#q_result_title').html(qd['object'].toUpperCase());
+        $('#q_result').html(result);
+        pageSnap(1);
+        //google analytics
+        for( d in qd ){ qdata += ','+qd[d]; }
+        $('#q_data_1').val(result);
+        $('#q_data_2').val(date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate()+','+ result + qdata);
+        $('#tag_manager_submit').click();
+        return false;
+    }
+        
+    function definery(form){
         $(form).find('input[type=text], input[type=radio]:checked, input[type=range]').each(function(){
             qd[this.name.replace('q_','')] = $(this).val().trim().replace(',',' ');
         });
@@ -420,26 +436,17 @@ jQuery(document).ready(function() {
             if( qd.visible==='yes' ){
                 if( qd.decorative==='yes' ){ result += 1 }
             }
-            if( qd.pride>3 ){ result -= 2*qd.pride }
-            result -= 2*qd.fashionable;
+            if( qd.pride>3 ){ result -= 2*Number(qd.pride) }
+            result -= 2*Number(qd.fashionable);
             if( qd.inherit==='yes' ){ result += 1000 }
             if( qd.bequeath==='no' ){ result -= 1 }
-            result += qd.love;
-            result += qd.richness;
+            result += Number(qd.love);
+            result += Number(qd.richness);
             if( qd.alternative>2 ){ result -= 3 }
-            result = result>0? 'LUXURY' : 'VULGAR';
         }
-        $('#q_result_title').html(qd['object'].toUpperCase());
-        $('#q_result').html(result);
-        pageSnap(1);
-        //google analytics
-        for( d in qd ){ qdata += ','+qd[d]; }
-        $('#q_data_1').val(result);
-        $('#q_data_2').val(date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate()+','+ result + qdata);
-        $('#tag_manager_submit').click();
-        return false;
+        return result;
     }
-    
+
     $('#scroller').on('click', '.scroller-foot .scroller-nav', function(e){ e.preventDefault(); pageSnap(1); });
     $('#scroller').on('click', '.scroller-top .scroller-nav', function(e){ e.preventDefault(); pageSnap(-1); });
     $(window).on('resize', function(e){ e.preventDefault(); pageSnap(0); });
@@ -463,7 +470,7 @@ jQuery(document).ready(function() {
         }
     });
     $('form').on('click', '.btn', function(){ if( this.type!=='submit' ){ $(this).addClass('selected').siblings('.btn').removeClass('selected') } });
-    $('form').on('submit', function(e){ e.preventDefault(); definery(this) });
+    $('form').on('submit', function(e){ e.preventDefault(); q_submit(this) });
     
 });
 
