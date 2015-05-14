@@ -38,7 +38,6 @@
         #scroller-frame { position:fixed; left:5.4%; top:13.5%; z-index:1; }
         #header { width:92.3%; position:fixed; left:3.6%; }
         #logo_va { max-width:110px; min-width:44px; width:40%; }
-        #headtext { display:inline-block; font-size:0.8em; line-height:1.1em; max-width:50%; text-align:left; }
         #q_result_title, #q_result { color:#a16d19; }
         #q_result { color:#a16d19; font-size:4em; letter-spacing:0.4em; }
         .scroller-mid { border-color:#231f20; display:table; padding:2% 1% 0.5% 2.5%; position:relative; left:3.6%; }
@@ -47,9 +46,11 @@
         .scroller-top, .scroller-foot { display:table; margin:0 auto; width:25%; }
         .scroller-top { height:11%; }
         .scroller-foot { height:15%; }
-        .header { color:#231f20; font-size:1.1em; line-height:1em; margin:0; width:80%; position:relative; left:16%; }
-        .header .tcell { text-align:right; }
-        .header img { margin:0 1em 0 0; }
+        #headtext { min-width:45%; text-align:right; }
+        #headtext div { display:inline-block; font-size:0.8em; line-height:1.1em; text-align:left; }
+        .header { color:#231f20; font-size:1.1em; line-height:1em; margin:0; width:86%; position:relative; left:10%; }
+        .header .tcell { text-align:left; }
+        .header img { margin:0 0 0 10%; }
         @-webkit-keyframes shake {
             0%, 100% { -webkit-transform:translate3d(0, 0, 0); transform:translate3d(0, 0, 0); }
             10%, 30%, 50%, 70%, 90% { -webkit-transform:translate3d(-10px, 0, 0); transform:translate3d(-10px, 0, 0); }
@@ -66,21 +67,22 @@
         .left { float:left; }
         .right { float:right; }
         @media screen and (max-width:1200px) {
-            #logo_na { width:28%; }
-            #logo_cc { width:6%; }
+            #logo_na { width:38%; }
+            #logo_cc { width:8%; }
         }
         @media screen and (max-width:600px) {
             h1, h2 { font-size:1.1em; letter-spacing:0.2em; }
             #scroller { font-size:16px; }
-            #headtext { font-size:10px; }
-            #logo_na { min-width:90px; width:19%; }
-            #logo_cc { min-width:18px; width:3.6%; }
+            .header .tcell { text-align:right; }
+            .header img { margin:0 10% 0 0; }
+            #headtext { font-size:10px; min-width:40%; }
+            #logo_na { min-width:80px; width:19%; }
+            #logo_cc { min-width:16px; width:3.6%; }
         }
         @media screen and (max-width:600px) and (orientation:portrait) {
             input, .btn { width:80%; }
             #header { left:0; }
             .header { width:90%; }
-            .header img { margin:0 5px 0 0; }
         }
         @media screen and (orientation:portrait) {
             #logo_va { min-width:60px; }
@@ -94,7 +96,7 @@
     <div id="scroller-frame"></div>
     <form method="post" action="#">
         <div class="scroller-wrap">
-            <div class="scroller-top header"><div class="tcell"><img id="logo_na" src="img/logo_na.jpg" alt="Northacre logo" title="Northacre"><img id="logo_cc" src="img/logo_cc.jpg" alt="Crafts Council logo" title="Crafts Council"><div id="headtext"><h3>What is Luxury?</h3>25 April &ndash;27 September 2015<br>A V&amp;A and Crafts Council exhibition</div></div></div>
+            <div class="scroller-top header"><div class="tcell"><img id="logo_cc" src="img/logo_cc.jpg" alt="Crafts Council logo" title="Crafts Council"><img id="logo_na" src="img/logo_na.jpg" alt="Northacre logo" title="Northacre"></div><div class="tcell" id="headtext"><div><h3>What is Luxury?</h3>25 April &ndash;27 September 2015<br>A V&amp;A and Crafts Council exhibition</div></div></div>
             <div class="scroller-mid">
                 <div class="tcell">
                     <h1>WHAT IS LUXURY?</h1>
