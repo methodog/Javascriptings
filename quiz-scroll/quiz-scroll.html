@@ -48,11 +48,15 @@
         .scroller-top, .scroller-foot { display:table; margin:0 auto; width:25%; }
         .scroller-top { height:11%; }
         .scroller-foot { height:15%; }
-        #headtext { min-width:45%; text-align:right; }
-        #headtext div { display:inline-block; font-size:0.8em; line-height:1.1em; text-align:left; }
         .header { color:#231f20; font-size:1.1em; line-height:1em; margin:0; width:86%; position:relative; left:10%; }
-        .header .tcell { text-align:left; }
-        .header img { margin:0 0 0 10%; }
+        .header .tcell { padding:0 0 0 8%; text-align:right; width:25%; }
+        .header img { width:100%; }
+        #headtext { text-align:right; }
+        #headtext div { display:inline-block; font-size:0.8em; line-height:1.1em; text-align:left; }
+        #logo_cc { width:8%; text-align:left; }
+        #logo_na { left:8%; width:18%; }
+        #logo_cc img { max-width:47px; }
+        #logo_na img { max-width:220px; }
         @-webkit-keyframes shake {
             0%, 100% { -webkit-transform:translate3d(0, 0, 0); transform:translate3d(0, 0, 0); }
             10%, 30%, 50%, 70%, 90% { -webkit-transform:translate3d(-10px, 0, 0); transform:translate3d(-10px, 0, 0); }
@@ -68,18 +72,19 @@
         .em { font-size:3em; line-height:1em; }
         .left { float:left; }
         .right { float:right; }
-        @media screen and (max-width:1200px) {
-            #logo_na { width:38%; }
-            #logo_cc { width:8%; }
+        @media screen and (min-width:1300px) {
+            #headtext { width:15%; }
+        }
+        @media screen and (max-width:800px) {
+            #headtext { width:40%; }
+            #logo_cc { width:10%; }
+            #logo_na { left:2%; width:24%; }
         }
         @media screen and (max-width:600px) {
             h1, h2 { font-size:1.1em; letter-spacing:0.2em; }
             #scroller { font-size:16px; }
             .header .tcell { text-align:right; }
-            .header img { margin:0 10% 0 0; }
-            #headtext { font-size:10px; min-width:40%; }
-            #logo_na { min-width:80px; width:19%; }
-            #logo_cc { min-width:16px; width:3.6%; }
+            #headtext { font-size:10px; }
         }
         @media screen and (max-width:600px) and (orientation:portrait) {
             input, .btn { width:80%; }
@@ -89,7 +94,7 @@
             .header { width:90%; }
         }
         @media screen and (orientation:portrait) {
-            #logo_va { min-width:60px; }
+            
         }
     </style>	
 </head>
@@ -100,7 +105,7 @@
     <div id="scroller-frame"></div>
     <form method="post" action="#">
         <div class="scroller-wrap">
-            <div class="scroller-top header"><div class="tcell"><img id="logo_cc" src="img/logo_cc.jpg" alt="Crafts Council logo" title="Crafts Council"><img id="logo_na" src="img/logo_na.jpg" alt="Northacre logo" title="Northacre"></div><div class="tcell" id="headtext"><div><h3>What is Luxury?</h3>25 April &ndash;27 September 2015<br>A V&amp;A and Crafts Council exhibition</div></div></div>
+            <div class="scroller-top header"><div class="tcell" id="logo_cc"><img src="img/logo_cc.jpg" alt="Crafts Council logo" title="Crafts Council"></div><div class="tcell" id="logo_na"><img src="img/logo_na.jpg" alt="Northacre logo" title="Northacre"></div><div class="tcell" id="headtext"><div><h3>What is Luxury?</h3>25 April &ndash;27 September 2015<br>A V&amp;A and Crafts Council exhibition</div></div></div>
             <div class="scroller-mid">
                 <div class="tcell">
                     <h1>THE DEFINERY</h1>
