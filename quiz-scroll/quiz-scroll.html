@@ -32,16 +32,16 @@
         input[type=range]::-moz-range-track { background:#b89b5d; border-radius:4px; height:8px; }
         input[type=range]::-webkit-slider-runnable-track { background:#b89b5d; border-radius:4px; height:8px; }
         input[type=range]::-ms-track { background:#b89b5d; border-radius:4px; height:8px; }
-        .btn { box-shadow: 10px 10px 0 0 #b89b5d; cursor:pointer; display:inline-block; padding:4% 0; position:relative; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
+        .btn { box-shadow: 10px 10px 0 0 #b89b5d; cursor:pointer; display:inline-block; padding:4% 0; text-decoration:none; position:relative; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
         .btn:hover, .btn:active, .btn.selected { box-shadow:none; top:10px; left:10px; }
         a.btn { max-width:400px; padding:0; }
+        .gold { color:#a16d19; }
         #scroller { background:transparent; color:#a16d19; font:20px/1.5 TimesNewRoman,Times New Roman,Times,Baskerville,Georgia,serif; }
         #scroller-frame, .scroller-mid { border:0px solid #b89b5d; border-width:1vw; width:90.5%; height:74%; }
         #scroller-frame { position:fixed; left:5.4%; top:13.5%; z-index:1; }
         #header { width:92.3%; position:fixed; left:3.6%; }
         #logo_va { max-width:110px; min-width:44px; width:40%; }
-        #q_result_title, #q_result { color:#a16d19; }
-        #q_result { color:#a16d19; font-size:4em; letter-spacing:0.4em; }
+        #q_result { font-size:4em; letter-spacing:0.4em; }
         .scroller-mid { border-color:#231f20; display:table; padding:2% 1% 0.5% 2.5%; position:relative; left:3.6%; }
         .tcell { display:table-cell; text-align:center; vertical-align:middle; position:relative; z-index:1; }
         .scroller-nav img { min-width:44px; width:20%;  }
@@ -112,7 +112,7 @@
                     Is it class or crass?
                     Certainty is such a luxury.</p>
                     <p>Let The Definery help you decide what objects to own.</p>
-                    <a class="btn href="#">Enter</a>
+                    <a class="btn next" href="javascript:void(0)">Enter</a>
                 </div>
             </div>
             <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
@@ -121,7 +121,7 @@
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
             <div class="scroller-mid">
                 <div class="tcell">
-                    <h2>WHAT IS YOUR OBJECT?</h2>
+                    <h2>NAME YOUR OBJECT</h2>
                     <input type="text" id="q_object" name="q_object" value="">
                 </div>
             </div>
@@ -131,9 +131,9 @@
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
             <div class="scroller-mid">
                 <div class="tcell">
-                    <h2>WOULD IT COST YOU ANYTHING?</h2>
-                    <label class="btn" for="q_not-free">yes</label><input type="radio" name="q_free" id="q_not-free" value="not-free">
-                    <label class="btn" for="q_free">no</label><input type="radio" name="q_free" id="q_free" value="free">
+                    <h2>DOSE IT COST MONEY?</h2>
+                    <label class="btn" for="q_not-free">yes</label><input type="radio" name="q_free" id="q_not-free" value="no">
+                    <label class="btn" for="q_free">no</label><input type="radio" name="q_free" id="q_free" value="yes">
                 </div>
             </div>
             <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
@@ -142,7 +142,7 @@
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
             <div class="scroller-mid">
                 <div class="tcell">
-                    <h2>HOW MUCH WOULD IT COST?</h2>
+                    <h2>HOW MUCH DOES IT COST?</h2>
                     <label class="em" for="q_cost">£</label><input type="text" id="q_cost" name="q_cost" value="">
                 </div>
             </div>
@@ -153,8 +153,19 @@
             <div class="scroller-mid">
                 <div class="tcell">
                     <h2>IS IT HANDMADE OR MASS-PRODUCED?</h2>
-                    <label class="btn" for="q_handmade">handmade</label><input type="radio" name="q_handmade" id="q_handmade" value="handmade">
-                    <label class="btn" for="q_mass-produced">mass-produced</label><input type="radio" name="q_handmade" id="q_mass-produced" value="mass-produced">
+                    <label class="btn" for="q_handmade">handmade</label><input type="radio" name="q_handmade" id="q_handmade" value="yes">
+                    <label class="btn" for="q_mass-produced">mass-produced</label><input type="radio" name="q_handmade" id="q_mass-produced" value="no">
+                </div>
+            </div>
+            <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
+        </div>
+        <div class="scroller-wrap">
+            <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
+            <div class="scroller-mid">
+                <div class="tcell">
+                    <h2>WOULD YOU CONSIDER IT MORE DECORATIVE OR PRACTICAL?</h2>
+                    <label class="btn" for="q_decorative">decorative</label><input type="radio" name="q_decorative" id="q_decorative" value="yes">
+                    <label class="btn" for="q_practical">practical</label><input type="radio" name="q_decorative" id="q_practical" value="no">
                 </div>
             </div>
             <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
@@ -174,18 +185,7 @@
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
             <div class="scroller-mid">
                 <div class="tcell">
-                    <h2>WOULD YOU SAY IT'S MORE DECORATIVE OR PRACTICAL?</h2>
-                    <label class="btn" for="q_decorative">decorative</label><input type="radio" name="q_decorative" id="q_decorative" value="decorative">
-                    <label class="btn" for="q_practical">practical</label><input type="radio" name="q_decorative" id="q_practical" value="practical">
-                </div>
-            </div>
-            <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
-        </div>
-        <div class="scroller-wrap">
-            <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
-            <div class="scroller-mid">
-                <div class="tcell">
-                    <h2>IS IT VISIBLE TO OTHER PEOPLE?</h2>
+                    <h2>WILL IT BE NOTICED BY OTHER PEOPLE?</h2>
                     <label class="btn" for="q_visible">yes</label><input type="radio" name="q_visible" id="q_visible" value="yes">
                     <label class="btn" for="q_visible-no">no</label><input type="radio" name="q_visible" id="q_visible-no" value="no">
                 </div>
@@ -196,9 +196,9 @@
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
             <div class="scroller-mid">
                 <div class="tcell">
-                    <h2>HOW DO YOU FEEL IF PEOPLE TALK ABOUT YOUR OBJECT?</h2>
+                    <h2>HOW WOULD YOU FEEL IF PEOPLE TALKED ABOUT YOUR OBJECT?</h2>
                     <label for="q_pride"></label><br>
-                    <input type="range" name="q_pride" id="q_pride" min="1" max="5" value="3" step="1" data-choices='["Mildly embarrassed", "Warm inside", "Indifferent", "Proud", "Shouting from the rooftops"]'>
+                    <input type="range" name="q_pride" id="q_pride" min="1" max="5" value="3" step="1" data-choices='["Awkwardly blushing", "Quietly content", "I don’t care", "Pretty pumped", "Like a master of the universe"]'>
                 </div>
             </div>
             <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
@@ -207,7 +207,7 @@
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
             <div class="scroller-mid">
                 <div class="tcell">
-                    <h2>HOW FASHIONABLE IS YOUR OBJECT?</h2>
+                    <h2>HOW HIP IS YOUR OBJECT?</h2>
                     On a scale of 0&ndash;10 (10 being the most)<br>
                     <label class="em" for="q_fashionable"></label><br>
                     <input type="range" name="q_fashionable" id="q_fashionable" min="0" max="10" value="5" step="1">
@@ -222,6 +222,17 @@
                     <h2>DID YOU INHERIT THIS OBJECT?</h2>
                     <label class="btn" for="q_inherit">yes</label><input type="radio" name="q_inherit" id="q_inherit" value="yes">
                     <label class="btn" for="q_inherit-no">no</label><input type="radio" name="q_inherit" id="q_inherit-no" value="no">
+                </div>
+            </div>
+            <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
+        </div>
+         <div class="scroller-wrap">
+            <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
+            <div class="scroller-mid">
+                <div class="tcell">
+                    <h2>IF YOUR OBJECT WAS BROKEN, WOULD YOU REPAIR OR REPLACE IT?</h2>
+                    <label class="btn" for="q_repair">repair</label><input type="radio" name="q_repair" id="q_repair" value="yes">
+                    <label class="btn" for="q_replace">replace</label><input type="radio" name="q_repair" id="q_replace" value="no">
                 </div>
             </div>
             <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
@@ -241,7 +252,7 @@
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
             <div class="scroller-mid">
                 <div class="tcell">
-                    <h2>HOW MUCH DO YOU EXPECT TO LOVE YOUR PURCHASE?</h2>
+                    <h2>HOW MUCH DO/WILL YOU LOVE YOUR OBJECT?</h2>
                     On a scale of 0&ndash;10 (10 being the most)<br>
                     <label class="em" for="q_love"></label><br>
                     <input type="range" name="q_love" id="q_love" min="0" max="10" value="5" step="1">
@@ -267,7 +278,7 @@
                 <div class="tcell">
                     <h2>IS THERE A CHEAPER ALTERNATIVE TO YOUR OBJECT THAT WOULD PRACTICALLY PERFORM THE SAME FUNCTION?</h2>
                     <label for="q_alternative">a bit cheaper</label><br>
-                    <input type="range" name="q_alternative" id="q_alternative" min="1" max="3" value="2" step="1" data-choices='["no", "a bit cheaper", "many times cheaper"]'>
+                    <input type="range" name="q_alternative" id="q_alternative" min="1" max="3" value="2" step="1" data-choices='["no", "slightly cheaper", "yes, loads cheaper"]'>
                 </div>
             </div>
             <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
@@ -276,7 +287,9 @@
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
             <div class="scroller-mid">
                 <div class="tcell">
-                <h2>READY FOR JUDGEMENT?</h2>
+                    <h2>TRUTH IS A LUXURY</h2>
+                    <p>Thank you for being honest.</p>
+                    <p>Ready for judgement?</p>
                     <input class="btn" type="submit" id="q_submit" name="q_submit" value="Run the Definery">
                 </div>
             </div>
@@ -286,8 +299,8 @@
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
             <div class="scroller-mid">
                 <div class="tcell">
-                    <h2>YOUR <span id="q_result_title"></span> IS</h2>
-                    <span id="q_result"></span>
+                    <h2 class="gold">THE <span id="q_result_title"></span> IS</h2>
+                    <p id="q_result"></p>
                     <input type="hidden" id="q_data_1" name="q_data_1" value="">
                     <input type="hidden" id="q_data_2" name="q_data_2" value="">
                     <input type="hidden" id="tag_manager_submit">
@@ -403,7 +416,7 @@ jQuery(document).ready(function() {
             if( in_array(stopwords, v) ){ hide_next(1); return false; }
         }
         else if( n==='q_cost' && ( v.length<1 || isNaN(v) ) ){ hide_next(1); return false; }
-        else if( n==='q_free' && v==='free' ){ hide_next(); np+=1; }
+        else if( n==='q_free' && v==='yes' ){ hide_next(); np+=1; }
         else if( n==='q_visible' && v==='no' ){ hide_next(); np+=1; }
         else if( t==='range' ){
             if( choices = $(input).data('choices') ){ v = choices[v-1]; }
@@ -452,6 +465,7 @@ jQuery(document).ready(function() {
             if( qd.pride>3 ){ result -= 2*Number(qd.pride) }
             result -= 2*Number(qd.fashionable);
             if( qd.inherit==='yes' ){ result += 1000 }
+            if( qd.repair==='no' ){ result -= 1000 }
             if( qd.bequeath==='no' ){ result -= 1 }
             result += Number(qd.love);
             result += Number(qd.richness);
@@ -460,7 +474,7 @@ jQuery(document).ready(function() {
         return result;
     }
 
-    $('#scroller').on('click', '.scroller-foot .scroller-nav', function(e){ e.preventDefault(); pageSnap(1); });
+    $('#scroller').on('click', '.scroller-foot .scroller-nav, .next', function(e){ e.preventDefault(); pageSnap(1); });
     $('#scroller').on('click', '.scroller-top .scroller-nav', function(e){ e.preventDefault(); pageSnap(-1); });
     $(window).on('resize', function(e){ e.preventDefault(); pageSnap(0); });
     if( touchscreen ){
