@@ -13,9 +13,10 @@
         }
         html { overflow-x:hidden; }
         html, body, form, #scroller, #header, #scroller-frame, .scroller-wrap, .scroller-mid { box-sizing:border-box; height:100%; margin:0; width:100%; }
-        h1, h2 { color:#231f20; font-family:open_sans,Verdana,Geneva,sans-serif; font-size:1.8em; letter-spacing:0.45em; margin:0 0 0.5em; }
+        h1, h2 { color:#231f20; font-family:open_sans,Verdana,Geneva,sans-serif; font-size:1.8em; letter-spacing:0.45em; line-height:1.2em; margin:0 0 0.5em; }
         h2 { font-size:1.3em; }
         h3 { font-size:1.3em; line-height:1.2em; margin:0; }
+        p { max-width:1200px; margin:0 auto; }
         hr { background-color:transparent; border:solid #b89b5d; border-width:0 0 2px; clear:both; color:#b89b5d; margin:0 auto 1em; width:5%; }
         a { outline:0; }
         img { max-width:100%; height:auto; }
@@ -33,6 +34,7 @@
         input[type=range]::-ms-track { background:#b89b5d; border-radius:4px; height:8px; }
         .btn { box-shadow: 10px 10px 0 0 #b89b5d; cursor:pointer; display:inline-block; padding:4% 0; position:relative; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
         .btn:hover, .btn:active, .btn.selected { box-shadow:none; top:10px; left:10px; }
+        a.btn { max-width:400px; padding:0; }
         #scroller { background:transparent; color:#a16d19; font:20px/1.5 TimesNewRoman,Times New Roman,Times,Baskerville,Georgia,serif; }
         #scroller-frame, .scroller-mid { border:0px solid #b89b5d; border-width:1vw; width:90.5%; height:74%; }
         #scroller-frame { position:fixed; left:5.4%; top:13.5%; z-index:1; }
@@ -101,9 +103,16 @@
             <div class="scroller-top header"><div class="tcell"><img id="logo_cc" src="img/logo_cc.jpg" alt="Crafts Council logo" title="Crafts Council"><img id="logo_na" src="img/logo_na.jpg" alt="Northacre logo" title="Northacre"></div><div class="tcell" id="headtext"><div><h3>What is Luxury?</h3>25 April &ndash;27 September 2015<br>A V&amp;A and Crafts Council exhibition</div></div></div>
             <div class="scroller-mid">
                 <div class="tcell">
-                    <h1>WHAT IS LUXURY?</h1>
-                    <hr>
-                    copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy copy 
+                    <h1>THE DEFINERY</h1>
+                    <p>Owning objects can be so confusing.
+                    You might like something but what do others think of it…
+                    Is your object luxury or vulgar?
+                    Will you be teased or envied behind your back?
+                    Sniggered at or sucked up to?
+                    Is it class or crass?
+                    Certainty is such a luxury.</p>
+                    <p>Let The Definery help you decide what objects to own.</p>
+                    <a class="btn href="#">Enter</a>
                 </div>
             </div>
             <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
