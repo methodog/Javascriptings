@@ -34,7 +34,8 @@
         input[type=range]::-ms-track { background:#b89b5d; border-radius:4px; height:8px; }
         .btn { box-shadow: 10px 10px 0 0 #b89b5d; cursor:pointer; display:inline-block; padding:4% 0; text-decoration:none; position:relative; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
         .btn:hover, .btn:active, .btn.selected { box-shadow:none; top:10px; left:10px; }
-        a.btn { max-width:400px; padding:0; }
+        a.btn { max-width:400px; padding:0 2em; width:auto; white-space:nowrap; }
+        .black, #sponsors { color:#231f20; }
         .gold { color:#a16d19; }
         #scroller { background:transparent; color:#a16d19; font:20px/1.5 TimesNewRoman,Times New Roman,Times,Baskerville,Georgia,serif; }
         #scroller-frame, .scroller-mid { border:0px solid #b89b5d; border-width:1vw; width:90.5%; height:74%; }
@@ -57,6 +58,11 @@
         #logo_na { left:8%; width:18%; }
         #logo_cc img { max-width:47px; }
         #logo_na img { max-width:220px; }
+        .col { display:inline-block; text-align:left; vertical-align:top; max-width:45%; }
+        .col h2, .col p { margin:0 0 1.2em; }
+        #creds { margin-left:10%; }
+        #creds h2 { font-size:0.8em; margin:0 0 0.2em; }
+        #creds h3 { letter-spacing:0.2em; }
         @-webkit-keyframes shake {
             0%, 100% { -webkit-transform:translate3d(0, 0, 0); transform:translate3d(0, 0, 0); }
             10%, 30%, 50%, 70%, 90% { -webkit-transform:translate3d(-10px, 0, 0); transform:translate3d(-10px, 0, 0); }
@@ -75,33 +81,52 @@
         @media screen and (min-width:1300px) {
             #headtext { width:15%; }
         }
+        @media screen and (max-width:1000px) {
+            #creds { margin-left:3%; max-width:49%; }
+        }
         @media screen and (max-width:800px) {
-            #headtext { width:40%; }
+            h1, h2, h3, #q_result { font-size:1.1em; letter-spacing:0.2em; margin-left:0; }
+            #q_result { font-size:1.3em; }
+            #scroller, .btn { font-size:15px; }
+            .btn { box-shadow: 5px 5px 0 0 #b89b5d; padding:2% 0; }
+            .btn:hover, .btn:active, .btn.selected { top:5px; left:5px; }
+            .header .tcell { text-align:right; }
+            #logo_cc { width:5%; }
+            #logo_na { left:12%; width:16%; }
+            #sponsor_cc { width:15%; }
+            #sponsor_na { width:50%; }
+            #a_links { position:absolute; bottom:5%; left:46%; text-align:left; width:52%; }
+            #a_links a { max-width:95%; white-space:normal; }
+        }
+        @media screen and (max-width:650px) {
+            #headtext { font-size:12px; width:40%; }
             #logo_cc { width:10%; }
             #logo_na { left:2%; width:24%; }
         }
-        @media screen and (max-width:600px) {
-            h1, h2 { font-size:1.1em; letter-spacing:0.2em; }
-            #scroller { font-size:16px; }
-            .header .tcell { text-align:right; }
-            #headtext { font-size:10px; }
-        }
         @media screen and (max-width:600px) and (orientation:portrait) {
             input, .btn { width:80%; }
+            #sponsor_cc { margin-left:5%; width:25%; }
+            #sponsor_na { margin-left:5%; width:75%; }
+        }
+        @media screen and (max-width:480px) {
+            #headtext { font-size:10px; }
+            #logo_cc { left:2%; }
+        }
+        @media screen and (max-width:480px) and (orientation:portrait) {
+            #headtext { font-size:10px; }
+            #logo_cc { left:2%; width:12%; }
+            #logo_na { width:28%; }
         }
         @media screen and (max-width:310px) and (orientation:portrait) {
             #header { left:0; }
             .header { width:90%; }
-        }
-        @media screen and (orientation:portrait) {
-            
         }
     </style>	
 </head>
 
 <body>
 <div id="scroller">
-    <div id="header"><div class="scroller-top left"><a class="tcell" title="Back to the exhibition" href="?"><img class="left" id="logo_va" src="img/logo_va.svg" onerror="this.src=img/logo_va.png;this.onerror=null;" alt="V&amp;A logo"></a></div></div>
+    <div id="header"><div class="scroller-top left"><a class="tcell" title="What is Luxury?" href="http://www.vam.ac.uk/content/exhibitions/what-is-luxury/"><img class="left" id="logo_va" src="img/logo_va.svg" onerror="this.src=img/logo_va.png;this.onerror=null;" alt="V&A logo"></a></div></div>
     <div id="scroller-frame"></div>
     <form method="post" action="#">
         <div class="scroller-wrap">
@@ -306,9 +331,36 @@
                 <div class="tcell">
                     <h2 class="gold">THE <span id="q_result_title"></span> IS</h2>
                     <p id="q_result"></p>
+                    <a class="btn" href="#">Play again</a>
+                    <a class="btn" href="" target="_blank">Share</a>
+                    <a class="btn" href="http://www.vam.ac.uk/content/exhibitions/what-is-luxury/">What is Luxury?</a>
+                    <a class="btn next" href="javascript:void(0)">About</a>
                     <input type="hidden" id="q_data_1" name="q_data_1" value="">
                     <input type="hidden" id="q_data_2" name="q_data_2" value="">
                     <input type="hidden" id="tag_manager_submit">
+                </div>
+            </div>
+            <div class="scroller-foot"></div>
+        </div>
+        <div class="scroller-wrap">
+            <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
+            <div class="scroller-mid">
+                <div class="tcell">
+                    <div class="col" id="sponsors">
+                        <h3 class="black">What is Luxury?</h3>
+                        <p>25 April &ndash;27 September 2015<br>A V&amp;A and Crafts Council exhibition<br><strong>#WhatisLuxury</strong></p>
+                        <p><img id="sponsor_cc" src="img/logo_cc.jpg" alt="Crafts Council logo" title="Crafts Council"></p>
+                        <p><img id="sponsor_na" src="img/logo_na.jpg" alt="Northacre logo" title="Northacre"></p>
+                    </div>
+                    <div class="col" id="creds">
+                        <h2>CONCEPT & DESIGN</h2>
+                        <h3>THE BEAUTIFUL MEME</h3>
+                    </div>
+                    <div id="a_links">
+                        <a class="btn" href="#">Play again</a>
+                        <a class="btn" href="http://www.vam.ac.uk/content/email/signup/" target="_blank">Sign up to V&A Newsletter</a>
+                        <a class="btn" href="http://www.vam.ac.uk/content/exhibitions/what-is-luxury/">What is Luxury?</a>
+                    </div>
                 </div>
             </div>
             <div class="scroller-foot"></div>
@@ -480,7 +532,7 @@ jQuery(document).ready(function() {
     }
 
     $('#scroller').on('click', '.scroller-foot .scroller-nav, .next', function(e){ e.preventDefault(); pageSnap(1); });
-    $('#scroller').on('click', '.scroller-top .scroller-nav', function(e){ e.preventDefault(); pageSnap(-1); });
+    $('#scroller').on('click', '.scroller-top .scroller-nav, .prev', function(e){ e.preventDefault(); pageSnap(-1); });
     $(window).on('resize', function(e){ e.preventDefault(); pageSnap(0); });
     if( touchscreen ){
         document.ontouchstart = function(e){ if( e.target.childElementCount>0 || e.target.nodeName[0]==='H' ){ e.preventDefault(); scrollDir(e); } };
@@ -501,7 +553,7 @@ jQuery(document).ready(function() {
             if( this.type==='radio' ){ pageSnap(1); }
         }
     });
-    $('form').on('click', '.btn', function(){ if( this.type!=='submit' ){ $(this).addClass('selected').siblings('.btn').removeClass('selected') } });
+    $('form').on('click', '.btn', function(){ if( this.nodeName==='LABEL' ){ $(this).addClass('selected').siblings('.btn').removeClass('selected') } });
     $('form').on('submit', function(e){ e.preventDefault(); q_submit(this) });
     
 });
