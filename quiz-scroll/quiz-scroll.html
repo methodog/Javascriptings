@@ -42,8 +42,9 @@
         #scroller-frame { position:fixed; left:5.4%; top:13.5%; z-index:1; }
         #header { width:92.3%; position:fixed; left:3.6%; }
         #logo_va { max-width:110px; min-width:44px; width:40%; }
-        #q_result { font-size:4em; letter-spacing:0.4em; margin:0 0 0 0.45em; }
+        #q_result { font-size:4em; letter-spacing:0.4em; text-indent:0.45em; }
         .scroller-mid { border-color:#231f20; display:table; padding:2% 1% 0.5% 2.5%; position:relative; left:3.6%; }
+        .table { display:table; height:100%; width:100%; }
         .tcell { display:table-cell; text-align:center; vertical-align:middle; position:relative; z-index:1; }
         .scroller-nav img { min-width:44px; width:20%;  }
         .scroller-top, .scroller-foot { display:table; margin:0 auto; width:25%; }
@@ -63,6 +64,8 @@
         #creds { margin-left:10%; }
         #creds h2 { font-size:0.8em; margin:0 0 0.2em; }
         #creds h3 { letter-spacing:0.2em; }
+        #sponsor_na { max-width:150px; }
+        #share { background:#fff; display:none; height:100%; width:100%; position:absolute; top:0; left:0; }
         @-webkit-keyframes shake {
             0%, 100% { -webkit-transform:translate3d(0, 0, 0); transform:translate3d(0, 0, 0); }
             10%, 30%, 50%, 70%, 90% { -webkit-transform:translate3d(-10px, 0, 0); transform:translate3d(-10px, 0, 0); }
@@ -84,7 +87,7 @@
         @media screen and (max-width:1000px) {
             #creds { margin-left:3%; max-width:49%; }
         }
-        @media screen and (max-width:800px) {
+        @media screen and (max-width:800px) and (max-height:800px) {
             h1, h2, h3, #q_result { font-size:1.1em; letter-spacing:0.2em; margin-left:0; }
             #q_result { font-size:1.3em; }
             #scroller, .btn { font-size:15px; }
@@ -161,7 +164,7 @@
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
             <div class="scroller-mid">
                 <div class="tcell">
-                    <h2>DOSE IT COST MONEY?</h2>
+                    <h2>DOES IT COST MONEY?</h2>
                     <label class="btn" for="q_not-free">yes</label><input type="radio" name="q_free" id="q_not-free" value="no">
                     <label class="btn" for="q_free">no</label><input type="radio" name="q_free" id="q_free" value="yes">
                 </div>
@@ -331,10 +334,15 @@
                 <div class="tcell">
                     <h2 class="gold">THE <span id="q_result_title"></span> IS</h2>
                     <p id="q_result"></p>
-                    <a class="btn" href="#">Play again</a>
-                    <a class="btn" href="" target="_blank">Share</a>
+                    <a class="btn" href="javascript:document.location.reload()">Play again</a>
+                    <a class="btn" rel="pop" href="javascript:void(0)">Share</a>
                     <a class="btn" href="http://www.vam.ac.uk/content/exhibitions/what-is-luxury/">What is Luxury?</a>
                     <a class="btn next" href="javascript:void(0)">About</a>
+                    <div id="share"><div class="table"><div class="tcell">
+                        <a class="btn" id="tweet" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery&hashtags=WhatisLuxury" title="Share on Twitter" target="_blank">Share on Twitter</a>
+                        <a class="btn" id="email" href="mailto:?subject=Try out The Definery at the V%26A&body=http%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery" title="Share by Email" target="_blank">Share by email</a>
+                        <a class="btn" rel="pop" href="javascript:void(0)">Back</a>
+                    </div></div></div>
                     <input type="hidden" id="q_data_1" name="q_data_1" value="">
                     <input type="hidden" id="q_data_2" name="q_data_2" value="">
                     <input type="hidden" id="tag_manager_submit">
@@ -357,7 +365,7 @@
                         <h3>THE BEAUTIFUL MEME</h3>
                     </div>
                     <div id="a_links">
-                        <a class="btn" href="#">Play again</a>
+                        <a class="btn" href="javascript:document.location.reload()">Play again</a>
                         <a class="btn" href="http://www.vam.ac.uk/content/email/signup/" target="_blank">Sign up to V&A Newsletter</a>
                         <a class="btn" href="http://www.vam.ac.uk/content/exhibitions/what-is-luxury/">What is Luxury?</a>
                     </div>
@@ -387,7 +395,8 @@ jQuery(document).ready(function() {
         triggers_luxury = ['time','holiday','peace','friend','pet','cat','dog'],
         triggers_vulgar = ['gold','car'],
         result = 0,
-        qd = {};
+        qd = {},
+        $share = $('#share');
         
     /* switch this to vam hosted json file once finalised after launch */
     $.ajax('//spreadsheets.google.com/feeds/cells/1CClyauFEPp-17GFaRq3uEhJlYvOA_ojYExvlkX0uAW0/od6/public/full?alt=json-in-script&callback=?', { dataType:'jsonp', timeout:3000 }).done(function(data){
@@ -438,6 +447,7 @@ jQuery(document).ready(function() {
             }
             canscroll = 0;
             $('html, body').stop(1).animate({scrollTop:$('.scroller-wrap').eq(p-1).offset().top}, 500, function(){ winY=$(window).scrollTop(); setTimeout(function(){ canscroll=1; if( Math.abs(winY-$('.scroller-wrap').eq(p-1).offset().top)>1 ){ pageSnap(0) } },100)});
+            $share.hide(0);
         }
         return false;
     }
@@ -486,11 +496,15 @@ jQuery(document).ready(function() {
     /* submission */
     function q_submit(form){
         var date = new Date(),
-            qdata = '';
+            qdata = '',
+            tweet = $('#tweet')[0],
+            email = $('#email')[0];
         definery(form);
         result = result>0? 'LUXURY' : 'VULGAR';
         $('#q_result_title').html(qd['object'].toUpperCase());
         $('#q_result').html(result);
+        tweet.href = 'https://twitter.com/intent/tweet?text='+ encodeURI('The Definery says my'+ qd['object'] +' is '+ result +'. ') +'&url=http%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery&hashtags=WhatisLuxury';
+        email.href = 'mailto:?subject=Try out The Definery at the V%26A&body='+ encodeURI('The Definery says my'+ qd['object'] +' is '+ result +'. ') +'%0D%0A%0D%0Ahttp%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery';
         pageSnap(1);
         //google analytics
         for( d in qd ){ qdata += ','+qd[d]; }
@@ -530,7 +544,7 @@ jQuery(document).ready(function() {
         }
         return result;
     }
-
+        
     $('#scroller').on('click', '.scroller-foot .scroller-nav, .next', function(e){ e.preventDefault(); pageSnap(1); });
     $('#scroller').on('click', '.scroller-top .scroller-nav, .prev', function(e){ e.preventDefault(); pageSnap(-1); });
     $(window).on('resize', function(e){ e.preventDefault(); pageSnap(0); });
@@ -555,6 +569,7 @@ jQuery(document).ready(function() {
     });
     $('form').on('click', '.btn', function(){ if( this.nodeName==='LABEL' ){ $(this).addClass('selected').siblings('.btn').removeClass('selected') } });
     $('form').on('submit', function(e){ e.preventDefault(); q_submit(this) });
+    $('a[rel=pop]').on('click', function(){ $share.toggle(0) });
     
 });
 
