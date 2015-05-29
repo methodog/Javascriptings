@@ -323,7 +323,7 @@
             <div class="scroller-mid">
                 <div class="tcell">
                     <h2>TRUTH IS A LUXURY</h2>
-                    <p>Thank you for being honest.</p>
+                    <p>Thank you for being honest</p>
                     <p>Ready for judgement?</p>
                     <input class="btn" type="submit" id="q_submit" name="q_submit" value="Run the Definery">
                 </div>
@@ -504,8 +504,8 @@ jQuery(document).ready(function() {
         result = isNaN(result)? result : (result>0? 'LUXURY' : 'VULGAR');
         $('#q_result_title').html(qd['object'].toUpperCase());
         $('#q_result').html(result);
-        tweet.href = 'https://twitter.com/intent/tweet?text='+ encodeURI('The Definery says my '+ qd['object'] +' is '+ result +'. ') +'&url=http%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery&hashtags=WhatisLuxury';
-        email.href = 'mailto:?subject=Try out The Definery at the V%26A&body='+ encodeURI('The Definery says my '+ qd['object'] +' is '+ result +'. ') +'%0D%0A%0D%0Ahttp%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery';
+        tweet.href = 'https://twitter.com/intent/tweet?text='+ encodeURI('Luxury or Vulgar? The @V_and_A\'s Definery says my '+ qd['object'] +' is '+ result +'. ') +'&url=http%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery&hashtags=WhatisLuxury';
+        email.href = 'mailto:?subject=Try out The Definery at the V%26A&body='+ encodeURI('Luxury or Vulgar? The @V_and_A\'s Definery says my '+ qd['object'] +' is '+ result +'. ') +'%0D%0A%0D%0Ahttp%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery';
         pageSnap(1);
         //google analytics
         for( d in qd ){ qdata += ','+qd[d]; }
