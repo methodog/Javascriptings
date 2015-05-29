@@ -488,7 +488,7 @@ jQuery(document).ready(function() {
             if( choices = $(input).data('choices') ){ v = choices[v-1]; }
             $('label[for='+n+']').html(v);
         }
-        if( window.location.pathname.indexOf('/test/')>-1 && window.location.search.indexOf('test')>-1 ){ var debug = $('.scroller-wrap').eq(p-1).find('.scroller-foot'); debug.find('h2').remove(); debug.append('<h2 class="tcell">'+definery($('form')[0])+'</h2>') }
+        if( window.location.pathname.indexOf('/quiz')>-1 && window.location.search.indexOf('test')>-1 ){ var debug = $('.scroller-wrap').eq(p-1).find('.scroller-foot'); debug.find('h2').remove(); debug.append('<h2 class="tcell">'+definery($('form')[0])+'</h2>') }
         return np;
     }
     
@@ -499,11 +499,11 @@ jQuery(document).ready(function() {
             tweet = $('#tweet')[0],
             email = $('#email')[0];
         definery(form);
-        result = result>0? 'LUXURY' : 'VULGAR';
+        result = isNaN(result)? result : (result>0? 'LUXURY' : 'VULGAR');
         $('#q_result_title').html(qd['object'].toUpperCase());
         $('#q_result').html(result);
-        tweet.href = 'https://twitter.com/intent/tweet?text='+ encodeURI('The Definery says my'+ qd['object'] +' is '+ result +'. ') +'&url=http%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery&hashtags=WhatisLuxury';
-        email.href = 'mailto:?subject=Try out The Definery at the V%26A&body='+ encodeURI('The Definery says my'+ qd['object'] +' is '+ result +'. ') +'%0D%0A%0D%0Ahttp%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery';
+        tweet.href = 'https://twitter.com/intent/tweet?text='+ encodeURI('The Definery says my '+ qd['object'] +' is '+ result +'. ') +'&url=http%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery&hashtags=WhatisLuxury';
+        email.href = 'mailto:?subject=Try out The Definery at the V%26A&body='+ encodeURI('The Definery says my '+ qd['object'] +' is '+ result +'. ') +'%0D%0A%0D%0Ahttp%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery';
         pageSnap(1);
         //google analytics
         for( d in qd ){ qdata += ','+qd[d]; }
