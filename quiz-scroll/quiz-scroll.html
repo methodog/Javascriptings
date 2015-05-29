@@ -380,7 +380,6 @@
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script type="text/javascript">
 function getY(e){ var y; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ y = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ y = e.touches[0].pageY; } }else{ y = e.pageY; } return y; }
-function getQrystr(name){ var match = RegExp('[?&]'+ name +'=([^&]*)').exec(window.location.search); return match && decodeURIComponent(match[1].replace(/\+/g, ' ')); }
 jQuery(document).ready(function() {
     
     var touchscreen = !!('ontouchstart' in window),
@@ -489,7 +488,7 @@ jQuery(document).ready(function() {
             if( choices = $(input).data('choices') ){ v = choices[v-1]; }
             $('label[for='+n+']').html(v);
         }
-        if( getQrystr('dev') ){ var debug = $('.scroller-wrap').eq(p-1).find('.scroller-foot'); debug.find('h2').remove(); debug.append('<h2 class="tcell">'+definery($('form')[0])+'</h2>') }
+        if( window.location.pathname.indexOf('/test/')>-1 && window.location.search.indexOf('test')>-1 ){ var debug = $('.scroller-wrap').eq(p-1).find('.scroller-foot'); debug.find('h2').remove(); debug.append('<h2 class="tcell">'+definery($('form')[0])+'</h2>') }
         return np;
     }
     
