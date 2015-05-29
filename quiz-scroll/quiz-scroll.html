@@ -567,7 +567,7 @@ jQuery(document).ready(function() {
     $(window).on('resize', function(e){ e.preventDefault(); pageSnap(0); });
     if( touchscreen ){
         document.ontouchstart = function(e){ if( e.target.childElementCount>0 || e.target.nodeName[0]==='H' ){ e.preventDefault(); scrollDir(e); } };
-        document.ontouchmove = function(e){ if( e.target.childElementCount>0 || e.target.nodeName[0]==='H' ){ pageSnap(scrollDir(e)) }else{ e.preventDefault(); if( e.target.nodeName==='LABEL' ){ $(e.target).click() } } };
+        document.ontouchmove = function(e){ if( e.target.childElementCount>0 || e.target.nodeName[0]==='H' ){ pageSnap(scrollDir(e)) }else{ if( e.target.type!=='range' ){ e.preventDefault() } if( e.target.nodeName==='LABEL' ){ $(e.target).click() } } };
     }else{
         $(window).on('scroll', function(e){ e.preventDefault(); pageSnap(scrollDir()); });
     }
