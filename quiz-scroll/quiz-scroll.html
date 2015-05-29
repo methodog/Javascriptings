@@ -42,7 +42,8 @@
         #scroller-frame { position:fixed; left:5.4%; top:13.5%; z-index:1; }
         #header { width:92.3%; position:fixed; left:3.6%; }
         #logo_va { max-width:110px; min-width:44px; width:40%; }
-        #q_result { font-size:4em; letter-spacing:0.4em; text-indent:0.45em; }
+        #q_result { margin-bottom:1em; }
+        #q_result.big { font-size:4em; letter-spacing:0.4em; margin-bottom:0; text-indent:0.45em; }
         .scroller-mid { border-color:#231f20; display:table; padding:2% 1% 0.5% 2.5%; position:relative; left:3.6%; }
         .table { display:table; height:100%; width:100%; }
         .tcell { display:table-cell; text-align:center; vertical-align:middle; position:relative; z-index:1; }
@@ -88,8 +89,8 @@
         }
         @media screen and (max-width:800px) {
             .header .tcell { text-align:right; }
-            #logo_cc { width:5%; }
-            #logo_na { width:16%; }
+            #logo_cc { width:6%; }
+            #logo_na { left:4%; width:14%; }
         }
         @media screen and (max-width:800px) and (max-height:800px) {
             h1, h2, h3, #q_result { font-size:1.1em; letter-spacing:0.2em; margin-left:0; }
@@ -158,6 +159,7 @@
                 <div class="tcell">
                     <h2>NAME YOUR OBJECT</h2>
                     <input type="text" id="q_object" name="q_object" value="">
+                    <p id="polite"></p>
                 </div>
             </div>
             <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
@@ -392,25 +394,37 @@ jQuery(document).ready(function() {
         winW = $(window).width(),
         winH = !!window.innerHeight? window.innerHeight : $(window).height(),
         canscroll = 1,
-        stopwords,
-        triggers_luxury = ['time','holiday','peace','friend','pet','cat','dog'],
-        triggers_vulgar = ['gold','car'],
+        stopwords, politewords, triggerwords,
         result = 0,
-        qd = {},
+        qd = {}
         $share = $('#share');
         
-    /* switch this to vam hosted json file once finalised after launch */
+    /* switch these to vam hosted json file once finalised after launch */
     $.ajax('//spreadsheets.google.com/feeds/cells/1CClyauFEPp-17GFaRq3uEhJlYvOA_ojYExvlkX0uAW0/od6/public/full?alt=json-in-script&callback=?', { dataType:'jsonp', timeout:3000 }).done(function(data){
-        stopwords = [];
+        stopwords = {};
         for( var i=0; i<data.feed.entry.length; i++ ){
-            stopwords[i] = data.feed.entry[i].gs$cell.$t;
+            stopwords[data.feed.entry[i].gs$cell.$t.toLowerCase()] = 'stop';
         }
     }).fail(function(data){ stopwords='fail' });
+    $.ajax('//spreadsheets.google.com/feeds/cells/1ecLTCWPyn2U_P0x6bXTk5EZoN8Q_-ppVqCI3id8iEqA/od6/public/full?alt=json-in-script&callback=?', { dataType:'jsonp', timeout:3000 }).done(function(data){
+        politewords = {};
+        for( var i=1; i<data.feed.entry.length; i+=2 ){
+            politewords[data.feed.entry[i-1].gs$cell.$t.toLowerCase()] = data.feed.entry[i].gs$cell.$t;
+        }
+    }).fail(function(data){ politewords='fail' });
+    $.ajax('//spreadsheets.google.com/feeds/cells/1-sq9FFvDqed9YMflIMXD5CzqiFHzyrd4xCwz8-Iyayo/od6/public/full?alt=json-in-script&callback=?', { dataType:'jsonp', timeout:3000 }).done(function(data){
+        triggerwords = {};
+        for( var i=1; i<data.feed.entry.length; i+=2 ){
+            triggerwords[data.feed.entry[i-1].gs$cell.$t.toLowerCase()] = data.feed.entry[i].gs$cell.$t;
+        }
+    }).fail(function(data){ triggerwords='fail' });
 
     /* init */
     (function init(){
-        if( !stopwords ){ setTimeout(function(){ init(); }, 50); return; }
-        else if( stopwords==='fail' ){ console.log('stopwords failed to load!') };
+        if( !stopwords || !politewords || !triggerwords ){ setTimeout(function(){ init(); }, 50); return; }
+        else if( stopwords==='fail' ){ console.log('stopwords failed to load!') }
+        else if( politewords==='fail' ){ console.log('politewords failed to load!') }
+        else if( triggerwords==='fail' ){ console.log('triggerwords failed to load!') };
         var resize = function(){
             var winW2 = $(window).width(),
                 winH2 = !!window.innerHeight? window.innerHeight : $(window).height();
@@ -454,10 +468,8 @@ jQuery(document).ready(function() {
     }
 
     /* validation */
-    function in_array(arr, val) {
-        val = val.toLowerCase();
-        for( var i=0, len=arr.length; i<len; i++){ if (arr[i] == val) return true; }
-        return false;
+    function list_val(list, val) {
+        return !list[val.toLowerCase()]? 0 : list[val.toLowerCase()];
     }
     
     function hide_next(halt){
@@ -481,7 +493,9 @@ jQuery(document).ready(function() {
         $(input).removeClass('invalid');
         if( n==='q_object' ){
             if( v.length<3 ){ hide_next(1); return false; }
-            if( in_array(stopwords, v) ){ hide_next(1); return false; }
+            if( list_val(stopwords, v) ){ hide_next(1); return false; }
+            if( list_val(politewords, v) ){ hide_next(1); $('#polite').html(list_val(politewords, v)); return false; }
+            $('#polite').html(''); 
         }
         else if( n==='q_cost' && ( v.length<1 || isNaN(v) ) ){ hide_next(1); return false; }
         else if( n==='q_free' && v==='yes' ){ hide_next(); np+=1; }
@@ -493,34 +507,12 @@ jQuery(document).ready(function() {
         if( window.location.pathname.indexOf('/quiz')>-1 && window.location.search.indexOf('test')>-1 ){ var debug = $('.scroller-wrap').eq(p-1).find('.scroller-foot'); debug.find('h2').remove(); debug.append('<h2 class="tcell">'+definery($('form')[0])+'</h2>') }
         return np;
     }
-    
-    /* submission */
-    function q_submit(form){
-        var date = new Date(),
-            qdata = '',
-            tweet = $('#tweet')[0],
-            email = $('#email')[0];
-        definery(form);
-        result = isNaN(result)? result : (result>0? 'LUXURY' : 'VULGAR');
-        $('#q_result_title').html(qd['object'].toUpperCase());
-        $('#q_result').html(result);
-        tweet.href = 'https://twitter.com/intent/tweet?text='+ encodeURI('Luxury or Vulgar? The @V_and_A\'s Definery says my '+ qd['object'] +' is '+ result +'. ') +'&url=http%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery&hashtags=WhatisLuxury';
-        email.href = 'mailto:?subject=Try out The Definery at the V%26A&body='+ encodeURI('Luxury or Vulgar? The @V_and_A\'s Definery says my '+ qd['object'] +' is '+ result +'. ') +'%0D%0A%0D%0Ahttp%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery';
-        pageSnap(1);
-        //google analytics
-        for( d in qd ){ qdata += ','+qd[d]; }
-        $('#q_data_1').val(result);
-        $('#q_data_2').val(date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate()+','+ result + qdata);
-        $('#tag_manager_submit').click();
-        return false;
-    }
         
     function definery(form){
         $(form).find('input[type=text], input[type=radio]:checked, input[type=range]').each(function(){
             qd[this.name.replace('q_','')] = $(this).val().trim().replace(',',' ');
         });
-        if( in_array(triggers_luxury, qd.object) ){ result = 'LUXURY'; }
-        else if( in_array(triggers_vulgar, qd.object) ){ result = 'VULGAR'; }
+        if( list_val(triggerwords, qd.object) ){ result = list_val(triggerwords, qd.object); }
         else { 
             result = 0;
             if( qd.free==='yes' ){ result += 5 }
@@ -535,17 +527,41 @@ jQuery(document).ready(function() {
                 if( qd.decorative==='yes' ){ result += 1 }
             }
             if( qd.pride>3 ){ result -= 2*Number(qd.pride) }
-            result -= 2*Number(qd.fashionable);
+            if( !!qd.fashionable ){ result -= 2*Number(qd.fashionable) }
             if( qd.inherit==='yes' ){ result += 1000 }
             if( qd.repair==='no' ){ result -= 1000 }
             if( qd.bequeath==='no' ){ result -= 1 }
-            result += Number(qd.love);
-            result += Number(qd.richness);
+            if( !!qd.love ){ result += Number(qd.love) }
+            if( !!qd.richness ){ result += Number(qd.richness) }
             if( qd.alternative>2 ){ result -= 3 }
         }
-        return result;
     }
-        
+            
+    /* submission */
+    function q_submit(form){
+        var date = new Date(),
+            qdata = '',
+            tweet = $('#tweet')[0],
+            email = $('#email')[0];
+        definery(form);
+        $('#q_result').removeClass('big');
+        if( !isNaN(result) ){ result = result>0? 'LUXURY' : 'VULGAR' }
+        else if( result.toLowerCase()==='luxury' ){ result = 'LUXURY' }
+        else if( result.toLowerCase()==='vulgar' ){ result = 'VULGAR' }
+        if( result==='LUXURY' || result==='VULGAR' ){ $('#q_result').addClass('big') }
+        $('#q_result_title').html(qd['object'].toUpperCase());
+        $('#q_result').html(result);
+        tweet.href = 'https://twitter.com/intent/tweet?text='+ encodeURI('Luxury or Vulgar? The @V_and_A\'s Definery says my '+ qd['object'] +' is '+ result +'. ') +'&url=http%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery&hashtags=WhatisLuxury';
+        email.href = 'mailto:?subject=Try out The Definery at the V%26A&body='+ encodeURI('Luxury or Vulgar? The @V_and_A\'s Definery says my '+ qd['object'] +' is '+ result +'. ') +'%0D%0A%0D%0Ahttp%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery';
+        pageSnap(1);
+        //google analytics
+        for( d in qd ){ qdata += ','+qd[d]; }
+        $('#q_data_1').val(result);
+        $('#q_data_2').val(date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate()+','+ result + qdata);
+        $('#tag_manager_submit').click();
+        return false;
+    }
+
     $('#scroller').on('click', '.scroller-foot .scroller-nav, .next', function(e){ e.preventDefault(); pageSnap(1); });
     $('#scroller').on('click', '.scroller-top .scroller-nav, .prev', function(e){ e.preventDefault(); pageSnap(-1); });
     $(window).on('resize', function(e){ e.preventDefault(); pageSnap(0); });
