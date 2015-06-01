@@ -62,7 +62,7 @@
         #logo_na img { max-width:140px; }
         .col { display:inline-block; text-align:left; vertical-align:top; max-width:45%; }
         .col h2, .col p { margin:0 0 1.2em; }
-        #creds { margin-left:10%; }
+        #creds { margin-left:3%; max-width:64%; }
         #creds h2 { font-size:0.8em; margin:0 0 0.2em; }
         #creds h3 { letter-spacing:0.2em; }
         #share { background:#fff; display:none; height:100%; width:100%; position:absolute; top:0; left:0; }
@@ -79,14 +79,18 @@
         .invalid, .shake { -webkit-animation-name:shake; animation-name:shake; -webkit-animation-duration:1s; animation-duration:1s; }
         .invalid { background:#231f20; }
         .em { font-size:3em; line-height:1em; }
-        .small { font-size:0.7em; line-height:2em; }
+        .small { font-size:0.7em; line-height:2em; margin:0!important; }
         .left { float:left; }
         .right { float:right; }
         @media screen and (min-width:1300px) {
             #headtext { width:15%; }
         }
-        @media screen and (max-width:1000px) {
-            #creds { margin-left:3%; max-width:49%; }
+        @media screen and (max-width:1024px) {
+            #sponsors { margin-left:2%; width:32%; }
+            #sponsor_cc { width:15%; }
+            #sponsor_na { width:50%; }
+            #a_links { position:absolute; bottom:5%; left:46%; text-align:left; width:52%; }
+            #a_links a { max-width:95%; white-space:normal; }
         }
         @media screen and (max-width:800px) {
             .header .tcell { text-align:right; }
@@ -100,22 +104,24 @@
             .btn { box-shadow: 5px 5px 0 0 #b89b5d; padding:2% 0; }
             .btn:hover, .btn:active, .btn.selected { top:5px; left:5px; }
             #logo_na { left:12%; }
-            #sponsor_cc { width:15%; }
-            #sponsor_na { width:50%; }
-            #a_links { position:absolute; bottom:5%; left:46%; text-align:left; width:52%; }
-            #a_links a { max-width:95%; white-space:normal; }
         }
         @media screen and (max-width:650px) {
             #headtext { font-size:12px; width:40%; }
             #logo_cc { width:10%; }
             #logo_na { left:2%; width:24%; }
+            #sponsors { width:40%; }
+            #creds { max-width:49%; }
         }
         @media screen and (max-width:600px) and (orientation:portrait) {
             input, .btn { width:80%; }
             #sponsor_cc { margin-left:5%; width:25%; }
             #sponsor_na { margin-left:5%; width:75%; }
         }
-        @media screen and (max-width:480px) {
+        @media screen and (max-width:600px) and (orientation:landscape) {
+            .col h2, .col p { margin:0 0 0.5em; }
+            #sponsors { line-height:1.2em; width:auto; }
+        }
+        @media screen and (max-width:480px) and (orientation:landscape) {
             #headtext { font-size:10px; }
             #logo_cc { left:2%; }
         }
