@@ -441,7 +441,6 @@ jQuery(document).ready(function() {
             winW = winW2;
             winH = winH2;
             if( $('#scroller-frame').outerWidth()===$('#scroller-frame').innerWidth() ){ $('#scroller-frame, .scroller-mid').css('border-width',(winW2/100)+'px') }
-            //$('#scroller-frame').height($('.scroller-mid').innerHeight());
         }; resize(); $(window).on('resize', function(){ resize(); });
         $('.scroller-wrap').slice(p+ps-1).hide(0);
         $('.scroller-wrap').slice(p+ps-2).find('.scroller-foot').css('opacity',0);
