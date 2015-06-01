@@ -79,6 +79,7 @@
         .invalid, .shake { -webkit-animation-name:shake; animation-name:shake; -webkit-animation-duration:1s; animation-duration:1s; }
         .invalid { background:#231f20; }
         .em { font-size:3em; line-height:1em; }
+        .small { font-size:0.7em; line-height:2em; }
         .left { float:left; }
         .right { float:right; }
         @media screen and (min-width:1300px) {
@@ -263,7 +264,7 @@
             </div>
             <div class="scroller-foot"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="next"><img src="img/next.png" alt="next"></a></div></div>
         </div>
-         <div class="scroller-wrap">
+        <div class="scroller-wrap">
             <div class="scroller-top"><div class="tcell"><a class="scroller-nav" href="javascript:void(0)" title="back"><img src="img/prev.png" alt="back"></a></div></div>
             <div class="scroller-mid">
                 <div class="tcell">
@@ -362,7 +363,7 @@
                         <h3 class="black">What is Luxury?</h3>
                         <p>25 April &ndash;27 September 2015<br>A V&amp;A and Crafts Council exhibition<br><strong>#WhatisLuxury</strong></p>
                         <p><img id="sponsor_cc" src="img/logo_cc.jpg" alt="Crafts Council logo" title="Crafts Council"></p>
-                        <p><img id="sponsor_na" src="img/logo_na.jpg" alt="Northacre logo" title="Northacre"></p>
+                        <p class="small">Sponsored by<br><img id="sponsor_na" src="img/logo_na.jpg" alt="Northacre logo" title="Northacre"></p>
                     </div>
                     <div class="col" id="creds">
                         <h2>CONCEPT & DESIGN</h2>
@@ -402,19 +403,19 @@ jQuery(document).ready(function() {
         triggerwords = {"dog":"Luxury","lamborghini":"Vulgar","v&a":"The world's greatest museum of art & design","the beautiful meme":"Luxury","pet":"Luxury","crafts council":"The national development agency for contemporary craft in the United Kingdom","northacre":"What is Luxury? sponsor","cat":"Luxury","book":"Luxury","what is luxury?":"A V&A and Crafts Council exhibition, 25 April – 27 September 2015","victoria and albert museum":"The world's greatest museum of art & design","the definery":"Luxury","definery":"Luxury","henry cole":"V&A's first Director","art":"Luxury","design":"Luxury","luca carini":"the person who made this","keith hale":"a legend","knitting":"Woolly Luxury","bashaw":"Luxury dog (British Galleries, V&A)","lizzy bullock":"Woolly Luxury"};
         
     /* switch these to vam hosted json file once finalised after launch */
-    $.ajax('//spreadsheets.google.com/feeds/cells/1CClyauFEPp-17GFaRq3uEhJlYvOA_ojYExvlkX0uAW0/od6/public/full?alt=json-in-script&callback=?', { dataType:'jsonp', timeout:3000 }).done(function(data){
+    $.ajax('//spreadsheets.google.com/feeds/cells/1CClyauFEPp-17GFaRq3uEhJlYvOA_ojYExvlkX0uAW0/od6/public/full?alt=json-in-script&callback=?', { dataType:'jsonp', timeout:5000 }).done(function(data){
         stopwords = {};
         for( var i=0; i<data.feed.entry.length; i++ ){
             stopwords[data.feed.entry[i].gs$cell.$t.toLowerCase()] = 'stop';
         }//console.log(JSON.stringify(stopwords));
     }).fail(function(data){ console.log('stopwords form failed to load'); });
-    $.ajax('//spreadsheets.google.com/feeds/cells/1ecLTCWPyn2U_P0x6bXTk5EZoN8Q_-ppVqCI3id8iEqA/od6/public/full?alt=json-in-script&callback=?', { dataType:'jsonp', timeout:3000 }).done(function(data){
+    $.ajax('//spreadsheets.google.com/feeds/cells/1ecLTCWPyn2U_P0x6bXTk5EZoN8Q_-ppVqCI3id8iEqA/od6/public/full?alt=json-in-script&callback=?', { dataType:'jsonp', timeout:5000 }).done(function(data){
         politewords = {};
         for( var i=1; i<data.feed.entry.length; i+=2 ){
             politewords[data.feed.entry[i-1].gs$cell.$t.toLowerCase()] = data.feed.entry[i].gs$cell.$t;
         }//console.log(JSON.stringify(politewords));
     }).fail(function(data){ console.log('politewords form failed to load'); });
-    $.ajax('//spreadsheets.google.com/feeds/cells/1-sq9FFvDqed9YMflIMXD5CzqiFHzyrd4xCwz8-Iyayo/od6/public/full?alt=json-in-script&callback=?', { dataType:'jsonp', timeout:3000 }).done(function(data){
+    $.ajax('//spreadsheets.google.com/feeds/cells/1-sq9FFvDqed9YMflIMXD5CzqiFHzyrd4xCwz8-Iyayo/od6/public/full?alt=json-in-script&callback=?', { dataType:'jsonp', timeout:5000 }).done(function(data){
         triggerwords = {};
         for( var i=1; i<data.feed.entry.length; i+=2 ){
             triggerwords[data.feed.entry[i-1].gs$cell.$t.toLowerCase()] = data.feed.entry[i].gs$cell.$t;
