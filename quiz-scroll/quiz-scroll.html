@@ -44,6 +44,7 @@
         #logo_va { max-width:110px; min-width:44px; width:40%; }
         #q_result { margin-bottom:1em; }
         #q_result.big { font-size:4em; letter-spacing:0.4em; margin-bottom:0; text-indent:0.45em; }
+        .scroller-wrap { overflow:hidden; }
         .scroller-mid { border-color:#231f20; display:table; padding:2% 1% 0.5% 2.5%; position:relative; left:3.6%; }
         .table { display:table; height:100%; width:100%; }
         .tcell { display:table-cell; text-align:center; vertical-align:middle; position:relative; z-index:1; }
@@ -440,7 +441,7 @@ jQuery(document).ready(function() {
             winW = winW2;
             winH = winH2;
             if( $('#scroller-frame').outerWidth()===$('#scroller-frame').innerWidth() ){ $('#scroller-frame, .scroller-mid').css('border-width',(winW2/100)+'px') }
-            $('#scroller-frame').height($('.scroller-mid').innerHeight());
+            //$('#scroller-frame').height($('.scroller-mid').innerHeight());
         }; resize(); $(window).on('resize', function(){ resize(); });
         $('.scroller-wrap').slice(p+ps-1).hide(0);
         $('.scroller-wrap').slice(p+ps-2).find('.scroller-foot').css('opacity',0);
