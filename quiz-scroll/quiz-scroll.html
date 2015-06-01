@@ -556,8 +556,8 @@ jQuery(document).ready(function() {
         if( result==='LUXURY' || result==='VULGAR' ){ $('#q_result').addClass('big') }
         $('#q_result_title').html(qd['object'].toUpperCase());
         $('#q_result').html(result);
-        tweet.href = 'https://twitter.com/intent/tweet?text='+ encodeURI('Luxury or Vulgar? The @V_and_A\'s Definery says my '+ qd['object'] +' is '+ result +'. ') +'&url=http%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery&hashtags=WhatisLuxury';
-        email.href = 'mailto:?subject=Try out The Definery at the V%26A&body='+ encodeURI('Luxury or Vulgar? The @V_and_A\'s Definery says my '+ qd['object'] +' is '+ result +'. ') +'%0D%0A%0D%0Ahttp%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery';
+        tweet.href = 'https://twitter.com/intent/tweet?text='+ encodeURI('#Luxury or #Vulgar? The V_and_A\'s #TheDefinery says my '+ qd['object'] +' is '+ result +'. ') +'&url=http%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery&hashtags=WhatisLuxury';
+        email.href = 'mailto:?subject=Try out The Definery at the V%26A&body='+ encodeURI('#Luxury or #Vulgar? The V_and_A\'s #TheDefinery says my '+ qd['object'] +' is '+ result +'. ') +'%0D%0A%0D%0Ahttp%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery';
         pageSnap(1);
         //google analytics
         for( d in qd ){ qdata += ','+qd[d]; }
