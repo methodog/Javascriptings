@@ -60,12 +60,15 @@
         #logo_cc { width:8%; text-align:left; }
         #logo_na { left:8%; width:18%; }
         #logo_cc img { max-width:47px; }
-        #logo_na img { max-width:140px; }
+        #logo_na img { margin-top:0.5em; max-width:140px; width:86%; vertical-align:top; }
+        #logo_na .small { text-align:left; float:right; }
         .col { display:inline-block; text-align:left; vertical-align:top; max-width:45%; }
         .col h2, .col p { margin:0 0 1.2em; }
+        #sponsor_na { margin-top:0.5em; }
         #creds { margin-left:3%; max-width:64%; }
         #creds h2 { font-size:0.8em; margin:0 0 0.2em; }
         #creds h3 { letter-spacing:0.2em; }
+        #a_links { margin-top:1em; }
         #share { background:#fff; display:none; height:100%; width:100%; position:absolute; top:0; left:0; }
         @-webkit-keyframes shake {
             0%, 100% { -webkit-transform:translate3d(0, 0, 0); transform:translate3d(0, 0, 0); }
@@ -80,14 +83,16 @@
         .invalid, .shake { -webkit-animation-name:shake; animation-name:shake; -webkit-animation-duration:1s; animation-duration:1s; }
         .invalid { background:#231f20; }
         .em { font-size:3em; line-height:1em; }
-        .small { font-size:0.7em; line-height:2em; margin:0!important; }
+        .small { font-size:0.7em; line-height:1em; margin:0!important; }
         .left { float:left; }
         .right { float:right; }
         @media screen and (min-width:1300px) {
             #headtext { width:15%; }
         }
         @media screen and (max-width:1024px) {
+            a.btn { padding:0 1em; }
             #sponsors { margin-left:2%; width:32%; }
+            #sponsors { line-height:1.2em; }
             #sponsor_cc { width:15%; }
             #sponsor_na { width:50%; }
             #a_links { position:absolute; bottom:5%; left:46%; text-align:left; width:52%; }
@@ -97,6 +102,7 @@
             .header .tcell { text-align:right; }
             #logo_cc { width:6%; }
             #logo_na { left:4%; width:14%; }
+            #logo_na img { width:74%; }
         }
         @media screen and (max-width:800px) and (max-height:800px) {
             h1, h2, h3, #q_result.big { font-size:1.1em; letter-spacing:0.2em; margin-left:0; }
@@ -109,18 +115,18 @@
         @media screen and (max-width:650px) {
             #headtext { font-size:12px; width:40%; }
             #logo_cc { width:10%; }
-            #logo_na { left:2%; width:24%; }
+            #logo_na { font-size:0.6em; left:2%; width:24%; }
             #sponsors { width:40%; }
             #creds { max-width:49%; }
         }
         @media screen and (max-width:600px) and (orientation:portrait) {
             input, .btn { width:80%; }
-            #sponsor_cc { margin-left:5%; width:25%; }
-            #sponsor_na { margin-left:5%; width:75%; }
+            #sponsor_cc { width:25%; }
+            #sponsor_na { width:75%; }
         }
         @media screen and (max-width:600px) and (orientation:landscape) {
             .col h2, .col p { margin:0 0 0.5em; }
-            #sponsors { line-height:1.2em; width:auto; }
+            #sponsors { width:auto; }
         }
         @media screen and (max-width:480px) and (orientation:landscape) {
             #headtext { font-size:10px; }
@@ -144,7 +150,7 @@
     <div id="scroller-frame"></div>
     <form method="post" action="#">
         <div class="scroller-wrap">
-            <div class="scroller-top header"><div class="tcell" id="logo_cc"><img src="img/logo_cc.jpg" alt="Crafts Council logo" title="Crafts Council"></div><div class="tcell" id="logo_na"><img src="img/logo_na.jpg" alt="Northacre logo" title="Northacre"></div><div class="tcell" id="headtext"><div><h3>What is Luxury?</h3>25 April &ndash;27 September 2015<br>A V&amp;A and Crafts Council exhibition</div></div></div>
+            <div class="scroller-top header"><div class="tcell" id="logo_cc"><img src="img/logo_cc.jpg" alt="Crafts Council logo" title="Crafts Council"></div><div class="tcell" id="logo_na"><div class="small">Sponsored by<br><img src="img/logo_na.jpg" alt="Northacre logo" title="Northacre"></div></div><div class="tcell" id="headtext"><div><h3>What is Luxury?</h3>25 April &ndash;27 September 2015<br>A V&amp;A and Crafts Council exhibition</div></div></div>
             <div class="scroller-mid">
                 <div class="tcell">
                     <h1>THE DEFINERY</h1>
