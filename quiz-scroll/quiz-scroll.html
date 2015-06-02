@@ -497,7 +497,6 @@ jQuery(document).ready(function() {
             choices;
         $(input).removeClass('invalid');
         if( n==='q_object' ){
-            if( v.length<3 ){ hide_next(1); return false; }
             if( list_val(stopwords, v) ){ hide_next(1); return false; }
             if( list_val(politewords, v) ){ hide_next(1); $('#polite').html(list_val(politewords, v)); return false; }
             $('#polite').html(''); 
