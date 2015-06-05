@@ -550,20 +550,23 @@ jQuery(document).ready(function() {
             
     /* submission */
     function q_submit(form){
+        definery(form);
         var date = new Date(),
             qdata = '',
             tweet = $('#tweet')[0],
-            email = $('#email')[0];
-        definery(form);
+            email = $('#email')[0]
+            object = qd['object'];
+        if( object.indexOf('a ')===0 ){ object = object.substr(2) }
         $('#q_result').removeClass('big');
         if( !isNaN(result) ){ result = result>0? 'LUXURY' : 'VULGAR' }
         else if( result.toLowerCase()==='luxury' ){ result = 'LUXURY' }
         else if( result.toLowerCase()==='vulgar' ){ result = 'VULGAR' }
         if( result==='LUXURY' || result==='VULGAR' ){ $('#q_result').addClass('big') }
-        $('#q_result_title').html(qd['object'].toUpperCase());
+        $('#q_result_title').html(object.toUpperCase());
         $('#q_result').html(result);
-        tweet.href = 'https://twitter.com/intent/tweet?text=%23Luxury%20or%20%23Vulgar?%20The%20V_and_A\'s%20%23TheDefinery%20says%20my%20'+ qd['object'] +'%20is%20'+ result +'.%20&url=http%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery&hashtags=WhatisLuxury';
-        email.href = 'mailto:?subject=Luxury%20or%20Vulgar?&body=Luxury%20or%20Vulgar?%20The%20V%26A\'s%20Definery%20says%20my%20'+ qd['object'] +'%20is%20'+ result +'%0D%0A%0D%0Ahttp%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery';
+        email.href = 'mailto:?subject=Luxury%20or%20Vulgar?&body=Luxury%20or%20Vulgar?%20The%20V%26A\'s%20Definery%20says%20my%20'+ object +'%20is%20'+ result +'%0D%0A%0D%0Ahttp%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery';
+        object = '%23'+object.replace(/\s/g,'');
+        tweet.href = 'https://twitter.com/intent/tweet?text=%23Luxury%20or%20%23Vulgar?%20The%20%40V_and_A\'s%20%23TheDefinery%20says%20my%20'+ object +'%20is%20'+ result +'.%20&url=http%3A%2F%2Fwww.vam.ac.uk%2Fthedefinery&hashtags=WhatisLuxury';
         pageSnap(1);
         //google analytics
         for( d in qd ){ qdata += ','+qd[d]; }
