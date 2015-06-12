@@ -509,7 +509,7 @@ jQuery(document).ready(function() {
             $('#polite').html(''); 
         }
         else if( n==='q_cost' && ( v.length<1 || isNaN(v) ) ){ hide_next(1); return false; }
-        else if( n==='q_free' && v==='yes' ){ hide_next(); np+=1; }
+        else if( n==='q_free' && v==='no' ){ hide_next(); np+=1; }
         else if( n==='q_visible' && v==='no' ){ hide_next(); np+=1; }
         else if( t==='range' ){
             if( choices = $(input).data('choices') ){ v = choices[v-1]; }
