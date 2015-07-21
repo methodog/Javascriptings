@@ -1,0 +1,4 @@
+for i in {1..4}
+do
+    convert -crop x300 bod-0$i.jpg $i%02d.jpg;
+done
