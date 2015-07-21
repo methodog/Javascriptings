@@ -48,7 +48,7 @@ var dragZoom = {
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
         el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
         el.xyP = getPgOffset(el.P);
-        el.hv = el.wh[0]>el.wh[1]? 0 : 1;console.log(el.wh);
+        el.hv = el.wh[0]>el.wh[1]? 0 : 1;
     },
     init: function(el, opt){
         if( typeof el==='string' ){ el = document.querySelector(el); } if( !el ){ return; }
