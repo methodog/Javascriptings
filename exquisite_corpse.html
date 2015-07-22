@@ -14,7 +14,7 @@
         .dragpad, .draggable { cursor:pointer; width:100%; height:100%; position:absolute; left:0; top:0; }
         .reel { height:33%; }
         .freel { width:auto; white-space:nowrap; }
-        #container { margin:auto; max-height:900px; max-width:335px; }
+        #container { margin:auto; max-height:100%; max-width:335px; }
         #player { display:none; }
     </style>
 </head>
@@ -127,8 +127,8 @@ var dragZoom = {
                 this.t = window.setTimeout(function(){ el.drop(); }, 23);
             };
             el.snap = function(d, dest){
-                var p = this.xy[this.hv]+Math.ceil(d*((d*dest)-(d*this.xy[this.hv]))/4);
-                if( (d<0 && p<=dest+5) || (d>0 && p>=dest-5) ){
+                var p = this.xy[this.hv]+d*((d*dest)-(d*this.xy[this.hv]))/4;
+                if( (d<0 && p<=dest+8) || (d>0 && p>=dest-8) ){
                     window.clearTimeout(this.t);
                     p = dest;
                     this.move((this.hv?[this.xy[0],p]:[p,this.xy[1]]));
@@ -268,7 +268,7 @@ addHandler(window,'load',function(){
     }
     function resize(){
         var c = document.getElementById('container');
-        c.style.height = (900/335)*getComputed(c,'width')+'px';
+        c.style.width = (335/900)*getComputed(c,'height')+'px';
         for( var i=0; i<freels.length; ++i ){
             dragZoom.size(freels[i]);
         }
@@ -283,7 +283,7 @@ addHandler(window,'load',function(){
         }
         return false;
     }
-    addHandler(fruity,'click',fire);
+    //addHandler(fruity,'click',fire);
     fire();
 });
 </script>
