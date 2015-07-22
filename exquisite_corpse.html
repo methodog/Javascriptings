@@ -128,7 +128,7 @@ var dragZoom = {
             };
             el.snap = function(d, dest){
                 var p = this.xy[this.hv]+d*((d*dest)-(d*this.xy[this.hv]))/4;
-                if( (d<0 && p<=dest+8) || (d>0 && p>=dest-8) ){
+                if( (d<0 && p<=dest+10) || (d>0 && p>=dest-10) ){
                     window.clearTimeout(this.t);
                     p = dest;
                     this.move((this.hv?[this.xy[0],p]:[p,this.xy[1]]));
