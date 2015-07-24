@@ -52,7 +52,7 @@ var flicker = {
         el.fade = !!opt.fade? opt.fade : 0;
         if( !el.cloned && el.loop ){ el.appendChild(el.childNodes[0].cloneNode(true)); el.cloned=1; }
         if( !el.styled ){ el.appendChild(document.createElement('style')); el.styled=1; }
-        if( !el.id ){ el.id = el.className+(++lenticule.id); }
+        if( !el.id ){ el.id = el.className+(++flicker.id); }
         flicker.size(el);
         el.arcs = el.childNodes.length-1;
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
