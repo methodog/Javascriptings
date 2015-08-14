@@ -21,9 +21,9 @@ function Thing(plot, x, y, z){
     this.plot = plot;
     this.obj = new Array(this.plot.length);
     for( var i=0; i<this.obj.length; ++i ){ this.obj[i] = new Array(); }
-    this.xfrm = [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [x,y,z,1] ];
-    this.c = 0;
-    this.r = Math.random()*0.07;
+    this.xfrm = this.xfrm1 = [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [x,y,z,1] ];
+    //~ this.c = 0;
+    //~ this.r = Math.random()*0.07;
 }
 Thing.prototype.rotate = function(radX, radY, radZ){
     var tmpMatrix = [ [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0] ], 
@@ -32,15 +32,15 @@ Thing.prototype.rotate = function(radX, radY, radZ){
                      : radZ!=null? [ [Math.cos(radZ),Math.sin(radZ),0,0], [-Math.sin(radZ),Math.cos(radZ),0,0], [0,0,1,0], [0,0,0,1] ]
                      : [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1] ],
         i, j, k;
-    for( i=0; i<this.xfrm.length; i++ ){ for( j=0; j<this.xfrm.length; j++ ){ for( k=0; k<this.xfrm.length; k++ ){
-        tmpMatrix[i][j] += rotateMatrix[i][k] * this.xfrm[k][j];
+    for( i=0; i<this.xfrm1.length; i++ ){ for( j=0; j<this.xfrm1.length; j++ ){ for( k=0; k<this.xfrm1.length; k++ ){
+        tmpMatrix[i][j] += rotateMatrix[i][k] * this.xfrm1[k][j];
     } } }
     this.xfrm = tmpMatrix;
 };
 Thing.prototype.transform = function(){
-    this.rotate((Math.sin((++this.c)*this.r)/Math.PI),null,null);
-    this.rotate(null,(Math.cos((++this.c)*this.r)/Math.PI),null);
-    this.rotate(null,null,((Math.cos((++this.c)*this.r)/10)/Math.PI));
+    //~ this.rotate((Math.sin((++this.c)*this.r)/Math.PI),null,null);
+    //~ this.rotate(null,(Math.cos((++this.c)*this.r)/Math.PI),null);
+    //~ this.rotate(null,null,((Math.cos((++this.c)*this.r)/10)/Math.PI));
     for( var r=0; r<this.obj.length; r++ ){ //construct current cubeMatrix from currentTransformation.
         this.obj[r][0] = (this.xfrm[0][0] * this.plot[r][0]) + (this.xfrm[1][0] * this.plot[r][1]) + (this.xfrm[2][0] * this.plot[r][2]) + this.xfrm[3][0];
         this.obj[r][1] = (this.xfrm[0][1] * this.plot[r][0]) + (this.xfrm[1][1] * this.plot[r][1]) + (this.xfrm[2][1] * this.plot[r][2]) + this.xfrm[3][1];
@@ -48,6 +48,7 @@ Thing.prototype.transform = function(){
     }
 }
 function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
+function rmHandler(el,evt,fn){ if( el.removeEventListener ){el.removeEventListener(evt,fn,false); }else if( el.detachEvent ){ el.detachEvent('on'+evt,fn); } }
 function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ if( style=='width' ){ y=el.getBoundingClientRect().right-el.getBoundingClientRect().left }else if( style=='height' ){ y=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else{ var y=el.currentStyle[style] } } return parseFloat(y); }
 function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
@@ -95,6 +96,7 @@ cnvPad = {
                 cnvPad.cnv.ontouchend = null;
                 cnvPad.release();
             };
+            window.ondeviceorientation = null;
         }else{
             document.onmousemove = cnvPad.move;
             document.onmouseup = function(){
@@ -118,8 +120,18 @@ cnvPad = {
 		return false;
 	},
 	release: function(){
-		cnvPad.cnv.animate();
-		cnvPad.cnv = null;
+        if( !!window.DeviceOrientationEvent ){
+            addHandler(window,'deviceorientation',function(e){
+                for( i in cnvPad.cnv.things ){
+                    cnvPad.cnv.things[i].rotate(-(e.gamma/15)/Math.PI,null,null);
+                    //cnvPad.cnv.things[i].rotate(null,(e.beta/15)/Math.PI,null);
+                }
+                cnvPad.cnv.draw();
+            });
+        }else{
+            cnvPad.cnv.animate();
+        }
+		//cnvPad.cnv = null;
 	}
 };
 
@@ -127,8 +139,8 @@ var i, els = document.querySelectorAll('.pad');
 for( i=0; i<els.length; ++i ){ 
     var el = els[i];
     cnvPad.init(el); 
-    addHandler(el,'mouseout',function(){ clearTimeout(this.t); });
-    addHandler(el,'mouseover',function(){ this.animate(); });
+    //~ addHandler(el,'mouseout',function(){ clearTimeout(this.t); });
+    //~ addHandler(el,'mouseover',function(){ this.animate(); });
     addHandler(window,'resize',function(){
         el.wh = [window.innerWidth, window.innerHeight];
         el.width = el.wh[0]; el.height = el.wh[1];
