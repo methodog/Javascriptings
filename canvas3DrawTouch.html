@@ -17,13 +17,11 @@
     <canvas class="pad"></canvas>
 
 <script type="text/javascript">
-function Thing(plot, x, y, z){
+function Thing(plot, x, y, z){console.log(this.plot, this.obj);
     this.plot = plot;
     this.obj = new Array(this.plot.length);
     for( var i=0; i<this.obj.length; ++i ){ this.obj[i] = new Array(); }
     this.xfrm = this.xfrm1 = [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [x,y,z,1] ];
-    //~ this.c = 0;
-    //~ this.r = Math.random()*0.07;
 }
 Thing.prototype.rotate = function(radX, radY, radZ){
     var tmpMatrix = [ [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0] ], 
@@ -33,14 +31,11 @@ Thing.prototype.rotate = function(radX, radY, radZ){
                      : [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1] ],
         i, j, k;
     for( i=0; i<this.xfrm1.length; i++ ){ for( j=0; j<this.xfrm1.length; j++ ){ for( k=0; k<this.xfrm1.length; k++ ){
-        tmpMatrix[i][j] += rotateMatrix[i][k] * this.xfrm1[k][j];
+        tmpMatrix[i][j] += rotateMatrix[i][k] * this.xfrm[k][j];
     } } }
     this.xfrm = tmpMatrix;
 };
 Thing.prototype.transform = function(){
-    //~ this.rotate((Math.sin((++this.c)*this.r)/Math.PI),null,null);
-    //~ this.rotate(null,(Math.cos((++this.c)*this.r)/Math.PI),null);
-    //~ this.rotate(null,null,((Math.cos((++this.c)*this.r)/10)/Math.PI));
     for( var r=0; r<this.obj.length; r++ ){ //construct current cubeMatrix from currentTransformation.
         this.obj[r][0] = (this.xfrm[0][0] * this.plot[r][0]) + (this.xfrm[1][0] * this.plot[r][1]) + (this.xfrm[2][0] * this.plot[r][2]) + this.xfrm[3][0];
         this.obj[r][1] = (this.xfrm[0][1] * this.plot[r][0]) + (this.xfrm[1][1] * this.plot[r][1]) + (this.xfrm[2][1] * this.plot[r][2]) + this.xfrm[3][1];
@@ -88,6 +83,7 @@ cnvPad = {
 		cnvPad.cnv = this;
         clearTimeout(cnvPad.cnv.t);
         cnvPad.cnv.plots.push([]);
+        cnvPad.cnv.things.push(null);
 		if( e.type==='touchstart' ){
             cnvPad.cnv.ontouchmove = cnvPad.move;
             cnvPad.cnv.onmousedown = null;
@@ -110,12 +106,11 @@ cnvPad = {
 	move: function(e){
 		e = e || window.event;
         var i=0, 
-            plot = cnvPad.cnv.plots[cnvPad.cnv.plots.length-1],
+            p=cnvPad.cnv.plots.length-1,
+            plot = cnvPad.cnv.plots[p],
             xyE = getXY(e);
         plot.push([xyE[0]-cnvPad.cnv.xy[0]-cnvPad.cnv.xy0[0], -xyE[1]-cnvPad.cnv.xy[1]+cnvPad.cnv.xy0[1], 0]);
-        plot.push([xyE[0]-cnvPad.cnv.xy[0]-cnvPad.cnv.xy0[0], -xyE[1]-cnvPad.cnv.xy[1]+cnvPad.cnv.xy0[1], 2]);
-        cnvPad.cnv.things = [];
-        for( ; i<cnvPad.cnv.plots.length; ++i ){ cnvPad.cnv.things.push(new Thing(cnvPad.cnv.plots[i], 0, 0, 500)); }
+        cnvPad.cnv.things[p] = new Thing(cnvPad.cnv.plots[p], 0, 0, 500);
         cnvPad.cnv.draw();
 		return false;
 	},
@@ -123,8 +118,9 @@ cnvPad = {
         if( !!window.DeviceOrientationEvent ){
             addHandler(window,'deviceorientation',function(e){
                 for( i in cnvPad.cnv.things ){
-                    cnvPad.cnv.things[i].rotate(-(e.gamma/15)/Math.PI,null,null);
-                    //cnvPad.cnv.things[i].rotate(null,(e.beta/15)/Math.PI,null);
+                    cnvPad.cnv.things[i].rotate((e.gamma/90)/Math.PI,null,null);
+                    cnvPad.cnv.things[i].rotate(null,(e.beta/90)/Math.PI,null);
+                    //cnvPad.cnv.things[i].rotate(null,null,(e.alpha/360)/Math.PI);
                 }
                 cnvPad.cnv.draw();
             });
