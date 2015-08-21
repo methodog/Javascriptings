@@ -17,7 +17,7 @@
     <canvas class="pad"></canvas>
 
 <script type="text/javascript">
-function Thing(plot, x, y, z){console.log(this.plot, this.obj);
+function Thing(plot, x, y, z){
     this.plot = plot;
     this.obj = new Array(this.plot.length);
     for( var i=0; i<this.obj.length; ++i ){ this.obj[i] = new Array(); }
@@ -105,8 +105,8 @@ cnvPad = {
 	},
 	move: function(e){
 		e = e || window.event;
-        var i=0, 
-            p=cnvPad.cnv.plots.length-1,
+        var i = 0, 
+            p = cnvPad.cnv.plots.length-1,
             plot = cnvPad.cnv.plots[p],
             xyE = getXY(e);
         plot.push([xyE[0]-cnvPad.cnv.xy[0]-cnvPad.cnv.xy0[0], -xyE[1]-cnvPad.cnv.xy[1]+cnvPad.cnv.xy0[1], 0]);
@@ -115,6 +115,17 @@ cnvPad = {
 		return false;
 	},
 	release: function(){
+        var f = 2,
+            n = cnvPad.cnv.plots.length-1,
+            p = cnvPad.cnv.plots[n],
+            t = cnvPad.cnv.things[n],
+            l = p.length,
+            i = 0;
+        while( p.length > l/f ){
+            p.splice(i, f-1);
+            t.obj.splice(i, f-1);
+            ++i;
+        }
         if( !!window.DeviceOrientationEvent ){
             addHandler(window,'deviceorientation',function(e){
                 for( i in cnvPad.cnv.things ){
