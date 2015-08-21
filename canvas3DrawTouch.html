@@ -21,7 +21,7 @@ function Thing(plot, x, y, z){console.log(this.plot, this.obj);
     this.plot = plot;
     this.obj = new Array(this.plot.length);
     for( var i=0; i<this.obj.length; ++i ){ this.obj[i] = new Array(); }
-    this.xfrm = this.xfrm1 = [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [x,y,z,1] ];
+    this.xfrm = [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [x,y,z,1] ];
 }
 Thing.prototype.rotate = function(radX, radY, radZ){
     var tmpMatrix = [ [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0] ], 
@@ -30,7 +30,7 @@ Thing.prototype.rotate = function(radX, radY, radZ){
                      : radZ!=null? [ [Math.cos(radZ),Math.sin(radZ),0,0], [-Math.sin(radZ),Math.cos(radZ),0,0], [0,0,1,0], [0,0,0,1] ]
                      : [ [1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1] ],
         i, j, k;
-    for( i=0; i<this.xfrm1.length; i++ ){ for( j=0; j<this.xfrm1.length; j++ ){ for( k=0; k<this.xfrm1.length; k++ ){
+    for( i=0; i<this.xfrm.length; i++ ){ for( j=0; j<this.xfrm.length; j++ ){ for( k=0; k<this.xfrm.length; k++ ){
         tmpMatrix[i][j] += rotateMatrix[i][k] * this.xfrm[k][j];
     } } }
     this.xfrm = tmpMatrix;
