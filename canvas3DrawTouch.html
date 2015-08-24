@@ -115,16 +115,26 @@ cnvPad = {
 		return false;
 	},
 	release: function(){
-        var f = 2,
+        var f = 3,
             n = cnvPad.cnv.plots.length-1,
-            p = cnvPad.cnv.plots[n],
-            t = cnvPad.cnv.things[n],
+            p = cnvPad.cnv.plots[n], t = cnvPad.cnv.things[n],
             l = p.length,
-            i = 0;
-        while( p.length > l/f ){
+            z1, z2, h = 40,
+            i = 1;
+        while( p.length > (l/f)+1 ){
             p.splice(i, f-1);
             t.obj.splice(i, f-1);
             ++i;
+        }
+        l = p.length, i = 2;
+        while( p.length < (5*l/3)-2 ){
+            z1 = [p[i-1][0],p[i-1][1],h];
+            z2 = [p[i][0],p[i][1],h];
+            p.splice(i, 0, z1, z2);
+            z1 = [t.obj[i-1][0],t.obj[i-1][1],h];
+            z2 = [t.obj[i][0],t.obj[i][1],h];
+            t.obj.splice(i, 0, z1, z2);
+            i+=5;
         }
         if( !!window.DeviceOrientationEvent ){
             addHandler(window,'deviceorientation',function(e){
