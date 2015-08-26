@@ -76,7 +76,6 @@ cnvPad = {
             }
             ctx.stroke();
         };
-        cnv.animate = function(){ cnv.t = setInterval(function(){cnv.draw()}, 74); };
 	},
 	touch: function(e){
 		e = e || window.event;
@@ -115,11 +114,11 @@ cnvPad = {
 		return false;
 	},
 	release: function(){
-        var f = 3,
+        var f = 2,
             n = cnvPad.cnv.plots.length-1,
             p = cnvPad.cnv.plots[n], t = cnvPad.cnv.things[n],
             l = p.length,
-            z1, z2, h = 40,
+            z1, z2, h = 400,
             i = 1;
         while( p.length > (l/f)+1 ){
             p.splice(i, f-1);
@@ -139,16 +138,20 @@ cnvPad = {
         if( !!window.DeviceOrientationEvent ){
             addHandler(window,'deviceorientation',function(e){
                 for( i in cnvPad.cnv.things ){
-                    cnvPad.cnv.things[i].rotate((e.gamma/90)/Math.PI,null,null);
-                    cnvPad.cnv.things[i].rotate(null,(e.beta/90)/Math.PI,null);
-                    //cnvPad.cnv.things[i].rotate(null,null,(e.alpha/360)/Math.PI);
+                    cnvPad.cnv.things[i].rotate(e.gamma/270,null,null);
+                    cnvPad.cnv.things[i].rotate(null,e.beta/270,null);
                 }
                 cnvPad.cnv.draw();
             });
         }else{
-            cnvPad.cnv.animate();
+            cnvPad.cnv.t = setInterval(function(){
+                for( i in cnvPad.cnv.things ){
+                    cnvPad.cnv.things[i].rotate(0.08,null,null);
+                    //cnvPad.cnv.things[i].rotate(null,0.1,null);
+                }
+                cnvPad.cnv.draw();
+            }, 42);
         }
-		//cnvPad.cnv = null;
 	}
 };
 
@@ -156,8 +159,6 @@ var i, els = document.querySelectorAll('.pad');
 for( i=0; i<els.length; ++i ){ 
     var el = els[i];
     cnvPad.init(el); 
-    //~ addHandler(el,'mouseout',function(){ clearTimeout(this.t); });
-    //~ addHandler(el,'mouseover',function(){ this.animate(); });
     addHandler(window,'resize',function(){
         el.wh = [window.innerWidth, window.innerHeight];
         el.width = el.wh[0]; el.height = el.wh[1];
