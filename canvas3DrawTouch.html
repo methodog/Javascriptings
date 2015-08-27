@@ -42,6 +42,7 @@ Thing.prototype.transform = function(){
         this.obj[r][2] = (this.xfrm[0][2] * this.plot[r][0]) + (this.xfrm[1][2] * this.plot[r][1]) + (this.xfrm[2][2] * this.plot[r][2]) + this.xfrm[3][2];
     }
 }
+var _mobileDevice = ( window.innerWidth<=1280 && !!('ontouchstart' in window) && !!window.DeviceOrientationEvent );
 function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
 function rmHandler(el,evt,fn){ if( el.removeEventListener ){el.removeEventListener(evt,fn,false); }else if( el.detachEvent ){ el.detachEvent('on'+evt,fn); } }
 function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ if( style=='width' ){ y=el.getBoundingClientRect().right-el.getBoundingClientRect().left }else if( style=='height' ){ y=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else{ var y=el.currentStyle[style] } } return parseFloat(y); }
@@ -135,7 +136,7 @@ cnvPad = {
             t.obj.splice(i, 0, z1, z2);
             i+=5;
         }
-        if( !!window.DeviceOrientationEvent ){
+        if( _mobileDevice ){
             addHandler(window,'deviceorientation',function(e){
                 for( i in cnvPad.cnv.things ){
                     cnvPad.cnv.things[i].rotate(e.gamma/270,null,null);
