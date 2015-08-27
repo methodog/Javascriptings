@@ -9,7 +9,6 @@
     <style type="text/css">
         body { background:#666; margin:0; overflow:hidden; }
         canvas { background:#ddd; border:1px solid #000; display:block; margin:0 auto; width:100%; height:100%; }
-        canvas:hover { border-color:#fff; }
     </style>
 </head>
 
@@ -119,7 +118,7 @@ cnvPad = {
             n = cnvPad.cnv.plots.length-1,
             p = cnvPad.cnv.plots[n], t = cnvPad.cnv.things[n],
             l = p.length,
-            z1, z2, h = 400,
+            z1, z2, h = 400, r,
             i = 1;
         while( p.length > (l/f)+1 ){
             p.splice(i, f-1);
@@ -147,8 +146,8 @@ cnvPad = {
         }else{
             cnvPad.cnv.t = setInterval(function(){
                 for( i in cnvPad.cnv.things ){
-                    cnvPad.cnv.things[i].rotate(0.08,null,null);
-                    //cnvPad.cnv.things[i].rotate(null,0.1,null);
+                    r = i%2>0? [0.02,null,null] : [null,0.02,null];
+                    cnvPad.cnv.things[i].rotate.apply(cnvPad.cnv.things[i], r);
                 }
                 cnvPad.cnv.draw();
             }, 42);
