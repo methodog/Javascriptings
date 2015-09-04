@@ -49,7 +49,7 @@ function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.off
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 var cnvPad;
 cnvPad = {
-	cnv:null, tt:null, mv:null,
+	cnv:null, t1:null, t2:null, mv:null, sp:0.01,
 	init: function(cnv){
 		if(typeof cnv==='string'){ cnv = document.getElementById(cnv); }
 		cnv.onmousedown = cnvPad.touch;
@@ -80,7 +80,8 @@ cnvPad = {
 	touch: function(e){
 		e = e || window.event;
 		cnvPad.cnv = this;
-		cnvPad.tt = e.timeStamp;
+		cnvPad.t1 = cnvPad.t2;
+		cnvPad.t2 = e.timeStamp;
 		cnvPad.mv = 0;
         clearTimeout(cnvPad.cnv.t);
         cnvPad.cnv.plots.push([]);
@@ -88,18 +89,18 @@ cnvPad = {
 		if( e.type==='touchstart' ){
             cnvPad.cnv.ontouchmove = cnvPad.move;
             cnvPad.cnv.onmousedown = null;
-            cnvPad.cnv.ontouchend = function(e){
+            cnvPad.cnv.ontouchend = function(){
                 cnvPad.cnv.ontouchmove = null;
                 cnvPad.cnv.ontouchend = null;
-                cnvPad.release(e);
+                cnvPad.release();
             };
             window.ondeviceorientation = null;
         }else{
             document.onmousemove = cnvPad.move;
-            document.onmouseup = function(e){
+            document.onmouseup = function(){
                 document.onmousemove = null;
                 document.onmouseup = null;
-                cnvPad.release(e);
+                cnvPad.release();
             };
         }
 		return false;
@@ -116,10 +117,16 @@ cnvPad = {
         cnvPad.cnv.draw();
 		return false;
 	},
-	release: function(e){
+	release: function(){
         if( !cnvPad.mv ){
             cnvPad.cnv.plots.pop();
             cnvPad.cnv.things.pop();
+            /* must be a tap */
+            if( cnvPad.t2-cnvPad.t1<500 ){
+                window.location.reload();
+            }else{
+                cnvPad.sp += 0.01;
+            }
         }else{
             var f = 2,
                 n = cnvPad.cnv.plots.length-1,
@@ -153,7 +160,7 @@ cnvPad = {
             }else{
                 cnvPad.cnv.t = setInterval(function(){
                     for( i in cnvPad.cnv.things ){
-                        r = i%2>0? [0.02,null,null] : [null,0.02,null];
+                        r = i%2>0? [cnvPad.sp,null,null] : [null,cnvPad.sp,null];
                         cnvPad.cnv.things[i].rotate.apply(cnvPad.cnv.things[i], r);
                     }
                     cnvPad.cnv.draw();
