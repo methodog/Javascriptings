@@ -76,6 +76,15 @@ cnvPad = {
             }
             ctx.stroke();
         };
+        if( !_mobileDevice ){
+            addHandler(window,'deviceorientation',function(e){
+                for( i in cnv.things ){
+                    cnv.things[i].rotate(e.gamma/270,null,null);
+                    cnv.things[i].rotate(null,e.beta/270,null);
+                }
+                cnv.draw();
+            });
+        }
 	},
 	touch: function(e){
 		e = e || window.event;
@@ -122,10 +131,10 @@ cnvPad = {
             cnvPad.cnv.plots.pop();
             cnvPad.cnv.things.pop();
             /* must be a tap */
-            if( cnvPad.t2-cnvPad.t1<500 ){
+            if( cnvPad.t2-cnvPad.t1<300 ){
                 window.location.reload();
             }else{
-                cnvPad.sp = (cnvPad.sp+0.01)%0.05;
+                cnvPad.sp = (cnvPad.sp+0.01)%0.1;
             }
         }else{
             var f = 2,
@@ -149,23 +158,15 @@ cnvPad = {
                 t.obj.splice(i, 0, z1, z2);
                 i+=5;
             }
-            if( _mobileDevice ){
-                addHandler(window,'deviceorientation',function(e){
-                    for( i in cnvPad.cnv.things ){
-                        cnvPad.cnv.things[i].rotate(e.gamma/270,null,null);
-                        cnvPad.cnv.things[i].rotate(null,e.beta/270,null);
-                    }
-                    cnvPad.cnv.draw();
-                });
-            }else{
-                cnvPad.cnv.t = setInterval(function(){
-                    for( i in cnvPad.cnv.things ){
-                        r = i%2>0? [cnvPad.sp,null,null] : [null,cnvPad.sp,null];
-                        cnvPad.cnv.things[i].rotate.apply(cnvPad.cnv.things[i], r);
-                    }
-                    cnvPad.cnv.draw();
-                }, 42);
-            }
+        }
+        if( !_mobileDevice ){
+            cnvPad.cnv.t = setInterval(function(){
+                for( i in cnvPad.cnv.things ){
+                    r = i%2>0? [cnvPad.sp,null,null] : [null,cnvPad.sp,null];
+                    cnvPad.cnv.things[i].rotate.apply(cnvPad.cnv.things[i], r);
+                }
+                cnvPad.cnv.draw();
+            }, 42);
         }
 	}
 };
