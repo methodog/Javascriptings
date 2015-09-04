@@ -49,7 +49,7 @@ function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.off
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 var cnvPad;
 cnvPad = {
-	cnv: null, 
+	cnv:null, tt:null, mv:null,
 	init: function(cnv){
 		if(typeof cnv==='string'){ cnv = document.getElementById(cnv); }
 		cnv.onmousedown = cnvPad.touch;
@@ -80,24 +80,26 @@ cnvPad = {
 	touch: function(e){
 		e = e || window.event;
 		cnvPad.cnv = this;
+		cnvPad.tt = e.timeStamp;
+		cnvPad.mv = 0;
         clearTimeout(cnvPad.cnv.t);
         cnvPad.cnv.plots.push([]);
         cnvPad.cnv.things.push(null);
 		if( e.type==='touchstart' ){
             cnvPad.cnv.ontouchmove = cnvPad.move;
             cnvPad.cnv.onmousedown = null;
-            cnvPad.cnv.ontouchend = function(){
+            cnvPad.cnv.ontouchend = function(e){
                 cnvPad.cnv.ontouchmove = null;
                 cnvPad.cnv.ontouchend = null;
-                cnvPad.release();
+                cnvPad.release(e);
             };
             window.ondeviceorientation = null;
         }else{
             document.onmousemove = cnvPad.move;
-            document.onmouseup = function(){
+            document.onmouseup = function(e){
                 document.onmousemove = null;
                 document.onmouseup = null;
-                cnvPad.release();
+                cnvPad.release(e);
             };
         }
 		return false;
@@ -108,49 +110,55 @@ cnvPad = {
             p = cnvPad.cnv.plots.length-1,
             plot = cnvPad.cnv.plots[p],
             xyE = getXY(e);
+        cnvPad.mv = 1;
         plot.push([xyE[0]-cnvPad.cnv.xy[0]-cnvPad.cnv.xy0[0], -xyE[1]-cnvPad.cnv.xy[1]+cnvPad.cnv.xy0[1], 0]);
         cnvPad.cnv.things[p] = new Thing(cnvPad.cnv.plots[p], 0, 0, 500);
         cnvPad.cnv.draw();
 		return false;
 	},
-	release: function(){
-        var f = 2,
-            n = cnvPad.cnv.plots.length-1,
-            p = cnvPad.cnv.plots[n], t = cnvPad.cnv.things[n],
-            l = p.length,
-            z1, z2, h = 400, r,
-            i = 1;
-        while( p.length > (l/f)+1 ){
-            p.splice(i, f-1);
-            t.obj.splice(i, f-1);
-            ++i;
-        }
-        l = p.length, i = 2;
-        while( p.length < (5*l/3)-2 ){
-            z1 = [p[i-1][0],p[i-1][1],h];
-            z2 = [p[i][0],p[i][1],h];
-            p.splice(i, 0, z1, z2);
-            z1 = [t.obj[i-1][0],t.obj[i-1][1],h];
-            z2 = [t.obj[i][0],t.obj[i][1],h];
-            t.obj.splice(i, 0, z1, z2);
-            i+=5;
-        }
-        if( _mobileDevice ){
-            addHandler(window,'deviceorientation',function(e){
-                for( i in cnvPad.cnv.things ){
-                    cnvPad.cnv.things[i].rotate(e.gamma/270,null,null);
-                    cnvPad.cnv.things[i].rotate(null,e.beta/270,null);
-                }
-                cnvPad.cnv.draw();
-            });
+	release: function(e){
+        if( !cnvPad.mv ){
+            cnvPad.cnv.plots.pop();
+            cnvPad.cnv.things.pop();
         }else{
-            cnvPad.cnv.t = setInterval(function(){
-                for( i in cnvPad.cnv.things ){
-                    r = i%2>0? [0.02,null,null] : [null,0.02,null];
-                    cnvPad.cnv.things[i].rotate.apply(cnvPad.cnv.things[i], r);
-                }
-                cnvPad.cnv.draw();
-            }, 42);
+            var f = 2,
+                n = cnvPad.cnv.plots.length-1,
+                p = cnvPad.cnv.plots[n], t = cnvPad.cnv.things[n],
+                l = p.length,
+                z1, z2, h = 400, r,
+                i = 1;
+            while( p.length > (l/f)+1 ){
+                p.splice(i, f-1);
+                t.obj.splice(i, f-1);
+                ++i;
+            }
+            l = p.length, i = 2;
+            while( p.length < (5*l/3)-2 ){
+                z1 = [p[i-1][0],p[i-1][1],h];
+                z2 = [p[i][0],p[i][1],h];
+                p.splice(i, 0, z1, z2);
+                z1 = [t.obj[i-1][0],t.obj[i-1][1],h];
+                z2 = [t.obj[i][0],t.obj[i][1],h];
+                t.obj.splice(i, 0, z1, z2);
+                i+=5;
+            }
+            if( _mobileDevice ){
+                addHandler(window,'deviceorientation',function(e){
+                    for( i in cnvPad.cnv.things ){
+                        cnvPad.cnv.things[i].rotate(e.gamma/270,null,null);
+                        cnvPad.cnv.things[i].rotate(null,e.beta/270,null);
+                    }
+                    cnvPad.cnv.draw();
+                });
+            }else{
+                cnvPad.cnv.t = setInterval(function(){
+                    for( i in cnvPad.cnv.things ){
+                        r = i%2>0? [0.02,null,null] : [null,0.02,null];
+                        cnvPad.cnv.things[i].rotate.apply(cnvPad.cnv.things[i], r);
+                    }
+                    cnvPad.cnv.draw();
+                }, 42);
+            }
         }
 	}
 };
