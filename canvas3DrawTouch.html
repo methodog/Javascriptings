@@ -125,7 +125,7 @@ cnvPad = {
             if( cnvPad.t2-cnvPad.t1<500 ){
                 window.location.reload();
             }else{
-                cnvPad.sp += 0.01;
+                cnvPad.sp = (cnvPad.sp+0.01)%0.05;
             }
         }else{
             var f = 2,
