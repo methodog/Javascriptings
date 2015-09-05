@@ -132,7 +132,8 @@ cnvPad = {
             cnvPad.cnv.things.pop();
             /* must be a tap */
             if( cnvPad.t2-cnvPad.t1<300 ){
-                window.location.reload();
+                cnvPad.cnv.plots = [];
+                cnvPad.cnv.things = [];
             }else{
                 cnvPad.sp = (cnvPad.sp+0.01)%0.1;
             }
