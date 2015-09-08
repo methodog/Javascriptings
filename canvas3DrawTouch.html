@@ -76,7 +76,7 @@ cnvPad = {
             }
             ctx.stroke();
         };
-        if( !_mobileDevice ){
+        if( _mobileDevice ){
             addHandler(window,'deviceorientation',function(e){
                 for( i in cnv.things ){
                     cnv.things[i].rotate(e.gamma/270,null,null);
