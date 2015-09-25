@@ -41,6 +41,7 @@ caram = {
             el.ontouchstart = caram.touch;
             el.xyO = getPgOffset(el);
             el.move = function(xy){
+                caram.obs.splice(caram.obs.indexOf(this), 1);// todo - more efficient place to do this?
                 var x=xy[0], y=xy[1], r, v;
                 if( x<=0-el.xyO[0] ){ x=0-el.xyO[0]; r=[-1,0]; }
                 else if( x>=this.whP[0]-this.wh[0]-el.xyO[0] ){ x=this.whP[0]-this.wh[0]-el.xyO[0]; r=[1,0]; }
@@ -48,7 +49,6 @@ caram = {
                 else if( y>=this.whP[1]-this.wh[1]-el.xyO[1] ){ y=this.whP[1]-this.wh[1]-el.xyO[1]; r=[0,1]; }
                 if( !r ){
                     for( var o in caram.obs ){
-                        if( caram.obs[o]===this ){ continue }
                         if( Math.abs(x-caram.obs[o].xy[0])<this.wh[0] && Math.abs(y-caram.obs[o].xy[1])<this.wh[1] ){
                             v = this.v;
                             this.v = caram.obs[o].v;
@@ -60,6 +60,7 @@ caram = {
                 this.xy = [x,y];
                 this.style.left = x+'px';
                 this.style.top = y+'px';
+                caram.obs.push(this);// todo - more efficient place to do this?
                 return r;
             };
             el.drop = function(){
@@ -120,12 +121,12 @@ var i, els = document.querySelectorAll('.puk');
 for( i=0; i<els.length; ++i ){ 
     var el = els[i];
     caram.init(el);
+    caram.obs.push(el);
     if( el.className.indexOf('jack')>-1 ){
         el.move([(el.whP[0]/2)-(el.wh[0]/2), el.wh[1]]);
     }else{
         el.move([el.wh[0]+(Math.random()*(el.whP[0]-(el.wh[0]*3))), (el.wh[1]*2)+(Math.random()*el.wh[1]*3)]);
     }
-    caram.obs.push(el);
     addHandler(window,'resize',function(){
         caram.size(el); 
     });
