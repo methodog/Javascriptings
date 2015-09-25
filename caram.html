@@ -50,10 +50,12 @@ caram = {
                 if( !r ){
                     for( var o in caram.obs ){
                         if( Math.abs(x-caram.obs[o].xy[0])<this.wh[0] && Math.abs(y-caram.obs[o].xy[1])<this.wh[1] ){
-                            v = this.v;
-                            this.v = caram.obs[o].v;
-                            caram.obs[o].v = v;
-                            clearTimeout(caram.obs[o].t); caram.obs[o].drop();
+                            if( Math.sqrt(Math.pow(x-caram.obs[o].xy[0],2) + Math.pow(y-caram.obs[o].xy[1],2))<this.wh[0] ){
+                                v = this.v;
+                                this.v = caram.obs[o].v;
+                                caram.obs[o].v = v;
+                                clearTimeout(caram.obs[o].t); caram.obs[o].drop();
+                            }
                         }
                     }
                 }
