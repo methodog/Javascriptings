@@ -44,7 +44,8 @@ caram = {
             el.xyO = getPgOffset(el);
             el.move = function(xy){
                 caram.obs.splice(caram.obs.indexOf(this), 1);// todo - more efficient place to do this?
-                var x=xy[0], y=xy[1], r, v;
+                var x=xy[0], y=xy[1], r,
+                    n, tmp, modn, costheta, vn1, vn2, vt1, vt2; //vector maths for collision: n=normal vector, t=tangential
                 if( x<=0-this.xyO[0] ){ x=0-this.xyO[0]; r=[-1,0]; }
                 else if( x>=this.whP[0]-this.wh[0]-this.xyO[0] ){ x=this.whP[0]-this.wh[0]-this.xyO[0]; r=[1,0]; }
                 if( y<=0-this.xyO[1] ){ y=0-this.xyO[1]; r=[0,-1]; }
@@ -53,9 +54,19 @@ caram = {
                     for( var o in caram.obs ){
                         if( Math.abs(x-caram.obs[o].xy[0])<this.wh[0] && Math.abs(y-caram.obs[o].xy[1])<this.wh[1] ){
                             if( Math.sqrt(Math.pow(x-caram.obs[o].xy[0],2) + Math.pow(y-caram.obs[o].xy[1],2))<this.wh[0] ){
-                                v = this.v;
-                                this.v = caram.obs[o].v;
-                                caram.obs[o].v = v;
+                                n = [this.xy[0]-caram.obs[o].xy[0], this.xy[1]-caram.obs[o].xy[1]];
+                                tmp = Math.sqrt(Math.pow(n[0],2) + Math.pow(n[1],2));
+                                n = [n[0]/tmp, n[1]/tmp];
+                                modn = Math.sqrt((n[0]*n[0])+(n[1]*n[1]));
+                                costheta = Math.cos(Math.atan((caram.obs[o].v[1]-this.v[1])/(caram.obs[o].v[0]-this.v[0])));
+                                vn1 = Math.sqrt(Math.pow(this.v[0],2)+Math.pow(this.v[1],2)) * modn * costheta;
+                                vn1 = [-vn1*n[0], -vn1*n[1]];
+                                vn2 = Math.sqrt(Math.pow(caram.obs[o].v[0],2)+Math.pow(caram.obs[o].v[1],2)) * modn * costheta;
+                                vn2 = [-vn2*n[0], -vn2*n[1]];
+                                vt1 = [vn1[0]-this.v[0], vn1[1]-this.v[1]];
+                                vt2 = [vn2[0]-caram.obs[o].v[0], vn2[1]-caram.obs[o].v[1]];
+                                this.v = [vt1[0]+vn2[0], vt1[1]+vn2[1]];
+                                caram.obs[o].v = [vt2[0]+vn1[0], vt2[1]+vn1[1]];
                                 clearTimeout(caram.obs[o].t); caram.obs[o].drop();
                             }
                         }
@@ -133,16 +144,17 @@ caram = {
                     caram.obs.splice(caram.obs.indexOf(p2), 1);
                 }
             }
-            caram.setup();
+            caram.reset();
         }else{
             caram.el.drop();
             caram.el = null;
         }
         caram.mv = 0;
 	},
-	setup: function(){
+	reset: function(){
         var puks = caram.obs.slice();
         for( var o in puks ){
+            clearTimeout(puks[o].t);
             if( puks[o].className.indexOf('jack')>-1 ){
                 puks[o].move([(puks[o].whP[0]/2)-(puks[o].wh[0]/2), puks[o].wh[1]]);
             }else{
@@ -161,7 +173,7 @@ for( i=0; i<els.length; ++i ){
         caram.size(el); 
     });
 }
-caram.setup();
+caram.reset();
 </script>
 </body>
 </html>
