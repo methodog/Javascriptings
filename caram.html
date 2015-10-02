@@ -16,7 +16,7 @@
     </style>	
 </head>
 
-<body>
+<body id="board">
     <div id="goal"></div>
     <div class="puk" id="jack"></div>
     <div class="puk">◎</div>
@@ -30,9 +30,10 @@ function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches
 var caram;
 caram = {
 	el:null, wh:null, xy0:null, xyT:null, obs:[], t1:null, t2:null, mv:null, goal:null, g:0, p2:0,
-	puk: function(el){
+	size: function(el){ el.wh = [getComputed(el,'width'), getComputed(el,'height')] },
+    puk: function(el){
         if( typeof el==='string' ){ el = document.querySelector(el); } if( !el ){ return; }
-        el.wh = [getComputed(el,'width'), getComputed(el,'height')];
+        caram.size(el);
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
         el.v = [0,0];
         if( !el.move ){
@@ -153,17 +154,20 @@ caram = {
         caram.mv = 0;
 	},
 	init: function(){
-        var puks = caram.obs.slice(),
-            goal = document.getElementById('goal');
-        caram.wh = [getComputed(document.body,'width'), getComputed(document.body,'height')];
+        var board = document.getElementById('board'),
+            goal = document.getElementById('goal'),
+            puks = caram.obs.slice();
+        caram.wh = [getComputed(board,'width'), getComputed(board,'height')];
+        board.style.fontSize = caram.wh[1]/14+'px';
         caram.goal = [(caram.wh[0]/2)-(getComputed(goal,'width')/2), (caram.wh[0]/2)+(getComputed(goal,'width')/2)];
         caram.g = 0;
-        for( var o in puks ){
-            clearTimeout(puks[o].t);
-            if( puks[o].id==='jack' ){
-                puks[o].move([(caram.wh[0]/2)-(puks[o].wh[0]/2), puks[o].wh[1]]);
+        for( var p in puks ){
+            clearTimeout(puks[p].t);
+            caram.size(puks[p]);
+            if( puks[p].id==='jack' ){
+                puks[p].move([(caram.wh[0]/2)-(puks[p].wh[0]/2), caram.wh[1]/3]);
             }else{
-                puks[o].move([puks[o].wh[0]+(Math.random()*(caram.wh[0]-(puks[o].wh[0]*3))), (puks[o].wh[1]*2)+(Math.random()*puks[o].wh[1]*3)]);
+                puks[p].move([puks[p].wh[0]+(Math.random()*(caram.wh[0]-(puks[p].wh[0]*3))), (caram.wh[1]+(Math.random()*(caram.wh[1]-puks[p].wh[1])))/2]);
             }
 	    }
 	}
@@ -172,7 +176,7 @@ caram = {
 var i, els = document.querySelectorAll('.puk');
 for( i=0; i<els.length; ++i ){ 
     var el = els[i];
-    caram.puk(el);
+    caram.puk(el);console.log(el.wh);
 }
 caram.init();
 addHandler(window,'resize',function(){
