@@ -33,13 +33,13 @@ caram = {
 	pukReset: function(el){ 
         clearTimeout(el.t);
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
+        el.v = [0,0];
         el.out = 0;
     },
     puk: function(el){
         if( typeof el==='string' ){ el = document.querySelector(el); } if( !el ){ return; }
         caram.pukReset(el);
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
-        el.v = [0,0];
         if( !el.move ){
             el.onmousedown = caram.touch;
             el.ontouchstart = caram.touch;
