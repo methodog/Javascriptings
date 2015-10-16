@@ -16,7 +16,7 @@
         #s2 { text-align:right; }
         #board { background:#ebd2b4; height:90%; width:100%; position:absolute; bottom:0; }
         #jack { background:#111; }
-        #goal { border-bottom:3px solid #111; border-top:1.5em solid #fff; border-radius:50% 50% 5% 5%; margin:-1.5em auto 0; width:4em; }
+        #goal { border-bottom:3px solid #111; border-top:1.5em solid #fff; border-radius:50% 50% 5% 5%; margin:-1.5em auto 0; width:4.5em; }
     </style>	
 </head>
 
@@ -37,7 +37,7 @@ function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches
 var caram;
 caram = {
     init: function(){
-        caram.el=null; caram.obs=[]; caram.goal=null;
+        caram.el=null; caram.obs=[]; caram.hit=0; caram.goal=null;
         var board = document.getElementById('board'),
             goal = document.getElementById('goal'),
             puks = document.querySelectorAll('.puk'),
@@ -61,8 +61,10 @@ caram = {
         el.out = 0;
     },
     puk: function(el){
+        var i;
         if( typeof el==='string' ){ el = document.querySelector(el); } if( !el ){ return; }
-        caram.obs.push(el);
+        i = caram.obs.push(el);
+        el.bid = Math.pow(2,i-1);//sequential bitwise id
         caram.pukReset(el);
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
         if( !el.move ){
@@ -70,10 +72,9 @@ caram = {
             el.onmousedown = caram.touch;
             el.ontouchstart = caram.touch;
             el.move = function(xy){
-                caram.obs.splice(caram.obs.indexOf(this), 1);// todo - more efficient place to do this?
                 var x=xy[0], y=xy[1], r,
                     n, tmp, modn, costheta, vn1, vn2, vt1, vt2; //vector maths for collision: n=normal t=tangent
-                if( !this.out ){ 
+                if( !this.out ){
                     if( x<=0 ){ x=0; r=[-1,0]; }
                     else if( x>=caram.wh[0]-this.wh[0] ){ x=caram.wh[0]-this.wh[0]; r=[1,0]; }
                     if( y>=caram.wh[1]-this.wh[1] ){ y=caram.wh[1]-this.wh[1]; r=[0,1]; }
@@ -81,25 +82,31 @@ caram = {
                         if( x>caram.goal[0] && x<caram.goal[1]-this.wh[0] ){ this.out=1; if( this.id==='jack' ){ caram.el.goals++ }else if( this===caram.el ){ caram.el.goals-- } caram.scores(); setTimeout(function(){caram.init()},1000) }
                         else{ y=0; r=[0,-1]; }
                     }
-                    if( !r ){
+                    if( r ){
+                        caram.hit = 0;
+                    }else{
                         for( var o in caram.obs ){
-                            if( Math.abs(x-caram.obs[o].xy[0])<this.wh[0] && Math.abs(y-caram.obs[o].xy[1])<this.wh[1] ){
-                                if( Math.sqrt(Math.pow(x-caram.obs[o].xy[0],2) + Math.pow(y-caram.obs[o].xy[1],2))<this.wh[0] ){
-                                    n = [this.xy[0]-caram.obs[o].xy[0], this.xy[1]-caram.obs[o].xy[1]];
-                                    tmp = Math.sqrt(Math.pow(n[0],2) + Math.pow(n[1],2));
-                                    n = [n[0]/tmp, n[1]/tmp];
-                                    modn = Math.sqrt((n[0]*n[0])+(n[1]*n[1]));
-                                    costheta = Math.cos(Math.atan((caram.obs[o].v[1]-this.v[1])/(caram.obs[o].v[0]-this.v[0])));
-                                    vn1 = Math.sqrt(Math.pow(this.v[0],2)+Math.pow(this.v[1],2)) * modn * costheta;
-                                    vn1 = [-vn1*n[0], -vn1*n[1]];
-                                    vn2 = Math.sqrt(Math.pow(caram.obs[o].v[0],2)+Math.pow(caram.obs[o].v[1],2)) * modn * costheta;
-                                    vn2 = [-vn2*n[0], -vn2*n[1]];
-                                    vt1 = [vn1[0]-this.v[0], vn1[1]-this.v[1]];
-                                    vt2 = [vn2[0]-caram.obs[o].v[0], vn2[1]-caram.obs[o].v[1]];
-                                    this.v = [vt1[0]+vn2[0], vt1[1]+vn2[1]];
-                                    clearTimeout(caram.obs[o].t); 
-                                    caram.obs[o].v = [vt2[0]+vn1[0], vt2[1]+vn1[1]];
-                                    caram.obs[o].drop();
+                            if( caram.obs[o]===this ){ continue; }
+                            if( caram.hit!==(this.bid|caram.obs[o].bid) ){
+                                if( Math.abs(x-caram.obs[o].xy[0])<this.wh[0] && Math.abs(y-caram.obs[o].xy[1])<this.wh[1] ){
+                                    if( Math.sqrt(Math.pow(x-caram.obs[o].xy[0],2) + Math.pow(y-caram.obs[o].xy[1],2))<this.wh[0] ){
+                                        caram.hit = this.bid|caram.obs[o].bid;
+                                        n = [this.xy[0]-caram.obs[o].xy[0], this.xy[1]-caram.obs[o].xy[1]];
+                                        tmp = Math.sqrt(Math.pow(n[0],2) + Math.pow(n[1],2));
+                                        n = [n[0]/tmp, n[1]/tmp];
+                                        modn = Math.sqrt((n[0]*n[0])+(n[1]*n[1]));
+                                        costheta = Math.cos(Math.atan((caram.obs[o].v[1]-this.v[1])/(caram.obs[o].v[0]-this.v[0])));
+                                        vn1 = Math.sqrt(Math.pow(this.v[0],2)+Math.pow(this.v[1],2)) * modn * costheta;
+                                        vn1 = [-vn1*n[0], -vn1*n[1]];
+                                        vn2 = Math.sqrt(Math.pow(caram.obs[o].v[0],2)+Math.pow(caram.obs[o].v[1],2)) * modn * costheta;
+                                        vn2 = [-vn2*n[0], -vn2*n[1]];
+                                        vt1 = [vn1[0]-this.v[0], vn1[1]-this.v[1]];
+                                        vt2 = [vn2[0]-caram.obs[o].v[0], vn2[1]-caram.obs[o].v[1]];
+                                        this.v = [vt1[0]+vn2[0], vt1[1]+vn2[1]];
+                                        clearTimeout(caram.obs[o].t); 
+                                        caram.obs[o].v = [vt2[0]+vn1[0], vt2[1]+vn1[1]];
+                                        caram.obs[o].drop();
+                                    }
                                 }
                             }
                         }
@@ -108,7 +115,6 @@ caram = {
                 this.xy = [x,y];
                 this.style.left = x+'px';
                 this.style.top = y+'px';
-                caram.obs.push(this);// todo - more efficient place to do this?
                 return r;
             };
             el.drop = function(){
@@ -132,6 +138,7 @@ caram = {
 		caram.t2 = e.timeStamp;
         clearTimeout(caram.el.t);
         caram.el.v = [0,0];
+        caram.hit = 0;
 		caram.xy0 = caram.el.xy;
         caram.xyT = getXY(e);
 		if( e.type==='touchstart' ){
