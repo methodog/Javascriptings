@@ -118,7 +118,7 @@ caram = {
                 return r;
             };
             el.drop = function(){
-                var f = 0.98, r;
+                var f = 0.974, r;
                 this.v = [this.v[0]*f, this.v[1]*f]; //v=u+at
                 r = this.move([this.xy[0]+this.v[0], this.xy[1]+this.v[1]]);
                 if( r ){
