@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      .logo {
+        background: #0000ff;
+        display: block;
+        padding-bottom: 56.25%;
+        position: relative;
+      }
+      .logo__container {
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+      .logo__icon {
+        color: #fff;
+        fill: #fff;
+        height: 100%;
+        width: 100%;
+      }
+      .logo-sizer {
+        width: 100%;
+        margin: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="logo-sizer">
+      <div class="logo">
+        <div class="logo__container">
+          <svg class="logo__icon">
+            <use xlink:href="ident.svg#ident" />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript">
+    jQuery(document).ready(function() {
+      $('.logo__icon').find('line').each(function(){
+        console.log(this);
+      });
+    });
+    </script>
+  </body>
+</html>
