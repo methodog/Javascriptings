@@ -26,7 +26,7 @@
 var i, els = document.querySelectorAll('.flickshow'), el;
 for( i=0; i<els.length; ++i ){
     for( j=0; j<els[i].childNodes.length; ++j ){
-        els[i].childNodes[j].onload = function(){ this.style = "animation: 1s slide ease-out "+ (Array.prototype.indexOf.call(this.parentNode.childNodes, this)+1) +"s"; };
+        els[i].childNodes[j].onload = function(){ this.style = "animation: 1s slide ease-out "+ (Array.prototype.indexOf.call(this.parentNode.childNodes, this)+1) +"s infinite"; };
     }
 }
 </script>
