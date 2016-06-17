@@ -8,10 +8,11 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <title>flickshow</title>
     <style type="text/css">
-        html, body { margin:0; }
+        html, body { height:100%; margin:0; }
         body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
         .gallery { display:flex; flex-direction:row; flex-wrap:wrap; justify-content:space-between; }
-        .flickshow { flex:0 1 33.33%; font-size:0; margin:auto; overflow:hidden; max-width:100%; white-space:nowrap; }
+        .gallery .flickshow { flex:0 1 33.33%; }
+        .flickshow { font-size:0; margin:auto; overflow:hidden; max-width:100%; white-space:nowrap; }
         .flickshow img { display:inline-block; height:auto; margin:0; width:100%; position:relative; vertical-align:middle; }
     </style>
 </head>
@@ -40,7 +41,7 @@ for( i=0; i<els.length; ++i ){
         my.exp = this.getAttribute('data-exposure');
         my.t = setInterval(function(){ 
             if(++my.i===my.ims.length){ my.i=0 }
-            if(my.ims.length){ my.ims[0].style.marginLeft = -(my.i*100)+'%' }
+            if(my.ims.length){ f.querySelectorAll('img')[0].style.marginLeft = -(my.i*100)+'%' }
             }
             , my.exp
         );
@@ -50,7 +51,7 @@ for( i=0; i<els.length; ++i ){
         clearTimeout(f.t);
         f.t1 = f.t2;
         f.t2 = e.timeStamp;
-        if( f.t2-f.t1<500 ){ this.flick() }
+        if( f.t2-f.t1<500 ){ f.flick() }
         return false; 
     };
     
