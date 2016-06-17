@@ -12,8 +12,9 @@
         body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
         .gallery { display:flex; flex-direction:row; flex-wrap:wrap; justify-content:space-between; }
         .gallery .flickshow { flex:0 1 33.33%; }
-        .flickshow { font-size:0; margin:auto; overflow:hidden; max-width:100%; white-space:nowrap; }
-        .flickshow img { display:inline-block; height:auto; margin:0; width:100%; position:relative; vertical-align:middle; }
+        .flickshow { font-size:0; margin:auto; overflow:hidden; max-height:100%; max-width:100%; white-space:nowrap; }
+        .flickshow img { display:inline-block; height:auto; margin:auto; width:100%; position:relative; vertical-align:middle; }
+        .flickshow.fit img { display:block; height:100%; width:auto; }
     </style>
 </head>
 
@@ -35,15 +36,19 @@ for( i=0; i<els.length; ++i ){
     f.i = 0;
     f.id = f.id || f.className+i;
     f.ims = [];
-    f.css = document.body.appendChild(document.createElement('style'));
+    f.mH = getComputed(f.parentNode, 'height');
+    
     f.flick = function(){
-        var my = this;
-        my.exp = this.getAttribute('data-exposure');
-        my.t = setInterval(function(){ 
-            if(++my.i===my.ims.length){ my.i=0 }
-            if(my.ims.length){ f.querySelectorAll('img')[0].style.marginLeft = -(my.i*100)+'%' }
-            }
-            , my.exp
+        f.exp = this.getAttribute('data-exposure');
+        f.t = setInterval(function(){ 
+            if(f.ims.length){ 
+                if(++f.i===f.ims.length){ f.i=0 }
+                if( f.className.indexOf('fit')>0 ){
+                    f.querySelectorAll('img')[0].style.marginTop = -(f.i*f.mH)+'px';
+                }else{
+                    f.querySelectorAll('img')[0].style.marginLeft = -(f.i*100)+'%';
+                }
+            }}, f.exp
         );
     };f.flick();
 
@@ -58,7 +63,11 @@ for( i=0; i<els.length; ++i ){
     for( j=0; j<f.childNodes.length; ++j ){
         f.childNodes[j].onload = function(){ 
             var p = this.parentNode;
-            p.ims.push(this); 
+            p.ims.push(this);
+            if( getComputed(this, 'height') > f.mH){
+                f.className = 'flickshow fit';
+                f.style.height = f.mH+'px';
+            }
         };
     }
 }
