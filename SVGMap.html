@@ -98,7 +98,7 @@ var dragZoom = {
             if( el.zoomer ){
                 el.zoom = function(z,xy0){
                     xy0 = xy0 || [this.whP[0]/2, this.whP[1]/2];
-                    if( z>1 && this.wh[0]>5000 ){ return; }
+                    if( z>1 && this.wh[0]>8000 ){ return; }
                     if( this.wh[0]*z>this.whP[0] || this.wh[1]*z>this.whP[1] ){
                         this.wh = [this.wh[0]*z,this.wh[1]*z];
                         this.style.width = this.wh[0]+'px';
