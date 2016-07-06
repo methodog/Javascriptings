@@ -260,11 +260,13 @@ for( var i=0; i<draggables.length; ++i ){
     draggables[i].newSlides = function(callback){
         var d = this,
             img;
-        $.ajax('http://www.vam.ac.uk/api/json/museumobject/search?materialsearch=glass&random=0&images=1&limit=10&offset='+(++this.sets), { dataType:'jsonp' }).done( function(data){
+        $.ajax('http://www.vam.ac.uk/api/json/museumobject/search?materialsearch=glass&random=0&images=1&limit=10&offset='+(++this.sets*10), { dataType:'jsonp' }).done( function(data){
             var slides = data.records;
             for( s in slides ){
                 img = slides[s].fields.primary_image_id;
-                $(d).append('<li><img src="http://media.vam.ac.uk/media/thira/collection_images/'+img.substr(0,6)+'/'+img+'_jpg_ds.jpg" alt="" height="355" width="355" /></li>');
+                if( !!img ){
+                    $(d).append('<li><img src="http://media.vam.ac.uk/media/thira/collection_images/'+img.substr(0,6)+'/'+img+'_jpg_ds.jpg" alt="" height="355" width="355" /></li>');
+                }
             }
             if( !!callback ){ callback.call(d) }
         });
