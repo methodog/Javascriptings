@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>objectFit + SrcSet</title>
+    <style type="text/css">
+        body {
+          margin: 0;
+          padding: 0;
+        }
+        
+        .object-fit__box {
+          float: left;
+          margin: 1em auto 0;
+          width: 100%;
+        }
+
+        @media screen and (min-width:500px) {
+          .object-fit__box { width: 50%; }
+        }
+
+        @media screen and (min-width:992px) {
+          .object-fit__box { width: 33%; }
+        }        
+        
+        .object-fit__img {
+          height: calc(9/16 * 100vw);
+          object-fit: cover;
+          width: 100%;
+        }
+        
+        @media screen and (min-width:500px) {
+          .object-fit__img { height: calc(9/16 * 50vw);
+        }
+
+        @media screen and (min-width:992px) {
+          .object-fit__img {
+            height: calc(9/16 * 33vw);
+          }
+        }
+    </style>
+</head>
+<body>
+    <div class="object-fit__box">
+        <img class="object-fit__img" alt="" src="img/objectFit/landscape.16x9.jpg" sizes="(min-width: 500px) calc(50vw - 28px), (min-width: 992px) calc(33.333vw - 147px), calc(90vw)" srcset="img/objectFit/landscape.16x9.320.jpg 320w, img/objectFit/landscape.16x9.640.jpg 640w, img/objectFit/landscape.16x9.960.jpg 960w, img/objectFit/landscape.16x9.jpg 1280w, img/objectFit/landscape.16x9.jpg 1920w, img/objectFit/landscape.16x9.jpg 2560w">
+    </div>
+    <div class="object-fit__box">
+        <img class="object-fit__img" alt="" src="img/objectFit/wider.jpg" sizes="(min-width: 500px) calc(50vw - 28px), (min-width: 992px) calc(33.333vw - 147px), calc(90vw)" srcset="img/objectFit/wider.320.jpg 320w, img/objectFit/wider.640.jpg 640w, img/objectFit/wider.960.jpg 960w, img/objectFit/wider.jpg 1280w, img/objectFit/wider.jpg 1920w, img/objectFit/wider.jpg 2560w">
+    </div>
+    <div class="object-fit__box">
+        <img class="object-fit__img" alt="" src="img/objectFit/portrait.jpg" sizes="(min-width: 500px) calc(50vw - 28px), (min-width: 992px) calc(33.333vw - 147px), calc(90vw)" srcset="img/objectFit/portrait.320.jpg 320w, img/objectFit/portrait.640.jpg 640w, img/objectFit/portrait.960.jpg 960w, img/objectFit/portrait.jpg 1280w, img/objectFit/portrait.jpg 1920w, img/objectFit/portrait.jpg 2560w">
+    </div>
+    <div class="object-fit__box">
+        <img class="object-fit__img" alt="" src="img/objectFit/landscape.16x9.jpg" sizes="(min-width: 500px) calc(50vw - 28px), (min-width: 992px) calc(33.333vw - 147px), calc(90vw)" srcset="img/objectFit/landscape.16x9.320.jpg 320w, img/objectFit/landscape.16x9.640.jpg 640w, img/objectFit/landscape.16x9.960.jpg 960w, img/objectFit/landscape.16x9.jpg 1280w, img/objectFit/landscape.16x9.jpg 1920w, img/objectFit/landscape.16x9.jpg 2560w">
+    </div>
+    <div class="object-fit__box">
+        <img class="object-fit__img" alt="" src="img/objectFit/wider.jpg" sizes="(min-width: 500px) calc(50vw - 28px), (min-width: 992px) calc(33.333vw - 147px), calc(90vw)" srcset="img/objectFit/wider.320.jpg 320w, img/objectFit/wider.640.jpg 640w, img/objectFit/wider.960.jpg 960w, img/objectFit/wider.jpg 1280w, img/objectFit/wider.jpg 1920w, img/objectFit/wider.jpg 2560w">
+    </div>
+    <div class="object-fit__box">
+        <img class="object-fit__img" alt="" src="img/objectFit/portrait.jpg" sizes="(min-width: 500px) calc(50vw - 28px), (min-width: 992px) calc(33.333vw - 147px), calc(90vw)" srcset="img/objectFit/portrait.320.jpg 320w, img/objectFit/portrait.640.jpg 640w, img/objectFit/portrait.960.jpg 960w, img/objectFit/portrait.jpg 1280w, img/objectFit/portrait.jpg 1920w, img/objectFit/portrait.jpg 2560w">
+    </div>
+</body>
+</html>
