@@ -7,14 +7,10 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <title>lenticule</title>
     <style type="text/css">
-        html, body { margin:0; }
+        html, body { height:100%; margin:0; }
         body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
-        .lenticule { display:table; margin:0 auto 3em; position:relative; left:0; top:0; }
+        .lenticule { height:100%; margin:0 auto 3em; position:relative; width:100%; }
         .lenticule img { height:auto; max-width:100%; position:absolute; left:0; top:0; }
-        .lenticule img:nth-child(1) { position:relative; }
-        @media screen and (max-width:800px) {
-            .lenticule { display:block; }
-        }
     </style>	
 </head>
 
@@ -130,9 +126,21 @@ var lenticule = {
     }
 };
 
-var i, els = document.querySelectorAll('.lenticule'), el;
+var i, j, els = document.querySelectorAll('.lenticule'), myWH, len, img, c;
 for( i=0; i<els.length; ++i ){
-    els[i].childNodes[0].onload = function(){ lenticule.init(this.parentNode, {'loop':1}) };
+    len = els[i];
+    c = len.childNodes.length;
+    for( j=0; j<c; ++j ){
+        img = len.childNodes[j];
+        if( j===0 ){
+            lenticule.init(len, {'loop':1});
+        };
+        img.onload = function(){
+            myWH = [getComputed(this, 'width'), getComputed(this, 'height')];
+            this.style.left = ((len.wh[0] - myWH[0]) / 2) + 'px';
+            this.style.top = ((len.wh[1] - myWH[1]) / 2) + 'px';
+        };
+    }
 }
 addHandler(window,'resize',function(){
     for( i=0; i<els.length; ++i ){
