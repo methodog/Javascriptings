@@ -10,7 +10,10 @@
         html, body { height:100%; margin:0; }
         body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
         .lenticule { height:100%; margin:0 auto 3em; position:relative; width:100%; }
-        .lenticule img { height:auto; max-width:100%; position:absolute; left:0; top:0; }
+        .lenticule img { max-height:100%; max-width:100%; margin:auto; position:absolute; bottom:0; left:0; right:0; top:0; }
+        .lenticule img:nth-child(1) { padding:12% 1% 0 0; }
+        .lenticule img:nth-child(3) { max-width:initial; max-height:initial; padding:20% 0 0; height:176%; width:auto; }
+        .lenticule img:nth-child(4) { padding:0 0 3% 2%; }
     </style>	
 </head>
 
@@ -78,7 +81,7 @@ var lenticule = {
             el.move = function(xy){
                 var vis;
                 this.val = this.min+(xy[0]/this.wh[0]*(this.rng));
-                if( this.loop ){ this.val = this.val.mod(this.rng); }
+                this.val = this.val.mod(this.rng);
                 vis = 1 + Math.ceil(this.val*this.arcs);
                 this.querySelector('style').innerHTML = '#'+el.id+' :nth-child('+(vis-1)+'){opacity:1!important} #'+el.id+' :nth-child('+vis+'){opacity:'+(this.val%(1/this.arcs))*this.arcs+'!important}';
                 this.xy = [xy[0],xy[1]];
@@ -133,13 +136,13 @@ for( i=0; i<els.length; ++i ){
     for( j=0; j<c; ++j ){
         img = len.childNodes[j];
         if( j===0 ){
-            lenticule.init(len, {'loop':1});
+            lenticule.init(len, {'loop':0});
         };
-        img.onload = function(){
-            myWH = [getComputed(this, 'width'), getComputed(this, 'height')];
-            this.style.left = ((len.wh[0] - myWH[0]) / 2) + 'px';
-            this.style.top = ((len.wh[1] - myWH[1]) / 2) + 'px';
-        };
+        //~ img.onload = function(){
+            //~ myWH = [getComputed(this, 'width'), getComputed(this, 'height')];
+            //~ this.style.left = ((len.wh[0] - myWH[0]) / 2) + 'px';
+            //~ this.style.top = ((len.wh[1] - myWH[1]) / 2) + 'px';
+        //~ };
     }
 }
 addHandler(window,'resize',function(){
