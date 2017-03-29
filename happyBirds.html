@@ -8,17 +8,19 @@
     <title>Birds (Methodog)</title>
     <style type="text/css">
         html, body { height:100%; margin:0; width:100%; overflow:hidden; }
-        body { background:#888; font:40px/1 helvetica,arial,freesans,sans-serif; font-weight:600; }
-        .bird { background:transparent url(img/birds/bird-st.gif) 0 0 no-repeat; cursor:pointer; width:148px; height:156px; position:relative; left:0; top:0; }
+        body { background:#32a1f6; font:40px/1 helvetica,arial,freesans,sans-serif; font-weight:600; }
+        .bird { background:transparent url(img/birds/bird-st.gif) 0 0 no-repeat; cursor:pointer; width:148px; height:156px; position:absolute; left:0; top:0; }
         .bird.right { background-image:url(img/birds/bird-r-st.gif); }
         .bird.dragged { background-image:url(img/birds/bird.gif); }
         .bird.dragged.right { background-image:url(img/birds/bird-r.gif); }
-        .tree { background:transparent url(img/birds/tree.gif) 0 0 no-repeat; width:687px; height:627px; opacity:0.8; position:absolute; left:5%; bottom:10%; }
+        .tree { opacity:0.8; position:absolute; right:5%; bottom:10%; }
+        #audio { display:none; }
     </style>	
 </head>
 
 <body>
-    <div class="tree"></div>
+    <audio id="audio" preload="metadata" autoplay="autopay" loop="loop" src="img/birds/background.mp3"></audio>
+    <img class="tree" src="img/birds/tree.gif"></img>
     <div class="bird right"></div>
     <div class="bird right"></div>
     <div class="bird right"></div>
@@ -32,8 +34,15 @@ function rmHandler(el,evt,fn){ if( el.removeEventListener ){el.removeEventListen
 function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ if( style=='width' ){ y=el.getBoundingClientRect().right-el.getBoundingClientRect().left }else if( style=='height' ){ y=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else{ var y=el.currentStyle[style] } } return parseFloat(y); }
 function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
-var dragDrop;
-dragDrop = {
+function bingo(){
+    audio.loop = 0;
+    audio.src = 'img/birds/kookaburras.mp3'
+    addHandler(audio,'ended',function(){
+        this.loop = 1;
+        this.src = 'img/birds/background.mp3';
+    });
+}
+var dragDrop = {
 	el: null, xy0: null, xyT: null, 
     size: function(el){
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
@@ -133,22 +142,26 @@ dragDrop = {
 	}
 };
 
-var i, els = document.querySelectorAll('.bird');
-for( i=0; i<els.length; ++i ){
-    dragDrop.init(els[i],1);
-    els[i].jump(Math.random()*50, -20-Math.random()*20);
-}
+var i,
+    audio = document.getElementById('audio'),
+    birds = document.querySelectorAll('.bird');
+addHandler(window,'load',function(){
+    for( i=0; i<birds.length; ++i ){
+        dragDrop.init(birds[i],1);
+        birds[i].jump(Math.random()*50, -20-Math.random()*20);
+    }
+});
 addHandler(window,'resize',function(){
-    for( i=0; i<els.length; ++i ){
-        dragDrop.size(els[i]);
-        els[i].jump((Math.random()<0.5?-1:1)*Math.random()*50, -20-Math.random()*20);
+    for( i=0; i<birds.length; ++i ){
+        dragDrop.size(birds[i]);
+        birds[i].jump((Math.random()<0.5?-1:1)*Math.random()*50, -20-Math.random()*20);
     }
 });
 if( !!window.DeviceOrientationEvent ){
     addHandler(window,'deviceorientation',function(e){
-        if( !dragDrop.el && Math.abs(e.gamma)>30 ){
-            for( i=0; i<els.length; ++i ){
-                els[i].jump((Math.random()<0.5?-1:1)*Math.random()*e.gamma, -Math.random()*e.gamma);
+        if( !dragDrop.bird && Math.abs(e.gamma)>30 ){
+            for( i=0; i<birds.length; ++i ){
+                birds[i].jump((Math.random()<0.5?-1:1)*Math.random()*e.gamma, -Math.random()*e.gamma);
             }
         }
     });
