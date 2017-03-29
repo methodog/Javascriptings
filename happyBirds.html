@@ -11,8 +11,8 @@
         body { background:#32a1f6; font:40px/1 helvetica,arial,freesans,sans-serif; font-weight:600; }
         .bird { background:transparent url(img/birds/bird-st.gif) 0 0 no-repeat; cursor:pointer; width:148px; height:156px; position:absolute; left:0; top:0; }
         .bird.right { background-image:url(img/birds/bird-r-st.gif); }
-        .bird.dragged { background-image:url(img/birds/bird.gif); }
-        .bird.dragged.right { background-image:url(img/birds/bird-r.gif); }
+        .bird.flying { background-image:url(img/birds/bird.gif); }
+        .bird.flying.right { background-image:url(img/birds/bird-r.gif); }
         .tree { opacity:0.8; position:absolute; right:5%; bottom:10%; }
         #audio { display:none; }
     </style>	
@@ -20,7 +20,7 @@
 
 <body>
     <audio id="audio" preload="metadata" autoplay="autopay" loop="loop" src="img/birds/background.mp3"></audio>
-    <img class="tree" src="img/birds/tree.gif"></img>
+    <img id="nest" class="tree" src="img/birds/tree.gif"></img>
     <div class="bird right"></div>
     <div class="bird right"></div>
     <div class="bird right"></div>
@@ -34,56 +34,61 @@ function rmHandler(el,evt,fn){ if( el.removeEventListener ){el.removeEventListen
 function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ if( style=='width' ){ y=el.getBoundingClientRect().right-el.getBoundingClientRect().left }else if( style=='height' ){ y=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else{ var y=el.currentStyle[style] } } return parseFloat(y); }
 function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
-function bingo(){
-    audio.loop = 0;
-    audio.src = 'img/birds/kookaburras.mp3'
-    addHandler(audio,'ended',function(){
-        this.loop = 1;
-        this.src = 'img/birds/background.mp3';
-    });
-}
-var dragDrop = {
+
+var i,
+nest = document.getElementById('nest'),
+audio = document.getElementById('audio'),
+birds = document.querySelectorAll('.bird');
+dragDrop = {
 	el: null, xy0: null, xyT: null, 
     size: function(el){
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
         el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
     },
-	init: function(el, unbound){
+	init: function(el){
         if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
-        el.P = unbound? document.body:el.parentNode;
+        el.P = document.body;
         dragDrop.size(el);
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
         el.v = [0,0];
         if( !el.move ){
             el.onmousedown = dragDrop.touch;
             el.ontouchstart = dragDrop.touch;
-            el.xyO = unbound? getPgOffset(el):[0,0];
+            el.xyO = getPgOffset(el);
             el.move = function(xy){
                 var x=xy[0], y=xy[1], r;
                 if( x<=0-el.xyO[0] ){ x=0-el.xyO[0]; r=[-1,0]; }
                 else if( x>=this.whP[0]-this.wh[0]-el.xyO[0] ){ x=this.whP[0]-this.wh[0]-el.xyO[0]; r=[1,0]; }
-                if( y<=0-el.xyO[1] ){ y=0-el.xyO[1]; r=[0,-1]; }
+                else if( y<=0-el.xyO[1] ){ y=0-el.xyO[1]; r=[0,-1]; }
                 else if( y>=this.whP[1]-this.wh[1]-el.xyO[1] ){ y=this.whP[1]-this.wh[1]-el.xyO[1]; r=[0,1]; }
+                else if( x>nest.box.left && x<nest.box.right-this.wh[0] && y>nest.box.top && y<nest.box.bottom-this.wh[1] ){ r=[0,0,1]; }
                 this.xy = [x,y];
                 this.style.left = x+'px';
                 this.style.top = y+'px';
                 return r;
             };
             el.drop = function(){
-                var g = 0.5, f = 1, r;
+                var g = 0.5, f = 1, r, i;
                 this.v = [this.v[0], this.v[1]+g]; //v=u+at
-                var r = this.move([this.xy[0]+this.v[0], this.xy[1]+this.v[1]]);
+                r = this.move([this.xy[0]+this.v[0], this.xy[1]+this.v[1]]);
                 if( r ){
                     if( r[0] ){ 
                         this.v = [-this.v[0]*f, this.v[1]*f];
                         if( this.v[0]>0 ){ this.className = this.className.replace(' left',' right') }
                         else{ this.className = this.className.replace(' right',' left') }
                     }
-                    if( r[1] ){ this.v = [this.v[0]*f, -this.v[1]*f]; }
-                    if( r[1]>0  ){ 
+                    else if( r[1]<0 ){ this.v = [this.v[0]*f, -this.v[1]*f]; }
+                    else if( r[1]>0 || r[2] ){
                         clearTimeout(this.t);
                         this.v = [0,0];
-                        this.className = this.className.replace(' dragged','');
+                        this.className = this.className.replace(' flying','');
+                        if( r[2] ){
+                            this.nest = true;
+                            for( i=0; i<birds.length; ++i ){
+                                if( !birds[i].nest ) return;
+                            }
+                            bingo();
+                        }
                         return; 
                     }
                 }
@@ -94,7 +99,7 @@ var dragDrop = {
                 if( this.v[1]==0 ){
                     clearTimeout(this.t);
                     this.v = [x,y];
-                    this.className = this.className.replace(' dragged','') + ' dragged';
+                    this.className = this.className.replace(' flying','') + ' flying';
                     this.drop();
                 }
                 return false;
@@ -108,7 +113,8 @@ var dragDrop = {
         dragDrop.el.v = [0,0];
 		dragDrop.xy0 = dragDrop.el.xy;
         dragDrop.xyT = getXY(e);
-		this.className += ' dragged';
+        dragDrop.el.nest = false;
+		this.className += ' flying';
 		if( e.type==='touchstart' ){
             dragDrop.el.ontouchmove = dragDrop.drag;
             dragDrop.el.onmousedown = null;
@@ -141,22 +147,29 @@ var dragDrop = {
 		dragDrop.el = null;
 	}
 };
-
-var i,
-    audio = document.getElementById('audio'),
-    birds = document.querySelectorAll('.bird');
+for( i=0; i<birds.length; ++i ){
+    dragDrop.init(birds[i]);
+}
+function scatter(dir){
+    for( i=0; i<birds.length; ++i ){
+        birds[i].nest = false;
+        birds[i].jump(Math.random()*50*dir, -20-Math.random()*20);
+    }
+}
+function bingo(){
+    audio.loop = 0;
+    audio.src = 'img/birds/kookaburras.mp3'
+    addHandler(audio,'ended',function(){
+        this.loop = 1;
+        this.src = 'img/birds/background.mp3';
+    });
+    setTimeout(function(){scatter(-1)}, 1000);
+}
 addHandler(window,'load',function(){
-    for( i=0; i<birds.length; ++i ){
-        dragDrop.init(birds[i],1);
-        birds[i].jump(Math.random()*50, -20-Math.random()*20);
-    }
+    scatter(1);
+    nest.box = nest.getBoundingClientRect();
 });
-addHandler(window,'resize',function(){
-    for( i=0; i<birds.length; ++i ){
-        dragDrop.size(birds[i]);
-        birds[i].jump((Math.random()<0.5?-1:1)*Math.random()*50, -20-Math.random()*20);
-    }
-});
+addHandler(window,'resize',function(){scatter(1)});
 if( !!window.DeviceOrientationEvent ){
     addHandler(window,'deviceorientation',function(e){
         if( !dragDrop.bird && Math.abs(e.gamma)>30 ){
