@@ -15,11 +15,14 @@
         .bird.flying.right { background-image:url(img/birds/bird-r.gif); }
         .tree { height:80%; width:auto; opacity:0.8; position:absolute; right:0; bottom:0; zoom:1; }
         #audio { display:none; }
+        #audio-btn { background:green; border-radius:50%; height:44px; width:44px; position:absolute; top:0; left:0; }
+        #audio-btn::after { content:''; border-radius:10%; border:13px solid rgba(0, 0, 0, 0); border-left-width:23px; border-left-color:#000; border-right:none; margin:auto; position:absolute; left:14px; top:9px; }
     </style>	
 </head>
 
 <body>
     <audio id="audio" preload="metadata" autoplay="autopay" loop="loop" src="img/birds/background.mp3"></audio>
+    <div id="audio-btn"></div>
     <img id="nest" class="tree" src="img/birds/tree.gif"></img>
     <div class="bird right"></div>
     <div class="bird right"></div>
@@ -38,7 +41,8 @@ function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches
 var i,
 nest = document.getElementById('nest'),
 audio = document.getElementById('audio'),
-birds = document.querySelectorAll('.bird');
+audioBtn = document.getElementById('audio-btn'),
+birds = document.querySelectorAll('.bird'),
 dragDrop = {
 	el: null, xy0: null, xyT: null, 
     size: function(el){
@@ -167,20 +171,17 @@ function bingo(){
     });
     setTimeout(function(){scatter(-1)}, 1500);
 }
+addHandler(audio,'play',function(){
+    audioBtn.style.display = 'none';
+});
+addHandler(audioBtn,'click',function(){
+    audio.play();
+});
 addHandler(window,'load',function(){
     scatter(1);
     nest.box = nest.getBoundingClientRect();
 });
 addHandler(window,'resize',function(){scatter(1)});
-//~ if( !!window.DeviceOrientationEvent ){
-    //~ addHandler(window,'deviceorientation',function(e){
-        //~ if( !dragDrop.bird && Math.abs(e.gamma)>30 ){
-            //~ for( i=0; i<birds.length; ++i ){
-                //~ birds[i].jump((Math.random()<0.5?-1:1)*Math.random()*e.gamma, -Math.random()*e.gamma);
-            //~ }
-        //~ }
-    //~ });
-//~ }
 </script>
 </body>
 </html>
