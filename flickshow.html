@@ -38,7 +38,7 @@ for( i=0; i<els.length; ++i ){
         f.css = f.css || f.appendChild(document.createElement('style'));
         f.t = setInterval(function(){ 
             if(f.ims.length){ 
-                if(++f.i===f.ims.length){ f.i=1 }
+                if(++f.i>f.ims.length){ f.i=1 }
                 f.css.innerHTML = '#'+f.id+' img:nth-child('+(f.i)+'){opacity:1}';
             }}, f.exp
         );
