@@ -5,44 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <title>lenticule</title>
+    <title>IIIF Compariscope</title>
     <style type="text/css">
         html, body { height:100%; margin:0; }
         body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
-        .lenticule { background:#fff; display: block; height:50%; width:50%; margin:auto; overflow:hidden; position:absolute; bottom:0; left:0; right:0; top:0; }
-        .lenticule img { max-height:100%; max-width:100%; margin:auto; position:absolute; bottom:0; left:0; right:0; top:0; }
-        .lenticule img:nth-child(1) { padding:12% 1% 0 0; }
-        .lenticule img:nth-child(3) { max-width:initial; max-height:initial; padding:20% 0 0; height:176%; width:auto; }
-        .lenticule img:nth-child(4) { padding:0 0 3% 2%; }
+        .dragpad { cursor:pointer; height:100%; position:absolute; left:0; top:0; width:100%; }
+        .compariscope { border:outset 1px solid red; display: block; height:50%; width:50%; margin:auto; overflow:hidden; position:absolute; bottom:0; left:0; right:0; top:0; }
+        .compariscope img { cursor:pointer; position:absolute; left:0; top:0; }
     </style>	
 </head>
 
 <body>
+<div class="compariscope">
+    <img src="img/liam_st_paul/pure_028.jpg" alt=""><img src="img/liam_st_paul/pure_034.jpg" alt=""><img src="img/liam_st_paul/pure_079.jpg" alt="">
+</div>
+
 <!--
-<p class="lenticule" id="liam"></p>
-<script type="text/javascript">(function() {var l=document.getElementById('liam'); for( i=1; i<=171; ++i ){ l.innerHTML += '<img src="img/liam_st_paul/pure_'+ (i<10?'00':(i<100?'0':''))+i +'.jpg" alt="">' }})();</script>
--->
-<!--
-<script type="text/javascript">(function() {var l=document.getElementById('liam'); for( i=1; i<=12; ++i ){ l.innerHTML += '<img src="img/lenticular/hand/01/'+ (i<10?'0':'')+i +'.jpg" alt="">' }})();</script>
-<script type="text/javascript">(function() {var l=document.getElementById('liam'); for( i=1; i<=170; ++i ){ l.innerHTML += '<img src="img/liam_st_paul/blend_'+ (i<10?'00':(i<100?'0':''))+i +'.jpg" alt="">' }})();</script>
-<p class="lenticule"><img src="img/liam_st_paul/blend_078c.jpg" alt=""><img src="img/liam_st_paul/blend_081c.jpg" alt=""><img src="img/liam_st_paul/blend_095c.jpg" alt=""><img src="img/liam_st_paul/blend_105c.jpg" alt=""><img src="img/liam_st_paul/blend_109c.jpg" alt=""><img src="img/liam_st_paul/blend_110c.jpg" alt=""><img src="img/liam_st_paul/blend_111c.jpg" alt=""><img src="img/liam_st_paul/blend_116c.jpg" alt=""><img src="img/liam_st_paul/blend_117c.jpg" alt=""><img src="img/liam_st_paul/blend_118c.jpg" alt=""><img src="img/liam_st_paul/blend_123c.jpg" alt=""><img src="img/liam_st_paul/blend_125c.jpg" alt=""><img src="img/liam_st_paul/blend_126c.jpg" alt=""><img src="img/liam_st_paul/blend_127c.jpg" alt=""><img src="img/liam_st_paul/blend_135c.jpg" alt=""><img src="img/liam_st_paul/blend_152c.jpg" alt=""><img src="img/liam_st_paul/blend_162c.jpg" alt=""><img src="img/liam_st_paul/blend_168c.jpg" alt=""></p>
-<p class="lenticule"><img src="img/liam_st_paul/pure_002.jpg" alt=""><img src="img/liam_st_paul/pure_003.jpg" alt=""><img src="img/liam_st_paul/pure_032.jpg" alt=""><img src="img/liam_st_paul/pure_036.jpg" alt=""><img src="img/liam_st_paul/pure_037.jpg" alt=""><img src="img/liam_st_paul/pure_070.jpg" alt=""><img src="img/liam_st_paul/pure_071.jpg" alt=""><img src="img/liam_st_paul/pure_075.jpg" alt=""><img src="img/liam_st_paul/pure_079.jpg" alt=""><img src="img/liam_st_paul/pure_096.jpg" alt=""><img src="img/liam_st_paul/pure_117.jpg" alt=""><img src="img/liam_st_paul/pure_118.jpg" alt=""><img src="img/liam_st_paul/pure_125.jpg" alt=""><img src="img/liam_st_paul/pure_126.jpg" alt=""><img src="img/liam_st_paul/pure_127.jpg" alt=""><img src="img/liam_st_paul/pure_135.jpg" alt=""><img src="img/liam_st_paul/pure_138.jpg" alt=""><img src="img/liam_st_paul/pure_151.jpg" alt=""><img src="img/liam_st_paul/pure_152.jpg" alt=""><img src="img/liam_st_paul/pure_163.jpg" alt=""><img src="img/liam_st_paul/pure_169.jpg" alt=""></p>
--->
-<!--
-<p class="lenticule"><img src="img/lenticular/VAM_1.jpg" alt=""><img src="img/lenticular/VAM_2.jpg" alt=""><img src="img/lenticular/VAM_3.jpg" alt=""><img src="img/lenticular/VAM_4.jpg" alt=""><img src="img/lenticular/VAM_5.jpg" alt=""></p>
-<p class="lenticule"><img src="img/lenticular/VAM_head_2.1.jpg" alt=""><img src="img/lenticular/VAM_head_2.2.jpg" alt=""><img src="img/lenticular/VAM_head_2.3.jpg" alt=""><img src="img/lenticular/VAM_head_2.4.jpg" alt=""><img src="img/lenticular/VAM_head_2.5.jpg" alt=""><img src="img/lenticular/VAM_head_2.6.jpg" alt=""><img src="img/lenticular/VAM_head_2.7.jpg" alt=""><img src="img/lenticular/VAM_head_2.8.jpg" alt=""><img src="img/lenticular/VAM_head_2.9.jpg" alt=""></p>
-<p class="lenticule"><img src="img/lenticular/VAM_thing_1.1.jpg" alt=""><img src="img/lenticular/VAM_thing_1.2.jpg" alt=""><img src="img/lenticular/VAM_thing_1.3.jpg" alt=""><img src="img/lenticular/VAM_thing_1.4.jpg" alt=""></p>
-<p class="lenticule"><img src="img/lenticular/gnome-1.jpg" alt=""><img src="img/lenticular/gnome-2.jpg" alt=""><img src="img/lenticular/gnome-3.jpg" alt=""><img src="img/lenticular/gnome-4.jpg" alt=""><img src="img/lenticular/gnome-5.jpg" alt=""><img src="img/lenticular/gnome-6.jpg" alt=""><img src="img/lenticular/gnome-7.jpg" alt=""><img src="img/lenticular/gnome-8.jpg" alt=""></p>
-<p class="lenticule"><img src="img/lenticular/birdbath-01.jpg" alt=""><img src="img/lenticular/birdbath-02.jpg" alt=""><img src="img/lenticular/birdbath-03.jpg" alt=""><img src="img/lenticular/birdbath-04.jpg" alt=""><img src="img/lenticular/birdbath-05.jpg" alt=""><img src="img/lenticular/birdbath-06.jpg" alt=""><img src="img/lenticular/birdbath-07.jpg" alt=""><img src="img/lenticular/birdbath-08.jpg" alt=""><img src="img/lenticular/birdbath-09.jpg" alt=""><img src="img/lenticular/birdbath-10.jpg" alt=""><img src="img/lenticular/birdbath-11.jpg" alt=""><img src="img/lenticular/birdbath-12.jpg" alt=""><img src="img/lenticular/birdbath-13.jpg" alt=""></p>
--->
-<!--
-<p class="lenticule"><img src="img/lenticular/constable.1.jpg" alt=""><img src="img/lenticular/constable.2.jpg" alt=""></p>
--->
-<!--
-<p class="lenticule"><img src="https://framemark.vam.ac.uk/demo/constable/2006AG5739/300,560,1500,2000/full/90/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/constable/2006AN8022/full/2000,1500/0/default.jpg" alt=""></p>
--->
 <p class="lenticule"><img src="https://framemark.vam.ac.uk/demo/raphael/RC912749/full/full/!0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/raphael/2006AN5938/full/full/!0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/raphael/INV43867/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/raphael/2010EJ0404/full/full/0/default.jpg" alt=""></p>
-<!--
 <p class="lenticule"><img src="https://framemark.vam.ac.uk/demo/constable/2010EF0301/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/constable/2010EG9859/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/constable/2010EH2616/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/constable/2010EH2617/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg" alt=""></p>
 -->
 
@@ -52,112 +31,161 @@ function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(e
 function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ if( style=='width' ){ y=el.getBoundingClientRect().right-el.getBoundingClientRect().left }else if( style=='height' ){ y=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else{ var y=el.currentStyle[style] } } return parseFloat(y); }
 function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
-var lenticule = {
-    el:null, xy0:null, xyT:null, id:0,
+var dragZoom = {
+    el:null, xy0:null, v0:null, xyT:null, xyE:null, d0:null, 
     size: function(el){
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
+        el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
+        el.xyP = getPgOffset(el.P);
+        el.hv = el.wh[0]>el.wh[1]? 0 : 1;
     },
     init: function(el, opt){
-        var i;
-        if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
+        if( typeof el==='string' ){ el = document.querySelector(el); } if( !el ){ return; }
         if( !opt ) var opt = {};
-        el.val = !!opt.val? opt.val : 0; 
-        el.min = !!opt.min? opt.min : 0; 
-        el.max = !!opt.max? opt.max : 1;
-        el.rng = el.max-el.min;
-        el.loop = !!opt.loop? opt.loop : 0;
-        if( !el.cloned && el.loop ){ for( i=el.childNodes.length-2; i>=0; --i){ el.appendChild(el.childNodes[i].cloneNode(true)); } el.cloned=1; }
-        if( !el.styled ){ el.appendChild(document.createElement('style')); el.styled=1; }
-        if( !el.id ){ el.id = el.className+(++lenticule.id); }
-        if( !el.load ){ for( i=0; i<=el.childNodes.length-1; ++i){ el.childNodes[i].onload=function(){this.style.opacity=0}; } el.load=1; }
-        lenticule.size(el);
-        el.arcs = el.childNodes.length-1;
+        el.zoomer = !!opt.zoom? opt.zoom : 0;
+        el.P = el.parentNode;
+        dragZoom.size(el);
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
-        if( typeof(opt.slide)==='function' ){ el.slide = opt.slide; }
-        if( typeof(opt.stop)==='function' ){ el.stop = opt.stop; }
+        el.v = [0,0];
         if( !el.move ){
-            el.onmousedown = lenticule.touch;
-            el.ontouchstart = lenticule.touch;
+            el.whP0 = el.whP;
+            el.onmousedown = dragZoom.touch;
+            el.ontouchstart = dragZoom.touch;
+            if( window.addEventListener ){
+                el.addEventListener('DOMMouseScroll', dragZoom.touch, false); 
+                el.addEventListener('mousewheel', dragZoom.touch, false); 
+            }else if( window.attachEvent ){
+                el.attachEvent('onmousewheel', dragZoom.touch);
+            }
             el.move = function(xy){
-                var vis;
-                this.val = this.min+(xy[0]/this.wh[0]*(this.rng));
-                this.val = this.val.mod(this.rng);
-                vis = 1 + Math.ceil(this.val*this.arcs);console.log(this.min, xy[0], this.wh[0], this.rng, this.val);
-                this.querySelector('style').innerHTML = '#'+el.id+' :nth-child('+(vis-1)+'){opacity:1!important} #'+el.id+' :nth-child('+vis+'){opacity:'+(this.val%(1/this.arcs))*this.arcs+'!important}';
-                this.xy = [xy[0],xy[1]];
+                var x=xy[0], y=xy[1], r;
+                if( this.wh[0]>this.whP[0] ){
+                    if( x>0 ){ x=0; r=this.wh[0]>this.whP[0]?[1,0]:null; }
+                    else if( x<this.whP[0]-this.wh[0] ){ x=this.whP[0]-this.wh[0]; r=this.wh[0]>this.whP[0]?[-1,0]:null; }
+                    this.style.left = x+'px';
+                }
+                if( this.wh[1]>this.whP[1] ){
+                    if( y>0 ){ y=0; r=this.wh[1]>this.whP[1]?[0,1]:r; }
+                    else if( y<this.whP[1]-this.wh[1] ){ y=this.whP[1]-this.wh[1]; r=this.wh[1]>this.whP[1]?[0,-1]:r; }
+                    this.style.top = y+'px';
+                }
+                this.xy = [x,y];
+                return r || null;
             };
+            el.drop = typeof(opt.drop)==='function'? opt.drop : function(){
+                var f = Math.abs(this.v[0])+Math.abs(this.v[1])>50?0.98:0.90, r;
+                this.v = [this.v[0]*f, this.v[1]*f];
+                var r = this.move([this.xy[0]+this.v[0], this.xy[1]+this.v[1]]);
+                if( r || Math.abs(this.v[0])+Math.abs(this.v[1])<0.5 ){
+                    dragZoom.v0=this.v=[0,0]; window.clearTimeout(this.t); 
+                    return;
+                }
+                this.t = window.setTimeout(function(){ el.drop(); }, 23);
+            };
+            if( el.zoomer ){
+                el.wMax = el.getAttribute('data-max-width');
+                el.zoom = function(z,xy0){
+                    xy0 = xy0 || [this.whP[0]/2, this.whP[1]/2];
+                    if( z>1 && this.wh[0]>8000 ){ return; }
+                    if( this.wh[0]*z>this.whP[0] || this.wh[1]*z>this.whP[1] ){
+                        this.wh = [this.wh[0]*z,this.wh[1]*z];
+                        this.style.width = this.wh[0]+'px';
+                        this.style.height = this.wh[1]+'px';
+                        this.move([(xy0[0]-((xy0[0]-this.xy[0])*z)),(xy0[1]-((xy0[1]-this.xy[1])*z))]);
+                    }else{
+                        this.style.width = this.style.height = '100%';
+                        this.wh = [getComputed(el,'width'), getComputed(el,'height')];
+                        this.style.left = this.style.top = 0;
+                        this.xy = [0,0];
+                    }
+                };
+                el.zoom0 = function(){
+                    if( !!el.style.width ){
+                        var c = 0;
+                        if( this.t ){ window.clearInterval(this.t); }
+                        this.t = window.setInterval(function(){ el.zoom(0.8); if( el.style.width==='100%' ){ window.clearInterval(el.t); }},50);
+
+                    }
+                };
+            }
         }
     },
     touch: function(e){
         e = e || window.event;
         if( e.type==='touchstart' && e.touches && e.touches.length>2 ){ return; }
-        lenticule.el = this;
-        lenticule.xy0 = lenticule.el.xy;
-        lenticule.xyT = getXY(e);
-        //~ lenticule.el.min = lenticule.el.val-(lenticule.xyT[0]/lenticule.el.wh[0]*(lenticule.el.max-lenticule.el.min));
-        //~ lenticule.el.max = lenticule.el.min+lenticule.el.rng;
+        dragZoom.el = this;
+        window.clearTimeout(dragZoom.el.t);
+        dragZoom.v0 = dragZoom.el.v;
+        dragZoom.el.v = [0,0];
+        dragZoom.xy0 = dragZoom.el.xy;
+        dragZoom.xyT = getXY(e);
         if( e.type==='touchstart' ){
-            this.ontouchmove = lenticule.drag;
-            this.onmousedown = null;
-            this.ontouchend = function(){
-                this.ontouchmove = null;
-                this.ontouchend = null;
-                lenticule.release();
+            if( dragZoom.el.zoomer && e.touches && e.touches.length===2 ){
+                dragZoom.d0 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
+                dragZoom.el.ontouchmove = dragZoom.zoom;
+            }else{
+                dragZoom.el.ontouchmove = dragZoom.drag;
+            }
+            dragZoom.el.onmousedown = null;
+            dragZoom.el.ontouchend = function(){
+                dragZoom.el.ontouchmove = null;
+                dragZoom.el.ontouchend = null;
+                dragZoom.release();
             };
         }else{
-            document.onmousemove = lenticule.drag;
-            document.onmouseup = function(){
-                document.onmousemove = null;
-                document.onmouseup = null;
-                lenticule.release();
-            };
+            if( e.type==='DOMMouseScroll' || e.type==='mousewheel' ){
+                if( dragZoom.el.zoomer ){ dragZoom.zoom(e); }
+            }else{
+                document.onmousemove = dragZoom.drag;
+                document.onmouseup = function(){
+                    document.onmousemove = null;
+                    document.onmouseup = null;
+                    dragZoom.release();
+                };
+            }
         }
         return false;
     },
     drag: function(e){
         e = e || window.event;
-        if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
-        var xyE = getXY(e),
-            xy = [lenticule.xy0[0]+xyE[0]-lenticule.xyT[0], lenticule.xy0[1]+xyE[1]-lenticule.xyT[1]];
-        lenticule.el.move(xy);
-        if( !!lenticule.el.slide ){ lenticule.el.slide.call(this); }
+        dragZoom.xyE = getXY(e);
+        var xy = [dragZoom.xy0[0]+dragZoom.xyE[0]-dragZoom.xyT[0], dragZoom.xy0[1]+dragZoom.xyE[1]-dragZoom.xyT[1]];
+        dragZoom.el.v = [xy[0]-dragZoom.el.xy[0],xy[1]-dragZoom.el.xy[1]];
+        dragZoom.el.move(xy);
         return false;
     },
     release: function(){
-        if( !!lenticule.el.stop ){ lenticule.el.stop.call(this); }
-        lenticule.el = null;
+        var vmax = 100;
+        dragZoom.el.v = [dragZoom.el.v[0]>vmax?vmax:dragZoom.el.v[0],dragZoom.el.v[1]>vmax?vmax:dragZoom.el.v[1]];
+        dragZoom.el.drop();
+        dragZoom.el = dragZoom.xyE = dragZoom.d0 = null;
+    },
+    zoom: function(e){
+        e = e || window.event;
+        if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
+        var z, d1, xy0 = [dragZoom.xyT[0]-dragZoom.el.xyP[0],dragZoom.xyT[1]-dragZoom.el.xyP[1]];
+        if( e.touches ){
+            d1 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
+            z = 1+((d1-dragZoom.d0>0?(d1/dragZoom.el.whP[0]):-0.5)*0.1);
+            dragZoom.d0 = d1;
+        }else{
+            z = (e.detail? e.detail*-1 : e.wheelDelta/40);
+            z = 1+((z>0?1:-1)*0.25);
+        }
+        dragZoom.el.zoom(z,xy0);
+        return false;
     }
 };
 
-var i, j, els = document.querySelectorAll('.lenticule'), myWH, len, img, c;
+
+var els = document.querySelectorAll('.compariscope'), compariscope,
+    i, j;
 for( i=0; i<els.length; ++i ){
-    len = els[i];
-    c = len.childNodes.length;
-    for( j=0; j<c; ++j ){
-        img = len.childNodes[j];
-        if( j===0 ){
-            lenticule.init(len, {'loop':1});
-        };
+    compariscope = els[i];
+    ims = compariscope.querySelectorAll('img');
+    for( j=0; j<ims.length; ++j ){
+        dragZoom.init(ims[j], {'zoom':1})
     }
-}
-addHandler(window,'resize',function(){
-    for( i=0; i<els.length; ++i ){
-        lenticule.size(els[i]);
-    }
-});
-if( !!window.DeviceOrientationEvent ){
-    addHandler(window,'deviceorientation',function(e){
-        if( !lenticule.el ){
-            for( i=0; i<els.length; ++i ){
-                if( !!els[i].wh ){
-                    lenticule.el = els[i];
-                    xy = [(e.gamma/45)*lenticule.el.wh[0], lenticule.el.xy[1]];
-                    lenticule.el.move(xy);
-                    lenticule.el = null;
-                }
-            }
-        }
-    });
 }
 </script>
 </body>
