@@ -9,8 +9,7 @@
     <style type="text/css">
         html, body { height:100%; margin:0; }
         body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
-        .dragpad { cursor:pointer; height:100%; position:absolute; left:0; top:0; width:100%; }
-        .compariscope { border:outset 1px solid red; display: block; height:50%; width:50%; margin:auto; overflow:hidden; position:absolute; bottom:0; left:0; right:0; top:0; }
+        .compariscope { height:50%; width:50%; margin:auto; position:relative; top:25%; }
         .compariscope img { cursor:pointer; position:absolute; left:0; top:0; }
     </style>	
 </head>
@@ -26,167 +25,157 @@
 -->
 
 <script type="text/javascript">
-Number.prototype.mod = function(n) { return ((this%n)+n)%n; }
-function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
-function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ if( style=='width' ){ y=el.getBoundingClientRect().right-el.getBoundingClientRect().left }else if( style=='height' ){ y=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else{ var y=el.currentStyle[style] } } return parseFloat(y); }
-function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
-function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
-var dragZoom = {
-    el:null, xy0:null, v0:null, xyT:null, xyE:null, d0:null, 
-    size: function(el){
-        el.wh = [getComputed(el,'width'), getComputed(el,'height')];
-        el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
-        el.xyP = getPgOffset(el.P);
-        el.hv = el.wh[0]>el.wh[1]? 0 : 1;
-    },
-    init: function(el, opt){
-        if( typeof el==='string' ){ el = document.querySelector(el); } if( !el ){ return; }
-        if( !opt ) var opt = {};
-        el.zoomer = !!opt.zoom? opt.zoom : 0;
-        el.P = el.parentNode;
-        dragZoom.size(el);
-        el.xy = [getComputed(el,'left'), getComputed(el,'top')];
-        el.v = [0,0];
-        if( !el.move ){
-            el.whP0 = el.whP;
-            el.onmousedown = dragZoom.touch;
-            el.ontouchstart = dragZoom.touch;
-            if( window.addEventListener ){
-                el.addEventListener('DOMMouseScroll', dragZoom.touch, false); 
-                el.addEventListener('mousewheel', dragZoom.touch, false); 
-            }else if( window.attachEvent ){
-                el.attachEvent('onmousewheel', dragZoom.touch);
-            }
-            el.move = function(xy){
-                var x=xy[0], y=xy[1], r;
-                if( this.wh[0]>this.whP[0] ){
-                    if( x>0 ){ x=0; r=this.wh[0]>this.whP[0]?[1,0]:null; }
-                    else if( x<this.whP[0]-this.wh[0] ){ x=this.whP[0]-this.wh[0]; r=this.wh[0]>this.whP[0]?[-1,0]:null; }
-                    this.style.left = x+'px';
+(function(){
+    Number.prototype.mod = function(n) { return ((this%n)+n)%n; }
+    function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
+    function getComputed(el,style){ var s; if( style=='width' ){ s=el.getBoundingClientRect().right-el.getBoundingClientRect().left; }else if( style=='height' ){ s=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else if(window.getComputedStyle){ s=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ s=el.currentStyle[style] } return parseFloat(s); }
+    function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
+    function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
+    var dragZoom = {
+        el:null, xy0:null, v0:null, xyT:null, xyE:null, d0:null, 
+        size: function(el){
+            el.wh = [getComputed(el,'width'), getComputed(el,'height')];
+            el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
+            el.xyP = getPgOffset(el.P);
+            el.hv = el.wh[0]>el.wh[1]? 0 : 1;
+        },
+        init: function(el, opt){
+            if( typeof el==='string' ){ el = document.querySelector(el); } if( !el ){ return; }
+            if( !opt ) var opt = {};
+            el.zoomer = !!opt.zoom? opt.zoom : 0;
+            el.P = el.parentNode;
+            dragZoom.size(el);
+            el.xy = [getComputed(el,'left'), getComputed(el,'top')];
+            el.v = [0,0];
+            if( !el.move ){
+                el.whP0 = el.whP;
+                el.onmousedown = dragZoom.touch;
+                el.ontouchstart = dragZoom.touch;
+                if( window.addEventListener ){
+                    el.addEventListener('DOMMouseScroll', dragZoom.touch, false); 
+                    el.addEventListener('mousewheel', dragZoom.touch, false); 
+                }else if( window.attachEvent ){
+                    el.attachEvent('onmousewheel', dragZoom.touch);
                 }
-                if( this.wh[1]>this.whP[1] ){
-                    if( y>0 ){ y=0; r=this.wh[1]>this.whP[1]?[0,1]:r; }
-                    else if( y<this.whP[1]-this.wh[1] ){ y=this.whP[1]-this.wh[1]; r=this.wh[1]>this.whP[1]?[0,-1]:r; }
-                    this.style.top = y+'px';
-                }
-                this.xy = [x,y];
-                return r || null;
-            };
-            el.drop = typeof(opt.drop)==='function'? opt.drop : function(){
-                var f = Math.abs(this.v[0])+Math.abs(this.v[1])>50?0.98:0.90, r;
-                this.v = [this.v[0]*f, this.v[1]*f];
-                var r = this.move([this.xy[0]+this.v[0], this.xy[1]+this.v[1]]);
-                if( r || Math.abs(this.v[0])+Math.abs(this.v[1])<0.5 ){
-                    dragZoom.v0=this.v=[0,0]; window.clearTimeout(this.t); 
-                    return;
-                }
-                this.t = window.setTimeout(function(){ el.drop(); }, 23);
-            };
-            if( el.zoomer ){
-                el.wMax = el.getAttribute('data-max-width');
-                el.zoom = function(z,xy0){
-                    xy0 = xy0 || [this.whP[0]/2, this.whP[1]/2];
-                    if( z>1 && this.wh[0]>8000 ){ return; }
-                    if( this.wh[0]*z>this.whP[0] || this.wh[1]*z>this.whP[1] ){
-                        this.wh = [this.wh[0]*z,this.wh[1]*z];
-                        this.style.width = this.wh[0]+'px';
-                        this.style.height = this.wh[1]+'px';
-                        this.move([(xy0[0]-((xy0[0]-this.xy[0])*z)),(xy0[1]-((xy0[1]-this.xy[1])*z))]);
-                    }else{
-                        this.style.width = this.style.height = '100%';
-                        this.wh = [getComputed(el,'width'), getComputed(el,'height')];
-                        this.style.left = this.style.top = 0;
-                        this.xy = [0,0];
+                el.move = function(xy){
+                    var x=xy[0], y=xy[1], r;
+                    if( this.wh[0]>this.whP[0] ){
+                        if( x>0 ){ x=0; r=this.wh[0]>this.whP[0]?[1,0]:null; }
+                        else if( x<this.whP[0]-this.wh[0] ){ x=this.whP[0]-this.wh[0]; r=this.wh[0]>this.whP[0]?[-1,0]:null; }
+                        this.style.left = x+'px';
                     }
-                };
-                el.zoom0 = function(){
-                    if( !!el.style.width ){
-                        var c = 0;
-                        if( this.t ){ window.clearInterval(this.t); }
-                        this.t = window.setInterval(function(){ el.zoom(0.8); if( el.style.width==='100%' ){ window.clearInterval(el.t); }},50);
-
+                    if( this.wh[1]>this.whP[1] ){
+                        if( y>0 ){ y=0; r=this.wh[1]>this.whP[1]?[0,1]:r; }
+                        else if( y<this.whP[1]-this.wh[1] ){ y=this.whP[1]-this.wh[1]; r=this.wh[1]>this.whP[1]?[0,-1]:r; }
+                        this.style.top = y+'px';
                     }
+                    this.xy = [x,y];
+                    return r || null;
                 };
+                el.drop = typeof(opt.drop)==='function'? opt.drop : function(){
+                    var f = Math.abs(this.v[0])+Math.abs(this.v[1])>50?0.98:0.90, r;
+                    this.v = [this.v[0]*f, this.v[1]*f];
+                    var r = this.move([this.xy[0]+this.v[0], this.xy[1]+this.v[1]]);
+                    if( r || Math.abs(this.v[0])+Math.abs(this.v[1])<0.5 ){
+                        dragZoom.v0=this.v=[0,0]; window.clearTimeout(this.t); 
+                        return;
+                    }
+                    this.t = window.setTimeout(function(){ el.drop(); }, 23);
+                };
+                if( el.zoomer ){
+                    el.wMax = el.getAttribute('data-max-width');
+                    el.zoom = function(z,xy0){
+                        xy0 = xy0 || [this.whP[0]/2, this.whP[1]/2];
+                        if( this.wh[0]*z>this.whP[0] || this.wh[1]*z>this.whP[1] ){
+                            this.wh = [this.wh[0]*z,this.wh[1]*z];
+                            this.style.width = this.wh[0]+'px';
+                            this.style.height = this.wh[1]+'px';
+                            this.move([(xy0[0]-((xy0[0]-this.xy[0])*z)),(xy0[1]-((xy0[1]-this.xy[1])*z))]);
+                        }
+                    };
+                }
             }
-        }
-    },
-    touch: function(e){
-        e = e || window.event;
-        if( e.type==='touchstart' && e.touches && e.touches.length>2 ){ return; }
-        dragZoom.el = this;
-        window.clearTimeout(dragZoom.el.t);
-        dragZoom.v0 = dragZoom.el.v;
-        dragZoom.el.v = [0,0];
-        dragZoom.xy0 = dragZoom.el.xy;
-        dragZoom.xyT = getXY(e);
-        if( e.type==='touchstart' ){
-            if( dragZoom.el.zoomer && e.touches && e.touches.length===2 ){
-                dragZoom.d0 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
-                dragZoom.el.ontouchmove = dragZoom.zoom;
-            }else{
-                dragZoom.el.ontouchmove = dragZoom.drag;
-            }
-            dragZoom.el.onmousedown = null;
-            dragZoom.el.ontouchend = function(){
-                dragZoom.el.ontouchmove = null;
-                dragZoom.el.ontouchend = null;
-                dragZoom.release();
-            };
-        }else{
-            if( e.type==='DOMMouseScroll' || e.type==='mousewheel' ){
-                if( dragZoom.el.zoomer ){ dragZoom.zoom(e); }
-            }else{
-                document.onmousemove = dragZoom.drag;
-                document.onmouseup = function(){
-                    document.onmousemove = null;
-                    document.onmouseup = null;
+        },
+        touch: function(e){
+            e = e || window.event;
+            if( e.type==='touchstart' && e.touches && e.touches.length>2 ){ return; }
+            dragZoom.el = this;
+            window.clearTimeout(dragZoom.el.t);
+            dragZoom.v0 = dragZoom.el.v;
+            dragZoom.el.v = [0,0];
+            dragZoom.xy0 = dragZoom.el.xy;
+            dragZoom.xyT = getXY(e);
+            if( e.type==='touchstart' ){
+                if( dragZoom.el.zoomer && e.touches && e.touches.length===2 ){
+                    dragZoom.d0 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
+                    dragZoom.el.ontouchmove = dragZoom.zoom;
+                }else{
+                    dragZoom.el.ontouchmove = dragZoom.drag;
+                }
+                dragZoom.el.onmousedown = null;
+                dragZoom.el.ontouchend = function(){
+                    dragZoom.el.ontouchmove = null;
+                    dragZoom.el.ontouchend = null;
                     dragZoom.release();
                 };
+            }else{
+                if( e.type==='DOMMouseScroll' || e.type==='mousewheel' ){
+                    if( dragZoom.el.zoomer ){ dragZoom.zoom(e); }
+                }else{
+                    document.onmousemove = dragZoom.drag;
+                    document.onmouseup = function(){
+                        document.onmousemove = null;
+                        document.onmouseup = null;
+                        dragZoom.release();
+                    };
+                }
             }
+            return false;
+        },
+        drag: function(e){
+            e = e || window.event;
+            dragZoom.xyE = getXY(e);
+            var xy = [dragZoom.xy0[0]+dragZoom.xyE[0]-dragZoom.xyT[0], dragZoom.xy0[1]+dragZoom.xyE[1]-dragZoom.xyT[1]];
+            dragZoom.el.v = [xy[0]-dragZoom.el.xy[0],xy[1]-dragZoom.el.xy[1]];
+            dragZoom.el.move(xy);
+            return false;
+        },
+        release: function(){
+            var vmax = 100;
+            dragZoom.el.v = [dragZoom.el.v[0]>vmax?vmax:dragZoom.el.v[0],dragZoom.el.v[1]>vmax?vmax:dragZoom.el.v[1]];
+            dragZoom.el.drop();
+            dragZoom.el = dragZoom.xyE = dragZoom.d0 = null;
+        },
+        zoom: function(e){
+            e = e || window.event;
+            if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
+            var z, d1, xy0 = [dragZoom.xyT[0]-dragZoom.el.xyP[0],dragZoom.xyT[1]-dragZoom.el.xyP[1]];
+            if( e.touches ){
+                d1 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
+                z = 1+((d1-dragZoom.d0>0?(d1/dragZoom.el.whP[0]):-0.5)*0.1);
+                dragZoom.d0 = d1;
+            }else{
+                z = (e.detail? e.detail*-1 : e.wheelDelta/40);
+                z = 1+((z>0?1:-1)*0.25);
+            }
+            dragZoom.el.zoom(z,xy0);
+            return false;
         }
-        return false;
-    },
-    drag: function(e){
-        e = e || window.event;
-        dragZoom.xyE = getXY(e);
-        var xy = [dragZoom.xy0[0]+dragZoom.xyE[0]-dragZoom.xyT[0], dragZoom.xy0[1]+dragZoom.xyE[1]-dragZoom.xyT[1]];
-        dragZoom.el.v = [xy[0]-dragZoom.el.xy[0],xy[1]-dragZoom.el.xy[1]];
-        dragZoom.el.move(xy);
-        return false;
-    },
-    release: function(){
-        var vmax = 100;
-        dragZoom.el.v = [dragZoom.el.v[0]>vmax?vmax:dragZoom.el.v[0],dragZoom.el.v[1]>vmax?vmax:dragZoom.el.v[1]];
-        dragZoom.el.drop();
-        dragZoom.el = dragZoom.xyE = dragZoom.d0 = null;
-    },
-    zoom: function(e){
-        e = e || window.event;
-        if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
-        var z, d1, xy0 = [dragZoom.xyT[0]-dragZoom.el.xyP[0],dragZoom.xyT[1]-dragZoom.el.xyP[1]];
-        if( e.touches ){
-            d1 = Math.sqrt(Math.pow(e.touches[0].pageX-e.touches[1].pageX,2)+Math.pow(e.touches[0].pageY-e.touches[1].pageY,2));
-            z = 1+((d1-dragZoom.d0>0?(d1/dragZoom.el.whP[0]):-0.5)*0.1);
-            dragZoom.d0 = d1;
-        }else{
-            z = (e.detail? e.detail*-1 : e.wheelDelta/40);
-            z = 1+((z>0?1:-1)*0.25);
-        }
-        dragZoom.el.zoom(z,xy0);
-        return false;
-    }
-};
+    };
 
 
-var els = document.querySelectorAll('.compariscope'), compariscope,
-    i, j;
-for( i=0; i<els.length; ++i ){
-    compariscope = els[i];
-    ims = compariscope.querySelectorAll('img');
-    for( j=0; j<ims.length; ++j ){
-        dragZoom.init(ims[j], {'zoom':1})
+    var els = document.querySelectorAll('.compariscope'), compariscope,
+        i, j;
+    for( i=0; i<els.length; ++i ){
+        compariscope = els[i];
+        ims = compariscope.querySelectorAll('img');
+        for( j=0; j<ims.length; ++j ){
+            addHandler(ims[j], 'load', function(){ 
+                dragZoom.init(this, {'zoom':1});
+            });
+        }
     }
-}
+})();
 </script>
 </body>
 </html>
