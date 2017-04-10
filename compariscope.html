@@ -11,10 +11,10 @@
         body { background:#333; color:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
         #compariscope { background:#aaa; display:block; height:400px; width:400px; margin:20px auto; overflow:hidden; position:relative; resize:both; }
         #compariscope img { cursor:pointer; position:absolute; left:0; top:0; }
-        #compariscope::after { content:"❖"; font-size:23px; background:green; line-height:20px; height:20px; width:20px; position:absolute; bottom:0; right:0; }
+        #compariscope::after { content:"❖"; cursor:pointer; font-size:23px; background:green; line-height:20px; height:20px; width:20px; position:absolute; bottom:0; right:0; }
         .img-loader { width:400px; margin:0 auto 20px; }
         #iiif-src { box-sizing:border-box; display:inline-block; padding:4px; height:24px; width:calc(100% - 40px); }
-        #img-add { background:green; border-radius:50%; display:inline-block; font-size:20px; font-weight:600; height:24px; line-height:24px; margin-left:10px; text-align:center; width:24px; vertical-align:middle; }
+        #img-add { background:green; border-radius:50%; cursor:pointer; display:inline-block; font-size:20px; font-weight:600; height:24px; line-height:24px; margin-left:10px; text-align:center; width:24px; vertical-align:middle; }
         #img-add:active { position:relative; left:1px; top:1px; }
     </style>	
 </head>
@@ -40,7 +40,8 @@
     var compariscope = document.getElementById('compariscope'),
         imgSrc = document.getElementById('iiif-src'),
         imgAdd = document.getElementById('img-add'),
-        img;
+        img,
+        imgs = [];
     
     imgAdd.onclick = function(e){ 
         img = new Image();
@@ -49,6 +50,22 @@
             compariscope.appendChild(this);
             dragZoom.init(this, {'zoom':1});
         }
+        imgs.push(img);
+    };
+
+    function reCentre(){
+        var el, i;
+        for( i=0; i<imgs.length; ++i ){
+            el = imgs[i];
+            dragZoom.size(el);
+            el.xyP = getPgOffset(el.P);
+            el.move([el.xy[0]+((el.whP[0]-el.whP0[0])/2), el.xy[1]+((el.whP[1]-el.whP0[1])/2)]);
+            el.whP0 = el.whP;
+        }
+    }
+
+    compariscope.onmousemove = function(e){ 
+        if(e.target === this) reCentre();
     };
     
     var dragZoom = {
