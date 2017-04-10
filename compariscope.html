@@ -9,21 +9,36 @@
     <style type="text/css">
         html, body { height:100%; margin:0; }
         body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
-        #compariscope-cnv { background:#fff; display:block; height:50%; width:50%; margin:auto; position:relative; top:25%; }
-        #compariscope-cnv img { cursor:pointer; position:absolute; left:0; top:0; }
+        #compariscope { background:orange; border:1px solid red; display:block; height:400px; width:400px; margin:20px auto; overflow:hidden; position:relative; resize:both; }
+        #compariscope img { cursor:pointer; position:absolute; left:0; top:0; }
+        ::-webkit-resizer {
+            border: 2px solid yellow;
+            background: blue;
+            box-shadow: 0 0 2px 5px red;
+            outline: 2px dashed green;
+
+            /*size does not work*/  
+            display:block;  
+            width: 150px !important;
+            height: 150px !important;
+        }
+        .img-loader { width:400px; margin:0 auto 20px; }
+        #iiif-src { box-sizing:border-box; display:inline-block; padding:4px; height:24px; width:calc(100% - 40px); }
+        #img-add { background:green; border-radius:50%; display:inline-block; font-weight:600; height:24px; line-height:24px; margin-left:10px; text-align:center; width:24px; vertical-align:middle; }
+        #img-add:active { position:relative; left:1px; top:1px; }
     </style>	
 </head>
 
 <body>
-<canvas id="compariscope-cnv"></canvas>
-<input id="iiif-src"></input>
+<div id="compariscope"></div>
+<form class="img-loader">
+    <input id="iiif-src"></input>
+    <a id="img-add">+</a>
+</form>
 <!--
-    <img src="img/liam_st_paul/pure_028.jpg" alt=""><img src="img/liam_st_paul/pure_034.jpg" alt=""><img src="img/liam_st_paul/pure_079.jpg" alt="">
--->
-
-<!--
-<p class="lenticule"><img src="https://framemark.vam.ac.uk/demo/raphael/RC912749/full/full/!0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/raphael/2006AN5938/full/full/!0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/raphael/INV43867/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/raphael/2010EJ0404/full/full/0/default.jpg" alt=""></p>
-<p class="lenticule"><img src="https://framemark.vam.ac.uk/demo/constable/2010EF0301/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/constable/2010EG9859/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/constable/2010EH2616/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/constable/2010EH2617/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg" alt=""></p>
+<img src="img/liam_st_paul/pure_028.jpg" alt=""><img src="img/liam_st_paul/pure_034.jpg" alt=""><img src="img/liam_st_paul/pure_079.jpg" alt="">
+<img src="https://framemark.vam.ac.uk/demo/raphael/RC912749/full/full/!0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/raphael/2006AN5938/full/full/!0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/raphael/INV43867/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/raphael/2010EJ0404/full/full/0/default.jpg" alt="">
+<img src="https://framemark.vam.ac.uk/demo/constable/2010EF0301/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/constable/2010EG9859/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/constable/2010EH2616/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/constable/2010EH2617/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg" alt="">
 -->
 
 <script type="text/javascript">
@@ -32,19 +47,18 @@
     function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
     function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 
-
-    var compariscope = document.getElementById('compariscope-cnv'),
-        ctx = compariscope.getContext('2d'),
+    var compariscope = document.getElementById('compariscope'),
         imgSrc = document.getElementById('iiif-src'),
+        imgAdd = document.getElementById('img-add'),
         img;
     
-    imgSrc.onchange = function(e){ 
+    imgAdd.onclick = function(e){ 
         img = new Image();
-        img.src = e.target.value;
+        img.src = imgSrc.value;
         img.onload = function() {
-            ctx.drawImage(img, 0, 0, img.width, img.height);
+            compariscope.appendChild(this);
+            dragZoom.init(this, {'zoom':1});
         }
-        //dragZoom.init(this, {'zoom':1});
     };
     
     var dragZoom = {
