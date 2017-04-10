@@ -9,19 +9,9 @@
     <style type="text/css">
         html, body { height:100%; margin:0; }
         body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
-        #compariscope { background:orange; border:1px solid red; display:block; height:400px; width:400px; margin:20px auto; overflow:hidden; position:relative; resize:both; }
+        #compariscope { background:#aaa; display:block; height:400px; width:400px; margin:20px auto; overflow:hidden; position:relative; resize:both; }
         #compariscope img { cursor:pointer; position:absolute; left:0; top:0; }
-        ::-webkit-resizer {
-            border: 2px solid yellow;
-            background: blue;
-            box-shadow: 0 0 2px 5px red;
-            outline: 2px dashed green;
-
-            /*size does not work*/  
-            display:block;  
-            width: 150px !important;
-            height: 150px !important;
-        }
+        #compariscope::after { content:"❖"; font-size:20px; background-color:rgba(255,255,255, .6); color:green; position:absolute; bottom:0; right:0; }
         .img-loader { width:400px; margin:0 auto 20px; }
         #iiif-src { box-sizing:border-box; display:inline-block; padding:4px; height:24px; width:calc(100% - 40px); }
         #img-add { background:green; border-radius:50%; display:inline-block; font-weight:600; height:24px; line-height:24px; margin-left:10px; text-align:center; width:24px; vertical-align:middle; }
