@@ -65,7 +65,9 @@
     }
 
     compariscope.onmousemove = function(e){ 
-        if(e.target === this) reCentre();
+        if(e.target === this){
+            window.requestAnimationFrame(function(){ reCentre() });
+        }
     };
     
     var dragZoom = {
@@ -95,19 +97,21 @@
                     el.attachEvent('onmousewheel', dragZoom.touch);
                 }
                 el.move = function(xy){
-                    var x=xy[0], y=xy[1], r;
-                    if( this.wh[0]>this.whP[0] ){
-                        if( x>0 ){ x=0; r=this.wh[0]>this.whP[0]?[1,0]:null; }
-                        else if( x<this.whP[0]-this.wh[0] ){ x=this.whP[0]-this.wh[0]; r=this.wh[0]>this.whP[0]?[-1,0]:null; }
-                        this.style.left = x+'px';
-                    }
-                    if( this.wh[1]>this.whP[1] ){
-                        if( y>0 ){ y=0; r=this.wh[1]>this.whP[1]?[0,1]:r; }
-                        else if( y<this.whP[1]-this.wh[1] ){ y=this.whP[1]-this.wh[1]; r=this.wh[1]>this.whP[1]?[0,-1]:r; }
-                        this.style.top = y+'px';
-                    }
-                    this.xy = [x,y];
-                    return r || null;
+                    var my=this, x=xy[0], y=xy[1], r;
+                    window.requestAnimationFrame(function(){ 
+                        if( my.wh[0]>my.whP[0] ){
+                            if( x>0 ){ x=0; r=my.wh[0]>my.whP[0]?[1,0]:null; }
+                            else if( x<my.whP[0]-my.wh[0] ){ x=my.whP[0]-my.wh[0]; r=my.wh[0]>my.whP[0]?[-1,0]:null; }
+                            my.style.left = x+'px';
+                        }
+                        if( my.wh[1]>my.whP[1] ){
+                            if( y>0 ){ y=0; r=my.wh[1]>my.whP[1]?[0,1]:r; }
+                            else if( y<my.whP[1]-my.wh[1] ){ y=my.whP[1]-my.wh[1]; r=my.wh[1]>my.whP[1]?[0,-1]:r; }
+                            my.style.top = y+'px';
+                        }
+                        my.xy = [x,y];
+                        return r || null;
+                    });
                 };
                 el.drop = typeof(opt.drop)==='function'? opt.drop : function(){
                     var f = Math.abs(this.v[0])+Math.abs(this.v[1])>50?0.98:0.90, r;
