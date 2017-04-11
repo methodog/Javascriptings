@@ -12,19 +12,23 @@
         #compariscope { background:#aaa; display:block; height:400px; width:400px; margin:20px auto; overflow:hidden; position:relative; resize:both; }
         #compariscope img { cursor:pointer; position:absolute; left:0; top:0; }
         #compariscope::after { content:"❖"; cursor:pointer; font-size:23px; background:green; line-height:20px; height:20px; width:20px; position:absolute; bottom:0; right:0; }
-        .img-loader { width:400px; margin:0 auto 20px; }
-        #iiif-src { box-sizing:border-box; display:inline-block; padding:4px; height:24px; width:calc(100% - 40px); }
-        #img-add { background:green; border-radius:50%; cursor:pointer; display:inline-block; font-size:20px; font-weight:600; height:24px; line-height:24px; margin-left:10px; text-align:center; width:24px; vertical-align:middle; }
-        #img-add:active { position:relative; left:1px; top:1px; }
+        .cs-ctrl { width:400px; margin:0 auto 20px; }
+        #cs-iiif-src { box-sizing:border-box; display:inline-block; padding:4px; height:24px; width:calc(100% - 40px); }
+        #cs-img-add { background:green; border-radius:50%; cursor:pointer; display:inline-block; font-size:20px; font-weight:600; height:24px; line-height:24px; margin-left:10px; text-align:center; width:24px; vertical-align:middle; }
+        #cs-img-add:active { position:relative; left:1px; top:1px; }
+        #cs-fader { border-radius:50%; width:100%; }
     </style>	
 </head>
 
 <body>
 <div id="compariscope"></div>
-<form class="img-loader">
-    <input id="iiif-src"></input>
-    <a id="img-add">+</a>
-</form>
+<div class="cs-ctrl">
+    <input type="range" id="cs-fader" value="0" step=".01">
+</div>
+<div class="cs-ctrl">
+    <input id="cs-iiif-src">
+    <a id="cs-img-add">+</a>
+</div>
 <!--
 <img src="img/liam_st_paul/pure_028.jpg" alt=""><img src="img/liam_st_paul/pure_034.jpg" alt=""><img src="img/liam_st_paul/pure_079.jpg" alt="">
 <img src="https://framemark.vam.ac.uk/demo/raphael/RC912749/full/full/!0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/raphael/2006AN5938/full/full/!0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/raphael/INV43867/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/raphael/2010EJ0404/full/full/0/default.jpg" alt="">
@@ -38,8 +42,9 @@
     function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 
     var compariscope = document.getElementById('compariscope'),
-        imgSrc = document.getElementById('iiif-src'),
-        imgAdd = document.getElementById('img-add'),
+        fader = document.getElementById('cs-fader'),
+        imgSrc = document.getElementById('cs-iiif-src'),
+        imgAdd = document.getElementById('cs-img-add'),
         img,
         imgs = [];
     
@@ -68,6 +73,16 @@
         if(e.target === this){
             window.requestAnimationFrame(function(){ reCentre() });
         }
+    };
+    
+    function csFade(x){
+        window.requestAnimationFrame(function(){ 
+            console.log(x);
+        });
+    }
+
+    fader.oninput = function(e){ 
+        csFade(e.target.value);
     };
     
     var dragZoom = {
