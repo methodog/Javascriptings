@@ -16,7 +16,9 @@
         #cs-iiif-src { box-sizing:border-box; display:inline-block; padding:4px; height:24px; width:calc(100% - 40px); }
         #cs-img-add { background:#f54007; border-radius:50%; cursor:pointer; display:inline-block; font-size:20px; font-weight:600; height:24px; line-height:24px; margin-left:10px; text-align:center; width:24px; vertical-align:middle; }
         #cs-img-add:active { position:relative; left:1px; top:1px; }
-        #cs-fader { border-radius:50%; width:100%; }
+        #cs-fader, #cs-scale { width:100%; }
+        #cs-scale { background:#fff; }
+        #cs-scale div { border-right:1px solid #fff; box-sizing:border-box; color:#f54007; float:left; font-weight:600; padding-right:4px; text-align:right; }
     </style>	
 </head>
 
@@ -24,6 +26,7 @@
 <div id="compariscope"></div>
 <style id="cs-css"></style>
 <div class="cs-ctrl">
+    <div id="cs-scale"></div>
     <input type="range" id="cs-fader" value="1" max="1" step=".01">
 </div>
 <div class="cs-ctrl">
@@ -45,6 +48,7 @@
     var compariscope = document.getElementById('compariscope'),
         css = document.getElementById('cs-css'),
         fader = document.getElementById('cs-fader'),
+        scale = document.getElementById('cs-scale'),
         imgSrc = document.getElementById('cs-iiif-src'),
         imgAdd = document.getElementById('cs-img-add');
         compariscope.imgs = [];
@@ -80,7 +84,9 @@
     };
 
     imgAdd.onclick = function(e){ 
-        var img = new Image();
+        var img = new Image(),
+            scaleHTML = '',
+            arcs;
         img.src = imgSrc.value;
         img.onload = function() {
             compariscope.appendChild(this);
@@ -89,6 +95,11 @@
             compariscope.fade(1);
         }
         compariscope.imgs.push(img);
+        arcs = compariscope.imgs.length;
+        for( i=1; i<=arcs; ++i ){
+            scaleHTML += '<div style="width:'+(100/arcs)+'%">'+i+'</div>';
+        }
+        scale.innerHTML = scaleHTML;
     };
 
     fader.oninput = function(e){ 
