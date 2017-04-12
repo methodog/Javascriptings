@@ -67,14 +67,16 @@
     }
     
     compariscope.fade = function(x){
-        var arcs = this.imgs.length;
-        var vis = Math.ceil(x*arcs);
+        var arcs = this.imgs.length,
+            vis = Math.ceil(x*arcs),
+            opacity = (x%(1/arcs))*arcs;
+            if( opacity===0 && x>0 ) opacity = 1;
         this.css.innerHTML = ' \
             #'+this.id+' :nth-child(-n+'+vis+'){ display:block } \
             #'+this.id+' :nth-child(n+'+(vis+1)+'){ display:none } \
-            #'+this.id+' :nth-child('+vis+'){ opacity:'+(x%(1/arcs))*arcs+' } \
+            #'+this.id+' :nth-child('+vis+'){ opacity:'+opacity+' } \
             ';
-        imgSrc.value = this.imgs[vis-1].src;
+        if(vis>0) imgSrc.value = this.imgs[vis-1].src;
     }
 
     compariscope.onmousemove = function(e){ 
