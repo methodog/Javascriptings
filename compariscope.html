@@ -62,10 +62,15 @@
         }
     }
     
-    compariscope.csFade = function(x){
+    compariscope.fade = function(x){
         var arcs = this.imgs.length;
-        var vis = 1 + Math.ceil(x*arcs);
-        this.css.innerHTML = '#'+this.id+' :nth-child('+(vis-1)+'){opacity:1!important} #'+this.id+' :nth-child('+vis+'){opacity:'+(x%(1/arcs))*arcs+'!important}';
+        var vis = Math.ceil(x*arcs);
+        this.css.innerHTML = ' \
+            #'+this.id+' :nth-child(-n+'+vis+'){ display:block } \
+            #'+this.id+' :nth-child(n+'+(vis+1)+'){ display:none } \
+            #'+this.id+' :nth-child('+vis+'){ opacity:'+(x%(1/arcs))*arcs+' } \
+            ';
+        imgSrc.value = this.imgs[vis-1].src;
     }
 
     compariscope.onmousemove = function(e){ 
@@ -81,13 +86,14 @@
             compariscope.appendChild(this);
             dragZoom.init(this, {'zoom':1});
             fader.value = '1';
+            compariscope.fade(1);
         }
         compariscope.imgs.push(img);
     };
 
     fader.oninput = function(e){ 
         window.requestAnimationFrame(function(){
-            compariscope.csFade(e.target.value);
+            compariscope.fade(e.target.value);
         });
 
     };
