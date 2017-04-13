@@ -104,6 +104,8 @@
         img.src = imgSrc.value;
         img.onload = function() {
             compariscope.appendChild(this);
+            if( this.width > this.height ) this.style.height = '100%';
+            else this.style.width = '100%';
             dragZoom.init(this, {'zoom':1});
             fader.value = '1';
             compariscope.fade(1);
@@ -129,6 +131,7 @@
             el.wh = [getComputed(el,'width'), getComputed(el,'height')];
             el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
             el.xyP = getPgOffset(el.P);
+            el.style.width = el.wh[0]+'px'; el.style.height = el.wh[1]+'px';
         },
         init: function(el, opt){
             if( typeof el==='string' ){ el = document.querySelector(el); } if( !el ){ return; }
@@ -149,34 +152,16 @@
                 }
                 el.move = function(xy){
                     var x=xy[0], y=xy[1], r;
-                    if( this.wh[0]>this.whP[0] ){
-                        if( x>0 ){ x=0; r=this.wh[0]>this.whP[0]?[1,0]:null; }
-                        else if( x<this.whP[0]-this.wh[0] ){ x=this.whP[0]-this.wh[0]; r=this.wh[0]>this.whP[0]?[-1,0]:null; }
-                        this.style.left = x+'px';
-                    }
-                    if( this.wh[1]>this.whP[1] ){
-                        if( y>0 ){ y=0; r=this.wh[1]>this.whP[1]?[0,1]:r; }
-                        else if( y<this.whP[1]-this.wh[1] ){ y=this.whP[1]-this.wh[1]; r=this.wh[1]>this.whP[1]?[0,-1]:r; }
-                        this.style.top = y+'px';
-                    }
+                    this.style.left = x+'px';
+                    this.style.top = y+'px';
                     this.xy = [x,y];
                     return r || null;
-                };
-                el.drop = typeof(opt.drop)==='function'? opt.drop : function(){
-                    var f = Math.abs(this.v[0])+Math.abs(this.v[1])>50?0.98:0.90, r;
-                    this.v = [this.v[0]*f, this.v[1]*f];
-                    var r = this.move([this.xy[0]+this.v[0], this.xy[1]+this.v[1]]);
-                    if( r || Math.abs(this.v[0])+Math.abs(this.v[1])<0.5 ){
-                        dragZoom.v0=this.v=[0,0]; window.clearTimeout(this.t); 
-                        return;
-                    }
-                    this.t = window.setTimeout(function(){ el.drop(); }, 23);
                 };
                 if( el.zoomer ){
                     el.wMax = el.getAttribute('data-max-width');
                     el.zoom = function(z,xy0){
                         xy0 = xy0 || [this.whP[0]/2, this.whP[1]/2];
-                        if( this.wh[0]*z>this.whP[0] || this.wh[1]*z>this.whP[1] ){
+                        if( this.wh[0]*z>this.whP[0] && this.wh[1]*z>this.whP[1] ){
                             this.wh = [this.wh[0]*z,this.wh[1]*z];
                             this.style.width = this.wh[0]+'px';
                             this.style.height = this.wh[1]+'px';
