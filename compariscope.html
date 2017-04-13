@@ -12,7 +12,6 @@
         #compariscope { background:#f54007 url(img/compariscope/cross-hairs.png) 50% 50% no-repeat; display:block; height:300px; width:300px; margin:20px auto; overflow:hidden; position:relative; resize:both; }
         #compariscope::after { content:"❖"; cursor:pointer; font-size:20px; background:#f54007; line-height:16px; height:16px; width:16px; position:absolute; bottom:0; right:0; }
         #compariscope img { cursor:pointer; position:absolute; left:0; top:0; }
-        #compariscope.cropping img { display:block; opacity:.5; }
         .cs-ctrl { width:400px; margin:0 auto 20px; }
         #cs-iiif-src { box-sizing:border-box; display:inline-block; padding:4px; height:24px; width:calc(100% - 40px); }
         #cs-img-add { background:#f54007; border-radius:50%; cursor:pointer; display:inline-block; font-size:20px; font-weight:600; height:24px; line-height:24px; margin-left:10px; text-align:center; width:24px; vertical-align:middle; }
@@ -79,17 +78,6 @@
             ';
         if(vis>0) imgSrc.value = this.imgs[vis-1].src;
     }
-
-    compariscope.onmousedown = function(e){ 
-        if(e.target === this){
-            compariscope.classList.add('cropping');
-        }
-    };
-    compariscope.onmouseout = function(e){ 
-        if(e.target === this){
-            compariscope.classList.remove('cropping');
-        }
-    };
 
     compariscope.onmousemove = function(e){ 
         if(e.target === this){
