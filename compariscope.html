@@ -220,7 +220,7 @@
                 dragZoom.d0 = d1;
             }else{
                 z = (e.detail? e.detail*-1 : e.wheelDelta/40);
-                z = 1+((z>0?1:-1)*0.25);
+                z = 1+((z>0?1:-1)*0.05);
             }
             dragZoom.el.zoom(z);
             return false;
