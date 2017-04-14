@@ -86,18 +86,18 @@
     };
 
     imgAdd.onclick = function(e){ 
-        var img = new Image(),
+        var img = document.createElement('img'),
             scaleHTML = '',
             arcs;
         img.src = imgSrc.value;
+        compariscope.appendChild(img);
         img.onload = function() {
-            compariscope.appendChild(this);
             if( this.naturalWidth > this.naturalHeight ){
                 this.style.width = 'auto'; this.style.height = '100%';
             }else{
                 this.style.width = '100%'; this.style.height = 'auto';
             }
-            dragZoom.init(this, {'zoom':1});
+            setTimeout(function(){dragZoom.init(img, {'zoom':1})}, 0);
             fader.value = '1';
             compariscope.fade(1);
         }
@@ -125,6 +125,7 @@
             el.wh = [getComputed(el,'width'), getComputed(el,'height')];
             el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
             el.xyP = getPgOffset(el.P);
+            el.style.width = el.wh[0]+'px'; el.style.height = el.wh[1]+'px';
         },
         init: function(el, opt){
             if( typeof el==='string' ){ el = document.querySelector(el); } if( !el ){ return; }
@@ -170,7 +171,6 @@
             e = e || window.event;
             if( e.type==='touchstart' && e.touches && e.touches.length>2 ){ return; }
             dragZoom.el = this;
-            window.clearTimeout(dragZoom.el.t);
             dragZoom.xy0 = dragZoom.el.xy;
             dragZoom.xyT = getXY(e);
             if( e.type==='touchstart' ){
