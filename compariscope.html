@@ -72,8 +72,8 @@
             opacity = (x%(1/arcs))*arcs;
             if( opacity===0 && x>0 ) opacity = 1;
         this.css.innerHTML = ' \
-            #'+this.id+' :nth-child(-n+'+vis+'){ display:block } \
-            #'+this.id+' :nth-child(n+'+(vis+1)+'){ display:none } \
+            #'+this.id+' :nth-child(-n+'+vis+'){ opacity:1 } \
+            #'+this.id+' :nth-child(n+'+(vis+1)+'){ opacity:0; z-index:-999 } \
             #'+this.id+' :nth-child('+vis+'){ opacity:'+opacity+' } \
             ';
         if(vis>0) imgSrc.value = this.imgs[vis-1].src;
