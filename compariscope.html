@@ -51,8 +51,9 @@
         scale = document.getElementById('cs-scale'),
         imgSrc = document.getElementById('cs-iiif-src'),
         imgAdd = document.getElementById('cs-img-add');
-        compariscope.imgs = [];
-        compariscope.css = css;
+    compariscope.imgs = [];
+    compariscope.css = css;
+    compariscope.style.width = '100%'; compariscope.style.height = (900/16)+'%'; 
 
     compariscope.reCentre = function(){
         var el, i,
@@ -82,6 +83,12 @@
     compariscope.onmousemove = function(e){ 
         if(e.target === this){
             window.requestAnimationFrame(function(){ compariscope.reCentre() });
+        }
+    };
+
+    compariscope.onmousedown = function(e){ 
+        if(e.target === this){
+            setTimeout(function(){ compariscope.style.width = '300px'; compariscope.style.height = '300px'; }, 0);
         }
     };
 
