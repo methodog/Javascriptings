@@ -34,16 +34,16 @@
     <a id="cs-img-add">+</a>
 </div>
 <!--
-http://framemark.int.vam.ac.uk/demo/raphael/RC912749/full/full/!0/default.jpg	
-http://framemark.int.vam.ac.uk/demo/raphael/2006AN5938/full/full/!0/default.jpg	
-http://framemark.int.vam.ac.uk/demo/raphael/INV43867/full/full/0/default.jpg	
-http://framemark.int.vam.ac.uk/demo/raphael/2010EJ0404/full/full/0/default.jpg	
+http://framemark.int.vam.ac.uk/demo/raphael/RC912749/full/full/!0/default.jpg
+http://framemark.int.vam.ac.uk/demo/raphael/2006AN5938/full/full/!0/default.jpg
+http://framemark.int.vam.ac.uk/demo/raphael/INV43867/full/full/0/default.jpg
+http://framemark.int.vam.ac.uk/demo/raphael/2010EJ0404/full/full/0/default.jpg
 
-http://framemark.int.vam.ac.uk/demo/constable/2010EF0301/full/full/0/default.jpg	
-http://framemark.int.vam.ac.uk/demo/constable/2010EG9859/full/full/0/default.jpg	
-http://framemark.int.vam.ac.uk/demo/constable/2010EH2616/full/full/0/default.jpg	
-http://framemark.int.vam.ac.uk/demo/constable/2010EH2617/full/full/0/default.jpg	
-http://framemark.int.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg	
+http://framemark.int.vam.ac.uk/demo/constable/2010EF0301/full/full/0/default.jpg
+http://framemark.int.vam.ac.uk/demo/constable/2010EG9859/full/full/0/default.jpg
+http://framemark.int.vam.ac.uk/demo/constable/2010EH2616/full/full/0/default.jpg
+http://framemark.int.vam.ac.uk/demo/constable/2010EH2617/full/full/0/default.jpg
+http://framemark.int.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg
 -->
 
 <script type="text/javascript">
@@ -78,7 +78,7 @@ http://framemark.int.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg
         var arcs = this.imgs.length,
             vis = Math.ceil(x*arcs),
             opacity = (x%(1/arcs))*arcs;
-            if( opacity===0 && x>0 ) opacity = 1;
+        if( (opacity===0 && x>0) || (x===1 && opacity!==1) ) opacity = 1;
         this.css.innerHTML = ' \
             #'+this.id+' :nth-child(-n+'+vis+'){ opacity:1 } \
             #'+this.id+' :nth-child(n+'+(vis+1)+'){ opacity:0; z-index:-999 } \
