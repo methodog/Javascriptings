@@ -35,8 +35,8 @@
 </div>
 <!--
 <img src="img/liam_st_paul/pure_028.jpg" alt=""><img src="img/liam_st_paul/pure_034.jpg" alt=""><img src="img/liam_st_paul/pure_079.jpg" alt="">
-<img src="https://framemark.vam.ac.uk/demo/raphael/RC912749/full/full/!0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/raphael/2006AN5938/full/full/!0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/raphael/INV43867/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/raphael/2010EJ0404/full/full/0/default.jpg" alt="">
-<img src="https://framemark.vam.ac.uk/demo/constable/2010EF0301/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/constable/2010EG9859/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/constable/2010EH2616/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/constable/2010EH2617/full/full/0/default.jpg" alt=""><img src="https://framemark.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg" alt="">
+<img src="http://framemark.int.vam.ac.uk/demo/raphael/RC912749/full/full/!0/default.jpg" alt=""><img src="http://framemark.int.vam.ac.uk/demo/raphael/2006AN5938/full/full/!0/default.jpg" alt=""><img src="http://framemark.int.vam.ac.uk/demo/raphael/INV43867/full/full/0/default.jpg" alt=""><img src="http://framemark.int.vam.ac.uk/demo/raphael/2010EJ0404/full/full/0/default.jpg" alt="">
+<img src="http://framemark.int.vam.ac.uk/demo/constable/2010EF0301/full/full/0/default.jpg" alt=""><img src="http://framemark.int.vam.ac.uk/demo/constable/2010EG9859/full/full/0/default.jpg" alt=""><img src="http://framemark.int.vam.ac.uk/demo/constable/2010EH2616/full/full/0/default.jpg" alt=""><img src="http://framemark.int.vam.ac.uk/demo/constable/2010EH2617/full/full/0/default.jpg" alt=""><img src="http://framemark.int.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg" alt="">
 -->
 
 <script type="text/javascript">
@@ -53,7 +53,7 @@
         imgAdd = document.getElementById('cs-img-add');
     compariscope.imgs = [];
     compariscope.css = css;
-    compariscope.style.width = '100%'; compariscope.style.height = (900/16)+'%'; 
+    compariscope.style.width = '60%'; compariscope.style.height = '60%'; 
 
     compariscope.reCentre = function(){
         var el, i,
@@ -104,7 +104,7 @@
             }else{
                 this.style.width = '100%'; this.style.height = 'auto';
             }
-            setTimeout(function(){dragZoom.init(img, {'zoom':1})}, 0);
+            setTimeout(function(){ dragZoom.init(img, {'zoom':1}) }, 0);
             fader.value = '1';
             compariscope.fade(1);
         }
