@@ -9,16 +9,16 @@
     <style type="text/css">
         html, body { height:100%; margin:0; }
         body { background:#333; color:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
-        #compariscope { background:#f54007 url(img/compariscope/cross-hairs.png) 50% 50% no-repeat; display:block; height:300px; width:300px; margin:20px auto; overflow:hidden; position:relative; resize:both; }
+        #compariscope { background:#f54007 url(img/compariscope/cross-hairs.png) 50% 50% no-repeat; display:block; height:400px; width:400px; margin:20px auto; overflow:hidden; position:relative; resize:both; }
         #compariscope::after { content:"❖"; cursor:pointer; font-size:20px; background:#f54007; line-height:16px; height:16px; width:16px; position:absolute; bottom:0; right:0; }
         #compariscope img { cursor:pointer; position:absolute; left:0; top:0; user-select:none; }
         .cs-ctrl { width:400px; margin:0 auto 20px; }
-        #cs-iiif-src { box-sizing:border-box; display:inline-block; padding:4px; height:24px; width:calc(100% - 40px); }
-        #cs-img-add { background:#f54007; border-radius:50%; cursor:pointer; display:inline-block; font-size:20px; font-weight:600; height:24px; line-height:24px; margin-left:10px; text-align:center; width:24px; vertical-align:middle; }
-        #cs-img-add:active { position:relative; left:1px; top:1px; }
-        #cs-fader, #cs-scale { width:100%; }
-        #cs-scale { background:#fff; }
-        #cs-scale div { border-right:1px solid #fff; box-sizing:border-box; color:#f54007; float:left; font-weight:600; padding-right:4px; text-align:right; }
+        .cs-btn { background:#f54007; border-radius:50%; cursor:pointer; display:inline-block; font-size:20px; font-weight:600; height:24px; line-height:24px; margin-left:10px; text-align:center; width:24px; vertical-align:middle; }
+        .cs-btn:active { position:relative; left:1px; top:1px; }
+        #cs-iiif-src { box-sizing:border-box; display:inline-block; padding:4px; height:24px; width:calc(100% - 80px); text-align:right; }
+        #cs-fader, #cs-range { width:100%; }
+        #cs-range { background:#fff; }
+        #cs-range div { border-right:1px solid #fff; box-sizing:border-box; color:#f54007; float:left; font-weight:600; padding-right:4px; text-align:right; }
     </style>	
 </head>
 
@@ -26,12 +26,13 @@
 <div id="compariscope"></div>
 <style id="cs-css"></style>
 <div class="cs-ctrl">
-    <div id="cs-scale"></div>
+    <div id="cs-range"></div>
     <input type="range" id="cs-fader" value="1" max="1" step=".01">
 </div>
 <div class="cs-ctrl">
     <input id="cs-iiif-src">
-    <a id="cs-img-add">+</a>
+    <a class="cs-btn" id="cs-img-add">+</a>
+    <a class="cs-btn" id="cs-img-remove">-</a>
 </div>
 <!--
 http://framemark.int.vam.ac.uk/demo/raphael/RC912749/full/full/!0/default.jpg
@@ -55,9 +56,10 @@ http://framemark.int.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg
     var compariscope = document.getElementById('compariscope'),
         css = document.getElementById('cs-css'),
         fader = document.getElementById('cs-fader'),
-        scale = document.getElementById('cs-scale'),
+        range = document.getElementById('cs-range'),
         imgSrc = document.getElementById('cs-iiif-src'),
-        imgAdd = document.getElementById('cs-img-add');
+        imgAdd = document.getElementById('cs-img-add'),
+        imgRemove = document.getElementById('cs-img-remove');
     compariscope.imgs = [];
     compariscope.css = css;
     compariscope.style.width = '60%'; compariscope.style.height = '60%'; 
@@ -73,7 +75,7 @@ http://framemark.int.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg
             el.whP0 = el.whP;
         }
     }
-    
+
     compariscope.fade = function(x){
         var arcs = this.imgs.length,
             vis = Math.ceil(x*arcs),
@@ -85,6 +87,15 @@ http://framemark.int.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg
             #'+this.id+' :nth-child('+vis+'){ opacity:'+opacity+' } \
             ';
         if(vis>0) imgSrc.value = this.imgs[vis-1].src;
+    }
+
+    compariscope.range = function(){
+        var arcs = this.imgs.length,
+            rangeHTML = '';
+        for( i=1; i<=arcs; ++i ){
+            rangeHTML += '<div style="width:'+(100/arcs)+'%">'+i+'</div>';
+        }
+        range.innerHTML = rangeHTML;
     }
 
     compariscope.onmousemove = function(e){ 
@@ -100,9 +111,7 @@ http://framemark.int.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg
     };
 
     imgAdd.onclick = function(e){ 
-        var img = document.createElement('img'),
-            scaleHTML = '',
-            arcs;
+        var img = document.createElement('img');
         img.src = imgSrc.value;
         compariscope.appendChild(img);
         img.onload = function() {
@@ -116,11 +125,17 @@ http://framemark.int.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg
             compariscope.fade(1);
         }
         compariscope.imgs.push(img);
-        arcs = compariscope.imgs.length;
-        for( i=1; i<=arcs; ++i ){
-            scaleHTML += '<div style="width:'+(100/arcs)+'%">'+i+'</div>';
-        }
-        scale.innerHTML = scaleHTML;
+        compariscope.range();
+    };
+
+    imgRemove.onclick = function(e){
+        var vis = Math.ceil(fader.value*compariscope.imgs.length),
+            img = compariscope.querySelector(':nth-child('+vis+')');
+        compariscope.removeChild(img);
+        fader.value = '1';
+        compariscope.fade(1);
+        compariscope.imgs.splice(compariscope.imgs.indexOf(img), 1);
+        compariscope.range();
     };
 
     window.onload = function(e){ imgSrc.focus(); }
