@@ -7,32 +7,47 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <title>IIIF Compariscope</title>
     <style type="text/css">
-        html, body { height:100%; margin:0; }
-        body { background:#333; color:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
-        #compariscope { background:#f54007 url(img/compariscope/cross-hairs.png) 50% 50% no-repeat; display:block; height:400px; width:400px; margin:20px auto; overflow:hidden; position:relative; resize:both; }
-        #compariscope::after { content:"❖"; cursor:pointer; font-size:20px; background:#f54007; line-height:16px; height:16px; width:16px; position:absolute; bottom:0; right:0; }
-        #compariscope img { cursor:pointer; position:absolute; left:0; top:0; user-select:none; }
-        .cs-ctrl { width:400px; margin:0 auto 20px; }
-        .cs-btn { background:#f54007; border-radius:50%; cursor:pointer; display:inline-block; font-size:20px; font-weight:600; height:24px; line-height:24px; margin-left:10px; text-align:center; width:24px; vertical-align:middle; }
+        html, body, #cs-wrapper { height:100%; margin:0; }
+        body { background:#333; color:#000; font:10px/1 courier,monospace; }
+        .compariscope { margin:20px auto; overflow:hidden; position:relative; }
+        .compariscope img { position:absolute; left:0; top:0; user-select:none; }
+        #cs-editor { background:#f54007 url(img/compariscope/cross-hairs.png) 50% 50% no-repeat; height:400px; width:400px; resize:both; }
+        #cs-editor::after { content:"❖"; cursor:pointer; font-size:20px; background:#f54007; line-height:16px; height:16px; width:16px; position:absolute; bottom:0; right:0; }
+        #cs-editor img { cursor:pointer; }
+        #cs-viewer, 
+        .cs-preview #cs-editor { display:none; }
+        .cs-preview #cs-viewer { display:block; }
+        .cs-ctrl { width:600px; max-width:90%; margin:0 auto 20px; text-align:center; }
+        .cs-btn { background:#f54007; border-radius:10px; box-shadow:inset 0 0 2px #000; cursor:pointer; display:inline-block; font-size:20px; font-weight:600; height:24px; line-height:24px; margin-left:10px; text-align:center; width:24px; vertical-align:middle; }
         .cs-btn:active { position:relative; left:1px; top:1px; }
+        .cs-preview #cs-img-add, .cs-preview #cs-img-remove { visibility:hidden; }
         #cs-iiif-src { box-sizing:border-box; display:inline-block; padding:4px; height:24px; width:calc(100% - 80px); text-align:right; }
         #cs-fader, #cs-range { width:100%; }
         #cs-range { background:#fff; }
         #cs-range div { border-right:1px solid #fff; box-sizing:border-box; color:#f54007; float:left; font-weight:600; padding-right:4px; text-align:right; }
+        #cs-mode { padding:0 10px; width:auto; }
+        #cs-mode::after { content:'Preview'; }
+        .cs-preview #cs-mode::after { content:'Edit'; }
     </style>	
 </head>
 
 <body>
-<div id="compariscope"></div>
-<style id="cs-css"></style>
-<div class="cs-ctrl">
-    <div id="cs-range"></div>
-    <input type="range" id="cs-fader" value="1" max="1" step=".01">
-</div>
-<div class="cs-ctrl">
-    <input id="cs-iiif-src">
-    <a class="cs-btn" id="cs-img-add">+</a>
-    <a class="cs-btn" id="cs-img-remove">-</a>
+<div id="cs-wrapper">
+    <style id="cs-css"></style>
+    <div class="compariscope" id="cs-editor"></div>
+    <div class="compariscope" id="cs-viewer"></div>
+    <div class="cs-ctrl">
+        <div id="cs-range"></div>
+        <input type="range" id="cs-fader" value="1" max="1" step=".01">
+    </div>
+    <div class="cs-ctrl">
+        <input id="cs-iiif-src">
+        <a class="cs-btn" id="cs-img-add">+</a>
+        <a class="cs-btn" id="cs-img-remove">-</a>
+    </div>
+    <div class="cs-ctrl">
+        <a class="cs-btn" id="cs-mode"></a>
+    </div>
 </div>
 <!--
 http://framemark.int.vam.ac.uk/demo/raphael/RC912749/full/full/!0/default.jpg
@@ -53,13 +68,16 @@ http://framemark.int.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg
     function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
     function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 
-    var compariscope = document.getElementById('compariscope'),
+    var compariscope = document.getElementById('cs-editor'),
+        viewer = document.getElementById('cs-viewer'),
+        wrapper = document.getElementById('cs-wrapper'),
         css = document.getElementById('cs-css'),
         fader = document.getElementById('cs-fader'),
         range = document.getElementById('cs-range'),
         imgSrc = document.getElementById('cs-iiif-src'),
         imgAdd = document.getElementById('cs-img-add'),
-        imgRemove = document.getElementById('cs-img-remove');
+        imgRemove = document.getElementById('cs-img-remove'),
+        mode = document.getElementById('cs-mode');
     compariscope.imgs = [];
     compariscope.css = css;
     compariscope.style.width = '60%'; compariscope.style.height = '60%'; 
@@ -82,9 +100,9 @@ http://framemark.int.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg
             opacity = (x%(1/arcs))*arcs;
         if( (opacity===0 && x>0) || (x===1 && opacity!==1) ) opacity = 1;
         this.css.innerHTML = ' \
-            #'+this.id+' :nth-child(-n+'+vis+'){ opacity:1 } \
-            #'+this.id+' :nth-child(n+'+(vis+1)+'){ opacity:0; z-index:-999 } \
-            #'+this.id+' :nth-child('+vis+'){ opacity:'+opacity+' } \
+            .compariscope :nth-child(-n+'+vis+'){ opacity:1 } \
+            .compariscope :nth-child(n+'+(vis+1)+'){ opacity:0; z-index:-999 } \
+            .compariscope :nth-child('+vis+'){ opacity:'+opacity+' } \
             ';
         if(vis>0) imgSrc.value = this.imgs[vis-1].src;
     }
@@ -138,15 +156,27 @@ http://framemark.int.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg
         compariscope.range();
     };
 
-    window.onload = function(e){ imgSrc.focus(); }
-
     fader.oninput = function(e){ 
         window.requestAnimationFrame(function(){
             compariscope.fade(e.target.value);
         });
-
     };
 
+    mode.onclick = function(e){
+        var iiifSrc = '',
+            html = '',
+            i;
+        viewer.style.width = compariscope.style.width;
+        viewer.style.height = compariscope.style.height;
+        wrapper.classList.toggle('cs-preview');
+        for( i=0; i<compariscope.imgs.length; ++i ){
+            iiifSrc = compariscope.imgs[i].src;
+            html += '<img src="'+iiifSrc+'">';
+        }
+        viewer.innerHTML = html;
+    };
+
+    window.onload = function(e){ imgSrc.focus(); }
 
     var dragZoom = {
         el:null, xy0:null, v0:null, xyT:null, xyE:null, d0:null, 
