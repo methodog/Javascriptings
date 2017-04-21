@@ -14,6 +14,7 @@
         #cs-editor { background:#f54007 url(img/compariscope/cross-hairs.png) 50% 50% no-repeat; height:400px; width:400px; resize:both; }
         #cs-editor::after { content:"❖"; cursor:pointer; font-size:20px; background:#f54007; line-height:16px; height:16px; width:16px; position:absolute; bottom:0; right:0; }
         #cs-editor img { cursor:pointer; }
+        #cs-viewer img { height:auto; width:100%; }
         #cs-viewer, 
         .cs-preview #cs-editor { display:none; }
         .cs-preview #cs-viewer { display:block; }
@@ -80,7 +81,8 @@ http://framemark.int.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg
         mode = document.getElementById('cs-mode');
     compariscope.imgs = [];
     compariscope.css = css;
-    compariscope.style.width = '60%'; compariscope.style.height = '60%'; 
+    compariscope.style.height = '60%'; 
+    compariscope.style.width = getComputed(compariscope,'height')+'px';  
 
     compariscope.reCentre = function(){
         var el, i,
@@ -163,15 +165,18 @@ http://framemark.int.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg
     };
 
     mode.onclick = function(e){
-        var iiifSrc = '',
+        var img,
+            iiifSrc = '',
             html = '',
             i;
         viewer.style.width = compariscope.style.width;
         viewer.style.height = compariscope.style.height;
         wrapper.classList.toggle('cs-preview');
         for( i=0; i<compariscope.imgs.length; ++i ){
-            iiifSrc = compariscope.imgs[i].src;
-            html += '<img src="'+iiifSrc+'">';
+            img = compariscope.imgs[i];
+            ifSrc = img.src.replace('/full/full/', '/pct:'+(-100*img.xy[0]/img.wh[0])+','+(-100*img.xy[1]/img.wh[1])+','+(100*img.whP[0]/img.wh[0])+','+(100*img.whP[1]/img.wh[1])+'/full/');
+            html += '<img src="'+ifSrc+'">';
+            if( i===compariscope.imgs.length-1 ) html = '<img src="'+ifSrc+'">' + html;
         }
         viewer.innerHTML = html;
     };
