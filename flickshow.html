@@ -57,12 +57,20 @@
             l = f.ims.length;
             for( j = l; j<l+chunk; ++j ){
                 if( !set[j] ) return;
+                if( !!document.getElementById(set[j]) ) continue;
                 img = document.createElement('img');
                 img.src = dir +'/'+ set[j];
-                img.onload = function(){ 
-                    if( this.parentNode.ims.push(this) === l+chunk ) f.loader();
+                img.id = set[j];
+                img.onload = function(){
+                    if( f.ims.push(this) === l+chunk ) f.loader();
                 };
                 f.appendChild(img);
+                img.onerror = function(){
+                    console.log('MISSING IMAGE:', img.src);
+                    set.splice(set.indexOf(img.id), 1);
+                    f.loader();
+                    this.remove();
+                };
             }
         };f.loader();
     }
