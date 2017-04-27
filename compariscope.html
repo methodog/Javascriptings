@@ -181,7 +181,6 @@ http://framemark.int.vam.ac.uk/demo/muybridge/2008BV6117/full/full/0/default.jpg
             img = compariscope.imgs[i];
             ifSrc = img.src.replace('/full/full/', '/pct:'+(-100*img.xy[0]/img.wh[0])+','+(-100*img.xy[1]/img.wh[1])+','+(100*img.whP[0]/img.wh[0])+','+(100*img.whP[1]/img.wh[1])+'/full/');
             html += '<img src="'+ifSrc+'">';
-            if( i===compariscope.imgs.length-1 ) html = '<img src="'+ifSrc+'">' + html;
         }
         viewer.innerHTML = html;
     };
