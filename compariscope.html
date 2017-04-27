@@ -123,15 +123,17 @@ http://framemark.int.vam.ac.uk/demo/muybridge/2008BV6117/full/full/0/default.jpg
         range.innerHTML = rangeHTML;
     }
 
-    compariscope.onmousemove = function(e){ 
-        if(e.target === this){
-            window.requestAnimationFrame(function(){ compariscope.reCentre() });
-        }
+    compariscope.onmousedown = function(e){ 
+        if( e.target === this ) this.rsReset = 1;
     };
 
-    compariscope.onmousedown = function(e){ 
-        if(e.target === this){
-            setTimeout(function(){ compariscope.style.width = '300px'; compariscope.style.height = '300px'; }, 0);
+    compariscope.onmousemove = function(e){ 
+        if( e.target === this ){
+            if( this.rsReset ){
+                this.rsReset = 0;
+                setTimeout(function(){ compariscope.style.width = '300px'; compariscope.style.height = '300px'; }, 0);
+            }
+            window.requestAnimationFrame(function(){ compariscope.reCentre() });
         }
     };
 
