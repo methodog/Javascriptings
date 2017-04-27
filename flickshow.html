@@ -25,7 +25,8 @@
     function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ if( style=='width' ){ y=el.getBoundingClientRect().right-el.getBoundingClientRect().left }else if( style=='height' ){ y=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else{ var y=el.currentStyle[style] } } return parseFloat(y); }
     var els = document.querySelectorAll('.flickshow'), f, 
         i, j, k, l, img, chunk = 3,
-        imgs, set, src;
+        imgs, set, src,
+        reImgSrc = new RegExp('/th-[^_]+_');
     for( i=0; i<els.length; ++i ){
         f = els[i];
         set = [];
@@ -40,7 +41,7 @@
         imgs = imgs.querySelectorAll('img');
         for( j=0; j<imgs.length; ++j ){
             src = imgs[j].src;
-            set.push(src.replace(/\/th-[^_]+_/, '/'));
+            set.push(src.replace(reImgSrc, '/'));
         }
             
         f.flick = function(){
