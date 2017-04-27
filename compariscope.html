@@ -170,12 +170,10 @@ http://framemark.int.vam.ac.uk/demo/muybridge/2008BV6117/full/full/0/default.jpg
     };
 
     mode.onclick = function(e){
-        var img,
-            iiifSrc = '',
-            html = '',
-            i;
-        viewer.style.width = compariscope.style.width;
-        viewer.style.height = compariscope.style.height;
+        var img, i,
+            iiifSrc = html = '';
+        viewer.style.width = (80*parseInt(compariscope.style.width)/parseInt(compariscope.style.height))+'vh';
+        viewer.style.height = '80vh';
         wrapper.classList.toggle('cs-preview');
         for( i=0; i<compariscope.imgs.length; ++i ){
             img = compariscope.imgs[i];
