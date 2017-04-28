@@ -19,7 +19,7 @@
         .cs-preview #cs-editor { display:none; }
         .cs-preview #cs-viewer { display:block; }
         .cs-ctrl { width:600px; max-width:90%; margin:0 auto 20px; text-align:center; }
-        .cs-btn { background:#f54007; border-radius:10px; box-shadow:inset 0 0 2px #000; cursor:pointer; display:inline-block; font-size:20px; font-weight:600; height:24px; line-height:24px; margin-left:10px; text-align:center; width:24px; vertical-align:middle; }
+        .cs-btn { background:#f54007; border-radius:10px; box-shadow:inset 0 0 2px #000; cursor:pointer; display:inline-block; font-size:20px; font-weight:600; height:24px; line-height:24px; text-align:center; width:24px; vertical-align:middle; }
         .cs-btn:active { position:relative; left:1px; top:1px; }
         .cs-preview #cs-img-add, .cs-preview #cs-img-remove { visibility:hidden; }
         #cs-iiif-src { box-sizing:border-box; display:inline-block; padding:4px; height:24px; width:calc(100% - 80px); text-align:right; }
@@ -64,6 +64,9 @@ http://framemark.int.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg
 
 http://framemark.int.vam.ac.uk/demo/muybridge/2006BC5159/full/full/0/default.jpg
 http://framemark.int.vam.ac.uk/demo/muybridge/2008BV6117/full/full/0/default.jpg
+
+http://framemark.int.vam.ac.uk/collections/2013GC0441/full/full/0/default.jpg
+https://images.britishart.yale.edu/iiif/745550dc-83ed-4a23-8dab-fde3532741f9/full/full/0/native.jpg
 -->
 
 <script type="text/javascript">
@@ -89,12 +92,20 @@ http://framemark.int.vam.ac.uk/demo/muybridge/2008BV6117/full/full/0/default.jpg
 
     compariscope.reCentre = function(){
         var el, i,
-            xyP = getPgOffset(this);
+            xyP = getPgOffset(this),
+            shiftImgs = 1;
+        for( i=0; i<this.imgs.length; ++i ){
+            el = this.imgs[i];
+            if( el.wh[0]<el.whP[0] && el.wh[1]<el.whP[1] ){
+                shiftImgs = 0;
+                break;
+            }
+        }
         for( i=0; i<this.imgs.length; ++i ){
             el = this.imgs[i];
             dragZoom.size(el);
             el.xyP = xyP;
-            if( el.wh[0]>=el.whP[0] && el.wh[1]>=el.whP[1] ){
+            if( shiftImgs ){
                 el.move([el.xy[0]+((el.whP[0]-el.whP0[0])/2), el.xy[1]+((el.whP[1]-el.whP0[1])/2)]);
             }
             el.whP0 = el.whP;
@@ -131,7 +142,7 @@ http://framemark.int.vam.ac.uk/demo/muybridge/2008BV6117/full/full/0/default.jpg
         if( e.target === this ){
             if( this.rsReset ){
                 this.rsReset = 0;
-                setTimeout(function(){ compariscope.style.width = '300px'; compariscope.style.height = '300px'; }, 0);
+                setTimeout(function(){ compariscope.style.width = '10px'; compariscope.style.height = '10px'; }, 0);
             }
             window.requestAnimationFrame(function(){ compariscope.reCentre() });
         }
@@ -173,16 +184,20 @@ http://framemark.int.vam.ac.uk/demo/muybridge/2008BV6117/full/full/0/default.jpg
 
     mode.onclick = function(e){
         var img, i,
-            iiifSrc = html = '';
-        viewer.style.width = (80*parseInt(compariscope.style.width)/parseInt(compariscope.style.height))+'vh';
-        viewer.style.height = '80vh';
-        wrapper.classList.toggle('cs-preview');
+            iSrc = html = '';
         for( i=0; i<compariscope.imgs.length; ++i ){
             img = compariscope.imgs[i];
-            ifSrc = img.src.replace('/full/full/', '/pct:'+(-100*img.xy[0]/img.wh[0])+','+(-100*img.xy[1]/img.wh[1])+','+(100*img.whP[0]/img.wh[0])+','+(100*img.whP[1]/img.wh[1])+'/full/');
-            html += '<img src="'+ifSrc+'">';
+            if( img.wh[0]<img.whP[0] || img.wh[1]<img.whP[1] ) {
+                alert('Each image must be larger or equal to the crop frame');
+                return;
+            }
+            iSrc = img.src.replace('/full/full/', '/pct:'+(-100*img.xy[0]/img.wh[0])+','+(-100*img.xy[1]/img.wh[1])+','+(100*img.whP[0]/img.wh[0])+','+(100*img.whP[1]/img.wh[1])+'/full/');
+            html += '<img src="'+iSrc+'">';
         }
+        viewer.style.width = (80*parseInt(compariscope.style.width)/parseInt(compariscope.style.height))+'vh';
+        viewer.style.height = '80vh';
         viewer.innerHTML = html;
+        wrapper.classList.toggle('cs-preview');
     };
 
     window.onload = function(e){ imgSrc.focus(); }
@@ -224,14 +239,12 @@ http://framemark.int.vam.ac.uk/demo/muybridge/2008BV6117/full/full/0/default.jpg
                 };
                 if( el.zoomer ){
                     el.zoom = function(z){
-                        var xy0 = [this.whP[0]/2, this.whP[1]/2];
-                        if( z>1 || (this.wh[0]*z>this.whP[0] && this.wh[1]*z>this.whP[1]) ){
-                            this.wh = [this.wh[0]*z,this.wh[1]*z];
-                            this.style.width = this.wh[0]+'px';
-                            this.style.height = this.wh[1]+'px';
-                            if( this.wh[0]>=this.whP[0] && this.wh[1]>=this.whP[1] ){
-                                this.move([(xy0[0]-((xy0[0]-this.xy[0])*z)),(xy0[1]-((xy0[1]-this.xy[1])*z))]);
-                            }
+                        var xy0 = [dragZoom.xyT[0]-dragZoom.el.xyP[0],dragZoom.xyT[1]-dragZoom.el.xyP[1]];
+                        this.wh = [this.wh[0]*z,this.wh[1]*z];
+                        this.style.width = this.wh[0]+'px';
+                        this.style.height = this.wh[1]+'px';
+                        if( this.wh[0]>=this.whP[0] && this.wh[1]>=this.whP[1] ){
+                            this.move([(xy0[0]-((xy0[0]-this.xy[0])*z)),(xy0[1]-((xy0[1]-this.xy[1])*z))]);
                         }
                     };
                 }
