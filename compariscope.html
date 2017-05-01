@@ -96,7 +96,7 @@ https://images.britishart.yale.edu/iiif/745550dc-83ed-4a23-8dab-fde3532741f9/ful
             shiftImgs = 1;
         for( i=0; i<this.imgs.length; ++i ){
             el = this.imgs[i];
-            if( el.wh[0]<el.whP[0] && el.wh[1]<el.whP[1] ){
+            if( el.wh[0]<el.whP[0] || el.wh[1]<el.whP[1] ){
                 shiftImgs = 0;
                 break;
             }
