@@ -22,7 +22,7 @@
         .cs-btn { background:#f54007; border-radius:10px; box-shadow:inset 0 0 2px #000; cursor:pointer; display:inline-block; font-size:20px; font-weight:600; height:24px; line-height:24px; text-align:center; width:24px; vertical-align:middle; }
         .cs-btn:active { position:relative; left:1px; top:1px; }
         .cs-preview #cs-img-add, .cs-preview #cs-img-remove { visibility:hidden; }
-        #cs-iiif-src { box-sizing:border-box; display:inline-block; padding:4px; height:24px; width:calc(100% - 80px); text-align:right; }
+        #cs-iiif-src { box-sizing:border-box; display:inline-block; padding:4px; height:24px; width:calc(100% - 100px); text-align:right; }
         #cs-fader, #cs-range { width:100%; }
         #cs-range { background:#fff; }
         #cs-range div { border-right:1px solid #fff; box-sizing:border-box; color:#f54007; float:left; font-weight:600; padding-right:4px; text-align:right; }
@@ -45,6 +45,7 @@
         <input id="cs-iiif-src">
         <a class="cs-btn" id="cs-img-add">+</a>
         <a class="cs-btn" id="cs-img-remove">-</a>
+        <a class="cs-btn" id="cs-img-shift">></a>
     </div>
     <div class="cs-ctrl">
         <a class="cs-btn" id="cs-mode"></a>
@@ -67,6 +68,9 @@ http://framemark.int.vam.ac.uk/demo/muybridge/2008BV6117/full/full/0/default.jpg
 
 http://framemark.int.vam.ac.uk/collections/2013GC0441/full/full/0/default.jpg
 https://images.britishart.yale.edu/iiif/745550dc-83ed-4a23-8dab-fde3532741f9/full/full/0/native.jpg
+
+http://framemark.int.vam.ac.uk/demo/balenciaga/2017JW7425/full/full/0/default.jpg
+http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jpg
 -->
 
 <script type="text/javascript">
@@ -84,6 +88,7 @@ https://images.britishart.yale.edu/iiif/745550dc-83ed-4a23-8dab-fde3532741f9/ful
         imgSrc = document.getElementById('cs-iiif-src'),
         imgAdd = document.getElementById('cs-img-add'),
         imgRemove = document.getElementById('cs-img-remove'),
+        imgShift = document.getElementById('cs-img-shift'),
         mode = document.getElementById('cs-mode');
     compariscope.imgs = [];
     compariscope.css = css;
@@ -166,13 +171,20 @@ https://images.britishart.yale.edu/iiif/745550dc-83ed-4a23-8dab-fde3532741f9/ful
         compariscope.range();
     };
 
+    imgShift.onclick = function(e){
+        var i = Math.round(fader.value*compariscope.imgs.length - 1),
+            img = compariscope.imgs[i];
+        compariscope.imgs[i] = img.nextSibling;
+        compariscope.imgs[i+1] = img;
+        compariscope.insertBefore(img.nextSibling, img);
+    };
+
     imgRemove.onclick = function(e){
-        var vis = Math.ceil(fader.value*compariscope.imgs.length),
-            img = compariscope.querySelector(':nth-child('+vis+')');
-        compariscope.removeChild(img);
+        var i = Math.round(fader.value*compariscope.imgs.length - 1);
+        compariscope.removeChild(compariscope.imgs[i]);
         fader.value = '1';
         compariscope.fade(1);
-        compariscope.imgs.splice(compariscope.imgs.indexOf(img), 1);
+        compariscope.imgs.splice(i, 1);
         compariscope.range();
     };
 
