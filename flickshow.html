@@ -25,18 +25,14 @@
     function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ if( style=='width' ){ y=el.getBoundingClientRect().right-el.getBoundingClientRect().left }else if( style=='height' ){ y=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else{ var y=el.currentStyle[style] } } return parseFloat(y); }
     var els = document.querySelectorAll('.flickshow'), f, 
         i, j, k, l, img, chunk = 3,
-        imgs, set, src,
+        imgs = document.getElementById('img-container'), set, src,
         reImgSrc = new RegExp('/th-[^_]+_');
     for( i=0; i<els.length; ++i ){
         f = els[i];
         set = [];
-        imgs = f;
         f.id = f.id || f.className+i;
         f.ims = [];
         f.i = 0;
-        while( imgs && imgs.id !== 'img-container' ){ 
-            imgs = imgs.nextSibling;
-        }
         imgs.style.display = 'none';
         imgs = imgs.querySelectorAll('img');
         for( j=0; j<imgs.length; ++j ){
