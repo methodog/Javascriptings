@@ -101,7 +101,7 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
             shiftImgs = 1;
         for( i=0; i<this.imgs.length; ++i ){
             el = this.imgs[i];
-            if( el.wh[0]<el.whP[0] || el.wh[1]<el.whP[1] ){
+            if( el.wh[0]<el.whP[0] || el.wh[1]<el.whP[1] || el.edged ){
                 shiftImgs = 0;
                 break;
             }
@@ -241,10 +241,11 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
                 }
                 el.move = function(xy){
                     var x=xy[0], y=xy[1];
-                    if( x>=0 ){ x=0; }
-                    else if( x<this.whP[0]-this.wh[0] ){ x=this.whP[0]-this.wh[0]; }
-                    if( y>=0 ){ y=0; }
-                    else if( y<this.whP[1]-this.wh[1] ){ y=this.whP[1]-this.wh[1]; }
+                    el.edged=0;
+                    if( x>=0 ){ x=0; el.edged=1; }
+                    else if( x<this.whP[0]-this.wh[0] ){ x=this.whP[0]-this.wh[0]; el.edged=1; }
+                    if( y>=0 ){ y=0; el.edged=1; }
+                    else if( y<this.whP[1]-this.wh[1] ){ y=this.whP[1]-this.wh[1]; el.edged=1; }
                     this.style.left = x+'px';
                     this.style.top = y+'px';
                     this.xy = [x,y];
