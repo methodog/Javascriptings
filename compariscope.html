@@ -12,7 +12,7 @@
         .compariscope { margin:20px auto; overflow:hidden; position:relative; }
         .compariscope img { position:absolute; left:0; top:0; user-select:none; }
         #cs-editor { background:#f54007 url(img/compariscope/cross-hairs.png) 50% 50% no-repeat; height:400px; width:400px; resize:both; }
-        #cs-editor::after { content:"❖"; cursor:pointer; font-size:20px; background:#f54007; line-height:16px; height:16px; width:16px; position:absolute; bottom:0; right:0; }
+        #cs-editor::after { content:"❖"; cursor:pointer; font-size:20px; background:#f54007; line-height:16px; height:16px; width:16px; text-align:center; position:absolute; bottom:0; right:0; }
         #cs-editor img { cursor:pointer; }
         #cs-viewer img { height:auto; width:100%; }
         #cs-viewer, 
@@ -21,8 +21,9 @@
         .cs-ctrl { width:600px; max-width:90%; margin:0 auto 20px; text-align:center; }
         .cs-btn { background:#f54007; border-radius:10px; box-shadow:inset 0 0 2px #000; cursor:pointer; display:inline-block; font-size:20px; font-weight:600; height:24px; line-height:24px; text-align:center; width:24px; vertical-align:middle; }
         .cs-btn:active { position:relative; left:1px; top:1px; }
+        .cs-btn.active { background:#000; color:#f54007; }
         .cs-preview #cs-img-add, .cs-preview #cs-img-remove { visibility:hidden; }
-        #cs-iiif-src { box-sizing:border-box; display:inline-block; padding:4px; height:24px; width:calc(100% - 100px); text-align:right; }
+        #cs-iiif-src { border:0; box-sizing:border-box; display:inline-block; padding:4px; height:24px; width:calc(100% - 130px); text-align:right; }
         #cs-fader, #cs-range { width:100%; }
         #cs-range { background:#fff; }
         #cs-range div { border-right:1px solid #fff; box-sizing:border-box; color:#f54007; float:left; font-weight:600; padding-right:4px; text-align:right; }
@@ -46,6 +47,7 @@
         <a class="cs-btn" id="cs-img-add">+</a>
         <a class="cs-btn" id="cs-img-remove">-</a>
         <a class="cs-btn" id="cs-img-shift">></a>
+        <a class="cs-btn" id="cs-img-lock">Z</a>
     </div>
     <div class="cs-ctrl">
         <a class="cs-btn" id="cs-mode"></a>
@@ -89,6 +91,7 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
         imgAdd = document.getElementById('cs-img-add'),
         imgRemove = document.getElementById('cs-img-remove'),
         imgShift = document.getElementById('cs-img-shift'),
+        imgLock = document.getElementById('cs-img-lock'),
         mode = document.getElementById('cs-mode');
     compariscope.imgs = [];
     compariscope.css = css;
@@ -166,7 +169,7 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
             }else{
                 this.style.width = '100%'; this.style.height = 'auto';
             }
-            setTimeout(function(){ dragZoom.init(img, {'zoom':1}) }, 0);
+            setTimeout(function(){ dragZoom.init(img, {'zoom':1, 'siblings':compariscope.imgs}) }, 0);
             fader.value = '1';
             compariscope.fade(1);
         }
@@ -189,6 +192,13 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
         compariscope.fade(1);
         compariscope.imgs.splice(i, 1);
         compariscope.range();
+    };
+
+    imgLock.onclick = function(e){
+        this.classList.toggle('active');
+        for( i=0; i<compariscope.imgs.length; ++i ){
+            compariscope.imgs[i].lock = this.classList.contains('active') ? true : false;
+        }
     };
 
     fader.oninput = function(e){ 
@@ -228,7 +238,8 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
         init: function(el, opt){
             if( typeof el==='string' ){ el = document.querySelector(el); } if( !el ){ return; }
             if( !opt ) var opt = {};
-            el.zoomer = !!opt.zoom? opt.zoom : 0;
+            el.zoomer = opt.zoom || 0;
+            el.siblings = opt.siblings || el.parentNode.getElementsByTagName(el.tagName);
             el.P = el.parentNode;
             dragZoom.size(el);
             el.xy = [getComputed(el,'left'), getComputed(el,'top')];
@@ -321,7 +332,13 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
                 z = (e.detail? e.detail*-1 : e.wheelDelta/40);
                 z = 1+((z>0?1:-1)*0.05);
             }
-            dragZoom.el.zoom(z);
+            if( dragZoom.el.lock ){
+                for( i=0; i<dragZoom.el.siblings.length; ++i ){
+                    dragZoom.el.siblings[i].zoom(z);
+                }
+            }else{
+                dragZoom.el.zoom(z);
+            }
             return false;
         }
     };
