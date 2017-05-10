@@ -47,7 +47,7 @@
         <a class="cs-btn" id="cs-img-add">+</a>
         <a class="cs-btn" id="cs-img-remove">-</a>
         <a class="cs-btn" id="cs-img-shift">></a>
-        <a class="cs-btn" id="cs-img-lock">Z</a>
+        <a class="cs-btn" id="cs-img-lock">∑</a>
     </div>
     <div class="cs-ctrl">
         <a class="cs-btn" id="cs-mode"></a>
@@ -314,7 +314,13 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
             e = e || window.event;
             dragZoom.xyE = getXY(e);
             var xy = [dragZoom.xy0[0]+dragZoom.xyE[0]-dragZoom.xyT[0], dragZoom.xy0[1]+dragZoom.xyE[1]-dragZoom.xyT[1]];
-            dragZoom.el.move(xy);
+            if( dragZoom.el.lock ){
+                for( i=0; i<dragZoom.el.siblings.length; ++i ){
+                    dragZoom.el.siblings[i].move(xy);
+                }
+            }else{
+                dragZoom.el.move(xy);
+            }
             return false;
         },
         release: function(){
