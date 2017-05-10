@@ -131,6 +131,7 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
             .compariscope :nth-child('+vis+'){ opacity:'+opacity+' } \
             ';
         if(vis>0) imgSrc.value = this.imgs[vis-1].src;
+        fader.value = x;
     }
 
     compariscope.range = function(){
@@ -170,7 +171,6 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
                 this.style.width = '100%'; this.style.height = 'auto';
             }
             setTimeout(function(){ dragZoom.init(img, {'zoom':1, 'siblings':compariscope.imgs}) }, 0);
-            fader.value = '1';
             compariscope.fade(1);
         }
         compariscope.imgs.push(img);
@@ -183,12 +183,12 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
         compariscope.imgs[i] = img.nextSibling;
         compariscope.imgs[i+1] = img;
         compariscope.insertBefore(img.nextSibling, img);
+        compariscope.fade(parseFloat(fader.value) + (1/compariscope.imgs.length));
     };
 
     imgRemove.onclick = function(e){
         var i = Math.round(fader.value*compariscope.imgs.length - 1);
         compariscope.removeChild(compariscope.imgs[i]);
-        fader.value = '1';
         compariscope.fade(1);
         compariscope.imgs.splice(i, 1);
         compariscope.range();
