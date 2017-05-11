@@ -23,7 +23,7 @@
         .cs-btn:active { position:relative; left:1px; top:1px; }
         .cs-btn.active { background:#000; color:#f54007; }
         .cs-preview #cs-img-add, .cs-preview #cs-img-remove { visibility:hidden; }
-        #cs-iiif-src { border:0; box-sizing:border-box; display:inline-block; padding:4px; height:24px; width:calc(100% - 130px); text-align:right; }
+        #cs-iiif-src { border:0; box-sizing:border-box; display:inline-block; padding:4px; height:24px; width:calc(100% - 160px); text-align:right; }
         #cs-fader, #cs-range { width:100%; }
         #cs-range { background:#fff; }
         #cs-range div { border-right:1px solid #fff; box-sizing:border-box; color:#f54007; float:left; font-weight:600; padding-right:4px; text-align:right; }
@@ -47,7 +47,8 @@
         <a class="cs-btn" id="cs-img-add">+</a>
         <a class="cs-btn" id="cs-img-remove">-</a>
         <a class="cs-btn" id="cs-img-shift">></a>
-        <a class="cs-btn" id="cs-img-lock">∑</a>
+        <a class="cs-btn" id="cs-img-lock">₪</a>
+        <a class="cs-btn" id="cs-img-snap">☐</a>
     </div>
     <div class="cs-ctrl">
         <a class="cs-btn" id="cs-mode"></a>
@@ -92,6 +93,7 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
         imgRemove = document.getElementById('cs-img-remove'),
         imgShift = document.getElementById('cs-img-shift'),
         imgLock = document.getElementById('cs-img-lock'),
+        imgSnap = document.getElementById('cs-img-snap'),
         mode = document.getElementById('cs-mode');
     compariscope.imgs = [];
     compariscope.css = css;
@@ -100,22 +102,22 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
 
     compariscope.reCentre = function(){
         var el, i,
-            xyP = getPgOffset(this),
-            shiftImgs = 1;
-        for( i=0; i<this.imgs.length; ++i ){
-            el = this.imgs[i];
-            if( el.wh[0]<el.whP[0] || el.wh[1]<el.whP[1] || el.edged ){
-                shiftImgs = 0;
-                break;
-            }
-        }
+            xyP = getPgOffset(this);
+            //~ shiftImgs = 1;
+        //~ for( i=0; i<this.imgs.length; ++i ){
+            //~ el = this.imgs[i];
+            //~ if( el.wh[0]<el.whP[0] || el.wh[1]<el.whP[1] || el.edged ){
+                //~ shiftImgs = 0;
+                //~ break;
+            //~ }
+        //~ }
         for( i=0; i<this.imgs.length; ++i ){
             el = this.imgs[i];
             dragZoom.size(el);
             el.xyP = xyP;
-            if( shiftImgs ){
+            //~ if( shiftImgs ){
                 el.move([el.xy[0]+((el.whP[0]-el.whP0[0])/2), el.xy[1]+((el.whP[1]-el.whP0[1])/2)]);
-            }
+            //~ }
             el.whP0 = el.whP;
         }
     }
@@ -201,6 +203,18 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
         }
     };
 
+    imgSnap.onclick = function(e){
+        var i = Math.round(fader.value*compariscope.imgs.length - 1),
+            img = compariscope.imgs[i];
+        compariscope.style.width = img.wh[0]+'px'; compariscope.style.height = img.wh[1]+'px';
+        for( i=0; i<compariscope.imgs.length; ++i ){
+            dragZoom.size(compariscope.imgs[i]);
+        }
+        img.lock = 1;
+        img.move([0,0]);
+        img.lock = 0;
+    };
+
     fader.oninput = function(e){ 
         window.requestAnimationFrame(function(){
             compariscope.fade(e.target.value);
@@ -255,11 +269,11 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
                 }
                 el.move = function(xy){
                     var x=xy[0], y=xy[1];
-                    el.edged=0;
-                    if( x>=0 ){ x=0; el.edged=1; }
-                    else if( x<this.whP[0]-this.wh[0] ){ x=this.whP[0]-this.wh[0]; el.edged=1; }
-                    if( y>=0 ){ y=0; el.edged=1; }
-                    else if( y<this.whP[1]-this.wh[1] ){ y=this.whP[1]-this.wh[1]; el.edged=1; }
+                    //~ el.edged=0;
+                    //~ if( x>=0 ){ x=0; el.edged=1; }
+                    //~ else if( x<this.whP[0]-this.wh[0] ){ x=this.whP[0]-this.wh[0]; el.edged=1; }
+                    //~ if( y>=0 ){ y=0; el.edged=1; }
+                    //~ else if( y<this.whP[1]-this.wh[1] ){ y=this.whP[1]-this.wh[1]; el.edged=1; }
                     this.style.left = x+'px';
                     this.style.top = y+'px';
                     this.xy = [x,y];
