@@ -100,19 +100,13 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
     compariscope.style.height = '60%'; 
     compariscope.style.width = getComputed(compariscope,'height')+'px';  
 
-    compariscope.reCentre = function(){
+    compariscope.reSize = function(){
         var sib, i,
-            xyP = getPgOffset(this),
-            lock0;
+            xyP = getPgOffset(this);
         for( i=0; i<this.imgs.length; ++i ){
             sib = this.imgs[i];
             dragZoom.size(sib);
             sib.xyP = xyP;
-            lock0 = sib.lock;
-            sib.lock = 0;
-            sib.move([sib.xy[0]+((sib.whP[0]-sib.whP0[0])/2), sib.xy[1]+((sib.whP[1]-sib.whP0[1])/2)]);
-            if( lock0 ) sib.lock = 1;
-            sib.whP0 = sib.whP;
         }
     }
 
@@ -150,7 +144,7 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
                 this.rsReset = 0;
                 setTimeout(function(){ compariscope.style.width = '10px'; compariscope.style.height = '10px'; }, 0);
             }
-            window.requestAnimationFrame(function(){ compariscope.reCentre() });
+            window.requestAnimationFrame(function(){ compariscope.reSize() });
         }
     };
 
