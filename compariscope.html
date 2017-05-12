@@ -177,6 +177,7 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
     imgShift.onclick = function(e){
         var i = compariscope.index,
             img = compariscope.imgs[i];
+        if( i===compariscope.imgs.length-1 ) return;
         compariscope.imgs[i] = img.nextSibling;
         compariscope.imgs[i+1] = img;
         compariscope.insertBefore(img.nextSibling, img);
