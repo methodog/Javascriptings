@@ -47,8 +47,8 @@
         <a class="cs-btn" id="cs-img-add" title="Add layer">+</a>
         <a class="cs-btn" id="cs-img-remove" title="Remove current layer">-</a>
         <a class="cs-btn" id="cs-img-shift" title="Raise current layer">></a>
-        <a class="cs-btn" id="cs-img-lock" title="Lock all layers">₪</a>
         <a class="cs-btn" id="cs-img-snap" title="Crop to current layer">☐</a>
+        <a class="cs-btn" id="cs-img-lock" title="Lock all layers">₪</a>
     </div>
     <div class="cs-ctrl">
         <a class="cs-btn" id="cs-mode"></a>
@@ -101,12 +101,12 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
     compariscope.style.width = getComputed(compariscope,'height')+'px';  
 
     compariscope.reSize = function(){
-        var sib, i,
+        var img, i,
             xyP = getPgOffset(this);
         for( i=0; i<this.imgs.length; ++i ){
-            sib = this.imgs[i];
-            dragZoom.size(sib);
-            sib.xyP = xyP;
+            img = this.imgs[i];
+            dragZoom.size(img);
+            img.xyP = xyP;
         }
     }
 
@@ -217,8 +217,8 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
             iSrc = html = '';
         for( i=0; i<compariscope.imgs.length; ++i ){
             img = compariscope.imgs[i];
-            if( img.wh[0]<img.whP[0] || img.wh[1]<img.whP[1] ) {
-                alert('Each image must be larger or equal to the crop frame');
+            if( img.xy[0]>0 || img.xy[1]>0 || img.xy[0]+img.wh[0]<img.whP[0] || img.xy[1]+img.wh[1]<img.whP[1] ) {
+                alert('Image layer '+ (i+1) +' is outside the crop region');
                 return;
             }
             iSrc = img.src.replace('/full/full/', '/pct:'+(-100*img.xy[0]/img.wh[0])+','+(-100*img.xy[1]/img.wh[1])+','+(100*img.whP[0]/img.wh[0])+','+(100*img.whP[1]/img.wh[1])+'/full/');
