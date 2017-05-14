@@ -214,15 +214,21 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
 
     mode.onclick = function(e){
         var img, i,
-            iSrc = html = '';
+            src = srcset = html = '',
+            sizes = [320, 640, 960, 1280, 1920, 2560], s;
         for( i=0; i<compariscope.imgs.length; ++i ){
             img = compariscope.imgs[i];
             if( img.xy[0]>0 || img.xy[1]>0 || img.xy[0]+img.wh[0]<img.whP[0] || img.xy[1]+img.wh[1]<img.whP[1] ) {
                 alert('Image layer '+ (i+1) +' is outside the crop region');
                 return;
             }
-            iSrc = img.src.replace('/full/full/', '/pct:'+(-100*img.xy[0]/img.wh[0])+','+(-100*img.xy[1]/img.wh[1])+','+(100*img.whP[0]/img.wh[0])+','+(100*img.whP[1]/img.wh[1])+'/full/');
-            html += '<img src="'+iSrc+'">';
+            src = img.src.replace('/full/full/', '/pct:'+(-100*img.xy[0]/img.wh[0])+','+(-100*img.xy[1]/img.wh[1])+','+(100*img.whP[0]/img.wh[0])+','+(100*img.whP[1]/img.wh[1])+'/full/');
+            for( s=0; s<sizes.length; ++s ){
+                if( s>0 ) srcset += ', ';
+                srcset += (src.replace('full', sizes[s]+',') + ' '+sizes[s]+'w');
+            }
+            src = src.replace('full', '960,');
+            html += '<img src="'+src+'" srcset="'+srcset+'">';
         }
         viewer.style.width = (80*parseInt(compariscope.style.width)/parseInt(compariscope.style.height))+'vh';
         viewer.style.height = '80vh';
