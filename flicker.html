@@ -45,13 +45,13 @@ var flicker = {
     init: function(el, opt){
         if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
         if( !opt ) var opt = {};
-        el.val = !!opt.val? opt.val : 0; 
-        el.min = !!opt.min? opt.min : 0; 
-        el.max = !!opt.max? opt.max : 1;
+        el.val = opt.val || 0; 
+        el.min = opt.min || 0; 
+        el.max = opt.max || 1;
         el.rng = el.max-el.min;
         el.v = [0,0];
-        el.loop = !!opt.loop? opt.loop : 0;
-        el.fade = !!opt.fade? opt.fade : 0;
+        el.loop = opt.loop || 0;
+        el.fade = opt.fade || 0;
         if( !el.cloned && el.loop ){ el.appendChild(el.childNodes[0].cloneNode(true)); el.cloned=1; }
         if( !el.styled ){ el.appendChild(document.createElement('style')); el.styled=1; }
         if( !el.id ){ el.id = el.className+(++flicker.id); }
@@ -93,8 +93,6 @@ var flicker = {
         flicker.el.v = [0,0];
         flicker.xy0 = flicker.el.xy;
         flicker.xyT = getXY(e);
-        //~ flicker.el.min = flicker.el.val-(flicker.xyT[0]/flicker.el.wh[0]*(flicker.el.max-flicker.el.min));
-        //~ flicker.el.max = flicker.el.min+flicker.el.rng;
         if( e.type==='touchstart' ){
             this.ontouchmove = flicker.drag;
             this.onmousedown = null;
@@ -126,7 +124,7 @@ var flicker = {
     release: function(){
         flicker.el.className = flicker.el.className.replace(/ dragged/,'');
         if( !!flicker.el.stop ){ flicker.el.stop.call(this); }
-        flicker.el.drop();
+        if( flicker.el.loop ){ flicker.el.drop(); }
         flicker.el = null;
     }
 };
