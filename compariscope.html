@@ -14,7 +14,7 @@
         #cs-editor { background:#fff url(img/compariscope/cross-hairs.png) 50% 50% no-repeat; outline:2px dashed #f54007; height:400px; width:400px; resize:both; }
         #cs-editor::after { content:"❖"; cursor:pointer; font-size:20px; background:#f54007; line-height:16px; height:16px; width:16px; text-align:center; position:absolute; bottom:0; right:0; }
         #cs-viewer { max-width:100%; }
-        #cs-editor img { cursor:pointer; outline:2px solid #f54007; }
+        #cs-editor img { cursor:pointer; outline:4px dashed #000; }
         #cs-viewer img { height:auto; width:100%; }
         #cs-viewer, 
         .cs-preview #cs-editor { display:none; }
@@ -98,7 +98,7 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
         mode = document.getElementById('cs-mode');
     compariscope.imgs = [];
     compariscope.css = css;
-    compariscope.style.height = '60%'; 
+    compariscope.style.height = '80%'; 
     compariscope.style.width = getComputed(compariscope,'height')+'px';  
 
     compariscope.reSize = function(){
@@ -220,7 +220,7 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
         for( i=0; i<compariscope.imgs.length; ++i ){
             img = compariscope.imgs[i];
             if( img.xy[0]>0 || img.xy[1]>0 || img.xy[0]+img.wh[0]<img.whP[0] || img.xy[1]+img.wh[1]<img.whP[1] ) {
-                alert('Image layer '+ (i+1) +' is outside the crop region');
+                alert('Layer '+ (i+1) +' is over-cropped!');
                 return;
             }
             src = img.src.replace('/full/full/', '/pct:'+(-100*img.xy[0]/img.wh[0])+','+(-100*img.xy[1]/img.wh[1])+','+(100*img.whP[0]/img.wh[0])+','+(100*img.whP[1]/img.wh[1])+'/full/');
