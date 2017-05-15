@@ -7,29 +7,29 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <title>IIIF Compariscope</title>
     <style type="text/css">
-        html, body, #cs-wrapper { height:100%; margin:0; }
+        html, body, #cs-wrapper { height:100%; margin:0; text-align:center; }
         body { background:#333; color:#000; font:10px/1 courier,monospace; }
         .compariscope { margin:20px auto; overflow:hidden; position:relative; }
         .compariscope img { position:absolute; left:0; top:0; user-select:none; }
         #cs-editor { background:#fff url(img/compariscope/cross-hairs.png) 50% 50% no-repeat; outline:2px dashed #f54007; height:400px; width:400px; resize:both; }
         #cs-editor::after { content:"❖"; cursor:pointer; font-size:20px; background:#f54007; line-height:16px; height:16px; width:16px; text-align:center; position:absolute; bottom:0; right:0; }
-        #cs-viewer { max-width:100%; }
-        #cs-editor img { cursor:pointer; outline:4px dashed #000; }
-        #cs-viewer img { height:auto; width:100%; }
+        #cs-viewer { height:100%; position:relative; width:100%; }
+        #cs-editor img { cursor:pointer; outline:4px dashed #f54007; }
+        #cs-viewer img { margin:auto; max-height:100%; max-width:100%; position:absolute; top:0; bottom:0; left:0; right:0; }
         #cs-viewer, 
-        .cs-preview #cs-editor { display:none; }
+        .cs-preview #cs-editor, .cs-preview .cs-ctrl { display:none; }
         .cs-preview #cs-viewer { display:block; }
         .cs-ctrl { width:600px; max-width:90%; margin:0 auto 20px; text-align:center; }
         .cs-btn { background:#f54007; border-radius:10px; box-shadow:inset 0 0 2px #000; cursor:pointer; display:inline-block; font-size:20px; font-weight:600; height:24px; line-height:24px; text-align:center; width:24px; vertical-align:middle; }
         .cs-btn:active { position:relative; left:1px; top:1px; }
         .cs-btn.active { background:#000; color:#f54007; }
-        .cs-preview #cs-img-add, .cs-preview #cs-img-remove, .cs-preview #cs-img-shift, .cs-preview #cs-img-lock, .cs-preview #cs-img-snap { visibility:hidden; }
         #cs-iiif-src { border:0; box-sizing:border-box; display:inline-block; padding:4px; height:24px; width:calc(100% - 160px); text-align:right; }
         #cs-fader, #cs-range { width:100%; }
         #cs-range { background:#fff; }
         #cs-range div { border-right:1px solid #fff; box-sizing:border-box; color:#f54007; float:left; font-weight:600; padding-right:4px; text-align:right; }
         #cs-mode { padding:0 10px; width:auto; }
         #cs-mode::after { content:'Preview'; }
+        .cs-preview #cs-mode { position:fixed; top:5%; right:25%; }
         .cs-preview #cs-mode::after { content:'Edit'; }
     </style>	
 </head>
@@ -38,7 +38,7 @@
 <div id="cs-wrapper">
     <style id="cs-css"></style>
     <div class="compariscope" id="cs-editor"></div>
-    <div class="compariscope" id="cs-viewer"></div>
+    <div id="cs-viewer"></div>
     <div class="cs-ctrl">
         <div id="cs-range"></div>
         <input type="range" id="cs-fader" value="1" max="1" step=".01">
@@ -51,9 +51,7 @@
         <a class="cs-btn" id="cs-img-snap" title="Crop to current layer">☐</a>
         <a class="cs-btn" id="cs-img-lock" title="Lock all layers">₪</a>
     </div>
-    <div class="cs-ctrl">
-        <a class="cs-btn" id="cs-mode"></a>
-    </div>
+    <a class="cs-btn" id="cs-mode"></a>
 </div>
 <!--
 http://framemark.int.vam.ac.uk/demo/raphael/RC912749/full/full/!0/default.jpg
@@ -61,16 +59,18 @@ http://framemark.int.vam.ac.uk/demo/raphael/2006AN5938/full/full/!0/default.jpg
 http://framemark.int.vam.ac.uk/demo/raphael/INV43867/full/full/0/default.jpg
 http://framemark.int.vam.ac.uk/demo/raphael/2010EJ0404/full/full/0/default.jpg
 
-http://framemark.int.vam.ac.uk/demo/constable/2010EF0301/full/full/0/default.jpg
-http://framemark.int.vam.ac.uk/demo/constable/2010EG9859/full/full/0/default.jpg
 http://framemark.int.vam.ac.uk/demo/constable/2010EH2616/full/full/0/default.jpg
 http://framemark.int.vam.ac.uk/demo/constable/2010EH2617/full/full/0/default.jpg
-http://framemark.int.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg
+http://framemark.int.vam.ac.uk/demo/constable/2010EG9859/full/full/0/default.jpg
+https://images.britishart.yale.edu/iiif/af14b715-885c-4925-95e9-d69dcb936bed/full/full/0/native.jpg
+    http://framemark.int.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg
+    http://framemark.int.vam.ac.uk/demo/constable/2010EF0301/full/full/0/default.jpg
 
 http://framemark.int.vam.ac.uk/demo/muybridge/2006BC5159/full/full/0/default.jpg
 http://framemark.int.vam.ac.uk/demo/muybridge/2008BV6117/full/full/0/default.jpg
 
 http://framemark.int.vam.ac.uk/collections/2013GC0441/full/full/0/default.jpg
+https://images.britishart.yale.edu/iiif/a866e10e-5a6f-4b87-b4ec-6f0488940796/full/full/0/native.jpg
 https://images.britishart.yale.edu/iiif/745550dc-83ed-4a23-8dab-fde3532741f9/full/full/0/native.jpg
 
 http://framemark.int.vam.ac.uk/demo/balenciaga/2017JW7425/full/full/0/default.jpg
@@ -155,7 +155,7 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
         compariscope.appendChild(img);
         img.onload = function() {
             if( compariscope.imgs.length===1 ){ 
-                compariscope.style.width = getComputed(compariscope,'height') * this.naturalWidth/this.naturalHeight+'px';  
+                compariscope.style.width = Math.ceil(getComputed(compariscope,'height') * this.naturalWidth/this.naturalHeight)+'px';  
             }
             if( this.naturalWidth > this.naturalHeight ){
                 this.style.width = 'auto'; this.style.height = '100%';
@@ -231,8 +231,6 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
             src = src.replace('full', '960,');
             html += '<img src="'+src+'" srcset="'+srcset+'">';
         }
-        viewer.style.width = (80*parseInt(compariscope.style.width)/parseInt(compariscope.style.height))+'vh';
-        viewer.style.height = '80vh';
         viewer.innerHTML = html;
         wrapper.classList.toggle('cs-preview');
     };
