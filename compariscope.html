@@ -253,7 +253,7 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
                 el.fade = function(x){
                     var vis = Math.ceil(x*this.arcs)+1,
                         opacity = (x%(1/this.arcs))*this.arcs;
-                    if( (opacity===0 && x>0) || (x===1 && opacity!==1) ) opacity = 1;
+                    if( x===0 || (opacity===0 && x>0) || (x===1 && opacity!==1) ) opacity = 1;
                     this.css.innerHTML = ' \
                         #'+el.id+' :nth-child(-n+'+vis+'){ opacity:1 } \
                         #'+el.id+' :nth-child(n+'+(vis+1)+'){ opacity:0; z-index:-999 } \
