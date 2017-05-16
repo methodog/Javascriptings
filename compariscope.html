@@ -21,15 +21,15 @@
         .cs-preview #cs-viewer { display:block; }
         .cs-ctrl { width:600px; max-width:90%; margin:0 auto 20px; text-align:center; }
         .cs-btn { background:#f54007; border-radius:10px; box-shadow:inset 0 0 2px #000; cursor:pointer; display:inline-block; font-size:20px; font-weight:600; height:24px; line-height:24px; text-align:center; width:24px; vertical-align:middle; }
-        .cs-btn:active { position:relative; left:1px; top:1px; }
+        .cs-btn:active { margin:1px 0 0 1px; }
         .cs-btn.active { background:#000; color:#f54007; }
         #cs-iiif-src { border:0; box-sizing:border-box; display:inline-block; padding:4px; height:24px; width:calc(100% - 160px); text-align:right; }
         #cs-fader, #cs-range { width:100%; }
         #cs-range { background:#fff; }
         #cs-range div { border-right:1px solid #fff; box-sizing:border-box; color:#f54007; float:left; font-weight:600; padding-right:4px; text-align:right; }
-        #cs-mode { padding:0 10px; width:auto; }
+        #cs-mode { padding:0 10px; width:6em; }
         #cs-mode::after { content:'Preview'; }
-        .cs-preview #cs-mode { position:fixed; top:5%; right:25%; }
+        .cs-preview #cs-mode { position:fixed; right:5%; top:5%; }
         .cs-preview #cs-mode::after { content:'Edit'; }
     </style>	
 </head>
@@ -215,12 +215,12 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
 
     mode.onclick = function(e){
         var img, i,
-            src = srcset = html = '',
+            src = html = '', srcset,
             sizes = [320, 640, 960, 1280, 1920, 2560], s;
         for( i=0; i<compariscope.imgs.length; ++i ){
+            srcset = '';
             img = compariscope.imgs[i];
             if( img.xy[0]>0 || img.xy[1]>0 || img.xy[0]+img.wh[0]<img.whP[0] || img.xy[1]+img.wh[1]<img.whP[1] ) {
-                console.log(img.wh,img.whP);
                 alert('Layer '+ (i+1) +' is over-cropped!');
                 return;
             }
@@ -360,6 +360,98 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
             }
             dragZoom.el.zoom(z);
             return false;
+        }
+    };
+
+    var flicker = {
+        el:null, xy0:null, v0:null, xyT:null, id:0, 
+        size: function(el){
+            el.wh = [getComputed(el,'width'), getComputed(el,'height')];
+        },
+        init: function(el, opt){
+            if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
+            if( !opt ) var opt = {};
+            el.val = opt.val || 0; 
+            el.min = opt.min || 0; 
+            el.max = opt.max || 1;
+            el.rng = el.max-el.min;
+            el.v = [0,0];
+            el.loop = opt.loop || 0;
+            el.fade = opt.fade || 0;
+            if( !el.cloned && el.loop ){ el.appendChild(el.childNodes[0].cloneNode(true)); el.cloned=1; }
+            if( !el.styled ){ el.appendChild(document.createElement('style')); el.styled=1; }
+            if( !el.id ){ el.id = el.className+(++flicker.id); }
+            flicker.size(el);
+            el.arcs = el.childNodes.length-1;
+            el.xy = [getComputed(el,'left'), getComputed(el,'top')];
+            if( typeof(opt.slide)==='function' ){ el.slide = opt.slide; }
+            if( typeof(opt.stop)==='function' ){ el.stop = opt.stop; }
+            if( !el.move ){
+                el.onmousedown = flicker.touch;
+                el.ontouchstart = flicker.touch;
+                el.move = function(xy){
+                    var vis, e = 0, css;
+                    this.val = this.min+(xy[0]/this.wh[0]*(this.rng));
+                    if( this.loop ){ this.val = this.val.mod(this.rng); }
+                    else if( this.val<this.min ){ this.val = this.min; e = 1; }
+                    else if( this.val>this.max ){ this.val = this.max; e = 1; }
+                    vis = 1 + Math.ceil(this.val*this.arcs);
+                    css = '#'+el.id+' :nth-child('+(vis-1)+'){opacity:1}'; if( el.fade ){ css += '#'+el.id+' :nth-child('+vis+'){opacity:'+(this.val%(1/this.arcs))*this.arcs+'}' }
+                    this.querySelector('style').innerHTML = css;
+                    if( !e ){ this.xy = [xy[0],xy[1]]; }
+                };
+                el.drop = function(){
+                    var f = 0.98;
+                    this.v = [this.v[0]*f, this.v[1]*f];
+                    this.move([this.xy[0]-this.v[0], this.xy[1]-this.v[1]]);
+                    if( Math.abs(this.v[0])+Math.abs(this.v[1])<0.1 ){ flicker.v0 = this.v = [0,0]; window.clearTimeout(this.t); return; }
+                    this.t = window.setTimeout(function(){ el.drop(); }, 23);
+                };
+            }
+        },
+        touch: function(e){
+            e = e || window.event;
+            if( e.type==='touchstart' && e.touches && e.touches.length>2 ){ return; }
+            flicker.el = this;
+            window.clearTimeout(flicker.el.t);
+            this.className += ' dragged';
+            flicker.v0 = flicker.el.v;
+            flicker.el.v = [0,0];
+            flicker.xy0 = flicker.el.xy;
+            flicker.xyT = getXY(e);
+            if( e.type==='touchstart' ){
+                this.ontouchmove = flicker.drag;
+                this.onmousedown = null;
+                this.ontouchend = function(){
+                    this.ontouchmove = null;
+                    this.ontouchend = null;
+                    flicker.release();
+                };
+            }else{
+                document.onmousemove = flicker.drag;
+                document.onmouseup = function(){
+                    document.onmousemove = null;
+                    document.onmouseup = null;
+                    flicker.release();
+                };
+            }
+            return false;
+        },
+        drag: function(e){
+            e = e || window.event;
+            if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
+            var xyE = getXY(e),
+                xy = [flicker.xy0[0]+xyE[0]-flicker.xyT[0], flicker.xy0[1]+xyE[1]-flicker.xyT[1]];
+            flicker.el.v = [flicker.el.xy[0]-xy[0],flicker.el.xy[1]-xy[1]];
+            flicker.el.move(xy);
+            if( !!flicker.el.slide ){ flicker.el.slide.call(this); }
+            return false;
+        },
+        release: function(){
+            flicker.el.className = flicker.el.className.replace(/ dragged/,'');
+            if( !!flicker.el.stop ){ flicker.el.stop.call(this); }
+            if( flicker.el.loop ){ flicker.el.drop(); }
+            flicker.el = null;
         }
     };
 })();
