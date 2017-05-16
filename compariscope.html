@@ -155,7 +155,7 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
         compariscope.appendChild(img);
         img.onload = function() {
             if( compariscope.imgs.length===1 ){ 
-                compariscope.style.width = Math.ceil(getComputed(compariscope,'height') * this.naturalWidth/this.naturalHeight)+'px';  
+                compariscope.style.width = Math.round(getComputed(compariscope,'height') * this.naturalWidth/this.naturalHeight)+'px';  
             }
             if( this.naturalWidth > this.naturalHeight ){
                 this.style.width = 'auto'; this.style.height = '100%';
@@ -220,6 +220,7 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
         for( i=0; i<compariscope.imgs.length; ++i ){
             img = compariscope.imgs[i];
             if( img.xy[0]>0 || img.xy[1]>0 || img.xy[0]+img.wh[0]<img.whP[0] || img.xy[1]+img.wh[1]<img.whP[1] ) {
+                console.log(img.wh,img.whP);
                 alert('Layer '+ (i+1) +' is over-cropped!');
                 return;
             }
@@ -240,8 +241,8 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
     var dragZoom = {
         el:null, xy0:null, v0:null, xyT:null, xyE:null, d0:null, 
         size: function(el){
-            el.wh = [getComputed(el,'width'), getComputed(el,'height')];
-            el.whP = [getComputed(el.P,'width'), getComputed(el.P,'height')];
+            el.wh = [Math.ceil(getComputed(el,'width')), Math.ceil(getComputed(el,'height'))];
+            el.whP = [Math.round(getComputed(el.P,'width')), Math.round(getComputed(el.P,'height'))];
             el.xyP = getPgOffset(el.P);
             el.style.width = el.wh[0]+'px'; el.style.height = el.wh[1]+'px';
         },
