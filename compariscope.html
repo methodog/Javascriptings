@@ -9,6 +9,7 @@
     <style type="text/css">
         html, body, #cs-wrapper { height:100%; margin:0; text-align:center; }
         body { background:#333; color:#000; font:10px/1 courier,monospace; }
+        .display-none { display:none!important; }
         .compariscope { margin:20px auto; overflow:hidden; position:relative; }
         .compariscope img { cursor:pointer; position:absolute; left:0; top:0; user-select:none; }
         #cs-editor { background:#fff url(img/compariscope/cross-hairs.png) 50% 50% no-repeat; outline:2px dashed #f54007; height:400px; width:400px; resize:both; }
@@ -27,10 +28,18 @@
         #cs-fader, #cs-range { width:100%; }
         #cs-range { background:#fff; }
         #cs-range div { border-right:1px solid #fff; box-sizing:border-box; color:#f54007; float:left; font-weight:600; padding-right:4px; text-align:right; }
-        #cs-mode { padding:0 10px; width:6em; }
+        #cs-mode { width:6em; z-index:1; }
         #cs-mode::after { content:'Preview'; }
         .cs-preview #cs-mode { position:fixed; right:5%; top:5%; }
         .cs-preview #cs-mode::after { content:'Edit'; }
+        #cs-mixer { display:inline-block; position:fixed; left:5%; top:5%; width:6em; z-index:1; }
+        #cs-mixer::after { content:'Meld'; }
+        #cs-mixer.cs-splitter::after { content:'Split'; }
+        #cs-viewer.cs-split img { max-width:50%; right:50%; }
+        #cs-viewer.cs-split img:nth-child(2) { left:50%; right:0; }
+        #cs-viewer.cs-unsplit img { max-width:50%; }
+        #cs-viewer.cs-split img,
+        #cs-viewer.cs-unsplit img { transition:left 1s, right 1s; }
     </style>	
 </head>
 
@@ -38,7 +47,6 @@
 <div id="cs-wrapper">
     <style id="cs-css"></style>
     <div class="compariscope" id="cs-editor"></div>
-    <div class="compariscope" id="cs-viewer"></div>
     <div class="cs-ctrl">
         <div id="cs-range"></div>
         <input type="range" id="cs-fader" value="1" max="1" step=".01">
@@ -52,6 +60,8 @@
         <a class="cs-btn" id="cs-img-lock" title="Lock all layers">₪</a>
     </div>
     <a class="cs-btn" id="cs-mode"></a>
+    <a class="cs-btn display-none" id="cs-mixer"></a>
+    <div class="compariscope" id="cs-viewer"></div>
 </div>
 <!--
 http://framemark.int.vam.ac.uk/demo/raphael/RC912749/full/full/!0/default.jpg
@@ -95,7 +105,8 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
         imgShift = document.getElementById('cs-img-shift'),
         imgLock = document.getElementById('cs-img-lock'),
         imgSnap = document.getElementById('cs-img-snap'),
-        mode = document.getElementById('cs-mode');
+        mode = document.getElementById('cs-mode'),
+        mixer = document.getElementById('cs-mixer');
     compariscope.imgs = [];
     compariscope.css = css;
     compariscope.style.height = '80%'; 
@@ -235,12 +246,33 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
             html += '<img src="'+src+'" srcset="'+srcset+'">';
         }
         viewer.innerHTML = html;
+        viewer.classList.remove('cs-split');
+        mixer.classList.add('display-none');
+        mixer.classList.remove('cs-splitter');
         wrapper.classList.toggle('cs-preview');
-        iFader.init(viewer);
+        if( wrapper.classList.contains('cs-preview') ){
+            if( compariscope.imgs.length===2 ){
+                viewer.classList.add('cs-split');
+                mixer.classList.remove('display-none');
+            }else{
+                iFader.init(viewer);
+            }
+        }else{
+            iFader.uninit(viewer);
+        }
     };
 
-     var iFader = {
-        el:null, id:0,
+    mixer.onclick = function(e){
+        var splitting = viewer.classList.contains('cs-split')
+        this.classList.toggle('cs-splitter');
+        viewer.classList.toggle('cs-split');
+        viewer.classList.toggle('cs-unsplit');
+        if( splitting ){ setTimeout(iFader.init(viewer), 1500) }
+        else{ iFader.uninit(viewer) }
+    };
+
+    var iFader = {
+        id:0,
         init: function(el){
             el.w = Math.ceil(getComputed(el,'width'));
             el.x = getComputed(el,'left');
@@ -266,6 +298,12 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
             e = e || window.event;
             var xyE = getXY(e);
             this.fade((xyE[0]-this.x)/this.w);
+        },
+        uninit: function(el){
+            el.fade = null;
+            el.onmousemove = null;
+            el.ontouchmove = null;
+            el.css.remove();
         }
     }
 
