@@ -82,7 +82,7 @@ https://images.britishart.yale.edu/iiif/a866e10e-5a6f-4b87-b4ec-6f0488940796/ful
 https://images.britishart.yale.edu/iiif/745550dc-83ed-4a23-8dab-fde3532741f9/full/full/0/native.jpg
 
 http://framemark.int.vam.ac.uk/demo/balenciaga/2017JW7425/full/full/0/default.jpg
-http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jpg
+http://framemark.int.vam.ac.uk/demo/balenciaga/2011FA0188/full/full/0/default.jpg
 -->
 
 <script type="text/javascript">
@@ -226,8 +226,9 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
 
     mode.onclick = function(e){
         var img, i,
-            src = html = '', srcset,
-            sizes = [320, 640, 960, 1280, 1920, 2560], s;
+            html = sizes = '', srcset, src,
+            variants = [320, 640, 960, 1280, 1920, 2560], v;
+        if( compariscope.imgs.length===2 ) sizes = 'calc(50vw)';
         for( i=0; i<compariscope.imgs.length; ++i ){
             srcset = '';
             img = compariscope.imgs[i];
@@ -236,12 +237,12 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
                 return;
             }
             src = img.src.replace('/full/full/', '/pct:'+(-100*img.xy[0]/img.wh[0])+','+(-100*img.xy[1]/img.wh[1])+','+(100*img.whP[0]/img.wh[0])+','+(100*img.whP[1]/img.wh[1])+'/full/');
-            for( s=0; s<sizes.length; ++s ){
-                if( s>0 ) srcset += ', ';
-                srcset += (src.replace('full', sizes[s]+',') + ' '+sizes[s]+'w');
+            for( v=0; v<variants.length; ++v ){
+                if( v>0 ) srcset += ', ';
+                srcset += (src.replace('full', variants[v]+',') + ' '+variants[v]+'w');
             }
             src = src.replace('full', '960,');
-            html += '<img src="'+src+'" srcset="'+srcset+'">';
+            html += '<img src="'+src+'" srcset="'+srcset+'" sizes="'+sizes+'">';
         }
         viewer.innerHTML = html;
         viewer.classList.remove('cs-split');
@@ -262,21 +263,21 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
     };
 
     mixer.onclick = function(e){
-        var splitting = viewer.classList.contains('cs-split')
+        var mixing = viewer.classList.contains('cs-split')
         this.classList.toggle('cs-splitter');
         viewer.classList.toggle('cs-split');
         viewer.classList.toggle('cs-unsplit');
-        if( splitting ){ setTimeout(iFader.init(viewer), 1500) }
+        if( mixing ){ setTimeout(function(){ iFader.init(viewer) }, 1500) }
         else{ iFader.uninit(viewer) }
     };
 
     var iFader = {
         id:0,
+        size: function(el){
+            el.w = Math.ceil(el.childNodes[0].width);
+            el.x = Math.ceil((getComputed(el,'width')-el.w)/2);
+        },
         init: function(el){
-            el.childNodes[0].onload = function(){
-                this.parentNode.w = Math.ceil(this.width);
-                this.parentNode.x = Math.ceil(getComputed(this,'left'));
-            }
             el.arcs = el.childNodes.length-1;
             if( !el.fade ){
                 el.id = el.id || el.className+(++iFader.id);
@@ -287,7 +288,7 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
                     x = 1-x;
                     var vis = Math.ceil(x*this.arcs)+1,
                         opacity = (x%(1/this.arcs))*this.arcs;
-                    if( x===0 || (opacity===0 && x>0) || (x===1 && opacity!==1) ) opacity = 1;
+                    if( x===0 || (opacity===0 && x>0) || (x===1 && opacity!==1) ){ opacity = 1; }
                     this.css.innerHTML = ' \
                         #'+el.id+' :nth-child(-n+'+vis+'){ opacity:1 } \
                         #'+el.id+' :nth-child(n+'+(vis+1)+'){ opacity:0; z-index:-999 } \
@@ -298,6 +299,7 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2017JT3719/full/full/0/default.jp
         },
         touch: function(e){
             e = e || window.event;
+            if( !this.w ){ iFader.size(this); }
             var xyE = getXY(e);
             if( xyE[0]>this.x && xyE[0]<this.x+this.w){
                 this.fade((xyE[0]-this.x)/this.w);
