@@ -227,7 +227,9 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2011FA0188/full/full/0/default.jp
     mode.onclick = function(e){
         var img, i,
             html = sizes = '', srcset, src,
-            variants = [320, 640, 960, 1280, 1920, 2560], v;
+            duo = compariscope.imgs.length===2,
+            variants = [320, 640, 960, 1280, 1920], v,
+            variant1 = duo? '960' : '1920';
         if( compariscope.imgs.length===2 ) sizes = 'calc(50vw)';
         for( i=0; i<compariscope.imgs.length; ++i ){
             srcset = '';
@@ -241,7 +243,7 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2011FA0188/full/full/0/default.jp
                 if( v>0 ) srcset += ', ';
                 srcset += (src.replace('full', variants[v]+',') + ' '+variants[v]+'w');
             }
-            src = src.replace('full', '960,');
+            src = src.replace('full', variant1+',');
             html += '<img src="'+src+'" srcset="'+srcset+'" sizes="'+sizes+'">';
         }
         viewer.innerHTML = html;
@@ -251,7 +253,7 @@ http://framemark.int.vam.ac.uk/demo/balenciaga/2011FA0188/full/full/0/default.jp
         mixer.classList.remove('cs-splitter');
         wrapper.classList.toggle('cs-preview');
         if( wrapper.classList.contains('cs-preview') ){
-            if( compariscope.imgs.length===2 ){
+            if( duo ){
                 viewer.classList.add('cs-split');
                 mixer.classList.remove('display-none');
             }else{
