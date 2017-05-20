@@ -279,10 +279,10 @@ https://dlcs.io/iiif-img/wellcome/1/c4c91749-f4e3-46d7-acba-e882f02987ad/full/fu
         id:0,
         size: function(el){
             el.w = Math.ceil(el.childNodes[0].width);
-            el.x = Math.ceil((getComputed(el,'width')-el.w)/2);
+            el.x = Math.ceil((getComputed(document.body,'width')-el.w)/2);
         },
         init: function(el){
-            el.arcs = el.childNodes.length-1;
+            el.arcs = el.getElementsByTagName('img').length-1;
             if( !el.fade ){
                 el.id = el.id || el.className+(++iFader.id);
                 el.css = el.appendChild(document.createElement('style'));
