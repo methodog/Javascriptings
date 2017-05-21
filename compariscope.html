@@ -171,9 +171,9 @@ https://dlcs.io/iiif-img/wellcome/1/c4c91749-f4e3-46d7-acba-e882f02987ad/full/fu
                 compariscope.style.width = Math.round(getComputed(compariscope,'height') * this.naturalWidth/this.naturalHeight)+'px';  
             }
             if( this.naturalWidth > this.naturalHeight ){
-                this.style.width = 'auto'; this.style.height = '100%';
-            }else{
                 this.style.width = '100%'; this.style.height = 'auto';
+            }else{
+                this.style.width = 'auto'; this.style.height = '100%';
             }
             setTimeout(function(){ dragZoom.init(img, {'zoom':1, 'siblings':compariscope.imgs}) }, 0);
             compariscope.fade(1);
