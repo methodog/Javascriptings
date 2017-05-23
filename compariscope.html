@@ -81,8 +81,7 @@ http://framemark.int.vam.ac.uk/collections/2013GC0441/full/full/0/default.jpg
 https://images.britishart.yale.edu/iiif/a866e10e-5a6f-4b87-b4ec-6f0488940796/full/full/0/native.jpg
 https://images.britishart.yale.edu/iiif/745550dc-83ed-4a23-8dab-fde3532741f9/full/full/0/native.jpg
 
-http://framemark.int.vam.ac.uk/demo/balenciaga/2017JW7425/full/full/0/default.jpg
-http://framemark.int.vam.ac.uk/demo/balenciaga/2011FA0188/full/full/0/default.jpg
+http://framemark.vam.ac.uk/collections/2017JT2624/full/full/0/default.jpg
 
 https://dlcs.io/iiif-img/wellcome/1/c4c91749-f4e3-46d7-acba-e882f02987ad/full/full/0/default.jpg
 -->
@@ -240,7 +239,7 @@ https://dlcs.io/iiif-img/wellcome/1/c4c91749-f4e3-46d7-acba-e882f02987ad/full/fu
                 alert('Layer '+ (i+1) +' is over-cropped!');
                 return;
             }
-            src = img.src.replace('/full/full/', '/pct:'+(-100*img.xy[0]/img.wh[0])+','+(-100*img.xy[1]/img.wh[1])+','+(100*img.whP[0]/img.wh[0])+','+(100*img.whP[1]/img.wh[1])+'/full/');
+            src = img.src.replace('/full/full/', '/pct:'+Number(Math.round((-100*img.xy[0]/img.wh[0])+"e+3")+"e-3")+','+Number(Math.round((-100*img.xy[1]/img.wh[1])+"e+3")+"e-3")+','+Number(Math.round((100*img.whP[0]/img.wh[0])+"e+3")+"e-3")+','+Number(Math.round((100*img.whP[1]/img.wh[1])+"e+3")+"e-3")+'/full/');
             for( v=0; v<variants.length; ++v ){
                 if( v>0 ) srcset += ', ';
                 srcset += (src.replace('full', variants[v]+',') + ' '+variants[v]+'w');
@@ -435,7 +434,7 @@ https://dlcs.io/iiif-img/wellcome/1/c4c91749-f4e3-46d7-acba-e882f02987ad/full/fu
                 dragZoom.d0 = d1;
             }else{
                 z = (e.detail? e.detail*-1 : e.wheelDelta/40);
-                z = 1+((z>0?1:-1)*0.05);
+                z = 1+((z>0?1:-1)*0.015);
             }
             dragZoom.el.zoom(z);
             return false;
