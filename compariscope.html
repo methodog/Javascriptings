@@ -85,14 +85,11 @@ http://framemark.int.vam.ac.uk/demo/constable/2010EH2616/full/full/0/default.jpg
 http://framemark.int.vam.ac.uk/demo/constable/2010EH2617/full/full/0/default.jpg
 
 Balenciaga
-http://framemark.vam.ac.uk/collections/2017JW7425/full/full/0/default.jpg
-http://framemark.vam.ac.uk/collections/2017JX8311/full/full/0/default.jpg
+http://framemark.vam.ac.uk/collections/2017JW9015/full/full/0/default.jpg
+http://framemark.vam.ac.uk/collections/2017JT3716/full/full/0/default.jpg
 
 http://framemark.vam.ac.uk/collections/2017JW8353/full/full/0/default.jpg
 http://framemark.vam.ac.uk/collections/2017JT2624/full/full/0/default.jpg
-
-http://framemark.vam.ac.uk/collections/2017JW9015/full/full/0/default.jpg
-http://framemark.vam.ac.uk/collections/2017JT3716/full/full/0/default.jpg
 
 Raphael
 http://framemark.int.vam.ac.uk/demo/raphael/RC912749/full/full/!0/default.jpg
@@ -177,6 +174,19 @@ https://dlcs.io/iiif-img/wellcome/1/c4c91749-f4e3-46d7-acba-e882f02987ad/full/fu
             }
             window.requestAnimationFrame(function(){ compariscope.reSize() });
         }
+    };
+
+    /* utility for shrinking viewer to fixed size set by CSS, e.g. height: 60vw; */
+    viewer.size = function(){
+      const img = viewer.getElementsByTagName('img')[0];
+      if (img.naturalHeight) {
+        clearTimeout(img.timer);
+        viewer.style.height = '';
+        const cH = Math.ceil(img.naturalHeight * img.width / img.naturalWidth) + 'px';
+        viewer.style.height = cH;
+      } else {
+        img.timer = setTimeout(function(){ viewer.size(); }, 50);
+      }
     };
 
     window.onload = function(e){ imgSrc.focus(); }
