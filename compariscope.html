@@ -27,7 +27,7 @@
         #cs-fader, #cs-range { width:100%; }
         #cs-range { background:#fff; }
         #cs-range div { border-right:1px solid #fff; box-sizing:border-box; color:#f54007; float:left; font-weight:600; padding-right:4px; text-align:right; }
-        #cs-mode { float:rght; width:6em; z-index:1; }
+        #cs-mode { width:6em; z-index:1; }
         #cs-mode::after { content:'Preview'; }
         .cs-preview #cs-mode { position:fixed; right:5%; top:5%; }
         .cs-preview #cs-mode::after { content:'Edit'; }
@@ -39,6 +39,7 @@
         #cs-viewer.cs-unsplit img { max-width:50%; }
         #cs-viewer.cs-split img,
         #cs-viewer.cs-unsplit img { transition:left 1s, right 1s; }
+        #cs-op-url { background:#fff; font-size:18px; height:22px; line-height:22px;  }
     </style>	
 </head>
 
@@ -60,42 +61,44 @@
     </div>
     <a class="cs-btn" id="cs-mode"></a>
     <a class="cs-btn display-none" id="cs-mixer"></a>
+    <a id="cs-op-url"></a>
     <div id="cs-viewer"></div>
 </div>
 <!--
 Haywain Restoration
-http://framemark.int.vam.ac.uk/collections/2010EB9761/full/full/0/default.jpg
-http://framemark.int.vam.ac.uk/collections/2010EG9859/full/full/0/default.jpg
+https://framemark.int.vam.ac.uk/collections/2010EB9761/full/full/0/default.jpg
+https://framemark.int.vam.ac.uk/collections/2010EG9859/full/full/0/default.jpg
 
 Haywain
 https://images.britishart.yale.edu/iiif/af14b715-885c-4925-95e9-d69dcb936bed/full/full/0/native.jpg
-http://framemark.int.vam.ac.uk/demo/constable/2010EG9859/full/full/0/default.jpg
-    http://framemark.int.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg
+https://framemark.int.vam.ac.uk/demo/constable/2010EG9859/full/full/0/default.jpg
+    https://framemark.int.vam.ac.uk/demo/constable/N1207/full/full/0/default.jpg
 
 Hadleigh Castle
-http://framemark.int.vam.ac.uk/collections/2013GC0441/full/full/0/default.jpg
+https://framemark.int.vam.ac.uk/collections/2013GC0441/full/full/0/default.jpg
 https://images.britishart.yale.edu/iiif/a866e10e-5a6f-4b87-b4ec-6f0488940796/full/full/0/native.jpg
      John Constable, Sketch of Hadleigh Castle, 1828–29, oil on millboard, Yale Center for British Art, Paul Mellon Collection
 https://images.britishart.yale.edu/iiif/745550dc-83ed-4a23-8dab-fde3532741f9/full/full/0/native.jpg
      John Constable, Hadleigh Castle, The Mouth of the Thames--Morning after a Stormy Night, 1829, Oil on canvas, Yale Center for British Art, Paul Mellon Collection
 
 Willy Lott's Cottage
-http://framemark.int.vam.ac.uk/demo/constable/2010EF0301/full/full/0/default.jpg
-http://framemark.int.vam.ac.uk/demo/constable/2010EH2616/full/full/0/default.jpg
-http://framemark.int.vam.ac.uk/demo/constable/2010EH2617/full/full/0/default.jpg
+https://framemark.vam.ac.uk/collections/2010EF0301/full/full/0/default.jpg
+https://framemark.vam.ac.uk/collections/2010EH2616/full/full/0/default.jpg
+https://framemark.vam.ac.uk/collections/2010EH2617/full/full/0/default.jpg
 
 Balenciaga
-http://framemark.vam.ac.uk/collections/2017JW9015/full/full/0/default.jpg
-http://framemark.vam.ac.uk/collections/2017JT3716/full/full/0/default.jpg
+https://framemark.vam.ac.uk/collections/2017JW9015/full/full/0/default.jpg
+https://framemark.vam.ac.uk/collections/2017JT3716/full/full/0/default.jpg
 
-http://framemark.vam.ac.uk/collections/2017JW8353/full/full/0/default.jpg
-http://framemark.vam.ac.uk/collections/2017JT2624/full/full/0/default.jpg
+https://framemark.vam.ac.uk/collections/2017JW8353/full/full/0/default.jpg
+https://framemark.vam.ac.uk/collections/2017JT2624/full/full/0/default.jpg
 
 Raphael
-http://framemark.int.vam.ac.uk/demo/raphael/RC912749/full/full/!0/default.jpg
-http://framemark.int.vam.ac.uk/demo/raphael/2006AN5938/full/full/!0/default.jpg
-http://framemark.int.vam.ac.uk/demo/raphael/INV43867/full/full/0/default.jpg
-http://framemark.int.vam.ac.uk/demo/raphael/2010EJ0404/full/full/0/default.jpg
+https://framemark.vam.ac.uk/digital-loan/RC912749/full/full/!0/default.jpg
+https://framemark.vam.ac.uk/collections/2006AN5938/full/full/!0/default.jpg
+https://framemark.vam.ac.uk/digital-loan/INV43867/full/full/0/default.jpg
+https://framemark.vam.ac.uk/collections/2010EJ0404/full/full/0/default.jpg
+https://data.getty.edu/museum/api/iiif/288136/full/949,1024/0/default.jpg
 
 Muybridge
 http://framemark.int.vam.ac.uk/demo/muybridge/2006BC5159/full/full/0/default.jpg
@@ -122,7 +125,8 @@ https://dlcs.io/iiif-img/wellcome/1/c4c91749-f4e3-46d7-acba-e882f02987ad/full/fu
         imgLock = document.getElementById('cs-img-lock'),
         imgSnap = document.getElementById('cs-img-snap'),
         mode = document.getElementById('cs-mode'),
-        mixer = document.getElementById('cs-mixer');
+        mixer = document.getElementById('cs-mixer'),
+        opURL = document.getElementById('cs-op-url');
     compariscope.imgs = [];
     compariscope.css = css;
     compariscope.style.height = 'calc(100vh - 160px)'; 
@@ -261,6 +265,7 @@ https://dlcs.io/iiif-img/wellcome/1/c4c91749-f4e3-46d7-acba-e882f02987ad/full/fu
             duo = compariscope.imgs.length===2,
             variants = [320, 640, 960, 1280, 1920], v,
             variant1 = duo? '960' : '1920';
+        viewer.opURLs = [];
         if( compariscope.imgs.length===2 ) sizes = 'calc(50vw)';
         for( i=0; i<compariscope.imgs.length; ++i ){
             srcset = '';
@@ -274,6 +279,7 @@ https://dlcs.io/iiif-img/wellcome/1/c4c91749-f4e3-46d7-acba-e882f02987ad/full/fu
                 if( v>0 ) srcset += ', ';
                 srcset += (src.replace('full', variants[v]+',') + ' '+variants[v]+'w');
             }
+            viewer.opURLs.push(src);
             src = src.replace('full', variant1+',');
             html += '<img src="'+src+'" srcset="'+srcset+'" sizes="'+sizes+'">';
         }
@@ -327,6 +333,7 @@ https://dlcs.io/iiif-img/wellcome/1/c4c91749-f4e3-46d7-acba-e882f02987ad/full/fu
                         #'+el.id+' :nth-child(n+'+(vis+1)+'){ opacity:0; z-index:-999 } \
                         #'+el.id+' :nth-child('+vis+'){ opacity:'+opacity+' } \
                         ';
+                    opURL.innerHTML = viewer.opURLs[Math.round(x*this.arcs+1)-1];
                 }
             }
         },
