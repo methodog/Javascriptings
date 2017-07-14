@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>What's the Point?</title>
+    <style type="text/css">
+      html, body { height:100%; margin:0; }
+      body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
+      .flickshow { height:100%; width:100%; position:relative; }
+      .flickshow img { max-height:100%; max-width:100%; margin:auto; position:absolute; left:0; top:0; bottom:0; right:0; }
+      @keyframes shake {
+        0%, 100% { transform:translate3d(0, 0, 0); }
+        10%, 30%, 50%, 70%, 90% { transform:translate3d(-10px, 0, 0); }
+        20%, 40%, 60%, 80% { transform:translate3d(10px, 0, 0); }
+      }
+      .wipe--no { animation-duration:1s; animation-name:shake; }
+      .wipe--left { margin:0 0 0 -100%; transition:margin 1s; }
+      .wipe--right { margin:0 -100% 0 0; transition:margin 1s; }
+      .wipe--up { margin:-100% 0 0 0; transition:margin 1s; }
+      .wipe--down { margin:0 0 -100% 0; transition:margin 1s; }
+    </style>
+</head>
+
+<body>
+
+<div class="flickshow">
+  <img data-way="no" src="img/pointer/no/2014GY1389.jpg">
+  <img data-way="up" src="img/pointer/up/2007BP4022.jpg">
+  <img data-way="no" src="img/pointer/no/2006AM3262.jpg">
+  <img data-way="left" src="img/pointer/left/2014GW5263.jpg">
+  <img data-way="up" src="img/pointer/up/2017JY7670.jpg">
+  <img data-way="down" src="img/pointer/down/2007BP2220.jpg">
+  <img data-way="right" src="img/pointer/right/2013GN4204.jpg">
+  <img data-way="right" src="img/pointer/right/2006AC4723.jpg">
+  <img data-way="up" src="img/pointer/up/2016JE4681.jpg">
+  <img data-way="left" src="img/pointer/left/2014GX2957.jpg">
+  <img data-way="down" src="img/pointer/down/2006BB5397.jpg">
+  <img data-way="up" src="img/pointer/up/2007BP4022.jpg">
+</div>
+
+<script type="text/javascript">
+(function(){
+  function eXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
+
+  function swipeDir(e){
+    var winXY2 = -eXY(e),
+      d = winXY2>winXY? 1:-1;
+      winY = winY2;
+    return d;
+  }  
+
+  function wipe(el, dir) {
+    el.classList.remove('wipe--no');
+    el.classList.remove('wipe--left');
+    el.classList.remove('wipe--right');
+    el.classList.remove('wipe--up');
+    el.classList.remove('wipe--down');
+  }
+
+  document.ontouchstart = function(e){ e.preventDefault(); swipeDir(e); };
+  document.ontouchmove = function(e){ e.preventDefault(); wipe(e.target, swipeDir(e)) };
+    
+})();
+</script>
+</body>
+</html>
