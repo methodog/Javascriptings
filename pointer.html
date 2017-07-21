@@ -52,7 +52,7 @@
   function swipeDir(e){
     var touchXY2 = eXY(e),
         deltaXY = [touchXY2[0] - touchXY[0] , touchXY2[1] - touchXY[1]];
-    if (deltaXY[0]*deltaXY[0] > deltaXY[1]*deltaXY[1]) {
+    if (Math.abs(deltaXY[0]) > Math.abs(deltaXY[1])) {
       dir = deltaXY[0] > 0 ? 'right' : 'left';
     } else {
       dir = deltaXY[1] > 0 ? 'down' : 'up';
@@ -63,11 +63,7 @@
 
   function wipe(el, dir) {
     if (dragging) {
-      el.classList.remove('wipe--no');
-      el.classList.remove('wipe--left');
-      el.classList.remove('wipe--right');
-      el.classList.remove('wipe--up');
-      el.classList.remove('wipe--down');
+      el.class = '';
       el.classList.add('wipe--'+ dir);
       dragging = 0;
     }
