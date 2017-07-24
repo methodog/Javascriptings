@@ -10,36 +10,37 @@
     <style type="text/css">
       html, body { height:100%; margin:0; }
       body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
-      .flickshow { height:100%; width:100%; overflow:hidden; position:relative; }
-      .flickshow img { max-height:100%; max-width:100%; margin:auto; position:absolute; left:0; top:0; bottom:0; right:0; }
+      .flickshow, .slide { height:100%; width:100%; overflow:hidden; position:relative; }
+      .slide { background:#000; }
+      .slide, .slide img { max-height:100%; max-width:100%; margin:auto; position:absolute; left:0; top:0; bottom:0; right:0; }
       @keyframes shake {
         0%, 100% { transform:translate3d(0, 0, 0); }
         10%, 30%, 50%, 70%, 90% { transform:translate3d(-10px, 0, 0); }
         20%, 40%, 60%, 80% { transform:translate3d(10px, 0, 0); }
       }
-      .flickshow .wipe--no { animation-duration:1s; animation-name:shake; }
-      .flickshow .wipe--left { left:-200%; transition:left 1s; }
-      .flickshow .wipe--right { right:-200%; transition:right 1s; }
-      .flickshow .wipe--up { top:-200%; transition:top 1s; }
-      .flickshow .wipe--down { bottom:-200%; transition:bottom 1s; }
+      .slide.wipe--no { animation-duration:1s; animation-name:shake; }
+      .slide.wipe--left { left:-200%; transition:left 1s; }
+      .slide.wipe--right { right:-200%; transition:right 1s; }
+      .slide.wipe--up { top:-200%; transition:top 1s; }
+      .slide.wipe--down { bottom:-200%; transition:bottom 1s; }
     </style>
 </head>
 
 <body>
 
 <div class="flickshow">
-  <img data-way="no" src="img/pointer/no/2014GY1389.jpg">
-  <img data-way="up" src="img/pointer/up/2007BP4022.jpg">
-  <img data-way="no" src="img/pointer/no/2006AM3262.jpg">
-  <img data-way="left" src="img/pointer/left/2014GW5263.jpg">
-  <img data-way="up" src="img/pointer/up/2017JY7670.jpg">
-  <img data-way="down" src="img/pointer/down/2007BP2220.jpg">
-  <img data-way="right" src="img/pointer/right/2013GN4204.jpg">
-  <img data-way="right" src="img/pointer/right/2006AC4723.jpg">
-  <img data-way="up" src="img/pointer/up/2016JE4681.jpg">
-  <img data-way="left" src="img/pointer/left/2014GX2957.jpg">
-  <img data-way="down" src="img/pointer/down/2006BB5397.jpg">
-  <img data-way="up" src="img/pointer/up/2007BP4022.jpg">
+  <div class="slide"><img data-way="no" src="img/pointer/no/2014GY1389.jpg"></div>
+  <div class="slide"><img data-way="up" src="img/pointer/up/2007BP4022.jpg"></div>
+  <div class="slide"><img data-way="no" src="img/pointer/no/2006AM3262.jpg"></div>
+  <div class="slide"><img data-way="left" src="img/pointer/left/2014GW5263.jpg"></div>
+  <div class="slide"><img data-way="up" src="img/pointer/up/2017JY7670.jpg"></div>
+  <div class="slide"><img data-way="down" src="img/pointer/down/2007BP2220.jpg"></div>
+  <div class="slide"><img data-way="right" src="img/pointer/right/2013GN4204.jpg"></div>
+  <div class="slide"><img data-way="right" src="img/pointer/right/2006AC4723.jpg"></div>
+  <div class="slide"><img data-way="up" src="img/pointer/up/2016JE4681.jpg"></div>
+  <div class="slide"><img data-way="left" src="img/pointer/left/2014GX2957.jpg"></div>
+  <div class="slide"><img data-way="down" src="img/pointer/down/2006BB5397.jpg"></div>
+  <div class="slide"><img data-way="up" src="img/pointer/up/2007BP4022.jpg"></div>
 </div>
 
 <script type="text/javascript">
@@ -52,7 +53,7 @@
   function swipeDir(e) {
     var touchXY2 = eXY(e),
         deltaXY = [touchXY2[0] - touchXY[0] , touchXY2[1] - touchXY[1]],
-        dir;
+        dir = 0;
     if (Math.abs(deltaXY[0]) + Math.abs(deltaXY[1]) > 5) {
       if (Math.abs(deltaXY[0]) > Math.abs(deltaXY[1])) {
         dir = deltaXY[0] > 0 ? 'right' : 'left';
@@ -65,9 +66,12 @@
   }  
 
   function wipe(el, dir) {
-    if (dragging) {
-      el.classList = [];
-      el.classList.add('wipe--'+ dir);
+    if (dragging && dir) {
+      if (dir !== el.dataset.way) {
+        dir = 'no';
+      }
+      el.parentNode.class = 'slide';
+      el.parentNode.classList.add('wipe--'+ dir);
       dragging = 0;
     }
   }
