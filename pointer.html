@@ -70,8 +70,8 @@
       if (dir !== el.dataset.way) {
         dir = 'no';
       }
-      el.parentNode.class = 'slide';
-      el.parentNode.classList.add('wipe--'+ dir);
+      el.parentNode.className = 'slide';
+      setTimeout(function(){ el.parentNode.classList.add('wipe--'+ dir) }, 0);
       dragging = 0;
     }
   }
