@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>lenticule</title>
+    <style type="text/css">
+        html, body { height:100%; margin:0; }
+        body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
+        .lenticule { background:#fff; display: block; height:100%; width:100%; margin:auto; overflow:hidden; position:absolute; bottom:0; left:0; right:0; top:0; user-select:none; }
+        .lenticule img { max-height:100%; max-width:100%; margin:auto; position:absolute; bottom:0; left:0; right:0; top:0; }
+    </style>	
+</head>
+
+<body>
+
+<p class="lenticule"><img src="img/lenticular/gnome-7.jpg" alt=""><img src="img/lenticular/gnome-8.jpg" alt=""></p>
+
+
+<script type="text/javascript">
+Number.prototype.mod = function(n) { return ((this%n)+n)%n; }
+function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
+function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ if( style=='width' ){ y=el.getBoundingClientRect().right-el.getBoundingClientRect().left }else if( style=='height' ){ y=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else{ var y=el.currentStyle[style] } } return parseFloat(y); }
+function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
+function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
+var lenticule = {
+    el:null, xy0:null, xyT:null, id:0,
+    size: function(el){
+        el.wh = [getComputed(el,'width'), getComputed(el,'height')];
+    },
+    init: function(el, opt){
+        var i;
+        if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
+        if( !opt ) var opt = {};
+        el.val = !!opt.val? opt.val : 0; 
+        el.min = !!opt.min? opt.min : 0; 
+        el.max = !!opt.max? opt.max : 1;
+        el.rng = el.max-el.min;
+        el.loop = !!opt.loop? opt.loop : 0;
+        if( !el.cloned && el.loop ){ for( i=el.childNodes.length-2; i>=0; --i){ el.appendChild(el.childNodes[i].cloneNode(true)); } el.cloned=1; }
+        if( !el.styled ){ el.appendChild(document.createElement('style')); el.styled=1; }
+        if( !el.id ){ el.id = el.className+(++lenticule.id); }
+        if( !el.load ){ for( i=0; i<=el.childNodes.length-1; ++i){ el.childNodes[i].onload=function(){this.style.opacity=0}; } el.load=1; }
+        lenticule.size(el);
+        el.arcs = el.childNodes.length-1;
+        el.xy = [getComputed(el,'left'), getComputed(el,'top')];
+        if( typeof(opt.slide)==='function' ){ el.slide = opt.slide; }
+        if( typeof(opt.stop)==='function' ){ el.stop = opt.stop; }
+        if( !el.move ){
+            el.onmousedown = lenticule.touch;
+            el.ontouchstart = lenticule.touch;
+            el.move = function(xy){
+                var vis;
+                this.val = this.min+(xy[0]/this.wh[0]*(this.rng));
+                this.val = this.val.mod(this.rng);
+                vis = 1 + Math.ceil(this.val*this.arcs);
+                this.querySelector('style').innerHTML = '#'+el.id+' :nth-child('+(vis-1)+'){opacity:1!important} #'+el.id+' :nth-child('+vis+'){opacity:'+(this.val%(1/this.arcs))*this.arcs+'!important}';
+                this.xy = [xy[0],xy[1]];
+            };
+        }
+    },
+    touch: function(e){
+        e = e || window.event;
+        if( e.type==='touchstart' && e.touches && e.touches.length>2 ){ return; }
+        lenticule.el = this;
+        lenticule.xy0 = lenticule.el.xy;
+        lenticule.xyT = getXY(e);
+        //~ lenticule.el.min = lenticule.el.val-(lenticule.xyT[0]/lenticule.el.wh[0]*(lenticule.el.max-lenticule.el.min));
+        //~ lenticule.el.max = lenticule.el.min+lenticule.el.rng;
+        if( e.type==='touchstart' ){
+            this.ontouchmove = lenticule.drag;
+            this.onmousedown = null;
+            this.ontouchend = function(){
+                this.ontouchmove = null;
+                this.ontouchend = null;
+                lenticule.release();
+            };
+        }else{
+            document.onmousemove = lenticule.drag;
+            document.onmouseup = function(){
+                document.onmousemove = null;
+                document.onmouseup = null;
+                lenticule.release();
+            };
+        }
+        return false;
+    },
+    drag: function(e){
+        e = e || window.event;
+        if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
+        var xyE = getXY(e),
+            xy = [lenticule.xy0[0]+xyE[0]-lenticule.xyT[0], lenticule.xy0[1]+xyE[1]-lenticule.xyT[1]];
+        lenticule.el.move(xy);
+        if( !!lenticule.el.slide ){ lenticule.el.slide.call(this); }
+        return false;
+    },
+    release: function(){
+        if( !!lenticule.el.stop ){ lenticule.el.stop.call(this); }
+        lenticule.el = null;
+    }
+};
+
+var i, j, els = document.querySelectorAll('.lenticule'), myWH, len, img, c;
+for( i=0; i<els.length; ++i ){
+    len = els[i];
+    c = len.childNodes.length;
+    for( j=0; j<c; ++j ){
+        img = len.childNodes[j];
+        if( j===0 ){
+            lenticule.init(len, {'loop':0});
+        };
+    }
+}
+addHandler(window,'resize',function(){
+    for( i=0; i<els.length; ++i ){
+        lenticule.size(els[i]);
+    }
+});
+if( !!window.DeviceOrientationEvent ){
+    addHandler(window,'deviceorientation',function(e){
+        if( !lenticule.el ){
+            for( i=0; i<els.length; ++i ){
+                if( !!els[i].wh ){
+                    lenticule.el = els[i];
+                    xy = [(e.gamma/45)*lenticule.el.wh[0], lenticule.el.xy[1]];
+                    lenticule.el.move(xy);
+                    lenticule.el = null;
+                }
+            }
+        }
+    });
+}
+</script>
+</body>
+</html>
