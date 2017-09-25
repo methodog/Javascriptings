@@ -81,7 +81,7 @@
       currentSlide = slideshow.childNodes[slideshow.childNodes.length-1],
       score = 0,
       scoreboard = document.querySelector('.scoreboard'),
-      blackboard = document.querySelector('.scoreboard');
+      blackboard = document.querySelector('.blackboard');
 
   function eXY (e) { var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 
@@ -103,12 +103,13 @@
   function wipe (el, dir) {
     if (dragging && dir) {
       if (dir !== el.dataset.way) {
+        dir = false;
         if (el.dataset.way=='no') {
-          dir = 'left';
           blackboard.innerHTML = "Learn!";
           blackboard.classList.remove('hidden');
+          currentSlide.classList.add('hidden');
+          currentSlide = currentSlide.nextSibling;
         } else {
-          dir = 'no';
           scoreboard.innerHTML = score;
           scoreboard.classList.remove('hidden');
         }
@@ -116,7 +117,7 @@
         score++;
       }
       currentSlide.className = 'slide';
-      setTimeout(function(){ currentSlide.classList.add('wipe--'+ dir); loadSlide() }, 0);
+      setTimeout(function(){ if (dir) { currentSlide.classList.add('wipe--'+ dir) } loadSlide() }, 0);
       dragging = 0;
     }
   }
@@ -124,11 +125,12 @@
   function start (zero) {
     if (zero) { score = 0 }
     scoreboard.classList.add('hidden');
+    blackboard.classList.add('hidden');
     currentSlide.classList.add('countdown');
   }
 
-  scoreboard.ontouchstart = scoreboard.onclick = function(e){ start(zero) };
-  blackboard.ontouchstart = scoreboard.onclick = function(e){ start() };
+  scoreboard.ontouchstart = scoreboard.onclick = function(e){ start(true) };
+  blackboard.ontouchstart = blackboard.onclick = function(e){ start() };
   document.ontouchstart = document.onmousedown = function(e){ if (e.target.tagName=='IMG') { e.preventDefault(); currentSlide = e.target.parentNode; dragging = 1; swipeDir(e); } };
   document.ontouchmove = document.onmousemove = function(e){ e.preventDefault(); wipe(e.target, swipeDir(e)) };
 })();
