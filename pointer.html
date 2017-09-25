@@ -9,16 +9,22 @@
     <title>Pointing the way</title>
     <style type="text/css">
       html, body { height:100%; margin:0; }
-      body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
+      body { background:#000; font:14px/1 arial,freesans,sans-serif; }
       .slideshow, .slide { height:100%; width:100%; overflow:hidden; position:relative; }
       .slide { background:#000; }
       .slide, .slide img { max-height:100%; max-width:100%; margin:auto; position:absolute; left:0; top:0; bottom:0; right:0; }
-      .scoreboard { background:red; font-size:50vh; line-height:100vh; text-align:center; }
+      .scoreboard { background:#0f0; font-size:50vh; line-height:100vh; text-align:center; z-index:1; }
+      .hidden { display:none; }
+      @keyframes bgfade {
+        0% { background-position:0% }
+        100% { background-position:-100% }
+      }
       @keyframes shake {
         0%, 100% { transform:translate3d(0, 0, 0); }
         10%, 30%, 50%, 70%, 90% { transform:translate3d(-10px, 0, 0); }
         20%, 40%, 60%, 80% { transform:translate3d(10px, 0, 0); }
       }
+      .slide.countdown { animation-duration:2s; animation-name:bgfade; background:linear-gradient(90deg, #f00, #000);background-size: 200% 200%; }
       .slide.wipe--no { animation-duration:1s; animation-name:shake; }
       .slide.wipe--left { left:-200%; transition:left 1s; }
       .slide.wipe--right { right:-200%; transition:right 1s; }
@@ -29,7 +35,7 @@
 
 <body>
 
-<div class="scoreboard slide"></div>
+<div class="scoreboard slide">Begin</div>
 <div class="slideshow"></div>
 
 <script type="text/javascript">
@@ -77,7 +83,8 @@
 
   var dragging = 0,
       touchXY = [0,0],
-      score = 0;
+      currentSlide = slideshow.childNodes[slideshow.childNodes.length-1],
+      score = 0;console.log(currentSlide);
 
   function eXY (e) { var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 
@@ -98,20 +105,26 @@
 
   function wipe (el, dir) {
     if (dragging && dir) {
-      if (dir !== el.dataset.way && !(el.dataset.way=='no' && el.parentNode.classList.contains('wipe--no'))) {
+      if (dir !== el.dataset.way && !(el.dataset.way=='no' && currentSlide.classList.contains('wipe--no'))) {
         dir = 'no';
         scoreboard.innerHTML = score;
-        el.parentNode.appendChild(scoreboard);
+        scoreboard.classList.remove('hidden');
       } else {
         score++;
       }
-      el.parentNode.className = 'slide';
-      setTimeout(function(){ el.parentNode.classList.add('wipe--'+ dir); loadSlide(); }, 0);
+      currentSlide.className = 'slide';
+      setTimeout(function(){ currentSlide.classList.add('wipe--'+ dir); loadSlide() }, 0);
       dragging = 0;
     }
   }
 
-  document.ontouchstart = document.onmousedown = function(e){ if (e.target.tagName=='IMG') { e.preventDefault(); dragging = 1; swipeDir(e); } };
+  function start () {
+    scoreboard.classList.add('hidden');
+    setTimeout(function(){ currentSlide.classList.add('countdown') }, 0);
+  }
+
+  scoreboard.ontouchstart = scoreboard.onclick = function(e){ start() };
+  document.ontouchstart = document.onmousedown = function(e){ if (e.target.tagName=='IMG') { e.preventDefault(); currentSlide = e.target.parentNode; dragging = 1; swipeDir(e); } };
   document.ontouchmove = document.onmousemove = function(e){ e.preventDefault(); wipe(e.target, swipeDir(e)) };
 })();
 </script>
