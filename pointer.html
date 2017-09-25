@@ -99,9 +99,13 @@
 
   function wipe (el, dir) {
     if (dragging && dir) {
-      if (dir !== el.dataset.way && !(el.dataset.way=='no' && currentSlide.classList.contains('wipe--no'))) {
+      if (dir !== el.dataset.way) {
         dir = 'no';
-        scoreboard.innerHTML = score;
+        if (el.dataset.way=='no') {
+          scoreboard.innerHTML = "Learn!";
+        } else {
+          scoreboard.innerHTML = score;
+        }
         scoreboard.classList.remove('hidden');
       } else {
         score++;
@@ -114,7 +118,7 @@
 
   function start () {
     scoreboard.classList.add('hidden');
-    setTimeout(function(){ currentSlide.classList.add('countdown') }, 0);
+    currentSlide.classList.add('countdown');
   }
 
   scoreboard.ontouchstart = scoreboard.onclick = function(e){ start() };
