@@ -9,11 +9,12 @@
     <title>Pointing the way</title>
     <style type="text/css">
       html, body { height:100%; margin:0; }
-      body { background:#000; font:14px/1 arial,freesans,sans-serif; }
+      body { background:#000; font:16px/1 arial,freesans,sans-serif; }
       .slideshow, .slide { height:100%; width:100%; overflow:hidden; position:relative; }
       .slide { background:#000; }
       .slide, .slide img { max-height:100%; max-width:100%; margin:auto; position:absolute; left:0; top:0; bottom:0; right:0; }
-      .scoreboard { background:#0f0; font-size:50vh; line-height:100vh; text-align:center; z-index:1; }
+      .scoreboard { background:#0f0; color:#000; font-size:50vh; line-height:100vh; text-align:center; z-index:1; }
+      .blackboard { background:#000; color:#fff; z-index:1; }
       .hidden { display:none; }
       @keyframes bgfade {
         0% { background-position:0% }
@@ -30,6 +31,7 @@
 <body>
 
 <div class="scoreboard slide">Begin</div>
+<div class="blackboard slide hidden"></div>
 <div class="slideshow"></div>
 
 <script type="text/javascript">
@@ -48,8 +50,7 @@
         {"way": "down", "src": "img/pointer/down/2006BB5397.jpg"},
         {"way": "up", "src": "img/pointer/up/2007BP4022.jpg"}
       ],
-    slideshow = document.querySelector('.slideshow'),
-    scoreboard = document.querySelector('.scoreboard');
+    slideshow = document.querySelector('.slideshow');
   slideshow.starters = [];
 
   function loadSlide (starters) {
@@ -78,7 +79,9 @@
   var dragging = 0,
       touchXY = [0,0],
       currentSlide = slideshow.childNodes[slideshow.childNodes.length-1],
-      score = 0;
+      score = 0,
+      scoreboard = document.querySelector('.scoreboard'),
+      blackboard = document.querySelector('.scoreboard');
 
   function eXY (e) { var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 
@@ -100,13 +103,15 @@
   function wipe (el, dir) {
     if (dragging && dir) {
       if (dir !== el.dataset.way) {
-        dir = 'no';
         if (el.dataset.way=='no') {
-          scoreboard.innerHTML = "Learn!";
+          dir = 'left';
+          blackboard.innerHTML = "Learn!";
+          blackboard.classList.remove('hidden');
         } else {
+          dir = 'no';
           scoreboard.innerHTML = score;
+          scoreboard.classList.remove('hidden');
         }
-        scoreboard.classList.remove('hidden');
       } else {
         score++;
       }
@@ -116,12 +121,14 @@
     }
   }
 
-  function start () {
+  function start (zero) {
+    if (zero) { score = 0 }
     scoreboard.classList.add('hidden');
     currentSlide.classList.add('countdown');
   }
 
-  scoreboard.ontouchstart = scoreboard.onclick = function(e){ start() };
+  scoreboard.ontouchstart = scoreboard.onclick = function(e){ start(zero) };
+  blackboard.ontouchstart = scoreboard.onclick = function(e){ start() };
   document.ontouchstart = document.onmousedown = function(e){ if (e.target.tagName=='IMG') { e.preventDefault(); currentSlide = e.target.parentNode; dragging = 1; swipeDir(e); } };
   document.ontouchmove = document.onmousemove = function(e){ e.preventDefault(); wipe(e.target, swipeDir(e)) };
 })();
