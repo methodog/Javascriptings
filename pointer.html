@@ -12,15 +12,12 @@
       body { background:#000; font:16px/1 arial,freesans,sans-serif; }
       .slideshow, .slide { height:100%; width:100%; overflow:hidden; position:relative; }
       .slide { background:#000; }
-      .slide, .slide img { max-height:100%; max-width:100%; margin:auto; position:absolute; left:0; top:0; bottom:0; right:0; }
+      .slide, .slide img, .slide:before { max-height:100%; max-width:100%; margin:auto; position:absolute; left:0; top:0; bottom:0; right:0; }
       .scoreboard { background:#0f0; color:#000; font-size:50vh; line-height:100vh; text-align:center; z-index:1; }
       .blackboard { background:#000; color:#fff; z-index:1; }
       .hidden { display:none; }
-      @keyframes bgfade {
-        0% { background-position:0% }
-        100% { background-position:-100% }
-      }
-      .slide.countdown { animation-duration:2s; animation-name:bgfade; background:linear-gradient(90deg, #000 -100%, #f00 0);background-size: 200% 200%; }
+      .slide:before { background:#f00; content:''; display:block; transform:translate(-100%); }
+      .slide.countdown:before { transform:translate(0); transition:transform 2s linear; }
       .slide.wipe--left { left:-200%; transition:left 1s; }
       .slide.wipe--right { right:-200%; transition:right 1s; }
       .slide.wipe--up { top:-200%; transition:top 1s; }
@@ -81,7 +78,8 @@
       currentSlide = slideshow.childNodes[slideshow.childNodes.length-1],
       score = 0,
       scoreboard = document.querySelector('.scoreboard'),
-      blackboard = document.querySelector('.blackboard');
+      blackboard = document.querySelector('.blackboard'),
+      countdown = null;
 
   function eXY (e) { var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
 
@@ -102,37 +100,52 @@
 
   function wipe (el, dir) {
     if (dragging && dir) {
+      clearTimeout(countdown);
       if (dir !== el.dataset.way) {
         dir = false;
         if (el.dataset.way=='no') {
           blackboard.innerHTML = "Learn!";
           blackboard.classList.remove('hidden');
           currentSlide.classList.add('hidden');
-          currentSlide = currentSlide.nextSibling;
+          currentSlide = currentSlide.previousSibling;
         } else {
-          scoreboard.innerHTML = score;
-          scoreboard.classList.remove('hidden');
+          gameOver();
         }
       } else {
         score++;
       }
-      currentSlide.className = 'slide';
-      setTimeout(function(){ if (dir) { currentSlide.classList.add('wipe--'+ dir) } loadSlide() }, 0);
+      if (dir) {
+        currentSlide.classList.add('wipe--'+ dir);
+      }
+      loadSlide(); 
+      currentSlide = currentSlide.previousSibling;
+      countdown();
       dragging = 0;
     }
   }
+
+  function countdown () {
+    currentSlide.classList.add('countdown');
+    countdown = setTimeout(function(){ gameOver() }, 2000);
+  }
+  
 
   function start (zero) {
     if (zero) { score = 0 }
     scoreboard.classList.add('hidden');
     blackboard.classList.add('hidden');
-    currentSlide.classList.add('countdown');
+    countdown();
+  }
+  
+  function gameOver () {
+    scoreboard.innerHTML = score;
+    scoreboard.classList.remove('hidden');
   }
 
   scoreboard.ontouchstart = scoreboard.onclick = function(e){ start(true) };
   blackboard.ontouchstart = blackboard.onclick = function(e){ start() };
-  document.ontouchstart = document.onmousedown = function(e){ if (e.target.tagName=='IMG') { e.preventDefault(); currentSlide = e.target.parentNode; dragging = 1; swipeDir(e); } };
-  document.ontouchmove = document.onmousemove = function(e){ e.preventDefault(); wipe(e.target, swipeDir(e)) };
+  document.ontouchstart = document.onmousedown = function(e){ if (e.target.tagName === 'IMG') { e.preventDefault(); dragging = 1; swipeDir(e); } };
+  document.ontouchmove = document.onmousemove = function(e){ if (dragging) { e.preventDefault(); wipe(e.target, swipeDir(e)) } };
 })();
 </script>
 </body>
