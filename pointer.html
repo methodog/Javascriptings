@@ -100,6 +100,7 @@
 
   function wipe (el, dir) {
     if (dragging && dir) {
+      dragging = 0;
       clearTimeout(timer);
       if (dir !== el.dataset.way) {
         dir = false;
@@ -109,17 +110,18 @@
           currentSlide.classList.add('hidden');
         } else {
           gameOver();
+          return true;
         }
       } else {
         score++;
       }
       if (dir) {
+        currentSlide.className = 'slide';
         currentSlide.classList.add('wipe--'+ dir);
       }
       loadSlide(); 
       currentSlide = currentSlide.previousSibling;
       countdown();
-      dragging = 0;
     }
   }
 
