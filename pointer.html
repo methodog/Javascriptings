@@ -9,12 +9,12 @@
     <title>Pointing the way</title>
     <style type="text/css">
       html, body { height:100%; margin:0; }
-      body { background:#000; font:16px/1 arial,freesans,sans-serif; }
+      body { background:#000; font:18px/1 arial,freesans,sans-serif; }
       .slideshow, .slide { height:100%; width:100%; overflow:hidden; position:relative; }
       .slide { background:#000; }
       .slide, .slide img, .slide:before { max-height:100%; max-width:100%; margin:auto; position:absolute; left:0; top:0; bottom:0; right:0; }
       .scoreboard { background:#0f0; color:#000; font-size:50vh; line-height:100vh; text-align:center; z-index:1; }
-      .blackboard { background:#000; color:#fff; z-index:1; }
+      .blackboard { background:#000; box-sizing:border-box; color:#fff; padding:20%; z-index:1; }
       .hidden { display:none; }
       .slide:before { background:#f00; content:''; display:block; transform:translate(-100%); }
       .slide.countdown:before { transform:translate(0); transition:transform 2s linear; }
@@ -104,10 +104,9 @@
       if (dir !== el.dataset.way) {
         dir = false;
         if (el.dataset.way=='no') {
-          blackboard.innerHTML = "Learn!";
+          blackboard.innerHTML = "Did you know... &nbsp;&nbsp; Did you know... &nbsp;&nbsp; Did you know... &nbsp;&nbsp; Did you know... &nbsp;&nbsp; Did you know... &nbsp;&nbsp; Did you know... &nbsp;&nbsp; Did you know... &nbsp;&nbsp; Did you know... &nbsp;&nbsp; ";
           blackboard.classList.remove('hidden');
           currentSlide.classList.add('hidden');
-          currentSlide = currentSlide.previousSibling;
         } else {
           gameOver();
         }
@@ -125,6 +124,7 @@
   }
 
   function countdown () {
+    clearTimeout(timer);
     currentSlide.className = 'slide';
     setTimeout(function(){ currentSlide.classList.add('countdown') }, 0);
     timer = setTimeout(function(){ gameOver() }, 2000);
