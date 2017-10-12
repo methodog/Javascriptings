@@ -16,7 +16,7 @@
       .scoreboard { background:#0f0; color:#000; font-size:50vh; line-height:100vh; text-align:center; z-index:1; }
       .blackboard { background:#000; box-sizing:border-box; color:#fff; padding:20%; z-index:1; }
       .hidden { display:none; }
-      .slide:before { background:#f00; content:''; display:block; transform:translate(-100%); }
+      .slide::before { background:#f00; content:''; display:block; transform:translate(-100%); }
       .slide.countdown:before { transform:translate(0); transition:transform 2s linear; }
       .slide.wipe--left { left:-200%; transition:left 1s; }
       .slide.wipe--right { right:-200%; transition:right 1s; }
