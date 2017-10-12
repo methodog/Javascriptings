@@ -9,14 +9,14 @@
     <title>Pointing the way</title>
     <style type="text/css">
       html, body { height:100%; margin:0; }
-      body { background:#000; font:18px/1 arial,freesans,sans-serif; }
-      .slideshow, .slide { height:100%; width:100%; overflow:hidden; position:relative; }
-      .slide { background:#000; }
-      .slide, .slide img, .slide:before { max-height:100%; max-width:100%; margin:auto; position:absolute; left:0; top:0; bottom:0; right:0; }
-      .scoreboard { background:#0f0; color:#000; font-size:50vh; line-height:100vh; text-align:center; z-index:1; }
-      .blackboard { background:#000; box-sizing:border-box; color:#fff; padding:20%; z-index:1; }
+      body { background:#1d1e20; font:18px/1 arial,freesans,sans-serif; }
       .hidden { display:none; }
-      .slide:before { background:#f00; content:''; display:block; left:-200%; }
+      .slideshow, .slide { height:100%; width:100%; overflow:hidden; position:relative; }
+      .slide { background:#1d1e20; }
+      .slide, .slide img, .slide:before { max-height:100%; max-width:100%; margin:auto; position:absolute; left:0; top:0; bottom:0; right:0; }
+      .scoreboard { background:#50e3c2; color:#1d1e20; font-size:50vh; line-height:100vh; text-align:center; z-index:1; }
+      .blackboard { background:#1d1e20; box-sizing:border-box; color:#fff; padding:20%; z-index:1; }
+      .slide:before { background:#e42020; content:''; display:block; left:-200%; }
       .slide.countdown:before { left:0; transition:left 2s linear; }
       .slide.wipe--left { left:-200%; transition:left 1s; }
       .slide.wipe--right { right:-200%; transition:right 1s; }
@@ -27,7 +27,7 @@
 
 <body>
 
-<div class="scoreboard slide">Begin</div>
+<div class="scoreboard slide">❖</div>
 <div class="blackboard slide hidden"></div>
 <div class="slideshow"></div>
 
