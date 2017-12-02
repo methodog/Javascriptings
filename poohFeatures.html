@@ -54,8 +54,9 @@
 <script type="text/javascript">
 (() => {
   function initBalloon (el) {
+    const h2w = window.screen.height / window.screen.width;
     el.start = () => {
-      setTimeout(() => { el.h2w = el.naturalHeight / el.naturalWidth; }, 0);
+      el.h2w = el.naturalHeight / el.naturalWidth;
       el.scaler = 0.05 + (0.2 * Math.random());
       el.style.width = (el.scaler * 100) + '%';
       el.style.zIndex = parseInt(el.scaler * 100, 10);
@@ -68,7 +69,7 @@
       const x = xy[0];
       const y = xy[1];
       let r;
-      if (y < - el.h2w * el.scaler * 100) {
+      if (y < - el.h2w * el.scaler * 100 / h2w) {
         r = true;
       }
       el.xy = [x, y];
