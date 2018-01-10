@@ -55,13 +55,13 @@
 (() => {
   function initBalloon (el) {
     const h2w = window.screen.height / window.screen.width;
-    el.start = () => {
+    el.launch = () => {
       el.h2w = el.naturalHeight / el.naturalWidth;
       el.scaler = 0.05 + (0.2 * Math.random());
       el.style.width = (el.scaler * 100) + '%';
       el.style.zIndex = parseInt(el.scaler * 100, 10);
       el.move([90 * Math.random(), 100]);
-      el.onclick = el.start;
+      el.onclick = el.launch;
       clearTimeout(el.t);
       el.t = setTimeout(() => { el.drop(); }, parseInt(2000 + (Math.random() * 6000), 10));
     };
@@ -82,7 +82,7 @@
     el.drop = () => {
       const r = el.move([el.xy[0], el.xy[1] - (el.scaler * 1.5)]);
       if (r) {
-        el.start();
+        el.launch();
       }
       el.t = setTimeout(() => { el.drop(); }, 23);
     };
@@ -97,7 +97,7 @@
       /*eslint-enable */
       document.body.appendChild(balloon);
       initBalloon(balloon);
-      balloon.start();
+      balloon.launch();
     }
 
     if (window.screen.width > 1024) {
