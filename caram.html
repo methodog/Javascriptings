@@ -52,7 +52,7 @@ caram = {
       }else{
         puks[i].move([puks[i].wh[0]+(Math.random()*(caram.wh[0]-(puks[i].wh[0]*3))), (caram.wh[1]+(Math.random()*(caram.wh[1]-puks[i].wh[1])))/2]);
       }
-	    }
+    }
 	},
 	pukReset: function(el){ 
     clearTimeout(el.t);
@@ -197,7 +197,7 @@ caram = {
 	},
 	scores: function(zero){
     var p1 = document.getElementById('p1'),
-      p2 = document.getElementById('p2')
+      p2 = document.getElementById('p2'),
       s1 = document.getElementById('s1'),
       s2 = document.getElementById('s2');
     if( !!zero ){
