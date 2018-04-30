@@ -44,6 +44,7 @@ pong = {
     pong.wh = [getComputed(board,'width'), getComputed(board,'height')];
     document.body.style.fontSize = pong.wh[1]/14+'px';
     pong.goal = [(pong.wh[0]/2)-(getComputed(goal,'width')/2), (pong.wh[0]/2)+(getComputed(goal,'width')/2)];
+    pong.paddle(paddle);
     pong.puk(puk);
 	},
 	pukReset: function(el){ 
@@ -65,11 +66,11 @@ pong = {
           if( x<=0 ){ x=0; r=[-1,0]; }
           else if( x>=pong.wh[0]-this.wh[0] ){ x=pong.wh[0]-this.wh[0]; r=[1,0]; }
           if( y>=pong.wh[1]-this.wh[1] ){ 
-            if( y>pong.paddle[0] && x<pong.goal[1]-this.wh[0] ){ this.out=1; if( this.id==='puk' ){ pong.el.goals++ }else if( this===pong.el ){ pong.el.goals-- } pong.scores(); setTimeout(function(){pong.init()},1000) }
-            else{ y=pong.wh[1]-this.wh[1]; r=[0,1]; }
+            if( x>pong.paddle[0] && x<pong.paddle[1]-this.wh[0] ){ this.out=1; if( this.id==='puk' ){ pong.el.goals++ }else if( this===pong.el ){ pong.el.goals-- } pong.scores(); setTimeout(function(){pong.init()},1000) }
+            else{ this.out=1; pong.el.goals--; pong.scores(); setTimeout(function(){pong.init()},1000) }
           }
           else if( y<=0 ){
-            if( x>pong.goal[0] && x<pong.goal[1]-this.wh[0] ){ this.out=1; if( this.id==='puk' ){ pong.el.goals++ }else if( this===pong.el ){ pong.el.goals-- } pong.scores(); setTimeout(function(){pong.init()},1000) }
+            if( x>pong.goal[0] && x<pong.goal[1]-this.wh[0] ){ this.out=1; pong.el.goals++; pong.scores(); setTimeout(function(){pong.init()},1000) }
             else{ y=0; r=[0,-1]; }
           }
           for( var o in pong.obs ){
@@ -97,6 +98,23 @@ pong = {
         if( Math.abs(this.v[0])+Math.abs(this.v[1]) < 0.5 ){ clearTimeout(this.t); return; }
         this.t = setTimeout(function(){ el.drop(); }, 23);
         return false;
+      };
+    }
+	},
+	paddleReset: function(el){ 
+    el.w = getComputed(el,'width');
+  },
+  paddle: function(el){
+    pong.paddleReset(el);
+    el.x = getComputed(el,'left');
+    if( !el.move ){
+      el.move = function(x){
+        if( !this.out ){
+          if( x<=0 ){ x=0; }
+          else if( x>=pong.wh[0]-this.w ){ x=pong.wh[0]-this.w; }
+        }
+        this.x = x;
+        this.style.left = x+'px';
       };
     }
 	},
@@ -139,36 +157,15 @@ pong = {
 		return false;
 	},
 	release: function(){
-    if( !pong.mv ){/* must be a tap */
-      if( pong.el.id==='puk' ){
-        if( pong.t2-pong.t1<300 ){/* double tap */
-          var p2 = document.getElementById('p2'),
-            s2 = document.getElementById('s2');
-          if( !pong.p2 ){
-            pong.p2 = 1;
-            p2.className = 'puk';
-            s2.className = 'score';
-          }else{
-            pong.p2 = 0;
-            p2.className = 'hide';
-            s2.className = 'hide';
-          }
-        }
-        pong.scores('zero');
-        pong.init();
-      }
-    }else{
-      pong.el.drop();
-      pong.el.throws++;
-      pong.scores();
-    }
-    pong.mv = 0;
+    pong.el.drop();
+    pong.scores();
 	},
 	scores: function(zero){
     var p1 = document.getElementById('p1'),
-      s1 = document.getElementById('s1');
+        s1 = document.getElementById('s1');
+    p1.throws++;
     if( !!zero ){
-      p1.throws = p1.goals = p2.throws = p2.goals = 0;
+      p1.throws = p1.goals = 0;
       s1.innerHTML = '';
     }else{
       s1.innerHTML = p1.goals+'/'+p1.throws;
