@@ -112,16 +112,39 @@ pong = {
         this.x = x;
         this.style.left = x+'px';
       };
-      el.onmousemove = el.ontouchmove = pong.touch;
+      el.onmousedown = el.ontouchstart = pong.touch;
     }
     return el;
 	},
 	touch: function(e){
 		e = e || window.event;
-		pong.paddle.move(getX(e));
+		pong.x0 = pong.paddle.x;
+    pong.xT = getX(e);
+		if( e.type==='touchstart' ){
+      pong.paddle.ontouchmove = pong.drag;
+      pong.paddle.onmousedown = null;
+      pong.paddle.ontouchend = function(){
+        pong.paddle.ontouchmove = null;
+        pong.paddle.ontouchend = null;
+      };
+    }else{
+      document.onmousemove = pong.drag;
+      document.onmouseup = function(){
+        document.onmousemove = null;
+        document.onmouseup = null;
+      };
+    }
+		return false;
+	},
+	drag: function(e){
+		e = e || window.event;
+    if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
+    var xE = getX(e), 
+      x = pong.x0+xE-pong.xT;
+    pong.paddle.move(x);
+		return false;
 	},
 	release: function(){
-    pong.el.drop();
     pong.scores();
 	},
 	scores: function(zero){
