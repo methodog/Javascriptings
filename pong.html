@@ -32,11 +32,10 @@ function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(e
 function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ if( style=='width' ){ y=el.getBoundingClientRect().right-el.getBoundingClientRect().left }else if( style=='height' ){ y=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else{ var y=el.currentStyle[style] } } return parseFloat(y); }
 function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
 function getX(e){ var x=null; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ x = (e.touches[0].pageX+e.touches[0].pageX)/2; }else{ x = e.touches[0].pageX; } }else{ x = e.pageX; } return x; }
-var pong;
-pong = {
+var pong = {
   init: function(){
     var board = document.getElementById('board'),
-      goal = document.getElementById('goal');
+        goal = document.getElementById('goal');
     pong.wh = [getComputed(board,'width'), getComputed(board,'height')];
     document.body.style.fontSize = pong.wh[1]/14+'px';
     pong.goal = [(pong.wh[0]/2)-(getComputed(goal,'width')/2), (pong.wh[0]/2)+(getComputed(goal,'width')/2)];
@@ -45,7 +44,7 @@ pong = {
     pong.obs=[];
 	},
 	pukReset: function(el){ 
-    clearTimeout(el.t);
+    clearTimeout(pong.puk.t);
     el.wh = [getComputed(el,'width'), getComputed(el,'height')];
     el.xy = [getComputed(el,'left'), getComputed(el,'top')];
     el.v = [0,0];
@@ -57,41 +56,40 @@ pong = {
       el.throws = el.goals = 0;
       el.move = function(xy){
         var x=xy[0], y=xy[1], r;
-        if( !this.out ){
+        if( !el.out ){
           if( x<=0 ){ x=0; r=[-1,0]; }
-          else if( x>=pong.wh[0]-this.wh[0] ){ x=pong.wh[0]-this.wh[0]; r=[1,0]; }
-          if( y>=pong.wh[1]-this.wh[1] ){ 
-            if( x>pong.paddle[0] && x<pong.paddle[1]-this.wh[0] ){ this.out=1; if( this.id==='puk' ){ pong.el.goals++ }else if( this===pong.el ){ pong.el.goals-- } pong.scores(); setTimeout(function(){pong.init()},1000) }
-            else{ this.out=1; pong.el.goals--; pong.scores(); setTimeout(function(){pong.init()},1000) }
+          else if( x>=pong.wh[0]-el.wh[0] ){ x=pong.wh[0]-el.wh[0]; r=[1,0]; }
+          if( y>=pong.wh[1]-el.wh[1] ){ 
+            if( x>pong.paddle[0] && x<pong.paddle[1]-el.wh[0] ){  }
+            else{ el.out=1; pong.el.goals--; pong.scores(); setTimeout(function(){pong.init()},1000) }
           }
           else if( y<=0 ){
-            if( x>pong.goal[0] && x<pong.goal[1]-this.wh[0] ){ this.out=1; pong.el.goals++; pong.scores(); setTimeout(function(){pong.init()},1000) }
+            if( x>pong.goal[0] && x<pong.goal[1]-el.wh[0] ){ el.out=1; pong.el.goals++; pong.scores(); setTimeout(function(){pong.init()},1000) }
             else{ y=0; r=[0,-1]; }
           }
+          if( r ){
+            if( r[0] ){ el.v = [-el.v[0], el.v[1]]; }
+            if( r[1] ){ el.v = [el.v[0], -el.v[1]]; }
+          }
           for( var o in pong.obs ){
-            if( Math.abs(x-pong.obs[o].xy[0])<this.wh[0] && Math.abs(y-pong.obs[o].xy[1])<this.wh[1] ){
-              //~ this.v = [vt1[0]+vn2[0], vt1[1]+vn2[1]];
+            if( Math.abs(x-pong.obs[o].xy[0])<el.wh[0] && Math.abs(y-pong.obs[o].xy[1])<el.wh[1] ){
+              //~ el.v = [vt1[0]+vn2[0], vt1[1]+vn2[1]];
               //~ clearTimeout(pong.obs[o].t); 
               //~ pong.obs[o].v = [vt2[0]+vn1[0], vt2[1]+vn1[1]];
               //~ pong.obs[o].drop();
             }
           }
         }
-        this.xy = [x,y];
-        this.style.left = x+'px';
-        this.style.top = y+'px';
+        el.xy = [x,y];
+        el.style.left = x+'px';
+        el.style.top = y+'px';
         return r;
       };
       el.drop = function(){
         var f = 1, r;
-        this.v = [this.v[0]*f, this.v[1]*f]; //v=u+at
-        r = this.move([this.xy[0]+this.v[0], this.xy[1]+this.v[1]]);
-        if( r ){
-          if( r[0] ){ this.v = [-this.v[0], this.v[1]]; }
-          if( r[1] ){ this.v = [this.v[0], -this.v[1]]; }
-        }
-        if( Math.abs(this.v[0])+Math.abs(this.v[1]) < 0.5 ){ clearTimeout(this.t); return; }
-        this.t = setTimeout(function(){ el.drop(); }, 23);
+        el.v = [el.v[0]*f, el.v[1]*f]; //v=u+at
+        el.move([el.xy[0]+el.v[0], el.xy[1]+el.v[1]]);
+        el.t = setTimeout(function(){ el.drop(); }, 23);
         return false;
       };
     }
@@ -100,17 +98,17 @@ pong = {
 	paddleReset: function(el){ 
     el.w = getComputed(el,'width');
     el.x = getComputed(el,'left');
+    el.dir = 0;
   },
   paddleInit: function(el){
     pong.paddleReset(el);
     if( !el.move ){
       el.move = function(x){
-        if( !this.out ){
-          if( x<=0 ){ x=0; }
-          else if( x>=pong.wh[0]-this.w ){ x=pong.wh[0]-this.w; }
-        }
-        this.x = x;
-        this.style.left = x+'px';
+        el.rSpin = x>el.x;
+        if( x<=0 ){ x=0; }
+        else if( x>=pong.wh[0]-el.w ){ x=pong.wh[0]-el.w; }
+        el.x = x;
+        el.style.left = x+'px';
       };
       el.onmousedown = el.ontouchstart = pong.touch;
     }
