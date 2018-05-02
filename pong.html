@@ -32,19 +32,20 @@ function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(e
 function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ if( style=='width' ){ y=el.getBoundingClientRect().right-el.getBoundingClientRect().left }else if( style=='height' ){ y=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else{ var y=el.currentStyle[style] } } return parseFloat(y); }
 function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
 function getX(e){ var x=null; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ x = (e.touches[0].pageX+e.touches[0].pageX)/2; }else{ x = e.touches[0].pageX; } }else{ x = e.pageX; } return x; }
+if( !Date.now ){ Date.now = function now() { return new Date().getTime(); }; }
 var pong = {
   init: function(){
     var board = document.getElementById('board'),
         goal = document.getElementById('goal');
     pong.wh = [getComputed(board,'width'), getComputed(board,'height')];
-    document.body.style.fontSize = pong.wh[1]/14+'px';
+    document.body.style.fontSize = pong.wh[0]/8+'px';
     pong.goal = [(pong.wh[0]/2)-(getComputed(goal,'width')/2), (pong.wh[0]/2)+(getComputed(goal,'width')/2)];
     pong.paddle = pong.paddleInit(document.getElementById('paddle'));
     pong.puk = pong.pukInit(document.getElementById('puk'));
     pong.obs=[];
 	},
 	pukReset: function(el){ 
-    clearTimeout(pong.puk.t);
+    clearTimeout(el.t);
     el.wh = [getComputed(el,'width'), getComputed(el,'height')];
     el.xy = [getComputed(el,'left'), getComputed(el,'top')];
     el.v = [0,0];
@@ -55,16 +56,24 @@ var pong = {
     if( !el.move ){
       el.throws = el.goals = 0;
       el.move = function(xy){
-        var x=xy[0], y=xy[1], r;
+        var x=xy[0], y=xy[1], r, vX;
         if( !el.out ){
           if( x<=0 ){ x=0; r=[-1,0]; }
           else if( x>=pong.wh[0]-el.wh[0] ){ x=pong.wh[0]-el.wh[0]; r=[1,0]; }
-          if( y>=pong.wh[1]-el.wh[1] ){ 
-            if( x>pong.paddle[0] && x<pong.paddle[1]-el.wh[0] ){  }
-            else{ el.out=1; pong.el.goals--; pong.scores(); setTimeout(function(){pong.init()},1000) }
+          if( y>=pong.wh[1]-el.wh[1] ){
+            if( x>pong.paddle[0] && x<pong.paddle[1]-el.wh[0] ){
+              vX = -el.v[0];
+              console.log( performance.now()-pong.paddle.dragT );
+              if( performance.now()-pong.paddle.dragT < 300 ){
+                vX = Math.abs(vX);
+                if( pong.paddle.spinL ){ vX = -vX; }
+              }
+              el.v = [vX, -el.v[1]];
+            }
+            else{ el.out=1; pong.el.goals--; pong.scores(); setTimeout(function(){pong.pukReset()},1000) }
           }
           else if( y<=0 ){
-            if( x>pong.goal[0] && x<pong.goal[1]-el.wh[0] ){ el.out=1; pong.el.goals++; pong.scores(); setTimeout(function(){pong.init()},1000) }
+            if( x>pong.goal[0] && x<pong.goal[1]-el.wh[0] ){ el.out=1; pong.el.goals++; pong.scores(); setTimeout(function(){pong.pukReset()},1000) }
             else{ y=0; r=[0,-1]; }
           }
           if( r ){
@@ -83,7 +92,6 @@ var pong = {
         el.xy = [x,y];
         el.style.left = x+'px';
         el.style.top = y+'px';
-        return r;
       };
       el.drop = function(){
         var f = 1, r;
@@ -103,14 +111,14 @@ var pong = {
   paddleInit: function(el){
     pong.paddleReset(el);
     if( !el.move ){
+      el.onmousedown = el.ontouchstart = pong.touch;
       el.move = function(x){
-        el.rSpin = x>el.x;
+        el.spinL = x<el.x;
         if( x<=0 ){ x=0; }
         else if( x>=pong.wh[0]-el.w ){ x=pong.wh[0]-el.w; }
         el.x = x;
         el.style.left = x+'px';
       };
-      el.onmousedown = el.ontouchstart = pong.touch;
     }
     return el;
 	},
@@ -139,6 +147,7 @@ var pong = {
     if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
     var xE = getX(e), 
       x = pong.x0+xE-pong.xT;
+    pong.paddle.dragT = e.timeStamp;
     pong.paddle.move(x);
 		return false;
 	},
