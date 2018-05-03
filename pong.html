@@ -11,8 +11,8 @@
     body { background:#111; color:#fff; font:42px/1 helvetica,arial,freesans,sans-serif; }
     .hide { display:none; }
     .board { background:#ebd2b4; height:80%; width:80%; position:absolute; left:10%; top:10%; }
-    .paddle { background:#fff; border-radius:4px; cursor:pointer; display:block; height:5%; width:20%; position:absolute; left:0; bottom:-5%; }
-    .puk { background:#603c11; border-radius:50%; cursor:pointer; display:block; height:1em; line-height:1em; width:1em; text-align:center; position:absolute; left:0; top:0; }
+    .paddle { background:#fff; border-radius:4px; cursor:pointer; display:block; height:5%; width:20%; position:absolute; left:40%; bottom:-5%; }
+    .puk { background:#603c11; border-radius:50%; cursor:pointer; display:block; height:1em; line-height:1em; width:1em; text-align:center; position:absolute; left:43.5%; top:80%; }
     .goal { border-bottom:3px solid #111; border-top:1.5em solid #fff; border-radius:50% 50% 5% 5%; margin:-1.5em auto 0; width:25%; }
     .scores { display:table; height:10%; margin:0 auto; width:90%; }
     .score { display:table-cell; vertical-align:middle; }
@@ -44,17 +44,18 @@ var pong = {
     pong.puk = pong.pukInit(document.getElementById('puk'));
     pong.obs=[];
 	},
-	pukReset: function(el){ 
-    clearTimeout(el.t);
-    el.wh = [getComputed(el,'width'), getComputed(el,'height')];
-    el.xy = [getComputed(el,'left'), getComputed(el,'top')];
-    el.v = [0,0];
-    el.out = 0;
-  },
   pukInit: function(el){
-    pong.pukReset(el);
-    if( !el.move ){
+    if( !el.reset ){
       el.throws = el.goals = 0;
+    	el.reset = function(){ 
+        clearTimeout(el.t);
+        el.removeAttribute('style');
+        el.wh = [getComputed(el,'width'), getComputed(el,'height')];
+        el.xy = [getComputed(el,'left'), getComputed(el,'top')];
+        el.v = [0,0];
+        el.out = 0;
+      }
+      el.reset();
       el.move = function(xy){
         var x=xy[0], y=xy[1], r, vX;
         if( !el.out ){
@@ -70,24 +71,24 @@ var pong = {
               }
               el.v = [vX, -el.v[1]];
             }
-            else{ el.out=1; pong.el.goals--; pong.scores(); setTimeout(function(){pong.pukReset()},1000) }
+            else{ el.out=1; pong.paddle.goals--; pong.scores(); setTimeout(function(){pong.puk.reset()},1000) }
           }
           else if( y<=0 ){
-            if( x>pong.goal[0] && x<pong.goal[1]-el.wh[0] ){ el.out=1; pong.el.goals++; pong.scores(); setTimeout(function(){pong.pukReset()},1000) }
+            if( x>pong.goal[0] && x<pong.goal[1]-el.wh[0] ){ el.out=1; pong.paddle.goals++; pong.scores(); setTimeout(function(){pong.puk.reset()},1000) }
             else{ y=0; r=[0,-1]; }
           }
           if( r ){
             if( r[0] ){ el.v = [-el.v[0], el.v[1]]; }
             if( r[1] ){ el.v = [el.v[0], -el.v[1]]; }
           }
-          for( var o in pong.obs ){
-            if( Math.abs(x-pong.obs[o].xy[0])<el.wh[0] && Math.abs(y-pong.obs[o].xy[1])<el.wh[1] ){
+          //~ for( var o in pong.obs ){
+            //~ if( Math.abs(x-pong.obs[o].xy[0])<el.wh[0] && Math.abs(y-pong.obs[o].xy[1])<el.wh[1] ){
               //~ el.v = [vt1[0]+vn2[0], vt1[1]+vn2[1]];
               //~ clearTimeout(pong.obs[o].t); 
               //~ pong.obs[o].v = [vt2[0]+vn1[0], vt2[1]+vn1[1]];
               //~ pong.obs[o].drop();
-            }
-          }
+            //~ }
+          //~ }
         }
         el.xy = [x,y];
         el.style.left = x+'px';
@@ -103,15 +104,15 @@ var pong = {
     }
     return el;
 	},
-	paddleReset: function(el){ 
-    el.w = getComputed(el,'width');
-    el.x = getComputed(el,'left');
-    el.dir = 0;
-  },
   paddleInit: function(el){
-    pong.paddleReset(el);
-    if( !el.move ){
-      el.onmousedown = el.ontouchstart = pong.touch;
+    if( !el.reset ){
+      el.reset = function(){ 
+        el.w = getComputed(el,'width');
+        el.x = getComputed(el,'left');
+        el.x0 = el.x;
+        el.dir = 0;
+      }
+      el.reset();
       el.move = function(x){
         el.spinL = x<el.x;
         if( x<=0 ){ x=0; }
@@ -119,6 +120,7 @@ var pong = {
         el.x = x;
         el.style.left = x+'px';
       };
+      el.onmousedown = el.ontouchstart = pong.touch;
     }
     return el;
 	},
@@ -151,11 +153,14 @@ var pong = {
     pong.paddle.move(x);
 		return false;
 	},
-	release: function(){
-    pong.scores();
+	start: function(){
+    pong.puk.reset();
+    pong.paddle.reset();
+    pong.puk.v = [(4*(pong.paddle.x-pong.paddle.x0) || Math.random(8)-4),-1];
+    setTimeout(pong.puk.drop, 1500);
 	},
 	scores: function(zero){
-    var p1 = document.getElementById('p1'),
+    var p1 = pong.paddle,
         s1 = document.getElementById('s1');
     p1.throws++;
     if( !!zero ){
@@ -168,8 +173,11 @@ var pong = {
 };
 
 pong.init();
+addHandler(window,'load',function(){
+  pong.start(); 
+});
 addHandler(window,'resize',function(){
-  pong.init(); 
+  pong.init();
 });
 </script>
 </body>
