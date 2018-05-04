@@ -161,7 +161,7 @@ var pong = {
     pong.puk.reset();
     pong.paddle.reset();
     pong.puk.v = [vX,-(vMag-Math.abs(vX))];
-    //setTimeout(pong.puk.drop, 1500);
+    setTimeout(pong.puk.drop, 1000);
 	},
 	scores: function(zero){
     var p1 = pong.paddle,
@@ -178,7 +178,7 @@ var pong = {
 
 pong.init();
 addHandler(window,'load',function(){
-  pong.start(); setTimeout(pong.puk.drop, 0);
+  pong.start();
 });
 addHandler(window,'resize',function(){
   pong.init();
