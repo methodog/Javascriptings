@@ -47,7 +47,7 @@ var pong = {
   pukInit: function(el){
     if( !el.reset ){
       el.throws = el.goals = 0;
-    	el.reset = function(){
+    	el.reset = function(){console.log('reset');
         clearTimeout(el.t);
         el.removeAttribute('style');
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
@@ -71,10 +71,10 @@ var pong = {
               }
               el.v = [vX, -el.v[1]];
             }
-            else{ el.out=1; pong.paddle.goals--; pong.scores(); pong.start(); console.log('out restart'); }
+            else{ el.out=1; pong.paddle.goals--; pong.scores(); console.log('out restart'); pong.start(); }
           }
           else if( y<=0 ){
-            if( x>pong.goal[0] && x<pong.goal[1]-el.wh[0] ){ el.out=1; pong.paddle.goals++; pong.scores(); pong.start(); console.log('goal restart'); }
+            if( x>pong.goal[0] && x<pong.goal[1]-el.wh[0] ){ el.out=1; pong.paddle.goals++; pong.scores(); console.log('goal restart'); pong.start(); }
             else{ y=0; r=[0,-1]; }
           }
           if( r ){
@@ -96,10 +96,10 @@ var pong = {
       };
       el.drop = function(){
         var f = 1, r;
-        if( el.t ) clearTimeout(el.t);
+        clearTimeout(el.t);
         el.v = [el.v[0]*f, el.v[1]*f]; //v=u+at
         el.move([el.xy[0]+el.v[0], el.xy[1]+el.v[1]]);
-        el.t = setTimeout(function(){ el.drop(); }, 23);
+        el.t = setTimeout(el.drop, 23);
         return false;
       };
     }
@@ -155,13 +155,13 @@ var pong = {
     pong.paddle.move(x);
 		return false;
 	},
-	start: function(){
+	start: function(){console.log('start');
     var vMag = 10,
         vX = ((vMag*(pong.paddle.x-pong.paddle.x0)/pong.paddle.x0) || (Math.random()*2*vMag)-vMag);
     pong.puk.reset();
     pong.paddle.reset();
     pong.puk.v = [vX,-(vMag-Math.abs(vX))];
-    setTimeout(pong.puk.drop, 1500);
+    //setTimeout(pong.puk.drop, 1500);
 	},
 	scores: function(zero){
     var p1 = pong.paddle,
@@ -178,7 +178,7 @@ var pong = {
 
 pong.init();
 addHandler(window,'load',function(){
-  pong.start(); 
+  pong.start(); setTimeout(pong.puk.drop, 0);
 });
 addHandler(window,'resize',function(){
   pong.init();
