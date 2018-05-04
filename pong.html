@@ -47,7 +47,7 @@ var pong = {
   pukInit: function(el){
     if( !el.reset ){
       el.throws = el.goals = 0;
-    	el.reset = function(){console.log(el.t);
+    	el.reset = function(){
         clearTimeout(el.t);
         el.removeAttribute('style');
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
@@ -96,6 +96,7 @@ var pong = {
       };
       el.drop = function(){
         var f = 1, r;
+        if( el.t ) clearTimeout(el.t);
         el.v = [el.v[0]*f, el.v[1]*f]; //v=u+at
         el.move([el.xy[0]+el.v[0], el.xy[1]+el.v[1]]);
         el.t = setTimeout(function(){ el.drop(); }, 23);
@@ -157,7 +158,7 @@ var pong = {
 	start: function(){
     var vMag = 10,
         vX = ((vMag*(pong.paddle.x-pong.paddle.x0)/pong.paddle.x0) || (Math.random()*2*vMag)-vMag);
-    pong.puk.reset();clearTimeout(pong.puk.t);
+    pong.puk.reset();
     pong.paddle.reset();
     pong.puk.v = [vX,-(vMag-Math.abs(vX))];
     setTimeout(pong.puk.drop, 1500);
