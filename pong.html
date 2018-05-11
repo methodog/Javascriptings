@@ -49,11 +49,12 @@ var pong = {
       el.throws = el.goals = 0;
     	el.reset = function(){console.log('reset');
         clearTimeout(el.t);
+        el.t = null;
+        el.v = [0,0];
+        el.out = 0;
         el.removeAttribute('style');
         el.wh = [getComputed(el,'width'), getComputed(el,'height')];
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
-        el.v = [0,0];
-        el.out = 0;
       }
       el.reset();
       el.move = function(xy){
@@ -71,10 +72,10 @@ var pong = {
               }
               el.v = [vX, -el.v[1]];
             }
-            else{ el.out=1; pong.paddle.goals--; pong.scores(); console.log('out restart'); pong.start(); }
+            else{ el.out=1; pong.paddle.goals--; pong.scores(); console.log('out restart'); pong.start(); return false; }
           }
           else if( y<=0 ){
-            if( x>pong.goal[0] && x<pong.goal[1]-el.wh[0] ){ el.out=1; pong.paddle.goals++; pong.scores(); console.log('goal restart'); pong.start(); }
+            if( x>pong.goal[0] && x<pong.goal[1]-el.wh[0] ){ el.out=1; pong.paddle.goals++; pong.scores(); console.log('goal restart'); pong.start(); return false; }
             else{ y=0; r=[0,-1]; }
           }
           if( r ){
@@ -95,7 +96,7 @@ var pong = {
         el.style.top = y+'px';
       };
       el.drop = function(){
-        var f = 1, r;
+        var f = 1;
         clearTimeout(el.t);
         el.v = [el.v[0]*f, el.v[1]*f]; //v=u+at
         el.move([el.xy[0]+el.v[0], el.xy[1]+el.v[1]]);
@@ -161,6 +162,7 @@ var pong = {
     pong.puk.reset();
     pong.paddle.reset();
     pong.puk.v = [vX,-(vMag-Math.abs(vX))];
+    clearTimeout(pong.puk.t);
     setTimeout(pong.puk.drop, 1000);
 	},
 	scores: function(zero){
