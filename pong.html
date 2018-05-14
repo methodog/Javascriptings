@@ -160,13 +160,13 @@ var pong = {
 		return false;
 	},
 	start: function(){console.log('start');
-    var vMag = 50,
-        vX = ((vMag*(pong.paddle.x-pong.paddle.x0)/pong.paddle.x0) || (Math.random()*2*vMag)-vMag);
+    var vMag = 10,
+        y2x = 5,
+        vX = ((vMag*(pong.paddle.x-pong.paddle.x0)/pong.paddle.x0) || (Math.random()*2*vMag)-vMag) / y2x;
     pong.puk.reset();
     pong.paddle.reset();
     pong.puk.v = [vX,-(vMag-Math.abs(vX))];
-    window.clearTimeout(pong.puk.t);
-    pong.puk.t = window.setTimeout(pong.puk.drop, 1000);
+    //window.setTimeout(pong.puk.drop, 1000);
 	},
 	scores: function(zero){
     var p1 = pong.paddle,
@@ -183,7 +183,7 @@ var pong = {
 
 pong.init();
 addHandler(window,'load',function(){
-  pong.start();
+  pong.start(); pong.puk.drop();
 });
 addHandler(window,'resize',function(){
   pong.init();
