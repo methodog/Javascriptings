@@ -160,8 +160,8 @@ var pong = {
 	},
 	start: function(){
     var vMag = 10,
-        y2x = 5,
-        vX = ((vMag * (pong.paddle.x - pong.paddle.x0)/pong.paddle.x0) || (Math.random() * 2 * vMag) - vMag) / y2x;
+        x2y = 0.3,
+        vX = vMag * x2y * (((pong.paddle.x - pong.paddle.x0)/pong.paddle.x0) || Math.sin(Math.random() * 2 * Math.PI));
     pong.puk.reset();
     pong.paddle.reset();
     pong.puk.v = [vX, -(vMag - Math.abs(vX))];
