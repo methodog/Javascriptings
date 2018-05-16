@@ -64,7 +64,6 @@ var pong = {
           if (y >= pong.wh[1] - el.wh[1]) {
             if (x > pong.paddle.x - el.wh[0] && x < pong.paddle.x + pong.paddle.w) {
               vX = el.v[0];
-              //console.log( performance.now() - pong.paddle.dragT );
               if( performance.now() - pong.paddle.dragT < 300 ){
                 vX = Math.abs(vX);
                 if (pong.paddle.spinL) { vX = -vX; }
@@ -161,7 +160,9 @@ var pong = {
 	start: function(){
     var vMag = 10,
         x2y = 0.3,
-        vX = vMag * x2y * (((pong.paddle.x - pong.paddle.x0)/pong.paddle.x0) || Math.sin(Math.random() * 2 * Math.PI));
+        mid = (pong.wh[0] / 2) - (pong.paddle.w / 2),
+        vX0 = Math.round(((pong.paddle.x - mid) / mid) * 10 + Number.EPSILON) / 10,
+        vX = vMag * x2y * ((vX0) || Math.sin(Math.random() * 2 * Math.PI));
     pong.puk.reset();
     pong.paddle.reset();
     pong.puk.v = [vX, -(vMag - Math.abs(vX))];
