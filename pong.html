@@ -46,7 +46,6 @@ var pong = {
 	},
   pukInit: function(el){
     if (!el.reset) {
-      el.throws = el.goals = 0;
     	el.reset = function(){
         window.clearTimeout(el.t);
         el.t = null;
