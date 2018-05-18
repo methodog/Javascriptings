@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <title>breakout</title>
+  <style type="text/css">
+    html, body { height:100%; margin:0; width:100%; overflow:hidden; }
+    body { background:#111; color:#fff; font:42px/1 helvetica,arial,freesans,sans-serif; }
+    .hide { display:none; }
+    .board { background:#ebd2b4; height:80%; width:80%; position:absolute; left:10%; top:10%; }
+    .paddle { background:#fff; border-radius:4px; cursor:pointer; display:block; height:8%; width:20%; position:absolute; left:40%; bottom:-8%; }
+    .puk { background:#603c11; border-radius:50%; cursor:pointer; display:block; height:.5em; width:.5em; text-align:center; position:absolute; left:50%; top:70%; }
+    .obstacle { background:#000; border-radius:2px; position:absolute; left:0; top:50%; }
+    .scores { display:table; height:10%; margin:0 auto; width:90%; }
+    .score { display:table-cell; vertical-align:middle; }
+  </style>
+</head>
+
+<body>
+  <div class="board" id="board">
+    <div class="paddle" id="paddle"></div>
+    <div class="puk" id="puk"></div>
+  </div>
+  <div class="scores"><div class="score" id="s1"></div></div>
+
+<script type="text/javascript">
+function addHandler(el, evt, fn) { if (el.addEventListener) { el.addEventListener(evt, fn, false); } else if (el.attachEvent) { el.attachEvent('on' + evt, fn); } }
+function getComputed(el, style) { if(window.getComputedStyle) { var y = document.defaultView.getComputedStyle(el, null).getPropertyValue(style); } else if(el.currentStyle) { if (style == 'width') { y = el.getBoundingClientRect().right - el.getBoundingClientRect().left } else if (style == 'height') { y = el.getBoundingClientRect().bottom - el.getBoundingClientRect().top } else { var y = el.currentStyle[style] } } return parseFloat(y); }
+function getPgOffset(el) { var o = [0, 0]; if (el.offsetParent) { do{ o = [o[0] + el.offsetLeft, o[1] + el.offsetTop]; }while( el = el.offsetParent ) } return [o[0] + document.body.scrollLeft, o[1] + document.body.scrollTop]; } 
+function getX(e) { var x = null; if (e.touches && e.touches.length) { if (e.touches.length > 1) { x = (e.touches[0].pageX + e.touches[0].pageX)/2; } else { x = e.touches[0].pageX; } } else { x = e.pageX; } return x; }
+if (!Date.now) { Date.now = function now() { return new Date().getTime(); }; }
+var pong = {
+  init: function() {
+    var obs = 10;
+    pong.board = document.getElementById('board');
+    pong.wh = [getComputed(pong.board, 'width'), getComputed(pong.board, 'height')];
+    document.body.style.fontSize = pong.wh[0]/8 + 'px';
+    pong.paddle = pong.paddleInit(document.getElementById('paddle'));
+    pong.puk = pong.pukInit(document.getElementById('puk'));
+    pong.obs = [];
+    for (var o = 0; o < obs; o++) {
+      var el = document.createElement('div');
+      el.classList.add('obstacle');
+      el.wh = [pong.wh[0] / obs, pong.wh[1] / obs];
+      el.xy = [o * el.wh[0], (pong.wh[1] / 2) - (el.wh[1] / 2)];
+      el.style.width = el.wh[0] + 'px';
+      el.style.height = el.wh[1] + 'px';
+      el.style.left = el.xy[0] + 'px';
+      el.style.top = el.xy[1] + 'px';
+      pong.board.appendChild(el);
+      pong.obs.push(el);
+    }
+	},
+  pukInit: function(el) {
+    if (!el.reset) {
+    	el.reset = function() {
+        window.clearTimeout(el.t);
+        el.t = null;
+        el.v = [0, 0];
+        el.removeAttribute('style');
+        el.wh = [getComputed(el, 'width'), getComputed(el, 'height')];
+        el.xy = [getComputed(el, 'left') - (el.wh[0] / 2), getComputed(el, 'top') - (el.wh[1] / 2)];
+        el.style.left = el.xy[0] + 'px';
+        el.style.top = el.xy[1] + 'px';
+      }
+      el.reset();
+      el.move = function(xy) {
+        var x = xy[0], y = xy[1], r, vX;
+        if (!el.out) {
+          if (x <= 0) { x =0 ; r = [-1, 0]; }
+          else if (x >= pong.wh[0] - el.wh[0]) { x = pong.wh[0] - el.wh[0]; r = [1, 0]; }
+          if (y >= pong.wh[1] - el.wh[1]) {
+            if (x > pong.paddle.x - el.wh[0] && x < pong.paddle.x + pong.paddle.w) {
+              vX = el.v[0];
+              if( performance.now() - pong.paddle.dragT < 300 ) {
+                vX = Math.abs(vX);
+                if (pong.paddle.spinL) { vX = -vX; }
+              }
+              el.v = [vX, -el.v[1]];
+            }
+            else { el.out = 1; pong.scores(); pong.start(); return false; }
+          }
+          else if (y <= 0) {y = 0; r = [0, -1]; }
+          if (r) {
+            if (r[0]) { el.v = [-el.v[0], el.v[1]]; }
+            if (r[1]) { el.v = [el.v[0], -el.v[1]]; }
+          }
+          for( var o in pong.obs ) {
+            if( Math.abs(x - pong.obs[o].xy[0]) < el.wh[0] && Math.abs(y - pong.obs[o].xy[1]) < el.wh[1] ) {
+              el.v = [el.v[0], -el.v[1]];
+              pong.obs[o].remove();
+              pong.obs.splice(o, 1);
+            }
+          }
+        }
+        el.xy = [x, y];
+        window.requestAnimationFrame(() => {
+          el.style.left = x + 'px';
+          el.style.top = y + 'px';
+        });
+      };
+      el.drop = function() {
+        var f = 1;
+        el.v = [el.v[0] * f, el.v[1] * f]; //v = u + at
+        el.move([el.xy[0] + el.v[0], el.xy[1] + el.v[1]]);
+        if( !el.out ) el.t = window.setTimeout(el.drop, 23);
+        return false;
+      };
+    }
+    return el;
+	},
+  paddleInit: function(el) {
+    if (!el.reset) {
+      el.reset = function() { 
+        el.w = getComputed(el, 'width');
+        el.x = getComputed(el, 'left');
+        el.x0 = el.x;
+        el.dir = 0;
+      }
+      el.reset();
+      el.move = function(x) {
+        el.spinL = x < el.x;
+        if (x <= 0) { x = 0; }
+        else if (x >= pong.wh[0] - el.w) { x = pong.wh[0] - el.w; }
+        el.x = x;
+        window.requestAnimationFrame(() => {
+          el.style.left = x + 'px';
+        });
+      };
+      el.throws = el.points = 0;
+      el.onmousedown = el.ontouchstart = pong.touch;
+    }
+    return el;
+	},
+	touch: function(e) {
+		e = e || window.event;
+		pong.x0 = pong.paddle.x;
+    pong.xT = getX(e);
+		if (e.type === 'touchstart') {
+      pong.paddle.ontouchmove = pong.drag;
+      pong.paddle.onmousedown = null;
+      pong.paddle.ontouchend = function() {
+        pong.paddle.ontouchmove = null;
+        pong.paddle.ontouchend = null;
+      };
+    } else {
+      document.onmousemove = pong.drag;
+      document.onmouseup = function() {
+        document.onmousemove = null;
+        document.onmouseup = null;
+      };
+    }
+		return false;
+	},
+	drag: function(e) {
+		e = e || window.event;
+    if (e.preventDefault) { e.preventDefault(); } else { e.returnValue = false; }
+    var xE = getX(e), 
+      x = pong.x0 + xE - pong.xT;
+    pong.paddle.dragT = e.timeStamp;
+    pong.paddle.move(x);
+		return false;
+	},
+	start: function() {
+    var vMag = 10,
+        x2y = 0.3,
+        mid = (pong.wh[0] / 2) - (pong.paddle.w / 2),
+        vX0 = Math.round(((pong.paddle.x - mid) / mid) * 10 + Number.EPSILON) / 10,
+        vX = vMag * x2y * ((vX0) || Math.sin(Math.random() * 2 * Math.PI));
+    pong.puk.reset();
+    pong.paddle.reset();
+    pong.puk.v = [vX, -(vMag - Math.abs(vX))];
+    window.setTimeout(function() { pong.puk.out = 0; pong.puk.drop() }, 1000);
+	},
+	scores: function(zero) {
+    var p1 = pong.paddle,
+        s1 = document.getElementById('s1');
+    p1.throws++;
+    if (!!zero) {
+      p1.throws = p1.points = 0;
+      s1.innerHTML = '';
+    } else {
+      s1.innerHTML = p1.points + '/' + p1.throws;
+    }
+  }
+};
+
+pong.init();
+addHandler(window, 'load', function() {
+  pong.start();
+});
+addHandler(window, 'resize', function() {
+  pong.init();
+});
+</script>
+</body>
+</html>
