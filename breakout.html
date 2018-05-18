@@ -87,17 +87,17 @@ var pong = {
           if (r) {
             if (r[0]) { el.v = [-el.v[0], el.v[1]]; }
             if (r[1]) { el.v = [el.v[0], -el.v[1]]; }
-          }
-          for (var o in pong.obs) {
-            var dXY = [Math.abs(x - pong.obs[o].xy[0]) - el.wh[0], Math.abs(y - pong.obs[o].xy[1]) - el.wh[1]]
-            if (dXY[0] <= 0 && dXY[1] <= 0) {
-              if (dXY[0] > dXY[1]) {
-                el.v = [-el.v[0], el.v[1]];
-              } else {
-                el.v = [el.v[0], -el.v[1]];
+          } else {
+            for (var o in pong.obs) {
+              if ((x + el.wh[0] > pong.obs[o].xy[0] && x < pong.obs[o].xy[0] + pong.obs[o].wh[0]) && (y + el.wh[1] > pong.obs[o].xy[1] && y < pong.obs[o].xy[1] + pong.obs[o].wh[1])) {
+                if (x + el.wh[0] > pong.obs[o].xy[0] && x < pong.obs[o].xy[0] + pong.obs[o].wh[0]) {
+                  el.v = [el.v[0], -el.v[1]];
+                } else {
+                  el.v = [-el.v[0], el.v[1]];
+                }
+                pong.obs[o].remove();
+                pong.obs.splice(o, 1);
               }
-              pong.obs[o].remove();
-              pong.obs.splice(o, 1);
             }
           }
         }
