@@ -34,18 +34,21 @@ function getX(e) { var x = null; if (e.touches && e.touches.length) { if (e.touc
 if (!Date.now) { Date.now = function now() { return new Date().getTime(); }; }
 var pong = {
   init: function() {
-    var obs = 10;
     pong.board = document.getElementById('board');
     pong.wh = [getComputed(pong.board, 'width'), getComputed(pong.board, 'height')];
     document.body.style.fontSize = pong.wh[0]/8 + 'px';
     pong.paddle = pong.paddleInit(document.getElementById('paddle'));
     pong.puk = pong.pukInit(document.getElementById('puk'));
+    pong.obsLen = 20;
+    pong.obsRows = 2;
     pong.obs = [];
-    for (var o = 0; o < obs; o++) {
+    var i = 0;
+    for (var o = 0; o < pong.obsLen; o++) {
       var el = document.createElement('div');
+      if ((o % (pong.obsLen / pong.obsRows)) == 0) { i++; }
       el.classList.add('obstacle');
-      el.wh = [pong.wh[0] / obs, pong.wh[1] / obs];
-      el.xy = [o * el.wh[0], (pong.wh[1] / 2) - (el.wh[1] / 2)];
+      el.wh = [pong.wh[0] / (pong.obsLen / pong.obsRows), pong.wh[1] / (pong.obsLen / pong.obsRows)];
+      el.xy = [(o % (pong.obsLen / pong.obsRows)) * el.wh[0], (pong.wh[1] / 2) - (el.wh[1] * i)];
       el.style.width = el.wh[0] + 'px';
       el.style.height = el.wh[1] + 'px';
       el.style.left = el.xy[0] + 'px';
