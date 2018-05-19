@@ -53,10 +53,10 @@ var pong = {
       pong.board.appendChild(el);
       pong.obs.push(el);
     }
-	},
+  },
   pukInit: function(el) {
     if (!el.reset) {
-    	el.reset = function() {
+      el.reset = function() {
         window.clearTimeout(el.t);
         el.t = null;
         el.v = [0, 0];
@@ -76,7 +76,7 @@ var pong = {
             if (x > pong.paddle.x - el.wh[0] && x < pong.paddle.x + pong.paddle.w) {
               vX = el.v[0];
               if( performance.now() - pong.paddle.dragT < 300 ) {
-                vX = Math.abs(vX);
+                vX = 1.2 * Math.abs(vX);
                 if (pong.paddle.spinL) { vX = -vX; }
               }
               el.v = [vX, -el.v[1]];
@@ -90,7 +90,7 @@ var pong = {
           } else {
             for (var o in pong.obs) {
               if ((x + el.wh[0] > pong.obs[o].xy[0] && x < pong.obs[o].xy[0] + pong.obs[o].wh[0]) && (y + el.wh[1] > pong.obs[o].xy[1] && y < pong.obs[o].xy[1] + pong.obs[o].wh[1])) {
-                if (x + el.wh[0] > pong.obs[o].xy[0] && x < pong.obs[o].xy[0] + pong.obs[o].wh[0]) {
+                if (y + el.wh[1] > pong.obs[o].xy[1] && y < pong.obs[o].xy[1] + pong.obs[o].wh[1]) {
                   el.v = [el.v[0], -el.v[1]];
                 } else {
                   el.v = [-el.v[0], el.v[1]];
@@ -116,7 +116,7 @@ var pong = {
       };
     }
     return el;
-	},
+  },
   paddleInit: function(el) {
     if (!el.reset) {
       el.reset = function() { 
@@ -139,12 +139,12 @@ var pong = {
       el.onmousedown = el.ontouchstart = pong.touch;
     }
     return el;
-	},
-	touch: function(e) {
-		e = e || window.event;
-		pong.x0 = pong.paddle.x;
+  },
+  touch: function(e) {
+    e = e || window.event;
+    pong.x0 = pong.paddle.x;
     pong.xT = getX(e);
-		if (e.type === 'touchstart') {
+    if (e.type === 'touchstart') {
       pong.paddle.ontouchmove = pong.drag;
       pong.paddle.onmousedown = null;
       pong.paddle.ontouchend = function() {
@@ -158,18 +158,18 @@ var pong = {
         document.onmouseup = null;
       };
     }
-		return false;
-	},
-	drag: function(e) {
-		e = e || window.event;
+    return false;
+  },
+  drag: function(e) {
+    e = e || window.event;
     if (e.preventDefault) { e.preventDefault(); } else { e.returnValue = false; }
     var xE = getX(e), 
       x = pong.x0 + xE - pong.xT;
     pong.paddle.dragT = e.timeStamp;
     pong.paddle.move(x);
-		return false;
-	},
-	start: function() {
+    return false;
+  },
+  start: function() {
     var vMag = 10,
         x2y = 0.3,
         mid = (pong.wh[0] / 2) - (pong.paddle.w / 2),
@@ -179,8 +179,8 @@ var pong = {
     pong.paddle.reset();
     pong.puk.v = [vX, -(vMag - Math.abs(vX))];
     window.setTimeout(function() { pong.puk.out = 0; pong.puk.drop() }, 1000);
-	},
-	scores: function(zero) {
+  },
+  scores: function(zero) {
     var p1 = pong.paddle,
         s1 = document.getElementById('s1');
     p1.throws++;
