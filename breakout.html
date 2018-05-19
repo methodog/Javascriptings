@@ -42,13 +42,16 @@ var pong = {
     pong.obsLen = 20;
     pong.obsRows = 2;
     pong.obs = [];
-    var i = 0;
+    pong.obsInit();
+  },
+  obsInit: function() {
+    var r = 0;
     for (var o = 0; o < pong.obsLen; o++) {
       var el = document.createElement('div');
-      if ((o % (pong.obsLen / pong.obsRows)) == 0) { i++; }
+      if ((o % (pong.obsLen / pong.obsRows)) == 0) { r++; }
       el.classList.add('obstacle');
       el.wh = [pong.wh[0] / (pong.obsLen / pong.obsRows), pong.wh[1] / (pong.obsLen / pong.obsRows)];
-      el.xy = [(o % (pong.obsLen / pong.obsRows)) * el.wh[0], (pong.wh[1] / 2) - (el.wh[1] * i)];
+      el.xy = [(o % (pong.obsLen / pong.obsRows)) * el.wh[0], (pong.wh[1] / 2) - (el.wh[1] * r)];
       el.style.width = el.wh[0] + 'px';
       el.style.height = el.wh[1] + 'px';
       el.style.left = el.xy[0] + 'px';
@@ -192,6 +195,9 @@ var pong = {
       s1.innerHTML = '';
     } else {
       s1.innerHTML = p1.points + '/' + p1.throws;
+    }
+    if (!pong.obs.length) {
+      pong.obsInit();
     }
   }
 };
