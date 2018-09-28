@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>parallax</title>
+    <style type="text/css">
+        html, body { height:100%; margin:0; }
+        body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
+        .parallaxer { height:100%; width:100%; overflow:hidden; position:relative; user-select:none; }
+        .parallaxer img { max-height:100%; max-width:100%; margin:auto; position:absolute; left:0; top:0; bottom:0; right:0; }
+    </style>	
+</head>
+
+<body>
+<div class="parallaxer js-parallaxer">
+    <img alt="" src="img/parallax/layer1.jpg">
+    <img alt="" src="img/parallax/layer2.png">
+    <img alt="" src="img/parallax/layer3.png">
+</div>
+
+<script type="text/javascript">
+function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ if( style=='width' ){ y=el.getBoundingClientRect().right-el.getBoundingClientRect().left }else if( style=='height' ){ y=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else{ var y=el.currentStyle[style] } } return parseFloat(y); }
+function getEventXY (e) {
+  const xy = [];
+  if (e.touches && e.touches.length) {
+    if (e.touches.length > 1) {
+      xy[0] = (e.touches[0].pageX + e.touches[0].pageX) / 2;
+      xy[1] = (e.touches[0].pageY + e.touches[0].pageY) / 2;
+    } else {
+      xy[0] = e.touches[0].pageX;
+      xy[1] = e.touches[0].pageY;
+    }
+  } else {
+    xy[0] = e.pageX;
+    xy[1] = e.pageY;
+  }
+  return xy;
+}
+
+const parallaxers = document.querySelectorAll(".js-parallaxer");
+
+if (parallaxers.length) {
+  const mover = {
+    id: 0,
+    size: (el) => {
+      const style = window.getComputedStyle(el);
+      el.wh = [parseInt(getComputed(el,'width')), Math.ceil(getComputed(el,'height'))];
+      el.xy = [parseInt(getComputed(el,'left')), Math.ceil(getComputed(el,'top'))];
+    },
+    init: (el) => {
+      el.imgs = el.getElementsByTagName('img');
+      el.arcs = el.imgs.length - 1;
+      if (!el.move) {
+        el.id = el.id || 'parallaxer' + mover.id++;
+        el.move = (xy) => {
+          Array.from(el.imgs, (img) => {
+            //img.style.transform = `translate($(xy[0]),)`;
+          });
+        };
+        el.zoom = (z) => {
+          let i = 0;
+          Array.from(el.imgs, (img) => {
+            if (!i++) return;
+            img.style.transform = `scale(${z * (i++ / el.arcs)})`;
+          });
+        };
+        el.zoom(1);
+        el.onmousemove = mover.touch;
+        el.onwheel = mover.touch;
+        el.ontouchmove = mover.touch;
+      }
+    },
+    touch: (e) => {
+      const el = e.target.parentNode;
+      const xyE = getEventXY(e);
+      if (!el.w) { mover.size(el); }
+      if (e.type === 'wheel'){
+        console.log(e.deltaY / 53);
+        el.zoom(e.deltaY / 53);
+      } else {
+        el.move([(xyE[0] - (el.xy[0] + (el.wh[0] / 2))) / el.wh[0], (xyE[1] - (el.xy[1] + (el.wh[1] / 2))) / el.wh[1]]);
+      }
+    }
+  };
+
+  Array.from(parallaxers, (parallaxer) => {
+    mover.init(parallaxer);
+  });
+}
+</script>
+</body>
+</html>
