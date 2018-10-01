@@ -44,7 +44,7 @@ const parallaxers = document.querySelectorAll(".js-parallaxer");
 
 if (parallaxers.length) {
   const painter = {
-    id: 0,
+    id: 1,
     size: (el) => {
       const style = window.getComputedStyle(el);
       el.wh = [parseInt(getComputed(el,'width')), Math.ceil(getComputed(el,'height'))];
@@ -56,16 +56,19 @@ if (parallaxers.length) {
       el.xlate = [0, 0];
       if (!el.paint) {
         el.id = el.id || 'parallaxer' + painter.id++;
+        el.css = el.appendChild(document.createElement('style'));
         el.paint = () => {
-          for (let i = 0; i < el.imgs.length; i++) {
-            el.imgs[i].style.transform = `scale(${1 + (el.scale * i * i / 50)}) translate(-${el.xlate[0] * i * i * 10}%  , -${el.xlate[1] * i * i * 10}%)`;
+          let css = '';
+          for (let i = 1; i < el.imgs.length; i++) {
+            css += `#${el.id} :nth-child(${i + 1}){ transform: scale(${1 + (el.scale * i * i / 50)}) translate(${-el.xlate[0] * i * i * 10}%  , ${-el.xlate[1] * i * i * 10}%) }`;
           }
+          el.css.innerHTML = css;
         };
-        el.move = (xy) => {console.log('m');
+        el.move = (xy) => {
           el.xlate = xy;
           el.paint();
         };
-        el.zoom = (z) => {console.log('z');
+        el.zoom = (z) => {
           el.scale += z;
           el.paint();
         };
