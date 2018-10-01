@@ -43,7 +43,7 @@ function getEventXY (e) {
 const parallaxers = document.querySelectorAll(".js-parallaxer");
 
 if (parallaxers.length) {
-  const mover = {
+  const painter = {
     id: 0,
     size: (el) => {
       const style = window.getComputedStyle(el);
@@ -52,34 +52,34 @@ if (parallaxers.length) {
     },
     init: (el) => {
       el.imgs = el.getElementsByTagName('img');
-      el.arcs = el.imgs.length - 1;
-      if (!el.move) {
-        el.id = el.id || 'parallaxer' + mover.id++;
-        el.move = (xy) => {
-          Array.from(el.imgs, (img) => {
-            //img.style.transform = `translate($(xy[0]),)`;
-          });
+      el.scale = 1;
+      el.xlate = [0, 0];
+      if (!el.paint) {
+        el.id = el.id || 'parallaxer' + painter.id++;
+        el.paint = () => {
+          for (let i = 0; i < el.imgs.length; i++) {
+            el.imgs[i].style.transform = `scale(${1 + (el.scale * i * i / 50)}) translate(-${el.xlate[0] * i * i * 10}%  , -${el.xlate[1] * i * i * 10}%)`;
+          }
         };
-        el.zoom = (z) => {
-          let i = 0;
-          Array.from(el.imgs, (img) => {
-            if (!i++) return;
-            img.style.transform = `scale(${z * (i++ / el.arcs)})`;
-          });
+        el.move = (xy) => {console.log('m');
+          el.xlate = xy;
+          el.paint();
         };
-        el.zoom(1);
-        el.onmousemove = mover.touch;
-        el.onwheel = mover.touch;
-        el.ontouchmove = mover.touch;
+        el.zoom = (z) => {console.log('z');
+          el.scale += z;
+          el.paint();
+        };
+        el.paint();
+        el.onmousemove = painter.touch.bind(null, el);
+        el.onwheel = painter.touch.bind(null, el);
+        el.ontouchmove = painter.touch.bind(null, el);
       }
     },
-    touch: (e) => {
-      const el = e.target.parentNode;
+    touch: (el, e) => {
       const xyE = getEventXY(e);
-      if (!el.w) { mover.size(el); }
+      if (!el.w) { painter.size(el); }
       if (e.type === 'wheel'){
-        console.log(e.deltaY / 53);
-        el.zoom(e.deltaY / 53);
+        el.zoom(e.deltaY > 0 ? -1 : 1);
       } else {
         el.move([(xyE[0] - (el.xy[0] + (el.wh[0] / 2))) / el.wh[0], (xyE[1] - (el.xy[1] + (el.wh[1] / 2))) / el.wh[1]]);
       }
@@ -87,7 +87,7 @@ if (parallaxers.length) {
   };
 
   Array.from(parallaxers, (parallaxer) => {
-    mover.init(parallaxer);
+    painter.init(parallaxer);
   });
 }
 </script>
