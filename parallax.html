@@ -66,11 +66,12 @@ if (parallaxers.length) {
         };
         el.move = (xy) => {
           el.xlate = xy;
-          el.paint();
         };
         el.zoom = (z) => {
           el.scale += z;
-          el.paint();
+          if (el.scale < 1) {
+            el.scale = 1;
+          }
         };
         el.paint();
         el.onmousemove = painter.touch.bind(null, el);
@@ -86,6 +87,7 @@ if (parallaxers.length) {
       } else {
         el.move([(xyE[0] - (el.xy[0] + (el.wh[0] / 2))) / el.wh[0], (xyE[1] - (el.xy[1] + (el.wh[1] / 2))) / el.wh[1]]);
       }
+      el.paint();
     }
   };
 
