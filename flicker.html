@@ -29,7 +29,7 @@
 <p class="flicker"><img src="img/strober/Dave.jpg" alt=""><img src="img/strober/Dave1.jpg" alt=""></p>
 <p class="flicker"><img src="img/strober/climbingfreaks.jpg" alt=""><img src="img/strober/climbingfreaks1.jpg" alt=""></p>
 -->
-<p class="flicker"><img src="img/strober/camel00.jpg" alt=""><img src="img/strober/camel01.jpg" alt=""><img src="img/strober/camel02.jpg" alt=""><img src="img/strober/camel03.jpg" alt=""><img src="img/strober/camel04.jpg" alt=""><img src="img/strober/camel05.jpg" alt=""><img src="img/strober/camel06.jpg" alt=""><img src="img/strober/camel07.jpg" alt=""><img src="img/strober/camel08.jpg" alt=""><img src="img/strober/camel09.jpg" alt=""><img src="img/strober/camel10.jpg" alt=""><img src="img/strober/camel11.jpg" alt=""><img src="img/strober/camel12.jpg" alt=""><img src="img/strober/camel13.jpg" alt=""><img src="img/strober/camel14.jpg" alt=""><img src="img/strober/camel15.jpg" alt=""></p>
+<p class="flicker"><img src="img/strober/camel00.jpg" alt=""><img src="img/strober/camel01.jpg" alt=""><img src="img/strober/camel02.jpg" alt=""><img src="img/strober/camel03.jpg" alt=""><img src="img/strober/camel04.jpg" alt=""><img src="img/strober/camel05.jpg" alt=""><img src="img/strober/camel06.jpg" alt=""><img src="img/strober/camel07.jpg" alt=""><img src="img/strober/camel08.jpg" alt=""><img src="img/strober/camel09.jpg" alt=""><img src="img/strober/camel10.jpg" alt=""><img src="img/strober/camel11.jpg" alt=""><img src="img/strober/camel12.jpg" alt=""><img src="img/strober/camel13.jpg" alt=""><img src="img/strober/camel14.jpg" alt=""></p>
 <p class="flicker"><img src="img/strober/horse00.jpg" alt=""><img src="img/strober/horse01.jpg" alt=""><img src="img/strober/horse02.jpg" alt=""><img src="img/strober/horse03.jpg" alt=""><img src="img/strober/horse04.jpg" alt=""><img src="img/strober/horse05.jpg" alt=""><img src="img/strober/horse06.jpg" alt=""><img src="img/strober/horse07.jpg" alt=""><img src="img/strober/horse08.jpg" alt=""><img src="img/strober/horse09.jpg" alt=""><img src="img/strober/horse10.jpg" alt=""><img src="img/strober/horse11.jpg" alt=""><img src="img/strober/horse12.jpg" alt=""><img src="img/strober/horse13.jpg" alt=""><img src="img/strober/horse14.jpg" alt=""><img src="img/strober/horse15.jpg" alt=""><img src="img/strober/horse16.jpg" alt=""><img src="img/strober/horse17.jpg" alt=""><img src="img/strober/horse18.jpg" alt=""><img src="img/strober/horse19.jpg" alt=""></p>
 <p class="flicker"><img src="img/strober/buffalo00.jpg" alt=""><img src="img/strober/buffalo01.jpg" alt=""><img src="img/strober/buffalo02.jpg" alt=""><img src="img/strober/buffalo03.jpg" alt=""><img src="img/strober/buffalo04.jpg" alt=""><img src="img/strober/buffalo05.jpg" alt=""><img src="img/strober/buffalo06.jpg" alt=""><img src="img/strober/buffalo07.jpg" alt=""><img src="img/strober/buffalo08.jpg" alt=""><img src="img/strober/buffalo09.jpg" alt=""><img src="img/strober/buffalo10.jpg" alt=""><img src="img/strober/buffalo11.jpg" alt=""><img src="img/strober/buffalo12.jpg" alt=""><img src="img/strober/buffalo13.jpg" alt=""><img src="img/strober/buffalo14.jpg" alt=""><img src="img/strober/buffalo15.jpg" alt=""></p>
 
@@ -58,7 +58,7 @@ var flicker = {
         if( !el.styled ){ el.appendChild(document.createElement('style')); el.styled=1; }
         if( !el.id ){ el.id = el.className+(++flicker.id); }
         flicker.size(el);
-        el.arcs = el.childNodes.length-1;
+        el.arcs = el.getElementsByTagName('img').length;
         el.xy = [getComputed(el,'left'), getComputed(el,'top')];
         if( typeof(opt.slide)==='function' ){ el.slide = opt.slide; }
         if( typeof(opt.stop)==='function' ){ el.stop = opt.stop; }
@@ -133,7 +133,7 @@ var flicker = {
 
 var i, els = document.querySelectorAll('.flicker'), el;
 for( i=0; i<els.length; ++i ){
-    els[i].childNodes[0].onload = function(){ flicker.init(this.parentNode, {'loop':1, 'fade':0}) };
+    els[i].getElementsByTagName('img')[0].onload = function(){ flicker.init(this.parentNode, {'loop':1, 'fade':0}) };
 }
 addHandler(window,'resize',function(){
     for( i=0; i<els.length; ++i ){
