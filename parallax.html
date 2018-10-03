@@ -54,7 +54,7 @@ if (parallaxers.length) {
     },
     init: (el) => {
       el.imgs = el.getElementsByTagName('img');
-      el.scale = 1;
+      el.scale = 34;
       el.xlate = [0, 0];
       if (!el.paint) {
         el.id = el.id || 'parallaxer' + painter.id++;
@@ -62,7 +62,7 @@ if (parallaxers.length) {
         el.paint = () => {
           let css = '';
           for (let i = 0; i < el.imgs.length; i++) {
-            css += `#${el.id} :nth-child(${i + 1}){ transform: scale(${.5 + (el.scale * i * i / 1000)}) translate(${-el.xlate[0] * i * i * el.scale}%  , ${-el.xlate[1] * i * i * el.scale}%) }`;
+            css += `#${el.id} :nth-child(${i + 1}){ transform: scale(${.5 + (el.scale * i * i / 1000)}) translate(${-el.xlate[0] * i * i * el.scale / 8}%  , ${-el.xlate[1] * i * i * el.scale / 8}%) }`;
           }
           el.css.innerHTML = css;
         };
