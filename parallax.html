@@ -62,7 +62,7 @@ if (parallaxers.length) {
         el.paint = () => {
           let css = '';
           for (let i = 0; i < el.imgs.length; i++) {
-            css += `#${el.id} :nth-child(${i + 1}){ transform: scale(${.5 + (el.scale * i * i / 100)}) translate(${-el.xlate[0] * i * i * el.scale / 8}%  , ${-el.xlate[1] * i * i * el.scale / 8}%) }`;
+            css += `#${el.id} :nth-child(${i + 1}){ transform: scale(${.5 + (el.scale * i * i / 100)}) translate(${-el.xlate[0] * i * i * 9 / el.scale}%  , ${-el.xlate[1] * i * i * 9 / el.scale}%) }`;
           }
           el.css.innerHTML = css;
         };
