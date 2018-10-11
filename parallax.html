@@ -56,6 +56,7 @@ if (parallaxers.length) {
       el.imgs = el.getElementsByTagName('img');
       el.scale = 3.4;
       el.xlate = [0, 0];
+      el.pinchDelta = 0;
       if (!el.paint) {
         el.id = el.id || 'parallaxer' + painter.id++;
         el.css = el.appendChild(document.createElement('style'));
@@ -87,7 +88,15 @@ if (parallaxers.length) {
       if (e.type === 'wheel'){
         el.zoom(e.deltaY > 0 ? -1 : 1);
       } else {
-        el.move([(xyE[0] - (el.xy[0] + (el.wh[0] / 2))) / el.wh[0], (xyE[1] - (el.xy[1] + (el.wh[1] / 2))) / el.wh[1]]);
+        if (e.touches && e.touches.length === 2) {
+          const pinchDeltaPrevious = el.pinchDelta;
+          el.pinchDelta = Math.sqrt(Math.pow(e.touches[0].pageX - e.touches[1].pageX, 2) + Math.pow(e.touches[0].pageY - e.touches[1].pageY, 2));
+          if (pinchDeltaPrevious) {
+            el.zoom((el.pinchDelta - pinchDeltaPrevious) / 10);
+          }
+        } else {
+          el.move([(xyE[0] - (el.xy[0] + (el.wh[0] / 2))) / el.wh[0], (xyE[1] - (el.xy[1] + (el.wh[1] / 2))) / el.wh[1]]);
+        }
       }
       el.paint();
     }
