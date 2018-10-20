@@ -65,7 +65,7 @@ if (parallaxers.length) {
           for (let i = 0; i < el.imgs.length; i++) {
             css += `#${el.id} :nth-child(${i + 1}){ transform: scale(${.5 + (el.scale * i * i / 100)}) translate(${-el.xlate[0] * i * i * 9 / el.scale}%  , ${-el.xlate[1] * i * i * 9 / el.scale}%) }`;
           }
-          el.css.innerHTML = css;
+          window.requestAnimationFrame(() => { el.css.innerHTML = css });
         };
         el.move = (xy) => {
           el.xlate = xy;
@@ -92,7 +92,7 @@ if (parallaxers.length) {
           const pinchDeltaPrevious = el.pinchDelta;
           el.pinchDelta = Math.sqrt(Math.pow(e.touches[0].pageX - e.touches[1].pageX, 2) + Math.pow(e.touches[0].pageY - e.touches[1].pageY, 2));
           if (pinchDeltaPrevious) {
-            el.zoom((el.pinchDelta - pinchDeltaPrevious) / 10);
+            el.zoom((el.pinchDelta - pinchDeltaPrevious) / 300);
           }
         } else {
           el.move([(xyE[0] - (el.xy[0] + (el.wh[0] / 2))) / el.wh[0], (xyE[1] - (el.xy[1] + (el.wh[1] / 2))) / el.wh[1]]);
