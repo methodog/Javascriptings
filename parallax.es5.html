@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>parallax</title>
+    <style type="text/css">
+        html, body { height:100%; margin:0; }
+        body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
+        .parallaxer { height:100%; width:100%; overflow:hidden; position:relative; left:0; top:0; user-select:none; }
+        .parallaxer img { max-height:100%; max-width:100%; margin:auto; position:absolute; left:0; top:0; bottom:0; right:0; }
+    </style>	
+</head>
+
+<body>
+<div class="parallaxer js-parallaxer">
+    <img alt="" src="img/parallax/layer2.1.jpg">
+    <img alt="" src="img/parallax/layer2.2.png">
+    <img alt="" src="img/parallax/layer2.3.png">
+    <img alt="" src="img/parallax/layer2.2.png">
+    <img alt="" src="img/parallax/layer2.3.png">
+</div>
+
+<script type="text/javascript">
+'use strict';
+
+function getComputed(el, style) {
+  if (window.getComputedStyle) {
+    var y = document.defaultView.getComputedStyle(el, null).getPropertyValue(style);
+  } else if (el.currentStyle) {
+    if (style == 'width') {
+      y = el.getBoundingClientRect().right - el.getBoundingClientRect().left;
+    } else if (style == 'height') {
+      y = el.getBoundingClientRect().bottom - el.getBoundingClientRect().top;
+    } else {
+      var y = el.currentStyle[style];
+    }
+  }return parseFloat(y);
+}
+function getEventXY(e) {
+  var xy = [];
+  if (e.touches && e.touches.length) {
+    if (e.touches.length > 1) {
+      xy[0] = (e.touches[0].pageX + e.touches[0].pageX) / 2;
+      xy[1] = (e.touches[0].pageY + e.touches[0].pageY) / 2;
+    } else {
+      xy[0] = e.touches[0].pageX;
+      xy[1] = e.touches[0].pageY;
+    }
+  } else {
+    xy[0] = e.pageX;
+    xy[1] = e.pageY;
+  }
+  return xy;
+}
+
+var parallaxers = document.querySelectorAll(".js-parallaxer");
+
+if (parallaxers.length) {
+  var painter = {
+    id: 1,
+    size: function size(el) {
+      el.wh = [parseInt(getComputed(el, 'width')), Math.ceil(getComputed(el, 'height'))];
+      el.xy = [parseInt(getComputed(el, 'left')), Math.ceil(getComputed(el, 'top'))];
+    },
+    init: function init(el) {
+      el.imgs = el.getElementsByTagName('img');
+      el.scale = 3.4;
+      el.xlate = [0, 0];
+      el.pinchDelta = 0;
+      if (!el.paint) {
+        el.id = el.id || 'parallaxer' + painter.id++;
+        el.css = el.appendChild(document.createElement('style'));
+        el.paint = function () {
+          var css = '';
+          for (var i = 0; i < el.imgs.length; i++) {
+            css += '#' + el.id + ' :nth-child(' + (i + 1) + '){ -webkit-transform: -webkit-scale(' + (.5 + el.scale * i * i / 100) + ') -webkit-translate(' + -el.xlate[0] * i * i * 9 / el.scale + '%  , ' + -el.xlate[1] * i * i * 9 / el.scale + '%) }';
+            css += '#' + el.id + ' :nth-child(' + (i + 1) + '){ transform: scale(' + (.5 + el.scale * i * i / 100) + ') translate(' + -el.xlate[0] * i * i * 9 / el.scale + '%  , ' + -el.xlate[1] * i * i * 9 / el.scale + '%) }';
+          }
+          window.requestAnimationFrame(function () {
+            el.css.innerHTML = css;
+          });
+        };
+        el.move = function (xy) {
+          el.xlate = xy;
+        };
+        el.zoom = function (z) {
+          el.scale += z;
+          if (el.scale < 1) {
+            el.scale = 1;
+          }
+        };
+        el.paint();
+        el.onmousemove = painter.touch.bind(null, el);
+        el.onwheel = painter.touch.bind(null, el);
+        el.ontouchmove = painter.touch.bind(null, el);
+      }
+    },
+    touch: function touch(el, e) {
+      var xyE = getEventXY(e);
+      if (!el.w) {
+        painter.size(el);
+      }
+      if (e.type === 'wheel') {
+        el.zoom(e.deltaY > 0 ? -1 : 1);
+      } else {
+        if (e.touches && e.touches.length === 2) {
+          var pinchDeltaPrevious = el.pinchDelta;
+          el.pinchDelta = Math.sqrt(Math.pow(e.touches[0].pageX - e.touches[1].pageX, 2) + Math.pow(e.touches[0].pageY - e.touches[1].pageY, 2));
+          if (pinchDeltaPrevious) {
+            el.zoom((el.pinchDelta - pinchDeltaPrevious) / 300);
+          }
+        } else {
+          el.move([(xyE[0] - (el.xy[0] + el.wh[0] / 2)) / el.wh[0], (xyE[1] - (el.xy[1] + el.wh[1] / 2)) / el.wh[1]]);
+        }
+      }
+      el.paint();
+    }
+  };
+
+  for (var i = 0; i < parallaxers.length; i++) {
+    painter.init(parallaxers[i]);
+  }
+}
+</script>
+</body>
+</html>
