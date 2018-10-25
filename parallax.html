@@ -1,49 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <title>parallax</title>
-    <style type="text/css">
-        html, body { height:100%; margin:0; }
-        body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
-        .parallaxer { height:100%; width:100%; overflow:hidden; position:relative; left:0; top:0; user-select:none; }
-        .parallaxer img { max-height:100%; max-width:100%; margin:auto; position:absolute; left:0; top:0; bottom:0; right:0; }
-    </style>	
+  <title>parallax</title>
+  <style type="text/css">
+    html, body { height:100%; margin:0; }
+    body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
+    .parallaxer { height:100%; width:100%; overflow:hidden; position:relative; left:0; top:0; user-select:none; }
+    .parallaxer img { max-height:100%; max-width:100%; margin:auto; position:absolute; left:0; top:0; bottom:0; right:0; }
+  </style>	
 </head>
 
 <body>
 <!--
-<div class="parallaxer js-parallaxer">
-    <img alt="" src="img/parallax/Gestetner_01.png">
-    <img alt="" src="img/parallax/Gestetner_02.png">
-    <img alt="" src="img/parallax/Gestetner_03.png">
-    <img alt="" src="img/parallax/Gestetner_04.png">
-    <img alt="" src="img/parallax/Gestetner_05.png">
-    <img alt="" src="img/parallax/Gestetner_06.png">
-</div>
+  <img alt="" src="img/parallax/Gestetner_01.png">
+  <img alt="" src="img/parallax/Gestetner_02.png">
+  <img alt="" src="img/parallax/Gestetner_03.png">
+  <img alt="" src="img/parallax/Gestetner_04.png">
+  <img alt="" src="img/parallax/Gestetner_05.png">
+  <img alt="" src="img/parallax/Gestetner_06.png">
 -->
-<div class="parallaxer js-parallaxer">
-    <img alt="" src="img/parallax/an_artists_studio_01.jpg">
-    <img alt="" src="img/parallax/an_artists_studio_02.png">
-    <img alt="" src="img/parallax/an_artists_studio_04.png">
-    <img alt="" src="img/parallax/an_artists_studio_03.png">
-    <img alt="" src="img/parallax/an_artists_studio_05.png">
-    <img alt="" src="img/parallax/an_artists_studio_07.png">
-    <img alt="" src="img/parallax/an_artists_studio_06.png">
-</div>
 <!--
-<div class="parallaxer js-parallaxer">
-    <img alt="" src="img/parallax/layer2.1.jpg">
-    <img alt="" src="img/parallax/layer2.2.png">
-    <img alt="" src="img/parallax/layer2.3.png">
-    <img alt="" src="img/parallax/layer2.2.png">
-    <img alt="" src="img/parallax/layer2.3.png">
-</div>
+  <img alt="" src="img/parallax/an_artists_studio_01.jpg">
+  <img alt="" src="img/parallax/an_artists_studio_02.png">
+  <img alt="" src="img/parallax/an_artists_studio_04.png">
+  <img alt="" src="img/parallax/an_artists_studio_03.png">
+  <img alt="" src="img/parallax/an_artists_studio_05.png">
+  <img alt="" src="img/parallax/an_artists_studio_07.png">
+  <img alt="" src="img/parallax/an_artists_studio_06.png">
 -->
+<!--
+  <img alt="" src="img/parallax/layer2.1.jpg">
+  <img alt="" src="img/parallax/layer2.2.png">
+  <img alt="" src="img/parallax/layer2.3.png">
+  <img alt="" src="img/parallax/layer2.2.png">
+  <img alt="" src="img/parallax/layer2.3.png">
+-->
+<div class="parallaxer js-parallaxer">
+</div>
 
+<script src="img/parallax/manifesto.bundle.js"></script>
 <script type="text/javascript">
 function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ if( style=='width' ){ y=el.getBoundingClientRect().right-el.getBoundingClientRect().left }else if( style=='height' ){ y=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else{ var y=el.currentStyle[style] } } return parseFloat(y); }
 function getEventXY (e) {
@@ -65,68 +64,83 @@ function getEventXY (e) {
 
 const parallaxers = document.querySelectorAll(".js-parallaxer");
 
-if (parallaxers.length) {
-  const painter = {
-    id: 1,
-    size: (el) => {
-      el.wh = [parseInt(getComputed(el,'width')), Math.ceil(getComputed(el,'height'))];
-      el.xy = [parseInt(getComputed(el,'left')), Math.ceil(getComputed(el,'top'))];
-    },
-    init: (el) => {
-      el.imgs = el.getElementsByTagName('img');
-      el.scale = 1;
-      el.xlate = [0, 0];
-      el.pinchDelta = 0;
-      if (!el.paint) {
-        el.id = el.id || 'parallaxer' + painter.id++;
-        el.css = el.appendChild(document.createElement('style'));
-        el.paint = () => {
-          let css = '';
-          for (let i = 0; i < el.imgs.length; i++) {
-            css += `#${el.id} :nth-child(${i + 1}){ transform: scale(${.5 + (el.scale * i * i / 100)}) translate(${-el.xlate[0] * i * i * 5 / el.scale}%  , ${-el.xlate[1] * i * i * 5 / el.scale}%); filter:blur(${i * i * el.scale / 300}px) }`;
-          }
-          window.requestAnimationFrame(() => { el.css.innerHTML = css });
-        };
-        el.move = (xy) => {
-          el.xlate = xy;
-        };
-        el.zoom = (z) => {
-          el.scale += z;
-          if (el.scale < 1) {
-            el.scale = 1;
-          } 
-          else if (el.scale > 5) {
-            el.scale = 5;
-          }
-        };
-        el.paint();
-        el.onmousemove = painter.touch.bind(null, el);
-        el.onwheel = painter.touch.bind(null, el);
-        el.ontouchmove = painter.touch.bind(null, el);
-      }
-    },
-    touch: (el, e) => {
-      const xyE = getEventXY(e);
-      if (!el.w) { painter.size(el); }
-      if (e.type === 'wheel'){
-        el.zoom(e.deltaY > 0 ? -1 : 1);
-      } else {
-        if (e.touches && e.touches.length === 2) {
-          const pinchDeltaPrevious = el.pinchDelta;
-          el.pinchDelta = Math.sqrt(Math.pow(e.touches[0].pageX - e.touches[1].pageX, 2) + Math.pow(e.touches[0].pageY - e.touches[1].pageY, 2));
-          if (pinchDeltaPrevious) {
-            el.zoom((el.pinchDelta - pinchDeltaPrevious) / 300);
-          }
-        } else {
-          el.move([(xyE[0] - (el.xy[0] + (el.wh[0] / 2))) / el.wh[0], (xyE[1] - (el.xy[1] + (el.wh[1] / 2))) / el.wh[1]]);
+const painter = {
+  id: 1,
+  size: (el) => {
+    el.wh = [parseInt(getComputed(el,'width')), Math.ceil(getComputed(el,'height'))];
+    el.xy = [parseInt(getComputed(el,'left')), Math.ceil(getComputed(el,'top'))];
+  },
+  init: (el) => {
+    el.imgs = el.getElementsByTagName('img');
+    el.scale = 1;
+    el.xlate = [0, 0];
+    el.pinchDelta = 0;
+    if (!el.paint) {
+      el.id = el.id || 'parallaxer' + painter.id++;
+      el.css = el.appendChild(document.createElement('style'));
+      el.paint = () => {
+        let css = '';
+        for (let i = 0; i < el.imgs.length; i++) {
+          css += `#${el.id} :nth-child(${i + 1}){ transform: scale(${.5 + (el.scale * i * i / 100)}) translate(${-el.xlate[0] * i * i * 5 / el.scale}%  , ${-el.xlate[1] * i * i * 5 / el.scale}%); filter:blur(${i * i * el.scale / 300}px) }`;
         }
-      }
+        window.requestAnimationFrame(() => { el.css.innerHTML = css });
+      };
+      el.move = (xy) => {
+        el.xlate = xy;
+      };
+      el.zoom = (z) => {
+        el.scale += z;
+        if (el.scale < 1) {
+          el.scale = 1;
+        } 
+        else if (el.scale > 5) {
+          el.scale = 5;
+        }
+      };
       el.paint();
+      el.onmousemove = painter.touch.bind(null, el);
+      el.onwheel = painter.touch.bind(null, el);
+      el.ontouchmove = painter.touch.bind(null, el);
     }
-  };
+  },
+  touch: (el, e) => {
+    const xyE = getEventXY(e);
+    if (!el.w) { painter.size(el); }
+    if (e.type === 'wheel'){
+      el.zoom(e.deltaY > 0 ? -1 : 1);
+    } else {
+      if (e.touches && e.touches.length === 2) {
+        const pinchDeltaPrevious = el.pinchDelta;
+        el.pinchDelta = Math.sqrt(Math.pow(e.touches[0].pageX - e.touches[1].pageX, 2) + Math.pow(e.touches[0].pageY - e.touches[1].pageY, 2));
+        if (pinchDeltaPrevious) {
+          el.zoom((el.pinchDelta - pinchDeltaPrevious) / 300);
+        }
+      } else {
+        el.move([(xyE[0] - (el.xy[0] + (el.wh[0] / 2))) / el.wh[0], (xyE[1] - (el.xy[1] + (el.wh[1] / 2))) / el.wh[1]]);
+      }
+    }
+    el.paint();
+  }
+};
 
-  Array.from(parallaxers, (parallaxer) => {
-    painter.init(parallaxer);
+Array.from(parallaxers, (parallaxer) => {
+  painter.init(parallaxer);
+});
+
+const qstr = new Map(location.search.slice(1).split('&').map(kv => kv.split('=')));
+
+if (!qstr.has('manifest')) {
+  alert('try with ?manifest=http://iiif-int.vam.ac.uk/demos/peepshow/manifest.json');
+} else {
+  manifesto.loadManifest(qstr.get('manifest')).then((manifest) => {
+    let m = manifesto.create(manifest);
+    let cvs = m.getSequences()[0].getCanvases();
+    let im = null;
+    Array.from(cvs, (cv) => {
+      im = parallaxers[0].insertBefore(document.createElement('img'), parallaxers[0].children[0]);
+      im.src = cv.getImages()[0].getResource().id;
+      painter.init(parallaxers[0]);
+    });
   });
 }
 </script>
