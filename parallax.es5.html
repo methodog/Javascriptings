@@ -16,12 +16,11 @@
 
 <body>
 <div class="parallaxer js-parallaxer">
-  <img alt="" src="img/parallax/an_artists_studio_01.jpg">
-  <img alt="" src="img/parallax/an_artists_studio_02.png">
-  <img alt="" src="img/parallax/an_artists_studio_03.png">
-  <img alt="" src="img/parallax/an_artists_studio_05.png">
-  <img alt="" src="img/parallax/an_artists_studio_07.png">
-  <img alt="" src="img/parallax/an_artists_studio_06.png">
+  <img alt="" src="img/parallax/layer2.1.jpg">
+  <img alt="" src="img/parallax/layer2.2.png">
+  <img alt="" src="img/parallax/layer2.3.png">
+  <img alt="" src="img/parallax/layer2.2.png">
+  <img alt="" src="img/parallax/layer2.3.png">
 </div>
 
 <script type="text/javascript">
@@ -77,8 +76,8 @@ if (parallaxers.length) {
         el.paint = function () {
           var css = '';
           for (var i = 0; i < el.imgs.length; i++) {
-            css += '#' + el.id + ' :nth-child(' + (i + 1) + '){ -webkit-transform: -webkit-scale(' + (.5 + el.scale * i * i / 100) + ') -webkit-translate(' + -el.xlate[0] * i * i * 9 / el.scale + '%  , ' + -el.xlate[1] * i * i * 9 / el.scale + '%) }';
-            css += '#' + el.id + ' :nth-child(' + (i + 1) + '){ transform: scale(' + (.5 + el.scale * i * i / 100) + ') translate(' + -el.xlate[0] * i * i * 9 / el.scale + '%  , ' + -el.xlate[1] * i * i * 9 / el.scale + '%) }';
+            css += '#' + el.id + ' :nth-child(' + (i + 1) + '){ -webkit-transform: -webkit-scale(' + (.5 + el.scale * i * i / 100) + ') -webkit-translate(' + -el.xlate[0] * i * i * 5 / el.scale + '%  , ' + -el.xlate[1] * i * i * 5 / el.scale + '%) }';
+            css += '#' + el.id + ' :nth-child(' + (i + 1) + '){ transform: scale(' + (.5 + el.scale * i * i / 100) + ') translate(' + -el.xlate[0] * i * i * 5 / el.scale + '%  , ' + -el.xlate[1] * i * i * 5 / el.scale + '%) }';
           }
           window.requestAnimationFrame(function () {
             el.css.innerHTML = css;
@@ -111,10 +110,11 @@ if (parallaxers.length) {
           var pinchDeltaPrevious = el.pinchDelta;
           el.pinchDelta = Math.sqrt(Math.pow(e.touches[0].pageX - e.touches[1].pageX, 2) + Math.pow(e.touches[0].pageY - e.touches[1].pageY, 2));
           if (pinchDeltaPrevious) {
-            el.zoom((el.pinchDelta - pinchDeltaPrevious) / 300);
+            el.zoom((el.pinchDelta - pinchDeltaPrevious) / 20);
           }
         } else {
-          el.move([(xyE[0] - (el.xy[0] + el.wh[0] / 2)) / el.wh[0], (xyE[1] - (el.xy[1] + el.wh[1] / 2)) / el.wh[1]]);
+          var mvGain = (!e.touches) ? 1 : 5;
+          el.move([(xyE[0] - (el.xy[0] + el.wh[0] / 2)) * mvGain / el.wh[0], (xyE[1] - (el.xy[1] + el.wh[1] / 2)) * mvGain / el.wh[1]]);
         }
       }
       el.paint();
