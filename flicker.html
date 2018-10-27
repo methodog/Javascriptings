@@ -55,7 +55,7 @@ var flicker = {
         el.loop = opt.loop || 0;
         el.fade = opt.fade || 0;
         if( !el.cloned && el.loop ){ el.appendChild(el.childNodes[0].cloneNode(true)); el.cloned=1; }
-        if( !el.styled ){ el.appendChild(document.createElement('style')); el.styled=1; }
+        if( !el.css ){ el.css = el.appendChild(document.createElement('style')); }
         if( !el.id ){ el.id = el.className+(++flicker.id); }
         flicker.size(el);
         el.arcs = el.getElementsByTagName('img').length;
@@ -73,7 +73,7 @@ var flicker = {
                 else if( this.val>this.max ){ this.val = this.max; e = 1; }
                 vis = 1 + Math.ceil(this.val*this.arcs);
                 css = '#'+el.id+' :nth-child('+(vis-1)+'){opacity:1}'; if( el.fade ){ css += '#'+el.id+' :nth-child('+vis+'){opacity:'+(this.val%(1/this.arcs))*this.arcs+'}' }
-                this.querySelector('style').innerHTML = css;
+                el.css.innerHTML = css;
                 if( !e ){ this.xy = [xy[0],xy[1]]; }
             };
             el.drop = function(){

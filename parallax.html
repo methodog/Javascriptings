@@ -116,19 +116,19 @@ Array.from(parallaxers, (parallaxer) => {
 });
 
 const qstr = new Map(location.search.slice(1).split('&').map(kv => kv.split('=')));
-
+const cvViewer = parallaxers[0];
 if (!qstr.has('manifest')) {
   alert('try ?manifest=http://iiif-int.vam.ac.uk/demos/peepshow/manifest.json');
 } else {
   manifesto.loadManifest(qstr.get('manifest')).then((manifest) => {
-    parallaxers[0].innerHTML = '';
+    cvViewer.innerHTML = '';
     const m = manifesto.create(manifest);
     const cvs = m.getSequences()[0].getCanvases();
     Array.from(cvs, (cv) => {
-      const im = parallaxers[0].insertBefore(document.createElement('img'), parallaxers[0].children[0]);
+      const im = cvViewer.insertBefore(document.createElement('img'), cvViewer.children[0]);
       im.src = cv.getImages()[0].getResource().id;
       /* p3 */// im.src = cv.getContent()[0].getBody()[0].id;
-      painter.init(parallaxers[0]);
+      painter.init(cvViewer);
     });
   });
 }
