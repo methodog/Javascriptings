@@ -122,12 +122,12 @@ if (!qstr.has('manifest')) {
 } else {
   manifesto.loadManifest(qstr.get('manifest')).then((manifest) => {
     parallaxers[0].innerHTML = '';
-    let m = manifesto.create(manifest);
-    let cvs = m.getSequences()[0].getCanvases();
-    let im = null;
+    const m = manifesto.create(manifest);
+    const cvs = m.getSequences()[0].getCanvases();
     Array.from(cvs, (cv) => {
-      im = parallaxers[0].insertBefore(document.createElement('img'), parallaxers[0].children[0]);
+      const im = parallaxers[0].insertBefore(document.createElement('img'), parallaxers[0].children[0]);
       im.src = cv.getImages()[0].getResource().id;
+      /* p3 */// im.src = cv.getContent()[0].getBody()[0].id;
       painter.init(parallaxers[0]);
     });
   });
