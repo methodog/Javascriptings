@@ -16,29 +16,18 @@
 
 <body>
 <!--
+  <img alt="" src="img/parallax/an_artists_studio_01.jpg"><img alt="" src="img/parallax/an_artists_studio_02.png"><img alt="" src="img/parallax/an_artists_studio_03.png"><img alt="" src="img/parallax/an_artists_studio_05.png"><img alt="" src="img/parallax/an_artists_studio_07.png"><img alt="" src="img/parallax/an_artists_studio_06.png">
+  <img alt="" src="img/parallax/layer2.1.jpg"><img alt="" src="img/parallax/layer2.2.png"><img alt="" src="img/parallax/layer2.3.png"><img alt="" src="img/parallax/layer2.2.png"><img alt="" src="img/parallax/layer2.3.png">
+-->
+<div class="parallaxer js-parallaxer">
   <img alt="" src="img/parallax/Gestetner_01.png">
   <img alt="" src="img/parallax/Gestetner_02.png">
   <img alt="" src="img/parallax/Gestetner_03.png">
   <img alt="" src="img/parallax/Gestetner_04.png">
   <img alt="" src="img/parallax/Gestetner_05.png">
+<!--
   <img alt="" src="img/parallax/Gestetner_06.png">
 -->
-<!--
-  <img alt="" src="img/parallax/an_artists_studio_01.jpg">
-  <img alt="" src="img/parallax/an_artists_studio_02.png">
-  <img alt="" src="img/parallax/an_artists_studio_03.png">
-  <img alt="" src="img/parallax/an_artists_studio_05.png">
-  <img alt="" src="img/parallax/an_artists_studio_07.png">
-  <img alt="" src="img/parallax/an_artists_studio_06.png">
--->
-<!--
-  <img alt="" src="img/parallax/layer2.1.jpg">
-  <img alt="" src="img/parallax/layer2.2.png">
-  <img alt="" src="img/parallax/layer2.3.png">
-  <img alt="" src="img/parallax/layer2.2.png">
-  <img alt="" src="img/parallax/layer2.3.png">
--->
-<div class="parallaxer js-parallaxer">
 </div>
 
 <script src="img/parallax/manifesto.bundle.js"></script>
@@ -129,9 +118,10 @@ Array.from(parallaxers, (parallaxer) => {
 const qstr = new Map(location.search.slice(1).split('&').map(kv => kv.split('=')));
 
 if (!qstr.has('manifest')) {
-  alert('try with ?manifest=http://iiif-int.vam.ac.uk/demos/peepshow/manifest.json');
+  alert('try ?manifest=http://iiif-int.vam.ac.uk/demos/peepshow/manifest.json');
 } else {
   manifesto.loadManifest(qstr.get('manifest')).then((manifest) => {
+    parallaxers[0].innerHTML = '';
     let m = manifesto.create(manifest);
     let cvs = m.getSequences()[0].getCanvases();
     let im = null;
