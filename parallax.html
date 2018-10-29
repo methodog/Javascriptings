@@ -50,7 +50,7 @@ function getEventXY (e) {
   return xy;
 }
 
-const parallaxers = document.querySelectorAll(".js-parallaxer");
+const parallaxer = document.querySelector(".js-parallaxer");
 
 const painter = {
   id: 1,
@@ -111,24 +111,20 @@ const painter = {
   }
 };
 
-Array.from(parallaxers, (parallaxer) => {
-  painter.init(parallaxer);
-});
-
 const qstr = new Map(location.search.slice(1).split('&').map(kv => kv.split('=')));
-const cvViewer = parallaxers[0];
 if (!qstr.has('manifest')) {
   alert('try ?manifest=http://iiif-int.vam.ac.uk/demos/peepshow/manifest.json');
+  painter.init(parallaxer);
 } else {
   manifesto.loadManifest(qstr.get('manifest')).then((manifest) => {
-    cvViewer.innerHTML = '';
+    parallaxer.innerHTML = '';
     const m = manifesto.create(manifest);
     const cvs = m.getSequences()[0].getCanvases();
     Array.from(cvs, (cv) => {
-      const im = cvViewer.insertBefore(document.createElement('img'), cvViewer.children[0]);
+      const im = parallaxer.insertBefore(document.createElement('img'), parallaxer.children[0]);
       im.src = cv.getImages()[0].getResource().id;
       /* p3 */// im.src = cv.getContent()[0].getBody()[0].id;
-      painter.init(cvViewer);
+      painter.init(parallaxer);
     });
   });
 }
