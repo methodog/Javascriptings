@@ -1,145 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <title>flicker</title>
-    <style type="text/css">
-        html, body { margin:0; height:100%; }
-        body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; margin:0 10px; }
-        .flicker { height:100%; position:relative; width:100%; left:0; }
-        .flicker img { margin:auto; max-height:100%; max-width:100%; opacity:0; position:absolute; top:0; bottom:0; left:0; right:0; user-select:none; }
-        .flicker img:nth-child(1) { opacity:1; }
-    </style>	
+  <title>flicker</title>
+  <style type="text/css">
+    html, body { margin:0; height:100%; }
+    body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
+    .flicker { height:100%; position:relative; width:100%; left:0; }
+    .flicker img { margin:auto; max-height:100%; max-width:100%; opacity:0; position:absolute; top:0; bottom:0; left:0; right:0; user-select:none; }
+    .flicker img:nth-child(1) { opacity:1; }
+  </style>	
 </head>
 
 <body>
 <!--
 <p class="flicker" id="liam"></p>
 <script type="text/javascript">(function() {var l=document.getElementById('liam'); for( i=1; i<=171; ++i ){ l.innerHTML += '<img src="img/liam_st_paul/pure_'+ (i<10?'00':(i<100?'0':''))+i +'.jpg" alt="">' }})();</script>
--->
-<!--
 <script type="text/javascript">(function() {var l=document.getElementById('liam'); for( i=1; i<=36; ++i ){ l.innerHTML += '<img src="img/360/small/'+ (i<10?'0':'')+i +'.jpg" alt="">' }})();</script>
-<script type="text/javascript">(function() {var l=document.getElementById('liam'); for( i=1; i<=170; ++i ){ l.innerHTML += '<img src="img/liam_st_paul/blend_'+ (i<10?'00':(i<100?'0':''))+i +'.jpg" alt="">' }})();</script>
--->
-<!--
-<p class="flicker"><img src="img/strober/Sophie_smiles_1.jpg" alt=""><img src="img/strober/Sophie_smiles_3.jpg" alt=""><img src="img/strober/Sophie_smiles_2.jpg" alt=""><img src="img/strober/Sophie_smiles_4.jpg" alt=""></p>
-<p class="flicker"><img src="img/strober/Dave.jpg" alt=""><img src="img/strober/Dave1.jpg" alt=""></p>
-<p class="flicker"><img src="img/strober/climbingfreaks.jpg" alt=""><img src="img/strober/climbingfreaks1.jpg" alt=""></p>
--->
-<p class="flicker"><img src="img/strober/camel00.jpg" alt=""><img src="img/strober/camel01.jpg" alt=""><img src="img/strober/camel02.jpg" alt=""><img src="img/strober/camel03.jpg" alt=""><img src="img/strober/camel04.jpg" alt=""><img src="img/strober/camel05.jpg" alt=""><img src="img/strober/camel06.jpg" alt=""><img src="img/strober/camel07.jpg" alt=""><img src="img/strober/camel08.jpg" alt=""><img src="img/strober/camel09.jpg" alt=""><img src="img/strober/camel10.jpg" alt=""><img src="img/strober/camel11.jpg" alt=""><img src="img/strober/camel12.jpg" alt=""><img src="img/strober/camel13.jpg" alt=""><img src="img/strober/camel14.jpg" alt=""></p>
-<p class="flicker"><img src="img/strober/horse00.jpg" alt=""><img src="img/strober/horse01.jpg" alt=""><img src="img/strober/horse02.jpg" alt=""><img src="img/strober/horse03.jpg" alt=""><img src="img/strober/horse04.jpg" alt=""><img src="img/strober/horse05.jpg" alt=""><img src="img/strober/horse06.jpg" alt=""><img src="img/strober/horse07.jpg" alt=""><img src="img/strober/horse08.jpg" alt=""><img src="img/strober/horse09.jpg" alt=""><img src="img/strober/horse10.jpg" alt=""><img src="img/strober/horse11.jpg" alt=""><img src="img/strober/horse12.jpg" alt=""><img src="img/strober/horse13.jpg" alt=""><img src="img/strober/horse14.jpg" alt=""><img src="img/strober/horse15.jpg" alt=""><img src="img/strober/horse16.jpg" alt=""><img src="img/strober/horse17.jpg" alt=""><img src="img/strober/horse18.jpg" alt=""><img src="img/strober/horse19.jpg" alt=""></p>
 <p class="flicker"><img src="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:3.681,3.612,20.126,19.941/1920,/0/default.jpg" srcset="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:3.681,3.612,20.126,19.941/320,/0/default.jpg 320w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:3.681,3.612,20.126,19.941/640,/0/default.jpg 640w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:3.681,3.612,20.126,19.941/960,/0/default.jpg 960w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:3.681,3.612,20.126,19.941/1280,/0/default.jpg 1280w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:3.681,3.612,20.126,19.941/1920,/0/default.jpg 1920w" sizes=""><img src="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:27.816,3.303,20.27,20.085/1920,/0/default.jpg" srcset="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:27.816,3.303,20.27,20.085/320,/0/default.jpg 320w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:27.816,3.303,20.27,20.085/640,/0/default.jpg 640w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:27.816,3.303,20.27,20.085/960,/0/default.jpg 960w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:27.816,3.303,20.27,20.085/1280,/0/default.jpg 1280w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:27.816,3.303,20.27,20.085/1920,/0/default.jpg 1920w" sizes=""><img src="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:52.714,2.605,20.628,20.433/1920,/0/default.jpg" srcset="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:52.714,2.605,20.628,20.433/320,/0/default.jpg 320w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:52.714,2.605,20.628,20.433/640,/0/default.jpg 640w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:52.714,2.605,20.628,20.433/960,/0/default.jpg 960w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:52.714,2.605,20.628,20.433/1280,/0/default.jpg 1280w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:52.714,2.605,20.628,20.433/1920,/0/default.jpg 1920w" sizes=""><img src="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.642,2.227,20.933,20.738/1920,/0/default.jpg" srcset="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.642,2.227,20.933,20.738/320,/0/default.jpg 320w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.642,2.227,20.933,20.738/640,/0/default.jpg 640w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.642,2.227,20.933,20.738/960,/0/default.jpg 960w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.642,2.227,20.933,20.738/1280,/0/default.jpg 1280w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.642,2.227,20.933,20.738/1920,/0/default.jpg 1920w" sizes=""><img src="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:3.646,27.273,21.131,20.931/1920,/0/default.jpg" srcset="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:3.646,27.273,21.131,20.931/320,/0/default.jpg 320w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:3.646,27.273,21.131,20.931/640,/0/default.jpg 640w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:3.646,27.273,21.131,20.931/960,/0/default.jpg 960w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:3.646,27.273,21.131,20.931/1280,/0/default.jpg 1280w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:3.646,27.273,21.131,20.931/1920,/0/default.jpg 1920w" sizes=""><img src="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:27.906,27.01,21.414,21.213/1920,/0/default.jpg" srcset="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:27.906,27.01,21.414,21.213/320,/0/default.jpg 320w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:27.906,27.01,21.414,21.213/640,/0/default.jpg 640w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:27.906,27.01,21.414,21.213/960,/0/default.jpg 960w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:27.906,27.01,21.414,21.213/1280,/0/default.jpg 1280w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:27.906,27.01,21.414,21.213/1920,/0/default.jpg 1920w" sizes=""><img src="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:52.186,26.884,21.377,21.185/1920,/0/default.jpg" srcset="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:52.186,26.884,21.377,21.185/320,/0/default.jpg 320w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:52.186,26.884,21.377,21.185/640,/0/default.jpg 640w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:52.186,26.884,21.377,21.185/960,/0/default.jpg 960w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:52.186,26.884,21.377,21.185/1280,/0/default.jpg 1280w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:52.186,26.884,21.377,21.185/1920,/0/default.jpg 1920w" sizes=""><img src="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.694,26.83,21.272,21.081/1920,/0/default.jpg" srcset="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.694,26.83,21.272,21.081/320,/0/default.jpg 320w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.694,26.83,21.272,21.081/640,/0/default.jpg 640w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.694,26.83,21.272,21.081/960,/0/default.jpg 960w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.694,26.83,21.272,21.081/1280,/0/default.jpg 1280w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.694,26.83,21.272,21.081/1920,/0/default.jpg 1920w" sizes=""><img src="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:4.107,52.328,20.897,20.711/1920,/0/default.jpg" srcset="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:4.107,52.328,20.897,20.711/320,/0/default.jpg 320w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:4.107,52.328,20.897,20.711/640,/0/default.jpg 640w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:4.107,52.328,20.897,20.711/960,/0/default.jpg 960w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:4.107,52.328,20.897,20.711/1280,/0/default.jpg 1280w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:4.107,52.328,20.897,20.711/1920,/0/default.jpg 1920w" sizes=""><img src="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:28.3,52.238,21.005,20.82/1920,/0/default.jpg" srcset="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:28.3,52.238,21.005,20.82/320,/0/default.jpg 320w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:28.3,52.238,21.005,20.82/640,/0/default.jpg 640w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:28.3,52.238,21.005,20.82/960,/0/default.jpg 960w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:28.3,52.238,21.005,20.82/1280,/0/default.jpg 1280w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:28.3,52.238,21.005,20.82/1920,/0/default.jpg 1920w" sizes=""><img src="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:52.405,52.134,21.107,20.922/1920,/0/default.jpg" srcset="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:52.405,52.134,21.107,20.922/320,/0/default.jpg 320w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:52.405,52.134,21.107,20.922/640,/0/default.jpg 640w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:52.405,52.134,21.107,20.922/960,/0/default.jpg 960w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:52.405,52.134,21.107,20.922/1280,/0/default.jpg 1280w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:52.405,52.134,21.107,20.922/1920,/0/default.jpg 1920w" sizes=""><img src="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.614,51.919,21.321,21.128/1920,/0/default.jpg" srcset="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.614,51.919,21.321,21.128/320,/0/default.jpg 320w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.614,51.919,21.321,21.128/640,/0/default.jpg 640w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.614,51.919,21.321,21.128/960,/0/default.jpg 960w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.614,51.919,21.321,21.128/1280,/0/default.jpg 1280w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.614,51.919,21.321,21.128/1920,/0/default.jpg 1920w" sizes=""><img src="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:2.888,76.841,22.082,21.882/1920,/0/default.jpg" srcset="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:2.888,76.841,22.082,21.882/320,/0/default.jpg 320w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:2.888,76.841,22.082,21.882/640,/0/default.jpg 640w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:2.888,76.841,22.082,21.882/960,/0/default.jpg 960w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:2.888,76.841,22.082,21.882/1280,/0/default.jpg 1280w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:2.888,76.841,22.082,21.882/1920,/0/default.jpg 1920w" sizes=""><img src="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:27.633,77.333,21.565,21.377/1920,/0/default.jpg" srcset="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:27.633,77.333,21.565,21.377/320,/0/default.jpg 320w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:27.633,77.333,21.565,21.377/640,/0/default.jpg 640w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:27.633,77.333,21.565,21.377/960,/0/default.jpg 960w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:27.633,77.333,21.565,21.377/1280,/0/default.jpg 1280w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:27.633,77.333,21.565,21.377/1920,/0/default.jpg 1920w" sizes=""><img src="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:51.936,76.799,21.641,21.445/1920,/0/default.jpg" srcset="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:51.936,76.799,21.641,21.445/320,/0/default.jpg 320w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:51.936,76.799,21.641,21.445/640,/0/default.jpg 640w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:51.936,76.799,21.641,21.445/960,/0/default.jpg 960w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:51.936,76.799,21.641,21.445/1280,/0/default.jpg 1280w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:51.936,76.799,21.641,21.445/1920,/0/default.jpg 1920w" sizes=""><img src="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.154,76.155,21.743,21.553/1920,/0/default.jpg" srcset="https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.154,76.155,21.743,21.553/320,/0/default.jpg 320w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.154,76.155,21.743,21.553/640,/0/default.jpg 640w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.154,76.155,21.743,21.553/960,/0/default.jpg 960w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.154,76.155,21.743,21.553/1280,/0/default.jpg 1280w, https://iiif.wellcomecollection.org/image/V0048766.jpg/pct:76.154,76.155,21.743,21.553/1920,/0/default.jpg 1920w" sizes=""></p>
+<p class="flicker"><img src="img/strober/camel00.jpg" alt=""><img src="img/strober/camel01.jpg" alt=""><img src="img/strober/camel02.jpg" alt=""><img src="img/strober/camel03.jpg" alt=""><img src="img/strober/camel04.jpg" alt=""><img src="img/strober/camel05.jpg" alt=""><img src="img/strober/camel06.jpg" alt=""><img src="img/strober/camel07.jpg" alt=""><img src="img/strober/camel08.jpg" alt=""><img src="img/strober/camel09.jpg" alt=""><img src="img/strober/camel10.jpg" alt=""><img src="img/strober/camel11.jpg" alt=""><img src="img/strober/camel12.jpg" alt=""><img src="img/strober/camel13.jpg" alt=""><img src="img/strober/camel14.jpg" alt=""></p>
+-->
+<p class="flicker"><img src="img/strober/horse00.jpg" alt=""><img src="img/strober/horse01.jpg" alt=""><img src="img/strober/horse02.jpg" alt=""><img src="img/strober/horse03.jpg" alt=""><img src="img/strober/horse04.jpg" alt=""><img src="img/strober/horse05.jpg" alt=""><img src="img/strober/horse06.jpg" alt=""><img src="img/strober/horse07.jpg" alt=""><img src="img/strober/horse08.jpg" alt=""><img src="img/strober/horse09.jpg" alt=""><img src="img/strober/horse10.jpg" alt=""><img src="img/strober/horse11.jpg" alt=""><img src="img/strober/horse12.jpg" alt=""><img src="img/strober/horse13.jpg" alt=""><img src="img/strober/horse14.jpg" alt=""><img src="img/strober/horse15.jpg" alt=""><img src="img/strober/horse16.jpg" alt=""><img src="img/strober/horse17.jpg" alt=""><img src="img/strober/horse18.jpg" alt=""><img src="img/strober/horse19.jpg" alt=""></p>
 
+<script src="img/manifesto.bundle.js"></script>
 <script type="text/javascript">
 Number.prototype.mod = function(n) { return ((this%n)+n)%n; }
 function addHandler(el,evt,fn){ if( el.addEventListener ){ el.addEventListener(evt,fn,false); }else if( el.attachEvent ){ el.attachEvent('on'+evt,fn); } }
 function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ if( style=='width' ){ y=el.getBoundingClientRect().right-el.getBoundingClientRect().left }else if( style=='height' ){ y=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else{ var y=el.currentStyle[style] } } return parseFloat(y); }
 function getPgOffset(el){ var o=[0,0]; if( el.offsetParent ){ do{ o=[o[0]+el.offsetLeft,o[1]+el.offsetTop]; }while( el=el.offsetParent ) } return [o[0]+document.body.scrollLeft,o[1]+document.body.scrollTop]; } 
 function getXY(e){ var xy=[]; if( e.touches && e.touches.length ){ if( e.touches.length>1 ){ xy[0] = (e.touches[0].pageX+e.touches[0].pageX)/2; xy[1] = (e.touches[0].pageY+e.touches[0].pageY)/2;}else{ xy[0] = e.touches[0].pageX; xy[1] = e.touches[0].pageY; } }else{ xy[0] = e.pageX; xy[1] = e.pageY; } return xy; }
-var flicker = {
-    el:null, xy0:null, v0:null, xyT:null, id:0, 
-    size: function(el){
-        el.wh = [getComputed(el,'width'), getComputed(el,'height')];
-    },
-    init: function(el, opt){
-        if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
-        if( !opt ) var opt = {};
-        el.val = opt.val || 0; 
-        el.min = opt.min || 0; 
-        el.max = opt.max || 1;
-        el.rng = el.max-el.min;
-        el.v = [0,0];
-        el.loop = opt.loop || 0;
-        el.fade = opt.fade || 0;
-        if( !el.cloned && el.loop ){ el.appendChild(el.childNodes[0].cloneNode(true)); el.cloned=1; }
-        if( !el.css ){ el.css = el.appendChild(document.createElement('style')); }
-        if( !el.id ){ el.id = el.className+(++flicker.id); }
-        flicker.size(el);
-        el.arcs = el.getElementsByTagName('img').length;
-        el.xy = [getComputed(el,'left'), getComputed(el,'top')];
-        if( typeof(opt.slide)==='function' ){ el.slide = opt.slide; }
-        if( typeof(opt.stop)==='function' ){ el.stop = opt.stop; }
-        if( !el.move ){
-            el.onmousedown = flicker.touch;
-            el.ontouchstart = flicker.touch;
-            el.move = function(xy){
-                var vis, e = 0, css;
-                this.val = this.min+(xy[0]/this.wh[0]*(this.rng));
-                if( this.loop ){ this.val = this.val.mod(this.rng); }
-                else if( this.val<this.min ){ this.val = this.min; e = 1; }
-                else if( this.val>this.max ){ this.val = this.max; e = 1; }
-                vis = 1 + Math.ceil(this.val*this.arcs);
-                css = '#'+el.id+' :nth-child('+(vis-1)+'){opacity:1}'; if( el.fade ){ css += '#'+el.id+' :nth-child('+vis+'){opacity:'+(this.val%(1/this.arcs))*this.arcs+'}' }
-                el.css.innerHTML = css;
-                if( !e ){ this.xy = [xy[0],xy[1]]; }
-            };
-            el.drop = function(){
-                var f = 0.98;
-                this.v = [this.v[0]*f, this.v[1]*f];
-                this.move([this.xy[0]-this.v[0], this.xy[1]-this.v[1]]);
-                if( Math.abs(this.v[0])+Math.abs(this.v[1])<0.1 ){ flicker.v0 = this.v = [0,0]; window.clearTimeout(this.t); return; }
-                this.t = window.setTimeout(function(){ el.drop(); }, 23);
-            };
-        }
-    },
-    touch: function(e){
-        e = e || window.event;
-        if( e.type==='touchstart' && e.touches && e.touches.length>2 ){ return; }
-        flicker.el = this;
-        window.clearTimeout(flicker.el.t);
-        this.className += ' dragged';
-        flicker.v0 = flicker.el.v;
-        flicker.el.v = [0,0];
-        flicker.xy0 = flicker.el.xy;
-        flicker.xyT = getXY(e);
-        if( e.type==='touchstart' ){
-            this.ontouchmove = flicker.drag;
-            this.onmousedown = null;
-            this.ontouchend = function(){
-                this.ontouchmove = null;
-                this.ontouchend = null;
-                flicker.release();
-            };
-        }else{
-            document.onmousemove = flicker.drag;
-            document.onmouseup = function(){
-                document.onmousemove = null;
-                document.onmouseup = null;
-                flicker.release();
-            };
-        }
-        return false;
-    },
-    drag: function(e){
-        e = e || window.event;
-        if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
-        var xyE = getXY(e),
-            xy = [flicker.xy0[0]+xyE[0]-flicker.xyT[0], flicker.xy0[1]+xyE[1]-flicker.xyT[1]];
-        flicker.el.v = [flicker.el.xy[0]-xy[0],flicker.el.xy[1]-xy[1]];
-        flicker.el.move(xy);
-        if( !!flicker.el.slide ){ flicker.el.slide.call(this); }
-        return false;
-    },
-    release: function(){
-        flicker.el.className = flicker.el.className.replace(/ dragged/,'');
-        if( !!flicker.el.stop ){ flicker.el.stop.call(this); }
-        if( flicker.el.loop ){ flicker.el.drop(); }
-        flicker.el = null;
+var painter = {
+  el:null, xy0:null, v0:null, xyT:null, id:0, 
+  size: function(el){
+    el.wh = [getComputed(el,'width'), getComputed(el,'height')];
+  },
+  init: function(el, opt){
+    if( typeof el==='string' ){ el = document.getElementById(el); } if( !el ){ return; }
+    if( !opt ) var opt = {};
+    el.val = opt.val || 0; 
+    el.min = opt.min || 0; 
+    el.max = opt.max || 1;
+    el.rng = el.max-el.min;
+    el.v = [0,0];
+    el.loop = opt.loop || 0;
+    el.fade = opt.fade || 0;
+    if( !el.cloned && el.loop ){ el.appendChild(el.childNodes[0].cloneNode(true)); el.cloned=1; }
+    if( !el.css ){ el.css = el.appendChild(document.createElement('style')); }
+    if( !el.id ){ el.id = el.className+(++painter.id); }
+    painter.size(el);
+    el.arcs = el.getElementsByTagName('img').length;
+    el.xy = [getComputed(el,'left'), getComputed(el,'top')];
+    if( typeof(opt.slide)==='function' ){ el.slide = opt.slide; }
+    if( typeof(opt.stop)==='function' ){ el.stop = opt.stop; }
+    if( !el.move ){
+      el.onmousedown = painter.touch;
+      el.ontouchstart = painter.touch;
+      el.move = function(xy){
+        var vis, e = 0, css;
+        this.val = this.min+(xy[0]/this.wh[0]*(this.rng));
+        if( this.loop ){ this.val = this.val.mod(this.rng); }
+        else if( this.val<this.min ){ this.val = this.min; e = 1; }
+        else if( this.val>this.max ){ this.val = this.max; e = 1; }
+        vis = 1 + Math.ceil(this.val*this.arcs);
+        css = '#'+el.id+' :nth-child('+(vis-1)+'){opacity:1}'; if( el.fade ){ css += '#'+el.id+' :nth-child('+vis+'){opacity:'+(this.val%(1/this.arcs))*this.arcs+'}' }
+        el.css.innerHTML = css;
+        if( !e ){ this.xy = [xy[0],xy[1]]; }
+      };
+      el.drop = function(){
+        var f = 0.98;
+        this.v = [this.v[0]*f, this.v[1]*f];
+        this.move([this.xy[0]-this.v[0], this.xy[1]-this.v[1]]);
+        if( Math.abs(this.v[0])+Math.abs(this.v[1])<0.1 ){ painter.v0 = this.v = [0,0]; window.clearTimeout(this.t); return; }
+        this.t = window.setTimeout(function(){ el.drop(); }, 23);
+      };
     }
+  },
+  touch: function(e){
+    e = e || window.event;
+    if( e.type==='touchstart' && e.touches && e.touches.length>2 ){ return; }
+    painter.el = this;
+    window.clearTimeout(painter.el.t);
+    this.className += ' dragged';
+    painter.v0 = painter.el.v;
+    painter.el.v = [0,0];
+    painter.xy0 = painter.el.xy;
+    painter.xyT = getXY(e);
+    if( e.type==='touchstart' ){
+      this.ontouchmove = painter.drag;
+      this.onmousedown = null;
+      this.ontouchend = function(){
+        this.ontouchmove = null;
+        this.ontouchend = null;
+        painter.release();
+      };
+    }else{
+      document.onmousemove = painter.drag;
+      document.onmouseup = function(){
+        document.onmousemove = null;
+        document.onmouseup = null;
+        painter.release();
+      };
+    }
+    return false;
+  },
+  drag: function(e){
+    e = e || window.event;
+    if( e.preventDefault ){ e.preventDefault(); }else{ e.returnValue=false; }
+    var xyE = getXY(e),
+      xy = [painter.xy0[0]+xyE[0]-painter.xyT[0], painter.xy0[1]+xyE[1]-painter.xyT[1]];
+    painter.el.v = [painter.el.xy[0]-xy[0],painter.el.xy[1]-xy[1]];
+    painter.el.move(xy);
+    if( !!painter.el.slide ){ painter.el.slide.call(this); }
+    return false;
+  },
+  release: function(){
+    painter.el.className = painter.el.className.replace(/ dragged/,'');
+    if( !!painter.el.stop ){ painter.el.stop.call(this); }
+    if( painter.el.loop ){ painter.el.drop(); }
+    painter.el = null;
+  }
 };
 
-var i, els = document.querySelectorAll('.flicker'), el;
-for( i=0; i<els.length; ++i ){
-    els[i].getElementsByTagName('img')[0].onload = function(){ flicker.init(this.parentNode, {'loop':1, 'fade':0}) };
-}
+var flicker = document.querySelector('.flicker');
+
 addHandler(window,'resize',function(){
-    for( i=0; i<els.length; ++i ){
-        flicker.size(els[i]);
-    }
+  painter.size(flicker);
 });
+
+const qstr = new Map(location.search.slice(1).split('&').map(kv => kv.split('=')));
+if (!qstr.has('manifest')) {
+  alert('try ?manifest=http://iiif-int.vam.ac.uk/demos/flickshow/manifest.json');
+  flicker.getElementsByTagName('img')[0].onload = function(){ painter.init(this.parentNode, {'loop':1, 'fade':0}) };
+} else {
+  manifesto.loadManifest(qstr.get('manifest')).then((manifest) => {
+  flicker.innerHTML = '';
+  const m = manifesto.create(manifest);
+  const cvs = m.getSequences()[0].getCanvases();
+  Array.from(cvs, (cv) => {
+    const im = flicker.insertBefore(document.createElement('img'), flicker.children[0]);
+    if (cv.getImages().length) {
+      im.src = cv.getImages()[0].getResource().id;
+    } else if (cv.getContent().length) {
+      im.src = cv.getContent()[0].getBody()[0].id;
+    }
+    painter.init(flicker, {'loop':1, 'fade':0});
+    });
+  });
+}
+
+
 </script>
 </body>
 </html>
