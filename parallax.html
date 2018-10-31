@@ -122,8 +122,11 @@ if (!qstr.has('manifest')) {
     const cvs = m.getSequences()[0].getCanvases();
     Array.from(cvs, (cv) => {
       const im = parallaxer.insertBefore(document.createElement('img'), parallaxer.children[0]);
-      im.src = cv.getImages()[0].getResource().id;
-      /* p3 */// im.src = cv.getContent()[0].getBody()[0].id;
+      if (cv.getImages().length) {
+        im.src = cv.getImages()[0].getResource().id;
+      } else if (cv.getContent().length) {
+        im.src = cv.getContent()[0].getBody()[0].id;
+      }
       painter.init(parallaxer);
     });
   });
