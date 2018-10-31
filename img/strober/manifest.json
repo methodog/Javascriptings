@@ -1,0 +1,830 @@
+        {
+	"@context": "http://iiif.io/api/presentation/2/context.json",
+	"@id": "http://667bb888-a096-44ba-9f55-f439f6495b52",
+	"@type": "sc:Manifest",
+	"label": "[Click to edit label]",
+	"metadata": [],
+	"description": [
+		{
+			"@value": "[Click to edit description]",
+			"@language": "en"
+		}
+	],
+	"license": "https://creativecommons.org/licenses/by/3.0/",
+	"attribution": "[Click to edit attribution]",
+	"sequences": [
+		{
+			"@id": "http://44d99188-f7de-40fd-9fd8-379ab0e99e43",
+			"@type": "sc:Sequence",
+			"label": [
+				{
+					"@value": "Normal Sequence",
+					"@language": "en"
+				}
+			],
+			"canvases": [
+        {
+					"@id": "http://d546a5ba-7aef-4f14-aae0-3c6a1440d6b9",
+					"@type": "sc:Canvas",
+					"label": "Empty canvas",
+					"height": 2334,
+					"width": 3000,
+					"images": [
+						{
+							"@context": "http://iiif.io/api/presentation/2/context.json",
+							"@id": "http://1e283e74-783f-4f3c-a203-31c6dd166b6f",
+							"@type": "oa:Annotation",
+							"motivation": "sc:painting",
+							"resource": {
+								"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176/pct:69.002,71.129,20.741,20.739/full/0/default.jpg",
+								"@type": "dctypes:Image",
+								"format": "image/jpeg",
+								"service": {
+									"@context": "http://iiif.io/api/image/2/context.json",
+									"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176",
+									"profile": [
+										"http://iiif.io/api/image/2/level1.json",
+										{
+											"formats": [
+												"jpg"
+											],
+											"qualities": [
+												"native",
+												"color",
+												"gray"
+											],
+											"supports": [
+												"regionByPct",
+												"sizeByForcedWh",
+												"sizeByWh",
+												"sizeAboveFull",
+												"rotationBy90s",
+												"mirroring",
+												"gray"
+											]
+										}
+									]
+								},
+								"height": 2334,
+								"width": 3000
+							},
+							"on": "http://1eb9b836-de94-4449-97cf-365089c81028"
+						}
+					],
+					"related": ""
+				},
+        {
+					"@id": "http://d546a5ba-7aef-4f14-aae0-3c6a1440d6b9",
+					"@type": "sc:Canvas",
+					"label": "Empty canvas",
+					"height": 2334,
+					"width": 3000,
+					"images": [
+						{
+							"@context": "http://iiif.io/api/presentation/2/context.json",
+							"@id": "http://1e283e74-783f-4f3c-a203-31c6dd166b6f",
+							"@type": "oa:Annotation",
+							"motivation": "sc:painting",
+							"resource": {
+								"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176/pct:48.881,71.303,20.553,20.552/full/0/default.jpg",
+								"@type": "dctypes:Image",
+								"format": "image/jpeg",
+								"service": {
+									"@context": "http://iiif.io/api/image/2/context.json",
+									"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176",
+									"profile": [
+										"http://iiif.io/api/image/2/level1.json",
+										{
+											"formats": [
+												"jpg"
+											],
+											"qualities": [
+												"native",
+												"color",
+												"gray"
+											],
+											"supports": [
+												"regionByPct",
+												"sizeByForcedWh",
+												"sizeByWh",
+												"sizeAboveFull",
+												"rotationBy90s",
+												"mirroring",
+												"gray"
+											]
+										}
+									]
+								},
+								"height": 2334,
+								"width": 3000
+							},
+							"on": "http://1eb9b836-de94-4449-97cf-365089c81028"
+						}
+					],
+					"related": ""
+				},
+        {
+					"@id": "http://d546a5ba-7aef-4f14-aae0-3c6a1440d6b9",
+					"@type": "sc:Canvas",
+					"label": "Empty canvas",
+					"height": 2334,
+					"width": 3000,
+					"images": [
+						{
+							"@context": "http://iiif.io/api/presentation/2/context.json",
+							"@id": "http://1e283e74-783f-4f3c-a203-31c6dd166b6f",
+							"@type": "oa:Annotation",
+							"motivation": "sc:painting",
+							"resource": {
+								"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176/pct:28.749,71.221,20.685,20.689/full/0/default.jpg",
+								"@type": "dctypes:Image",
+								"format": "image/jpeg",
+								"service": {
+									"@context": "http://iiif.io/api/image/2/context.json",
+									"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176",
+									"profile": [
+										"http://iiif.io/api/image/2/level1.json",
+										{
+											"formats": [
+												"jpg"
+											],
+											"qualities": [
+												"native",
+												"color",
+												"gray"
+											],
+											"supports": [
+												"regionByPct",
+												"sizeByForcedWh",
+												"sizeByWh",
+												"sizeAboveFull",
+												"rotationBy90s",
+												"mirroring",
+												"gray"
+											]
+										}
+									]
+								},
+								"height": 2334,
+								"width": 3000
+							},
+							"on": "http://1eb9b836-de94-4449-97cf-365089c81028"
+						}
+					],
+					"related": ""
+				},
+        {
+					"@id": "http://d546a5ba-7aef-4f14-aae0-3c6a1440d6b9",
+					"@type": "sc:Canvas",
+					"label": "Empty canvas",
+					"height": 2334,
+					"width": 3000,
+					"images": [
+						{
+							"@context": "http://iiif.io/api/presentation/2/context.json",
+							"@id": "http://1e283e74-783f-4f3c-a203-31c6dd166b6f",
+							"@type": "oa:Annotation",
+							"motivation": "sc:painting",
+							"resource": {
+								"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176/pct:8.835,71.046,20.863,20.861/full/0/default.jpg",
+								"@type": "dctypes:Image",
+								"format": "image/jpeg",
+								"service": {
+									"@context": "http://iiif.io/api/image/2/context.json",
+									"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176",
+									"profile": [
+										"http://iiif.io/api/image/2/level1.json",
+										{
+											"formats": [
+												"jpg"
+											],
+											"qualities": [
+												"native",
+												"color",
+												"gray"
+											],
+											"supports": [
+												"regionByPct",
+												"sizeByForcedWh",
+												"sizeByWh",
+												"sizeAboveFull",
+												"rotationBy90s",
+												"mirroring",
+												"gray"
+											]
+										}
+									]
+								},
+								"height": 2334,
+								"width": 3000
+							},
+							"on": "http://1eb9b836-de94-4449-97cf-365089c81028"
+						}
+					],
+					"related": ""
+				},
+        {
+					"@id": "http://d546a5ba-7aef-4f14-aae0-3c6a1440d6b9",
+					"@type": "sc:Canvas",
+					"label": "Empty canvas",
+					"height": 2334,
+					"width": 3000,
+					"images": [
+						{
+							"@context": "http://iiif.io/api/presentation/2/context.json",
+							"@id": "http://1e283e74-783f-4f3c-a203-31c6dd166b6f",
+							"@type": "oa:Annotation",
+							"motivation": "sc:painting",
+							"resource": {
+								"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176/pct:69.178,49.946,20.703,20.705/full/0/default.jpg",
+								"@type": "dctypes:Image",
+								"format": "image/jpeg",
+								"service": {
+									"@context": "http://iiif.io/api/image/2/context.json",
+									"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176",
+									"profile": [
+										"http://iiif.io/api/image/2/level1.json",
+										{
+											"formats": [
+												"jpg"
+											],
+											"qualities": [
+												"native",
+												"color",
+												"gray"
+											],
+											"supports": [
+												"regionByPct",
+												"sizeByForcedWh",
+												"sizeByWh",
+												"sizeAboveFull",
+												"rotationBy90s",
+												"mirroring",
+												"gray"
+											]
+										}
+									]
+								},
+								"height": 2334,
+								"width": 3000
+							},
+							"on": "http://1eb9b836-de94-4449-97cf-365089c81028"
+						}
+					],
+					"related": ""
+				},
+        {
+					"@id": "http://d546a5ba-7aef-4f14-aae0-3c6a1440d6b9",
+					"@type": "sc:Canvas",
+					"label": "Empty canvas",
+					"height": 2334,
+					"width": 3000,
+					"images": [
+						{
+							"@context": "http://iiif.io/api/presentation/2/context.json",
+							"@id": "http://1e283e74-783f-4f3c-a203-31c6dd166b6f",
+							"@type": "oa:Annotation",
+							"motivation": "sc:painting",
+							"resource": {
+								"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176/pct:49.587,50.046,20.583,20.579/full/0/default.jpg",
+								"@type": "dctypes:Image",
+								"format": "image/jpeg",
+								"service": {
+									"@context": "http://iiif.io/api/image/2/context.json",
+									"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176",
+									"profile": [
+										"http://iiif.io/api/image/2/level1.json",
+										{
+											"formats": [
+												"jpg"
+											],
+											"qualities": [
+												"native",
+												"color",
+												"gray"
+											],
+											"supports": [
+												"regionByPct",
+												"sizeByForcedWh",
+												"sizeByWh",
+												"sizeAboveFull",
+												"rotationBy90s",
+												"mirroring",
+												"gray"
+											]
+										}
+									]
+								},
+								"height": 2334,
+								"width": 3000
+							},
+							"on": "http://1eb9b836-de94-4449-97cf-365089c81028"
+						}
+					],
+					"related": ""
+				},
+        {
+					"@id": "http://d546a5ba-7aef-4f14-aae0-3c6a1440d6b9",
+					"@type": "sc:Canvas",
+					"label": "Empty canvas",
+					"height": 2334,
+					"width": 3000,
+					"images": [
+						{
+							"@context": "http://iiif.io/api/presentation/2/context.json",
+							"@id": "http://1e283e74-783f-4f3c-a203-31c6dd166b6f",
+							"@type": "oa:Annotation",
+							"motivation": "sc:painting",
+							"resource": {
+								"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176/pct:29.59,49.959,20.789,20.789/full/0/default.jpg",
+								"@type": "dctypes:Image",
+								"format": "image/jpeg",
+								"service": {
+									"@context": "http://iiif.io/api/image/2/context.json",
+									"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176",
+									"profile": [
+										"http://iiif.io/api/image/2/level1.json",
+										{
+											"formats": [
+												"jpg"
+											],
+											"qualities": [
+												"native",
+												"color",
+												"gray"
+											],
+											"supports": [
+												"regionByPct",
+												"sizeByForcedWh",
+												"sizeByWh",
+												"sizeAboveFull",
+												"rotationBy90s",
+												"mirroring",
+												"gray"
+											]
+										}
+									]
+								},
+								"height": 2334,
+								"width": 3000
+							},
+							"on": "http://1eb9b836-de94-4449-97cf-365089c81028"
+						}
+					],
+					"related": ""
+				},
+        {
+					"@id": "http://d546a5ba-7aef-4f14-aae0-3c6a1440d6b9",
+					"@type": "sc:Canvas",
+					"label": "Empty canvas",
+					"height": 2334,
+					"width": 3000,
+					"images": [
+						{
+							"@context": "http://iiif.io/api/presentation/2/context.json",
+							"@id": "http://1e283e74-783f-4f3c-a203-31c6dd166b6f",
+							"@type": "oa:Annotation",
+							"motivation": "sc:painting",
+							"resource": {
+								"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176/pct:9.554,49.912,20.894,20.895/full/0/default.jpg",
+								"@type": "dctypes:Image",
+								"format": "image/jpeg",
+								"service": {
+									"@context": "http://iiif.io/api/image/2/context.json",
+									"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176",
+									"profile": [
+										"http://iiif.io/api/image/2/level1.json",
+										{
+											"formats": [
+												"jpg"
+											],
+											"qualities": [
+												"native",
+												"color",
+												"gray"
+											],
+											"supports": [
+												"regionByPct",
+												"sizeByForcedWh",
+												"sizeByWh",
+												"sizeAboveFull",
+												"rotationBy90s",
+												"mirroring",
+												"gray"
+											]
+										}
+									]
+								},
+								"height": 2334,
+								"width": 3000
+							},
+							"on": "http://1eb9b836-de94-4449-97cf-365089c81028"
+						}
+					],
+					"related": ""
+				},
+        {
+					"@id": "http://d546a5ba-7aef-4f14-aae0-3c6a1440d6b9",
+					"@type": "sc:Canvas",
+					"label": "Empty canvas",
+					"height": 2334,
+					"width": 3000,
+					"images": [
+						{
+							"@context": "http://iiif.io/api/presentation/2/context.json",
+							"@id": "http://1e283e74-783f-4f3c-a203-31c6dd166b6f",
+							"@type": "oa:Annotation",
+							"motivation": "sc:painting",
+							"resource": {
+								"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176/pct:69.577,28.955,20.789,20.789/full/0/default.jpg",
+								"@type": "dctypes:Image",
+								"format": "image/jpeg",
+								"service": {
+									"@context": "http://iiif.io/api/image/2/context.json",
+									"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176",
+									"profile": [
+										"http://iiif.io/api/image/2/level1.json",
+										{
+											"formats": [
+												"jpg"
+											],
+											"qualities": [
+												"native",
+												"color",
+												"gray"
+											],
+											"supports": [
+												"regionByPct",
+												"sizeByForcedWh",
+												"sizeByWh",
+												"sizeAboveFull",
+												"rotationBy90s",
+												"mirroring",
+												"gray"
+											]
+										}
+									]
+								},
+								"height": 2334,
+								"width": 3000
+							},
+							"on": "http://1eb9b836-de94-4449-97cf-365089c81028"
+						}
+					],
+					"related": ""
+				},
+        {
+					"@id": "http://d546a5ba-7aef-4f14-aae0-3c6a1440d6b9",
+					"@type": "sc:Canvas",
+					"label": "Empty canvas",
+					"height": 2334,
+					"width": 3000,
+					"images": [
+						{
+							"@context": "http://iiif.io/api/presentation/2/context.json",
+							"@id": "http://1e283e74-783f-4f3c-a203-31c6dd166b6f",
+							"@type": "oa:Annotation",
+							"motivation": "sc:painting",
+							"resource": {
+								"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176/pct:49.502,28.937,20.832,20.833/full/0/default.jpg",
+								"@type": "dctypes:Image",
+								"format": "image/jpeg",
+								"service": {
+									"@context": "http://iiif.io/api/image/2/context.json",
+									"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176",
+									"profile": [
+										"http://iiif.io/api/image/2/level1.json",
+										{
+											"formats": [
+												"jpg"
+											],
+											"qualities": [
+												"native",
+												"color",
+												"gray"
+											],
+											"supports": [
+												"regionByPct",
+												"sizeByForcedWh",
+												"sizeByWh",
+												"sizeAboveFull",
+												"rotationBy90s",
+												"mirroring",
+												"gray"
+											]
+										}
+									]
+								},
+								"height": 2334,
+								"width": 3000
+							},
+							"on": "http://1eb9b836-de94-4449-97cf-365089c81028"
+						}
+					],
+					"related": ""
+				},
+        {
+					"@id": "http://d546a5ba-7aef-4f14-aae0-3c6a1440d6b9",
+					"@type": "sc:Canvas",
+					"label": "Empty canvas",
+					"height": 2334,
+					"width": 3000,
+					"images": [
+						{
+							"@context": "http://iiif.io/api/presentation/2/context.json",
+							"@id": "http://1e283e74-783f-4f3c-a203-31c6dd166b6f",
+							"@type": "oa:Annotation",
+							"motivation": "sc:painting",
+							"resource": {
+								"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176/pct:29.414,29.013,20.694,20.694/full/0/default.jpg",
+								"@type": "dctypes:Image",
+								"format": "image/jpeg",
+								"service": {
+									"@context": "http://iiif.io/api/image/2/context.json",
+									"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176",
+									"profile": [
+										"http://iiif.io/api/image/2/level1.json",
+										{
+											"formats": [
+												"jpg"
+											],
+											"qualities": [
+												"native",
+												"color",
+												"gray"
+											],
+											"supports": [
+												"regionByPct",
+												"sizeByForcedWh",
+												"sizeByWh",
+												"sizeAboveFull",
+												"rotationBy90s",
+												"mirroring",
+												"gray"
+											]
+										}
+									]
+								},
+								"height": 2334,
+								"width": 3000
+							},
+							"on": "http://1eb9b836-de94-4449-97cf-365089c81028"
+						}
+					],
+					"related": ""
+				},
+        {
+					"@id": "http://d546a5ba-7aef-4f14-aae0-3c6a1440d6b9",
+					"@type": "sc:Canvas",
+					"label": "Empty canvas",
+					"height": 2334,
+					"width": 3000,
+					"images": [
+						{
+							"@context": "http://iiif.io/api/presentation/2/context.json",
+							"@id": "http://1e283e74-783f-4f3c-a203-31c6dd166b6f",
+							"@type": "oa:Annotation",
+							"motivation": "sc:painting",
+							"resource": {
+								"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176/pct:10.027,28.911,20.832,20.828/full/0/default.jpg",
+								"@type": "dctypes:Image",
+								"format": "image/jpeg",
+								"service": {
+									"@context": "http://iiif.io/api/image/2/context.json",
+									"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176",
+									"profile": [
+										"http://iiif.io/api/image/2/level1.json",
+										{
+											"formats": [
+												"jpg"
+											],
+											"qualities": [
+												"native",
+												"color",
+												"gray"
+											],
+											"supports": [
+												"regionByPct",
+												"sizeByForcedWh",
+												"sizeByWh",
+												"sizeAboveFull",
+												"rotationBy90s",
+												"mirroring",
+												"gray"
+											]
+										}
+									]
+								},
+								"height": 2334,
+								"width": 3000
+							},
+							"on": "http://1eb9b836-de94-4449-97cf-365089c81028"
+						}
+					],
+					"related": ""
+				},
+        {
+					"@id": "http://d546a5ba-7aef-4f14-aae0-3c6a1440d6b9",
+					"@type": "sc:Canvas",
+					"label": "Empty canvas",
+					"height": 2334,
+					"width": 3000,
+					"images": [
+						{
+							"@context": "http://iiif.io/api/presentation/2/context.json",
+							"@id": "http://1e283e74-783f-4f3c-a203-31c6dd166b6f",
+							"@type": "oa:Annotation",
+							"motivation": "sc:painting",
+							"resource": {
+								"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176/pct:70.07,7.809,20.955,20.952/full/0/default.jpg",
+								"@type": "dctypes:Image",
+								"format": "image/jpeg",
+								"service": {
+									"@context": "http://iiif.io/api/image/2/context.json",
+									"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176",
+									"profile": [
+										"http://iiif.io/api/image/2/level1.json",
+										{
+											"formats": [
+												"jpg"
+											],
+											"qualities": [
+												"native",
+												"color",
+												"gray"
+											],
+											"supports": [
+												"regionByPct",
+												"sizeByForcedWh",
+												"sizeByWh",
+												"sizeAboveFull",
+												"rotationBy90s",
+												"mirroring",
+												"gray"
+											]
+										}
+									]
+								},
+								"height": 2334,
+								"width": 3000
+							},
+							"on": "http://1eb9b836-de94-4449-97cf-365089c81028"
+						}
+					],
+					"related": ""
+				},
+        {
+					"@id": "http://d546a5ba-7aef-4f14-aae0-3c6a1440d6b9",
+					"@type": "sc:Canvas",
+					"label": "Empty canvas",
+					"height": 2334,
+					"width": 3000,
+					"images": [
+						{
+							"@context": "http://iiif.io/api/presentation/2/context.json",
+							"@id": "http://1e283e74-783f-4f3c-a203-31c6dd166b6f",
+							"@type": "oa:Annotation",
+							"motivation": "sc:painting",
+							"resource": {
+								"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176/pct:50.036,8.004,20.651,20.65/full/0/default.jpg",
+								"@type": "dctypes:Image",
+								"format": "image/jpeg",
+								"service": {
+									"@context": "http://iiif.io/api/image/2/context.json",
+									"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176",
+									"profile": [
+										"http://iiif.io/api/image/2/level1.json",
+										{
+											"formats": [
+												"jpg"
+											],
+											"qualities": [
+												"native",
+												"color",
+												"gray"
+											],
+											"supports": [
+												"regionByPct",
+												"sizeByForcedWh",
+												"sizeByWh",
+												"sizeAboveFull",
+												"rotationBy90s",
+												"mirroring",
+												"gray"
+											]
+										}
+									]
+								},
+								"height": 2334,
+								"width": 3000
+							},
+							"on": "http://1eb9b836-de94-4449-97cf-365089c81028"
+						}
+					],
+					"related": ""
+				},
+        {
+					"@id": "http://d546a5ba-7aef-4f14-aae0-3c6a1440d6b9",
+					"@type": "sc:Canvas",
+					"label": "Empty canvas",
+					"height": 2334,
+					"width": 3000,
+					"images": [
+						{
+							"@context": "http://iiif.io/api/presentation/2/context.json",
+							"@id": "http://1e283e74-783f-4f3c-a203-31c6dd166b6f",
+							"@type": "oa:Annotation",
+							"motivation": "sc:painting",
+							"resource": {
+								"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176/pct:30.212,8.124,20.364,20.363/full/0/default.jpg",
+								"@type": "dctypes:Image",
+								"format": "image/jpeg",
+								"service": {
+									"@context": "http://iiif.io/api/image/2/context.json",
+									"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176",
+									"profile": [
+										"http://iiif.io/api/image/2/level1.json",
+										{
+											"formats": [
+												"jpg"
+											],
+											"qualities": [
+												"native",
+												"color",
+												"gray"
+											],
+											"supports": [
+												"regionByPct",
+												"sizeByForcedWh",
+												"sizeByWh",
+												"sizeAboveFull",
+												"rotationBy90s",
+												"mirroring",
+												"gray"
+											]
+										}
+									]
+								},
+								"height": 2334,
+								"width": 3000
+							},
+							"on": "http://1eb9b836-de94-4449-97cf-365089c81028"
+						}
+					],
+					"related": ""
+				},
+        {
+					"@id": "http://d546a5ba-7aef-4f14-aae0-3c6a1440d6b9",
+					"@type": "sc:Canvas",
+					"label": "Empty canvas",
+					"height": 2334,
+					"width": 3000,
+					"images": [
+						{
+							"@context": "http://iiif.io/api/presentation/2/context.json",
+							"@id": "http://1e283e74-783f-4f3c-a203-31c6dd166b6f",
+							"@type": "oa:Annotation",
+							"motivation": "sc:painting",
+							"resource": {
+								"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176/pct:10.366,8.156,20.347,20.347/full/0/default.jpg",
+								"@type": "dctypes:Image",
+								"format": "image/jpeg",
+								"service": {
+									"@context": "http://iiif.io/api/image/2/context.json",
+									"@id": "https://framemark-int.vam.ac.uk/collections/2018KU6176",
+									"profile": [
+										"http://iiif.io/api/image/2/level1.json",
+										{
+											"formats": [
+												"jpg"
+											],
+											"qualities": [
+												"native",
+												"color",
+												"gray"
+											],
+											"supports": [
+												"regionByPct",
+												"sizeByForcedWh",
+												"sizeByWh",
+												"sizeAboveFull",
+												"rotationBy90s",
+												"mirroring",
+												"gray"
+											]
+										}
+									]
+								},
+								"height": 2334,
+								"width": 3000
+							},
+							"on": "http://1eb9b836-de94-4449-97cf-365089c81028"
+						}
+					],
+					"related": ""
+				}
+			]
+		}
+	],
+	"structures": []
+}
