@@ -140,7 +140,7 @@ if (!qstr.has('manifest')) {
   const m = manifesto.create(manifest);
   const cvs = m.getSequences()[0].getCanvases();
   Array.from(cvs, (cv) => {
-    const im = flicker.insertBefore(document.createElement('img'), flicker.children[0]);
+    const im = flicker.appendChild(document.createElement('img'));
     if (cv.getImages().length) {
       im.src = cv.getImages()[0].getResource().id;
     } else if (cv.getContent().length) {
