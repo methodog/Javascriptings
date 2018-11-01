@@ -132,7 +132,7 @@ addHandler(window,'resize',function(){
 
 const qstr = new Map(location.search.slice(1).split('&').map(kv => kv.split('=')));
 if (!qstr.has('manifest')) {
-  alert('try ?manifest=http://iiif-int.vam.ac.uk/demos/flickshow/manifest.json');
+  alert('try ?manifest=https://iiif.vam.ac.uk/demos/muybridge/manifest.json');
   flicker.getElementsByTagName('img')[0].onload = function(){ painter.init(this.parentNode, {'loop':1, 'fade':0}) };
 } else {
   manifesto.loadManifest(qstr.get('manifest')).then((manifest) => {
