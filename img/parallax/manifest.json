@@ -31,7 +31,7 @@
 							"@type": "oa:Annotation",
 							"motivation": "sc:painting",
 							"resource": {
-								"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_01.tif/full/full/0/default.jpg",
+								"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_01.tif/full/full/0/default.png",
 								"@type": "dctypes:Image",
 								"format": "image/jpeg",
 								"service": {
@@ -81,7 +81,7 @@
 							"@type": "oa:Annotation",
 							"motivation": "sc:painting",
 							"resource": {
-								"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_02.tif/full/full/0/default.jpg",
+								"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_02.tif/full/full/0/default.png",
 								"@type": "dctypes:Image",
 								"format": "image/jpeg",
 								"service": {
@@ -131,7 +131,7 @@
 							"@type": "oa:Annotation",
 							"motivation": "sc:painting",
 							"resource": {
-								"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_03.tif/full/full/0/default.jpg",
+								"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_03.tif/full/full/0/default.png",
 								"@type": "dctypes:Image",
 								"format": "image/jpeg",
 								"service": {
@@ -181,7 +181,7 @@
 							"@type": "oa:Annotation",
 							"motivation": "sc:painting",
 							"resource": {
-								"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_04.tif/full/full/0/default.jpg",
+								"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_04.tif/full/full/0/default.png",
 								"@type": "dctypes:Image",
 								"format": "image/jpeg",
 								"service": {
@@ -231,7 +231,7 @@
 							"@type": "oa:Annotation",
 							"motivation": "sc:painting",
 							"resource": {
-								"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_05.tif/full/full/0/default.jpg",
+								"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_05.tif/full/full/0/default.png",
 								"@type": "dctypes:Image",
 								"format": "image/jpeg",
 								"service": {
@@ -281,7 +281,7 @@
 							"@type": "oa:Annotation",
 							"motivation": "sc:painting",
 							"resource": {
-								"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_06.tif/full/full/0/default.jpg",
+								"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_06.tif/full/full/0/default.png",
 								"@type": "dctypes:Image",
 								"format": "image/jpeg",
 								"service": {

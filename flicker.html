@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <title>flicker</title>
+  <title>iiif Flick Viewer</title>
   <style type="text/css">
     html, body { margin:0; height:100%; }
     body { background:#000; font:14px/1 helvetica,arial,freesans,sans-serif; }
@@ -133,7 +133,7 @@ addHandler(window,'resize',function(){
 const qstr = new Map(location.search.slice(1).split('&').map(kv => kv.split('=')));
 if (!qstr.has('manifest')) {
   alert('try ?manifest=https://iiif.vam.ac.uk/demos/muybridge/manifest.json');
-  flicker.getElementsByTagName('img')[0].onload = function(){ painter.init(this.parentNode, {'loop':1, 'fade':0}) };
+  painter.init(flicker, {'loop':1, 'fade':0});
 } else {
   manifesto.loadManifest(qstr.get('manifest')).then((manifest) => {
   flicker.innerHTML = '';
