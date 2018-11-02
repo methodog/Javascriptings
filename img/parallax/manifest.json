@@ -31,12 +31,12 @@
 							"@type": "oa:Annotation",
 							"motivation": "sc:painting",
 							"resource": {
-								"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_01.tif/full/full/0/default.png",
+								"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_01/full/full/0/default.png",
 								"@type": "dctypes:Image",
 								"format": "image/jpeg",
 								"service": {
 									"@context": "http://iiif.io/api/image/2/context.json",
-									"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_01.tif",
+									"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_01",
 									"profile": [
 										"http://iiif.io/api/image/2/level1.json",
 										{
@@ -81,12 +81,12 @@
 							"@type": "oa:Annotation",
 							"motivation": "sc:painting",
 							"resource": {
-								"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_02.tif/full/full/0/default.png",
+								"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_02/full/full/0/default.png",
 								"@type": "dctypes:Image",
 								"format": "image/jpeg",
 								"service": {
 									"@context": "http://iiif.io/api/image/2/context.json",
-									"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_02.tif",
+									"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_02",
 									"profile": [
 										"http://iiif.io/api/image/2/level1.json",
 										{
@@ -131,12 +131,12 @@
 							"@type": "oa:Annotation",
 							"motivation": "sc:painting",
 							"resource": {
-								"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_03.tif/full/full/0/default.png",
+								"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_03/full/full/0/default.png",
 								"@type": "dctypes:Image",
 								"format": "image/jpeg",
 								"service": {
 									"@context": "http://iiif.io/api/image/2/context.json",
-									"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_03.tif",
+									"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_03",
 									"profile": [
 										"http://iiif.io/api/image/2/level1.json",
 										{
@@ -181,12 +181,12 @@
 							"@type": "oa:Annotation",
 							"motivation": "sc:painting",
 							"resource": {
-								"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_04.tif/full/full/0/default.png",
+								"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_04/full/full/0/default.png",
 								"@type": "dctypes:Image",
 								"format": "image/jpeg",
 								"service": {
 									"@context": "http://iiif.io/api/image/2/context.json",
-									"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_04.tif",
+									"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_04",
 									"profile": [
 										"http://iiif.io/api/image/2/level1.json",
 										{
@@ -231,12 +231,12 @@
 							"@type": "oa:Annotation",
 							"motivation": "sc:painting",
 							"resource": {
-								"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_05.tif/full/full/0/default.png",
+								"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_05/full/full/0/default.png",
 								"@type": "dctypes:Image",
 								"format": "image/jpeg",
 								"service": {
 									"@context": "http://iiif.io/api/image/2/context.json",
-									"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_05.tif",
+									"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_05",
 									"profile": [
 										"http://iiif.io/api/image/2/level1.json",
 										{
@@ -281,12 +281,12 @@
 							"@type": "oa:Annotation",
 							"motivation": "sc:painting",
 							"resource": {
-								"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_06.tif/full/full/0/default.png",
+								"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_06/full/full/0/default.png",
 								"@type": "dctypes:Image",
 								"format": "image/jpeg",
 								"service": {
 									"@context": "http://iiif.io/api/image/2/context.json",
-									"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_06.tif",
+									"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_06",
 									"profile": [
 										"http://iiif.io/api/image/2/level1.json",
 										{
