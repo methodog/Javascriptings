@@ -67,7 +67,7 @@ const painter = {
     el.pinchDelta = 0;
     if (!el.paint) {
       el.id = el.id || 'parallaxer' + painter.id++;
-      el.css = el.appendChild(document.createElement('style'));
+      el.css = el.parentNode.insertBefore(document.createElement('style'), el);
       el.paint = () => {
         let css = '';
         let scalePlus = 0;
