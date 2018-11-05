@@ -36,7 +36,7 @@
 								"format": "image/jpeg",
 								"service": {
 									"@context": "http://iiif.io/api/image/2/context.json",
-									"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_01",
+									"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_01",
 									"profile": [
 										"http://iiif.io/api/image/2/level1.json",
 										{
@@ -86,7 +86,7 @@
 								"format": "image/jpeg",
 								"service": {
 									"@context": "http://iiif.io/api/image/2/context.json",
-									"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_02",
+									"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_02",
 									"profile": [
 										"http://iiif.io/api/image/2/level1.json",
 										{
@@ -136,7 +136,7 @@
 								"format": "image/jpeg",
 								"service": {
 									"@context": "http://iiif.io/api/image/2/context.json",
-									"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_03",
+									"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_03",
 									"profile": [
 										"http://iiif.io/api/image/2/level1.json",
 										{
@@ -186,7 +186,7 @@
 								"format": "image/jpeg",
 								"service": {
 									"@context": "http://iiif.io/api/image/2/context.json",
-									"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_04",
+									"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_04",
 									"profile": [
 										"http://iiif.io/api/image/2/level1.json",
 										{
@@ -236,7 +236,7 @@
 								"format": "image/jpeg",
 								"service": {
 									"@context": "http://iiif.io/api/image/2/context.json",
-									"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_05",
+									"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_05",
 									"profile": [
 										"http://iiif.io/api/image/2/level1.json",
 										{
@@ -286,7 +286,7 @@
 								"format": "image/jpeg",
 								"service": {
 									"@context": "http://iiif.io/api/image/2/context.json",
-									"@id": "https://framemark.vam.ac.uk/demos/peepshow/an_artists_studio_06",
+									"@id": "https://framemark.vam.ac.uk/demos/image/v2/an_artists_studio_06",
 									"profile": [
 										"http://iiif.io/api/image/2/level1.json",
 										{
