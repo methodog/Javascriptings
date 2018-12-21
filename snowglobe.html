@@ -117,19 +117,19 @@ dragDrop = {
 };
 
 addHandler(window,'load',function(){
-    var i, els = document.querySelectorAll('i');
-    for( i=0; i<els.length; ++i ){ dragDrop.init(els[i], 1); }
-    addHandler(window,'resize',function(){ respond(els); });
-    addHandler(window,'click',function(){ respond(els); });
-    function respond(els){
-      for( i=0; i<els.length; ++i ){
-        els[i].whP = [getComputed(els[i].P,'width'), getComputed(els[i].P,'height')];
-        els[i].v = [(Math.random()<0.5?-1:1)*Math.random()*7, -Math.random()*7];
-        els[i].move([els[i].xy[0], els[i].xy[1]-23]);
-        els[i].drop();
-      }
+  var i, els = document.querySelectorAll('i');
+  for( i=0; i<els.length; ++i ){ dragDrop.init(els[i], 1); }
+  addHandler(window,'resize',function(){ respond(els); });
+  addHandler(window,'click',function(){ respond(els); });
+  function respond(els){
+    for( i=0; i<els.length; ++i ){
+      els[i].whP = [getComputed(els[i].P,'width'), getComputed(els[i].P,'height')];
+      els[i].v = [(Math.random()<0.5?-1:1)*Math.random()*7, -Math.random()*7];
+      els[i].move([els[i].xy[0], els[i].xy[1]-23]);
+      els[i].drop();
     }
-    setTimeout(function(){ respond(els); }, 800);
+  }
+  setTimeout(function(){ respond(els); }, window.location.search.length * 50);
 });
 </script>
 
