@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <title>flickshow</title>
-    <style type="text/css">
-        .flickshow { display:none; height:100vh; margin:0; position:relative; width:100vw; }
-        .flickshow img { max-height:100%; max-width:100%; margin:auto; opacity:0; position:absolute; left:0; top:0; bottom:0; right:0; }
-    </style>
+  <title>flickshow</title>
+  <style type="text/css">
+    .flickshow { display:none; height:100vh; margin:0; position:relative; width:100vw; }
+    .flickshow img { max-height:100%; max-width:100%; margin:auto; opacity:0; position:absolute; left:0; top:0; bottom:0; right:0; }
+  </style>
 </head>
 
 <body>
@@ -18,71 +18,71 @@
 <div class="flickshow" data-exposure="3400"></div>
 <div id="img-container">
   <img src="./img/stereo/Great_Exhibition.jpg" alt="The Exhibition of 1862">
-  <img src="./img/stereo/temple_of_philae.jpg" alt="Temple of Philae">
   <img src="./img/stereo/skull_study.jpg" alt="Skull Study">
+  <img src="./img/stereo/temple_of_philae.jpg" alt="Temple of Philae">
 </div>
 
 <script type="text/javascript">
 (function(){
-    function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ if( style=='width' ){ y=el.getBoundingClientRect().right-el.getBoundingClientRect().left }else if( style=='height' ){ y=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else{ var y=el.currentStyle[style] } } return parseFloat(y); }
-    var els = document.querySelectorAll('.flickshow'), f, 
-        i, j, k, l, img, chunk = 3,
-        imgs = document.getElementById('img-container'), set, src,
-        reImgSrc = new RegExp('/th-[^_]+_');
-    for( i=0; i<els.length; ++i ){
-        f = els[i];
-        set = [];
-        f.id = f.id || f.className+i;
-        f.ims = [];
-        f.i = 0;
-        imgs.style.display = 'none';
-        imgs = imgs.querySelectorAll('img');
-        for( j=0; j<imgs.length; ++j ){
-            src = imgs[j].src;
-            set.push(src.replace(reImgSrc, '/'));
-        }
-            
-        f.flick = function(){
-            f.style.display = 'block';
-            f.exp = f.getAttribute('data-exposure');
-            f.css = f.css || f.appendChild(document.createElement('style'));
-            f.t = setInterval(function(){
-                if(f.ims.length){
-                    if(++f.i>f.ims.length){ f.i=1 }
-                    f.css.innerHTML = '#'+f.id+' img:nth-child('+(f.i+1)+'){opacity:1}';
-                }}, f.exp
-            );
-        };f.flick();
-
-        f.onmouseup = f.touchend = function(e){
-            clearTimeout(f.t);
-            f.t1 = f.t2;
-            f.t2 = e.timeStamp;
-            if( f.t2-f.t1<500 ){ f.flick() }
-            return false; 
-        };
-
-        f.loader = function(){
-            l = f.ims.length;
-            for( k = l; k<l+chunk; ++k ){
-                if( !set[k] ) return;
-                if( !!document.getElementById(set[k]) ) continue;
-                img = document.createElement('img');
-                img.src = set[k];
-                img.id = set[k];
-                img.onload = function(){
-                    if( f.ims.push(this) === l+chunk ) f.loader();
-                };
-                f.appendChild(img);
-                img.onerror = function(){
-                    console.log('MISSING IMAGE:', img.id);
-                    set.splice(set.indexOf(img.id), 1);
-                    f.loader();
-                    this.remove();
-                };
-            }
-        };f.loader();
+  function getComputed(el,style){ if(window.getComputedStyle){ var y=document.defaultView.getComputedStyle(el,null).getPropertyValue(style); }else if(el.currentStyle){ if( style=='width' ){ y=el.getBoundingClientRect().right-el.getBoundingClientRect().left }else if( style=='height' ){ y=el.getBoundingClientRect().bottom-el.getBoundingClientRect().top }else{ var y=el.currentStyle[style] } } return parseFloat(y); }
+  var els = document.querySelectorAll('.flickshow'), f, 
+    i, j, k, l, img, chunk = 3,
+    imgs = document.getElementById('img-container'), set, src,
+    reImgSrc = new RegExp('/th-[^_]+_');
+  for( i=0; i<els.length; ++i ){
+    f = els[i];
+    set = [];
+    f.id = f.id || f.className+i;
+    f.ims = [];
+    f.i = 0;
+    imgs.style.display = 'none';
+    imgs = imgs.querySelectorAll('img');
+    for( j=0; j<imgs.length; ++j ){
+      src = imgs[j].src;
+      set.push(src.replace(reImgSrc, '/'));
     }
+    f.style.display = 'block';
+    f.exp = f.getAttribute('data-exposure');
+    f.css = f.css || f.appendChild(document.createElement('style'));
+    f.flick = function(initial){
+      f.t = setTimeout(function(){
+        if(f.ims.length){
+          if(++f.i>f.ims.length){ f.i=1 }
+          f.css.innerHTML = '#'+f.id+' img:nth-child('+(f.i+1)+'){opacity:1}';
+        }
+        f.flick();
+      }, (!!initial ? 100 : f.exp));
+    };f.flick(1);
+
+    f.onmouseup = f.touchend = function(e){
+      clearTimeout(f.t);
+      f.t1 = f.t2;
+      f.t2 = e.timeStamp;
+      if( f.t2-f.t1<500 ){ f.flick() }
+      return false; 
+    };
+
+    f.loader = function(){
+      l = f.ims.length;
+      for( k = l; k<l+chunk; ++k ){
+        if( !set[k] ) return;
+        if( !!document.getElementById(set[k]) ) continue;
+        img = document.createElement('img');
+        img.src = set[k];
+        img.id = set[k];
+        img.onload = function(){
+          if( f.ims.push(this) === l+chunk ) f.loader();
+        };
+        f.appendChild(img);
+        img.onerror = function(){
+          console.log('MISSING IMAGE:', img.id);
+          set.splice(set.indexOf(img.id), 1);
+          f.loader();
+          this.remove();
+        };
+      }
+    };f.loader();
+  }
 })();
 </script>
 </body>
