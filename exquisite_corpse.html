@@ -23,13 +23,13 @@
 <div id="container">
     <div id="fruity">
         <div class="reel clip">
-            <div class="draggable freel"><img src="img/bodies/100.jpg" alt=""><img src="img/bodies/200.jpg" alt=""><img src="img/bodies/300.jpg" alt=""><img src="img/bodies/400.jpg" alt=""></div>
-        </div>
-        <div class="reel clip">
             <div class="draggable freel"><img src="img/bodies/101.jpg" alt=""><img src="img/bodies/201.jpg" alt=""><img src="img/bodies/301.jpg" alt=""><img src="img/bodies/401.jpg" alt=""></div>
-        </div>
-        <div class="reel clip">
+        </div>                                                                                                                                                                 
+        <div class="reel clip">                                                                                                                                                
             <div class="draggable freel"><img src="img/bodies/102.jpg" alt=""><img src="img/bodies/202.jpg" alt=""><img src="img/bodies/302.jpg" alt=""><img src="img/bodies/402.jpg" alt=""></div>
+        </div>                                                                                                                                                                 
+        <div class="reel clip">                                                                                                                                                
+            <div class="draggable freel"><img src="img/bodies/103.jpg" alt=""><img src="img/bodies/203.jpg" alt=""><img src="img/bodies/303.jpg" alt=""><img src="img/bodies/403.jpg" alt=""></div>
         </div>
     </div>
 </div>
@@ -268,7 +268,7 @@ addHandler(window,'load',function(){
     }
     function resize(){
         var c = document.getElementById('container');
-        c.style.width = (335/900)*getComputed(c,'height')+'px';
+        c.style.width = (1204/886)/3*getComputed(c,'height')+'px';
         for( var i=0; i<freels.length; ++i ){
             dragZoom.size(freels[i]);
         }
