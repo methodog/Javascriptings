@@ -18,10 +18,10 @@
       .blackboard { background:#1d1e20; box-sizing:border-box; color:#fff; padding:20%; z-index:1; }
       .slide:before { background:#e42020; content:''; display:block; left:-200%; }
       .slide.countdown:before { left:0; transition:left 2s linear; }
-      .slide.wipe--left { left:-200%; transition:left 1s; }
-      .slide.wipe--right { right:-200%; transition:right 1s; }
-      .slide.wipe--up { top:-200%; transition:top 1s; }
-      .slide.wipe--down { bottom:-200%; transition:bottom 1s; }
+      .slide.wipe--left { transform: translate(-100%, 0); transition: transform 1s; }
+      .slide.wipe--right { transform: translate(100%, 0); transition: transform 1s; }
+      .slide.wipe--up { transform: translate(0, -100%); transition: transform 1s; }
+      .slide.wipe--down { bottom: translate(0, 100%); transition: transform 1s; }
     </style>
 </head>
 
@@ -34,20 +34,20 @@
 <script type="text/javascript">
 (function () {
   var slides = [
-        {"way": "no", "src": "img/pointer/no/2014GY1389.jpg"},
-        {"way": "up", "src": "img/pointer/up/2007BP4022.jpg"},
-        {"way": "no", "src": "img/pointer/no/2006AM3262.jpg"},
-        {"way": "left", "src": "img/pointer/left/2014GW5263.jpg"},
-        {"way": "up", "src": "img/pointer/up/2017JY7670.jpg"},
-        {"way": "down", "src": "img/pointer/down/2007BP2220.jpg"},
-        {"way": "right", "src": "img/pointer/right/2013GN4204.jpg"},
-        {"way": "right", "src": "img/pointer/right/2006AC4723.jpg"},
-        {"way": "up", "src": "img/pointer/up/2016JE4681.jpg"},
-        {"way": "left", "src": "img/pointer/left/2014GX2957.jpg"},
-        {"way": "down", "src": "img/pointer/down/2006BB5397.jpg"},
-        {"way": "up", "src": "img/pointer/up/2007BP4022.jpg"}
-      ],
-    slideshow = document.querySelector('.slideshow');
+    {"way": "no", "src": "img/pointer/no/2014GY1389.jpg"},
+    {"way": "up", "src": "img/pointer/up/2007BP4022.jpg"},
+    {"way": "no", "src": "img/pointer/no/2006AM3262.jpg"},
+    {"way": "left", "src": "img/pointer/left/2014GW5263.jpg"},
+    {"way": "up", "src": "img/pointer/up/2017JY7670.jpg"},
+    {"way": "down", "src": "img/pointer/down/2007BP2220.jpg"},
+    {"way": "right", "src": "img/pointer/right/2013GN4204.jpg"},
+    {"way": "right", "src": "img/pointer/right/2006AC4723.jpg"},
+    {"way": "up", "src": "img/pointer/up/2016JE4681.jpg"},
+    {"way": "left", "src": "img/pointer/left/2014GX2957.jpg"},
+    {"way": "down", "src": "img/pointer/down/2006BB5397.jpg"},
+    {"way": "up", "src": "img/pointer/up/2007BP4022.jpg"}
+  ],
+  slideshow = document.querySelector('.slideshow');
   slideshow.starters = [];
 
   function loadSlide (starters) {
@@ -94,7 +94,7 @@
         dir = deltaXY[1] > 0 ? 'down' : 'up';
       }
     }
-    touchXY = touchXY2;
+    touchXY = touchXY2; console.log(dir, Math.atan(deltaXY[1]/deltaXY[0])/(Math.PI*2));
     return dir;
   }  
 
@@ -147,8 +147,8 @@
 
   scoreboard.ontouchstart = scoreboard.onclick = function(e){ start(true) };
   blackboard.ontouchstart = blackboard.onclick = function(e){ start() };
-  document.ontouchstart = document.onmousedown = function(e){ if (e.target.tagName === 'IMG') { e.preventDefault(); dragging = 1; swipeDir(e); } };
-  document.ontouchmove = document.onmousemove = function(e){ if (dragging) { e.preventDefault(); wipe(e.target, swipeDir(e)) } };
+  document.onpointerdown = function(e){ if (e.target.tagName === 'IMG') { e.preventDefault(); dragging = 1; swipeDir(e); } };
+  document.onpointermove = function(e){ if (dragging) { e.preventDefault(); wipe(e.target, swipeDir(e)) } };
 })();
 </script>
 </body>
