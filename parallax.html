@@ -20,7 +20,7 @@
   <img alt="" src="img/parallax/an_artists_studio_01.png"><img alt="" src="img/parallax/an_artists_studio_02.png"><img alt="" src="img/parallax/an_artists_studio_03.png"><img alt="" src="img/parallax/an_artists_studio_04.png"><img alt="" src="img/parallax/an_artists_studio_05.png"><img alt="" src="img/parallax/an_artists_studio_06.png">
 -->
 <div class="parallaxer js-parallaxer">
-  <img alt="" src="img/parallax/a_printers_workshop_01.png"><img alt="" src="img/parallax/a_printers_workshop_02.png"><img alt="" src="img/parallax/a_printers_workshop_03.png"><img alt="" src="img/parallax/a_printers_workshop_04.png"><img alt="" src="img/parallax/a_printers_workshop_05.png"><img alt="" src="img/parallax/a_printers_workshop_06.png">
+  <img alt="" src="img/parallax/small/a_printers_workshop_01.png"><img alt="" src="img/parallax/small/a_printers_workshop_02.png"><img alt="" src="img/parallax/small/a_printers_workshop_03.png"><img alt="" src="img/parallax/small/a_printers_workshop_04.png"><img alt="" src="img/parallax/small/a_printers_workshop_05.png"><img alt="" src="img/parallax/small/a_printers_workshop_06.png">
 <!--
   <img alt="" src="img/parallax/Gestetner_01.png">
   <img alt="" src="img/parallax/Gestetner_02.png">
@@ -118,19 +118,21 @@ const painter = {
 
 const qstr = new Map(location.search.slice(1).split('&').map(kv => kv.split('=')));
 if (!qstr.has('manifest')) {
-  alert('try ?manifest=http://iiif.vam.ac.uk/demos/peepshow/manifest.json');
+  console.log('try ?manifest=img/parallax/manifest_peepshow.p3.json');
   painter.init(parallaxer);
 } else {
+  parallaxer.innerHTML = '';
   manifesto.loadManifest(qstr.get('manifest')).then((manifest) => {
-    parallaxer.innerHTML = '';
     const m = manifesto.create(manifest);
     const cvs = m.getSequences()[0].getCanvases();
-    Array.from(cvs, (cv) => {
+    Array.from(cvs.reverse(), (cv) => {
       const im = parallaxer.appendChild(document.createElement('img'));
       if (cv.getImages().length) {
-        im.src = cv.getImages()[0].getResource().id;
+        // P2 manifest
+        im.src = `${cv.getImages()[0].getResource().id.replace(/full\/full/, 'full/1200,')}.png`;
       } else if (cv.getContent().length) {
-        im.src = cv.getContent()[0].getBody()[0].id;
+        // P3 manifest
+        im.src = `${cv.getContent()[0].getBody()[0].id.replace(/full\/full/, 'full/1200,')}.png`;
       }
       painter.init(parallaxer);
     });
