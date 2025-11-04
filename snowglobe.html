@@ -7,18 +7,43 @@
     <style type="text/css">
         html, body { margin:0; overflow:hidden; height:100%; width:100%; }
         body { background:#3b34db; color:#fff; font:36px/1 helvetica,arial,freesans,sans-serif; font-weight:600; text-align:center; }
-        i { cursor:pointer; display:inline-block; position:relative; }
+        i { cursor:pointer; display:inline-block; font-style:normal; position:relative; }
         #cont { margin:auto; position:absolute; top:10%; width:100%; }
         i, #cont { left:0; top:0; }
         .bg { height:100%; width:auto; }
         .word { white-space:nowrap; }
+        @keyframes spin {
+          0% {
+            transform: rotate(0);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+        @keyframes spinY {
+          0% {
+            transform: rotateY(0);
+          }
+          100% {
+            transform: rotateY(360deg);
+          }
+        }
+        i:empty {
+          perspective: 1lh;
+          animation: 12s linear alternate infinite spin;
+        }
+        i:empty::after {
+          content: '❄';
+          display: inline-block;
+          animation: 6s ease-in-out alternate infinite spinY;
+        }
     </style>	
 </head>
 
 <body>
     <img class="bg" src="img/Deer-Tiny.jpg">
     <div id="cont">
-      <i>❄</i><i>❅</i><i>❄</i><i>❅</i><i>❄</i><i>❅</i><i>❄</i><i>❅</i><i>❄</i><i>❅</i><i>❄</i><i>❅</i><i>❄</i><i>❅</i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
       <!--<br/><span class="word"><i>H</i><i>A</i><i>P</i><i>P</i><i>Y</i></span><span class="word"><i>C</i><i>H</i><i>R</i><i>I</i><i>S</i><i>T</i><i>M</i><i>A</i><i>S</i></span>-->
       <script type="text/javascript">
       if( window.location.search.length>1 ){
@@ -27,7 +52,7 @@
         document.write('</span>');
       }
       </script>
-      <br/><i>❄</i><i>❅</i><i>❄</i><i>❅</i><i>❄</i><i>❅</i><i>❄</i><i>❅</i><i>❄</i><i>❅</i><i>❄</i><i>❅</i><i>❄</i><i>❅</i>
+      <br/><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
     </div>
 
 <script type="text/javascript">
